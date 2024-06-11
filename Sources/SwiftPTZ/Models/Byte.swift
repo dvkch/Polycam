@@ -15,7 +15,9 @@ extension Byte {
     }
 }
 
-extension [Byte] {
+typealias Bytes = [UInt8]
+
+extension Bytes {
     var stringRepresentation: String {
         self
             .map { $0.stringRepresentation }
@@ -26,7 +28,7 @@ extension [Byte] {
         case equal, closeEnough, different
     }
 
-    func compare(_ other: [Byte], allowingVarianceOfOneAtIndex imperfectionIndex: Int) -> Comparison {
+    func compare(_ other: Self, allowingVarianceOfOneAtIndex imperfectionIndex: Int) -> Comparison {
         guard self.count == other.count else { return .different }
         
         let mismatchIndices = (0..<count).filter { self[$0] != other[$0] }
@@ -43,7 +45,7 @@ extension [Byte] {
 }
 
 extension String {
-    var bytes: [Byte] {
+    var bytes: Bytes {
         self
             .components(separatedBy: " ")
             .map { UInt8($0, radix: 16)! }
@@ -62,7 +64,7 @@ extension UInt16 {
         return (lo, loRetainer, hi)
     }
     
-    init(from bytes: [UInt8], loIndex: Int, hiIndex: Int, loRetainerIndex: Int, loRetainerMask: UInt8) {
+    init(from bytes: Bytes, loIndex: Int, hiIndex: Int, loRetainerIndex: Int, loRetainerMask: UInt8) {
         assert(loIndex < bytes.count)
         assert(loRetainerIndex < bytes.count)
         assert(hiIndex < bytes.count)

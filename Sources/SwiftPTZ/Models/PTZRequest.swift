@@ -8,7 +8,7 @@
 import Foundation
 
 protocol PTZRequest {
-    var bytes: [UInt8] { get }
+    var bytes: Bytes { get }
 }
 
 extension PTZRequest {
@@ -22,8 +22,8 @@ extension PTZRequest {
     }
 }
 
-struct PTZRequestMove {
-    let bytes: [UInt8]
+struct PTZRequestMove: PTZRequest {
+    let bytes: Bytes
 
     enum Direction: UInt8 {
         case left      = 0x11
@@ -58,8 +58,8 @@ struct PTZRequestMove {
     }
 }
 
-struct PTZRequestStopMove {
-    let bytes: [UInt8]
+struct PTZRequestStopMove: PTZRequest {
+    let bytes: Bytes
 
     enum Direction: UInt8 {
         case horizontal = 0x02
@@ -76,7 +76,7 @@ struct PTZRequestStopMove {
     }
 }
 
-struct PTZPosition {
+struct PTZPosition: Equatable {
     enum Kind {
         case pan
         case tilt
@@ -121,8 +121,14 @@ struct PTZPosition {
     }
 }
 
+extension PTZPosition: ExpressibleByIntegerLiteral {
+    init(integerLiteral value: IntegerLiteralType) {
+        self.value = value
+    }
+}
+
 struct PTZRequestSetPosition: PTZRequest {
-    let bytes: [UInt8]
+    let bytes: Bytes
     
     init(pan: PTZPosition, tilt: PTZPosition, zoom: PTZPosition) {
         let panValue  =  pan.requestValue(kind: .pan)
@@ -153,14 +159,10 @@ struct PTZRequestSetPosition: PTZRequest {
 }
 
 struct PTZRequestGetPosition: PTZRequest {
-    let bytes: [UInt8]
+    let bytes: Bytes
     
     init() {
-        self.bytes = [
-            0x82,
-            0x01,
-            0x50
-        ]
+        self.bytes = [0x82, 0x01, 0x50]
     }
 }
 
@@ -205,7 +207,7 @@ struct PTZBrightness {
 }
 
 struct PTZRequestSetBrightness: PTZRequest {
-    let bytes: [UInt8]
+    let bytes: Bytes
     
     init(brightness: PTZBrightness) {
         let brightnessBytes = brightness.requestValue.requestBytes
@@ -231,7 +233,7 @@ struct PTZRequestSetBrightness: PTZRequest {
 }
 
 struct PTZRequestSetInvertMode: PTZRequest {
-    let bytes: [UInt8]
+    let bytes: Bytes
     
     init(inverted: Bool) {
         self.bytes = [
@@ -271,7 +273,7 @@ struct PTZSaturation {
 }
 
 struct PTZRequestSetSaturation: PTZRequest {
-    let bytes: [UInt8]
+    let bytes: Bytes
     
     init(saturation: PTZSaturation) {
         let saturationBytes = saturation.requestValue.requestBytes
@@ -297,7 +299,7 @@ struct PTZRequestSetSaturation: PTZRequest {
 }
 
 struct PTZRequestSetWhiteBalance: PTZRequest {
-    let bytes: [UInt8]
+    let bytes: Bytes
     
     enum Mode: Int {
         case auto      =  1
@@ -321,59 +323,144 @@ struct PTZRequestSetWhiteBalance: PTZRequest {
 }
 
 struct PTZRequestStartManualWhiteBalanceCalibration: PTZRequest {
-    let bytes: [UInt8]
+    let bytes: Bytes
     
     init() {
-        self.bytes = [
-            0x82,
-            0x45,
-            0x17
-        ]
+        self.bytes = [0x82, 0x45, 0x17]
     }
 }
 
-struct PTZRequestSleep: PTZRequest {
-    let bytes: [UInt8]
+struct PTZRequestSetLed: PTZRequest {
+    let bytes: Bytes
     
-    enum Step {
-        case step1TurnLedOff
-        case step2StandByModeOn
-    }
-    init(step: Step) {
-        switch step {
-        case .step1TurnLedOff:    self.bytes = [0x84, 0x41, 0x21, 0x00, 0x00]
-        case .step2StandByModeOn: self.bytes = [0x83, 0x41, 0x00, 0x12]
+    init(on: Bool) {
+        if on {
+            self.bytes = [0x84, 0x41, 0x21, 0x02, 0x10]
+        }
+        else {
+            self.bytes = [0x84, 0x41, 0x21, 0x00, 0x00]
         }
     }
 }
 
-
-//
-struct PTZRequestWake: PTZRequest {
-    let bytes: [UInt8]
+struct PTZRequestSetStandByMode: PTZRequest {
+    let bytes: Bytes
     
-    enum Step {
-        case step1StandByModeOff
-        case step2TurnLedOn
-        case step3EnableVideoOutput
-        case step4SetShutterSpeed
-        case step5DisableMuteState
-        // PTZRequestSetPosition
-        // PTZRequestSetInvertMode
-        // PTZRequestSetBrightness
-        // PTZRequestSetSaturation
+    init(on: Bool) {
+        if on {
+            self.bytes = [0x83, 0x41, 0x00, 0x12]
+        }
+        else {
+            self.bytes = [0x83, 0x41, 0x00, 0x10]
+        }
+    }
+}
+
+struct PTZRequestEnableVideoOutput: PTZRequest {
+    let bytes: Bytes
+    
+    init() {
+        self.bytes = [0x83, 0x41, 0x13, 0x1a]
+    }
+}
+
+struct PTZRequestSetShutterSpeed: PTZRequest {
+    let bytes: Bytes
+    
+    enum Speed {
+        case zero
+    }
+    
+    init(speed: Speed) {
+        switch speed {
+        case .zero: self.bytes = [0x83, 0x42, 0x14, 0x00]
+        }
+    }
+}
+
+struct PTZRequestSetMuteState: PTZRequest {
+    let bytes: Bytes
+    
+    enum State {
+        case unmute
+    }
+    init(state: State) {
+        switch state {
+        case .unmute: self.bytes = [0x85, 0x41, 0x25, 0x08, 0x08, 0x08]
+        }
+    }
+}
+
+struct PTZRequestSetGain: PTZRequest {
+    let bytes: Bytes
+    
+    enum Gain: UInt8 {
+        case r = 0x42
+        case b = 0x43
+    }
+    
+    init(gain: Gain) {
+        switch gain {
         // change auto gainr to 37 => 84 43 42 01 04
+        case .r: self.bytes = [0x84, 0x43, 0x42, 0x01, 0x04]
         // change auto gainb to 33 => 84 43 43 01 00
-        // PTZRequestSetWhiteBalance
-        // PTZRequestSetBacklightCompensation
-    }
-    init(step: Step) {
-        switch step {
-        case .step1StandByModeOff:      self.bytes = [0x83, 0x41, 0x00, 0x10]
-        case .step2TurnLedOn:           self.bytes = [0x84, 0x41, 0x21, 0x02, 0x10]
-        case .step3EnableVideoOutput:   self.bytes = [0x83, 0x41, 0x13, 0x1a]
-        case .step4SetShutterSpeed:     self.bytes = [0x83, 0x42, 0x14, 0x00]
-        case .step5DisableMuteState:    self.bytes = [0x85, 0x41, 0x25, 0x08, 0x08, 0x08]
+        case .b: self.bytes = [0x84, 0x43, 0x43, 0x01, 0x00]
         }
     }
 }
+
+struct PTZRequestHello: PTZRequest {
+    let bytes: Bytes
+    
+    init() {
+        self.bytes = [0x82, 0x06, 0x77]
+    }
+}
+
+func bootSequence() -> [PTZRequest] {
+    return [
+        PTZRequestSetStandByMode(on: false),
+        PTZRequestSetLed(on: true),
+        PTZRequestEnableVideoOutput(),
+        PTZRequestSetShutterSpeed(speed: .zero),
+        PTZRequestSetMuteState(state: .unmute),
+        PTZRequestSetPosition(pan: .init(value: 0), tilt: .init(value: 0), zoom: .init(value: 0)),
+        PTZRequestSetInvertMode(inverted: false),
+        PTZRequestSetBrightness(brightness: .init(value: 11)),
+        PTZRequestSetSaturation(saturation: .init(value: 6)),
+        PTZRequestSetGain(gain: .r),
+        PTZRequestSetGain(gain: .b),
+        PTZRequestSetWhiteBalance(mode: .auto),
+        PTZRequestSetBacklightCompensation(enabled: false)
+    ]
+}
+
+func sleepSequence() -> [PTZRequest] {
+    return [
+        PTZRequestSetLed(on: false),
+        PTZRequestSetStandByMode(on: true),
+    ]
+}
+
+// 82 4c 19
+// 82 6 77
+// 82 6 7e
+// 82 6 7f
+
+
+/*
+2:17.581 INFO     PCon: hd[0]: PcThreads: PC_ProcessMsg: component_id: "cam1" serial_properties { baud_rate: 9600 parity: PARITY_NONE data_bits: 8 stop_bits: 1 }
+12:22:17.581 INFO     PCon: hd[0]: PcSerial: PC: Enter PC_SerialPropertiesCB for serial port on cam1
+12:22:17.581 INFO     PCon: hd[0]: PcSerial: PC: Set baud rate to 9600
+12:22:17.581 INFO     PCon: hd[0]: PcSerial: PC: Set parity to 3
+12:22:17.581 INFO     PCon: hd[0]: PcSerial: PC: Set data bits to 8
+12:22:17.581 INFO     PCon: hd[0]: PcSerial: PC: Set stop bits to 1
+12:22:17.581 INFO     SMan: hd[0]: CameraVisca: DiscoverCamera()
+12:22:17.581 DEBUG    SMan: hd[0]: CameraBase: Send 5 bytes: 81 9 0 2 ff
+12:22:17.582 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+12:22:17.582 DEBUG    SMan: hd[0]: CameraBase: In: Command:
+12:22:17.582 DEBUG    SMan: hd[0]: CameraBase: Have generic command
+12:22:17.582 INFO     SMan: hd[0]: SrcMan: 81 09 00 02 FF
+*/
+
+

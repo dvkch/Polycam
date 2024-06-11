@@ -3,14 +3,10 @@ import XCTest
 
 final class SwiftPTZTests: XCTestCase {
     func obtainFixture(category: String, name: String) -> URL {
-        let url = Bundle(for: SwiftPTZTests.self)
-            .resourceURL!
-            .appendingPathComponent("SwiftPTZ_SwiftPTZTests.bundle/Contents/Resources/Fixtures", isDirectory: true)
-            .appendingPathComponent(category, isDirectory: true)
-            .appendingPathComponent(name + ".json", isDirectory: false)
-            .absoluteURL
-        XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
-        return url
+        guard let url = Bundle.module.url(forResource: name, withExtension: "json", subdirectory: "Fixtures/\(category)") else {
+            fatalError("Missing resource file: \(category)/\(name)")
+        }
+        return url.absoluteURL
     }
     
     func obtainFixtures<T: Decodable>(category: String, name: String, type: T.Type) -> T {

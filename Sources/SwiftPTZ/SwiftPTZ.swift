@@ -12,10 +12,9 @@ import ArgumentParser
 struct SwiftPTZ: ParsableCommand {
     static var configuration = CommandConfiguration(
         abstract: "SwiftPTZ",
-        version: "1.0"
+        version: "1.0",
+        subcommands: [SnifferCommand.self, MoveCommand.self, TestCommand.self],
+        defaultSubcommand: TestCommand.self
     )
-
-    func run() throws {
-        print("Hello from PTZ")
-    }
 }
+
