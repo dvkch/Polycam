@@ -11,9 +11,9 @@ import SwiftSerial
 class Serial: Loggable {
     
     // MARK: Init
-    init(tag: String, deviceName: String) throws {
+    init(tag: String, name: SerialName) throws {
         self.logTag = "Serial \(tag)"
-        try open(deviceName: deviceName)
+        try open(deviceName: name.rawValue)
         
         readQueue.async {
             self.readLoop()

@@ -24,12 +24,12 @@ struct BatchCommand: ParsableCommand {
     }
     
     func run() throws {
-        guard let serialDevice = self.serialDevice ?? SerialDevice.firstAvailable?.rawValue else {
+        guard let serialDevice = self.serialDevice ?? SerialName.firstAvailable?.rawValue else {
             fatalError("No available serial device")
         }
 
         do {
-            let serial = try Serial(tag: "RS423", deviceName: serialDevice)
+            let serial = try Serial(tag: "RS423", name: .init(rawValue: serialDevice))
             serial.logLevel = .error
 
             let camera = Camera(serial: serial)
