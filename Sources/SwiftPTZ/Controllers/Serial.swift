@@ -8,16 +8,13 @@
 import Foundation
 import SwiftSerial
 
-class Serial {
-
-    private let tag: String
-    private let delay: TimeInterval
-    init(tag: String, deviceName: String, delay: TimeInterval = 0) throws {
-        self.tag = tag
-        self.delay = delay
-
+class Serial: Loggable {
+    
+    // MARK: Init
+    init(tag: String, deviceName: String) throws {
+        self.logTag = "Serial \(tag)"
         try open(deviceName: deviceName)
-
+        
         readQueue.async {
             self.readLoop()
         }
@@ -26,9 +23,22 @@ class Serial {
         }
     }
     
+    // MARK: Properties
+    var logLevel: LogLevel = .debug
+    let logTag: String
     private(set) var port: SerialPort!
+    private var shouldStop: Bool = false
+    private let writeLock = NSLock()
+    private let writeQueue = DispatchQueue.global(qos: .userInteractive)
+    private var bytesToSend: [UInt8] = []
+    private let readLock = NSLock()
+    private let readQueue = DispatchQueue.global(qos: .userInteractive)
+    private var readBytes: [UInt8] = []
+    private var lastReadUUID = UUID()
+
+    // MARK: Serial
     private func open(deviceName: String) throws {
-        Log.w(tag: tag, message: "Opening port...")
+        log(.info, "Opening port...")
         
         self.port = SerialPort(path: deviceName)
         self.port.setSettings(
@@ -42,102 +52,77 @@ class Serial {
             useHardwareFlowControl: false,
             useSoftwareFlowControl: false,
             processOutput: false
-
+            
         )
         try self.port.openPort()
-
-        Log.w(tag: tag, message: "> opened!")
+        
+        log(.info, "> opened!")
     }
     
-    private var shouldStop: Bool = false
-    func stop() {
-        shouldStop = true
-    }
-
-    private var receivedByteTimeoutTimer: Timer = Timer() {
-        didSet {
-            oldValue.invalidate()
-            RunLoop.current.add(receivedByteTimeoutTimer, forMode: .common)
-        }
-    }
-    private var receivedLastByteDate: Date = Date(timeIntervalSince1970: 0) {
-        didSet {
-            let startingNewMessage = Date().timeIntervalSince(oldValue) > 0.01
-            if startingNewMessage {
-                flushReceivedBytesToConsole()
-            }
-        }
-    }
-    private var receivedBytes: [UInt8] = [] {
-        didSet {
-            let date = receivedLastByteDate
-            DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.2 + delay) { [weak self] in
-                if date == self?.receivedLastByteDate {
-                    self?.flushReceivedBytesToConsole()
-                }
-            }
-        }
-    }
-    @objc private func flushReceivedBytesToConsole() {
-        if !receivedBytes.isZero {
-            Log.w(tag: tag, message: "> \(receivedBytes.stringRepresentation)")
-        }
-        receivedBytes = []
-    }
-
+    // MARK: Read/Write loops
     private func readLoop() {
-        Log.w(tag: tag, message: "Reading...")
+        log(.info, "Starting read loop...")
+        
         do {
             while !shouldStop {
+                let readUUID = UUID()
                 let byte = try port.readByte()
-                receivedLastByteDate = Date()
-                receivedBytes.append(byte)
+                readLock.withLock {
+                    self.lastReadUUID = readUUID
+                    self.readBytes.append(byte)
+                    
+                    DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) {
+                        guard self.lastReadUUID == readUUID else { return }
+                        self.readLock.withLock {
+                            self.log(.debug, "Received \(self.readBytes.count) bytes: \(self.readBytes.stringRepresentation)")
+                        }
+                    }
+                }
             }
         }
         catch {
-            Log.w(tag: tag, message: "Error reading: \(error)")
+            log(.error, "Error reading: \(error)")
         }
     }
+    
     private func writeLoop() {
+        log(.info, "Starting write loop...")
+        
         do {
             while !shouldStop {
-                let bytes = writeLock.locking {
+                let bytes = writeLock.withLock {
                     defer { bytesToSend = [] }
                     return bytesToSend
                 }
-
-                for byte in bytesToSend {
-                    try _ = port.writeData(Data([byte]))
-                }
+                
+                let writtenBytes = try port.writeData(Data(bytes))
                 if bytes.count > 0 {
-                    print("Wrote \(bytes.count) bytes: \(bytes.stringRepresentation)")
+                    log(.debug, "Wrote \(writtenBytes) out of \(bytes.count) bytes: \(bytes.stringRepresentation)")
                 }
                 Thread.sleep(forTimeInterval: 0.1)
             }
         }
         catch {
-            Log.w(tag: tag, message: "Error writing: \(error)")
+            log(.error, "Error writing: \(error)")
         }
     }
     
-    private let writeLock = NSLock()
-    private let writeQueue = DispatchQueue.global(qos: .userInteractive)
-    private var bytesToSend: [UInt8] = []
+    // MARK: Outside world
     func sendBytes(_ bytes: [UInt8]) {
-        writeLock.locking {
+        writeLock.withLock {
             bytesToSend.append(contentsOf: bytes)
         }
     }
     
-    private let readQueue = DispatchQueue.global(qos: .userInteractive)
-    private var readBytes: [UInt8] = []
-    func readByte() -> UInt8 {
-        var byte: UInt8 = 0
-        readQueue.sync {
-            if !readBytes.isEmpty {
-                byte = readBytes.removeFirst()
-            }
+    func readAllBytes() -> [UInt8] {
+        return readLock.withLock {
+            let bytes = Array(readBytes)
+            readBytes = []
+            return bytes
         }
-        return byte
+    }
+    
+    func stop() {
+        shouldStop = true
     }
 }

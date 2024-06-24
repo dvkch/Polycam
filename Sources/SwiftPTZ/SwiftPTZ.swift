@@ -13,8 +13,8 @@ struct SwiftPTZ: ParsableCommand {
     static var configuration = CommandConfiguration(
         abstract: "SwiftPTZ",
         version: "1.0",
-        subcommands: [SnifferCommand.self, MoveCommand.self, TestCommand.self],
-        defaultSubcommand: TestCommand.self
+        subcommands: [BatchCommand.self, MoveCommand.self],
+        defaultSubcommand: BatchCommand.self
     )
 }
 

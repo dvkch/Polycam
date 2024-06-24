@@ -33,6 +33,8 @@ enum PTZReplyParsed: Equatable {
     case executed
     case notExecutedSyntaxError
     case position(pan: PTZPosition, tilt: PTZPosition, zoom: PTZPosition)
+    case brightness(brightness: PTZBrightness)
+    case unknown(bytes: Bytes)
     
     /*
     12:35:28.338 INFO     SMan: hd[0]: CameraJCCP: rx: read response 49 bytes: 8f 30 46 77 06 30 31 30 30 30 30 35 37 30 31 30 31 30 30 35 32 30 31 30 30 30 30 32 31 30 31 30 30 30 30 30 36 32 39 35 30 30 31 30 31 30 30 34 38
@@ -45,8 +47,51 @@ enum PTZReplyParsed: Equatable {
      */
     //case hello()
 }
+
+extension PTZReplyParsed: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .ack:
+            return "ACK"
+        case .executed:
+            return "Executed"
+        case .notExecutedSyntaxError:
+            return "Not executed: syntax error"
+        case .position(let pan, let tilt, let zoom):
+            return "Position(\(pan.value), \(tilt.value), \(zoom.value))"
+        case .brightness(let brightness):
+            return "Brightness(\(brightness.value))"
+        case .unknown(let bytes):
+            return "Unknown(\(bytes.stringRepresentation))"
+        }
+    }
+}
+
+
 extension PTZReply {
-    var parsed: PTZReplyParsed? {
+    func replies() -> [PTZReplyParsed] {
+        var replies = [PTZReplyParsed]()
+        
+        var startIndex = 0
+        var endIndex = 0
+        
+        while startIndex < bytes.count {
+            while endIndex < bytes.count {
+                if let parsed = PTZReply(bytes: Array(bytes[startIndex...endIndex])).reply() {
+                    replies.append(parsed)
+                    startIndex = endIndex + 1
+                    endIndex += 1
+                }
+                else {
+                    endIndex += 1
+                }
+            }
+            startIndex += 1
+        }
+        return replies
+    }
+
+    private func reply() -> PTZReplyParsed? {
         if stringRepresentation == "A0" {
             return .ack
         }
@@ -56,11 +101,20 @@ extension PTZReply {
         else if stringRepresentation == "93 40 01 10" {
             return .notExecutedSyntaxError
         }
-        else if stringRepresentation.starts(with: "8A 41 50") {
+        else if stringRepresentation.starts(with: "8A 41 50") && validLength {
             let pan  = UInt16(from: bytes, loIndex: 5, hiIndex: 4, loRetainerIndex: 3, loRetainerMask: 0x02)
             let tilt = UInt16(from: bytes, loIndex: 7, hiIndex: 6, loRetainerIndex: 3, loRetainerMask: 0x08)
             let zoom = UInt16(from: bytes, loIndex: 9, hiIndex: 8, loRetainerIndex: 3, loRetainerMask: 0x20)
             return .position(pan: .init(kind: .pan, value: pan), tilt: .init(kind: .tilt, value: tilt), zoom: .init(kind: .zoom, value: zoom))
+        }
+        else if stringRepresentation.starts(with: "83 41 33") && validLength {
+            return .brightness(brightness: .init(value: Int(bytes[3] - 0x75)))
+        }
+        else if stringRepresentation.starts(with: "84 41 33 01") && validLength {
+            return .brightness(brightness: .init(value: Int(bytes[4] + 11)))
+        }
+        else if validLength {
+            return .unknown(bytes: bytes)
         }
         else {
             return nil

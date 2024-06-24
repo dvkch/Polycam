@@ -22,6 +22,23 @@ extension Collection where Element : BinaryInteger {
     }
 }
 
+extension Array {
+    static func * (lhs: Self, rhs: Int) -> Self {
+        var accumulator = Self()
+        accumulator.reserveCapacity(Swift.max(1, lhs.count * rhs))
+        for _ in 0..<rhs {
+            accumulator.append(contentsOf: lhs)
+        }
+        return accumulator
+    }
+}
+
+extension Bool {
+    var onOffString: String {
+        return self ? "on" : "off"
+    }
+}
+
 //17:28:11.039 DEBUG    SMan: hd[0]: CameraBase: In: Command: 3e8 fa 8b5 1f8
 //17:28:11.039 INFO     SMan: hd[0]: CameraJCCP: Send 14 bytes: 8d 41 51 24 0 3 68 0 0 7a 3 2 8 35
 
