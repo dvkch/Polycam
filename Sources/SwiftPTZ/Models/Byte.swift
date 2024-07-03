@@ -27,7 +27,7 @@ extension Bytes {
     enum Comparison {
         case equal, closeEnough, different
     }
-
+    
     func compare(_ other: Self, allowingVarianceOfOneAtIndex imperfectionIndex: Int) -> Comparison {
         guard self.count == other.count else { return .different }
         
@@ -52,6 +52,7 @@ extension String {
     }
 }
 
+#warning("TODO: deprecate this parsing")
 extension UInt16 {
     var requestBytes: (lo: UInt8, loRetainer: Bool, hi: UInt8) {
         var lo = UInt8(self & 0xFF)

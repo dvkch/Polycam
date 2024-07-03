@@ -1,7 +1,7 @@
 import XCTest
 @testable import SwiftPTZ
 
-final class SwiftPTZTests: XCTestCase {
+final class FixtureTests: XCTestCase {
     func obtainFixture(category: String, name: String) -> URL {
         guard let url = Bundle.module.url(forResource: name, withExtension: "json", subdirectory: "Fixtures/\(category)") else {
             fatalError("Missing resource file: \(category)/\(name)")
@@ -30,9 +30,9 @@ final class SwiftPTZTests: XCTestCase {
         for (i, fixture) in fixtures.enumerated() {
             let originalBytes = fixture.query.bytes
             let request = PTZRequestSetPosition(
-                pan:  .init(value: fixture.pan),
-                tilt: .init(value: fixture.tilt),
-                zoom: .init(value: fixture.zoom)
+                pan:  .init(rawValue: fixture.pan),
+                tilt: .init(rawValue: fixture.tilt),
+                zoom: .init(rawValue: fixture.zoom)
             )
             XCTAssertTrue(request.validLength)
 
@@ -70,18 +70,16 @@ final class SwiftPTZTests: XCTestCase {
         var failedFixtures: [Int] = []
 
         for (i, fixture) in fixtures.enumerated() {
-            let response = PTZReply(string: fixture.response)
-            XCTAssertTrue(response.validLength)
-            
-            let parsed = response.parsed
-            if case let .position(pan, tilt, zoom) = parsed {
-                if pan.value == fixture.pan, tilt.value == fixture.tilt {
-                    if zoom.value == fixture.zoom {
-                        successFixtures.append(i)
-                    }
-                    else if abs(zoom.value - fixture.zoom) < 4 {
-                        imperfectFixtures.append(i)
-                    }
+            let responses = PTZMessage.replies(from: fixture.response.bytes)
+            if responses.count == 1, let response = responses.first as? PTZReplyPosition {
+                let diffPan  = abs(response.pan.rawValue  - fixture.pan)
+                let diffTilt = abs(response.tilt.rawValue - fixture.tilt)
+                let diffZoom = abs(response.zoom.rawValue - fixture.zoom)
+                if diffPan == 0, diffTilt == 0, diffZoom == 0 {
+                    successFixtures.append(i)
+                }
+                else if diffPan < 4, diffTilt < 4, diffZoom < 4 {
+                    imperfectFixtures.append(i)
                 }
                 else {
                     failedFixtures.append(i)

@@ -20,6 +20,40 @@ extension PTZRequest {
         let expectedLength = (bytes.first ?? 0x80) & 0x0F
         return messageLength == expectedLength
     }
+
+    fileprivate func buildBytes(_ command: Bytes, _ args: (any PTZValue)...) -> Bytes {
+        var bytes = Bytes()
+        bytes.append(contentsOf: command)
+        
+        if args.count == 1, args[0].ptzValue.requestBytes.hi == 0 {
+            let argBytes = args[0].ptzValue.requestBytes
+            if argBytes.loRetainer {
+                bytes.append(contentsOf: [0x01, argBytes.lo])
+            }
+            else {
+                bytes.append(contentsOf: [argBytes.lo])
+            }
+        }
+        for arg in args {
+            #warning("TODO: insert arguments")
+        }
+        
+        bytes.insert(0x80 + UInt8(bytes.count), at: 0)
+        return bytes
+    }
+}
+
+struct PTZRequestHello: PTZRequest {
+    var bytes: Bytes {
+        // 82 06 77
+        // 82 06 7e
+        // 82 06 7f
+        return buildBytes([0x06, 0x77])
+    }
+
+    var description: String {
+        return "Hello"
+    }
 }
 
 struct PTZRequestMove: PTZRequest {
@@ -109,81 +143,17 @@ struct PTZRequestStopMove: PTZRequest {
     }
 }
 
-struct PTZPosition: Equatable {
-    enum Kind {
-        case pan
-        case tilt
-        case zoom
-        
-        var scale: (multiplier: Double, offset: Double) {
-            switch self {
-            case .pan:  return (multiplier: 0.02,      offset: 1000)
-            case .tilt: return (multiplier: 0.005,     offset:  250)
-            case .zoom: return (multiplier: 0.0217246, offset: 1146)
-            }
-        }
-    }
-    
-    let value: Int
-    init(value: Int) {
-        self.value = value
-    }
-
-    static var minValue: Int {
-        return -50_000
-    }
-    static var maxValue: Int {
-        return 50_000
-    }
-    static var randomValue: PTZPosition {
-        let value = (minValue...maxValue).randomElement()!
-        return self.init(value: value)
-    }
-
-    var isValid: Bool {
-        return value >= type(of: self).minValue && value <= type(of: self).maxValue
-    }
-    
-    var clamped: Int {
-        return Swift.min(type(of: self).maxValue, Swift.max(type(of: self).minValue, value))
-    }
-    
-    func requestValue(kind: Kind) -> UInt16 {
-        let value = Double(self.clamped) * kind.scale.multiplier + kind.scale.offset
-        return UInt16(value.rounded())
-    }
-    
-    init(kind: Kind, value: UInt16) {
-        self.value = Int((Double(value) - kind.scale.offset) / kind.scale.multiplier)
-    }
-}
-
-extension PTZPosition: ExpressibleByIntegerLiteral {
-    init(integerLiteral value: IntegerLiteralType) {
-        self.value = value
-    }
-}
-
 struct PTZRequestSetPosition: PTZRequest {
-    let bytes: Bytes
-    private let pan: PTZPosition
-    private let tilt: PTZPosition
-    private let zoom: PTZPosition
+    let pan: PTZPositionPan
+    let tilt: PTZPositionTilt
+    let zoom: PTZPositionZoom
     
-    init(pan: PTZPosition, tilt: PTZPosition, zoom: PTZPosition) {
-        self.pan = pan
-        self.tilt = tilt
-        self.zoom = zoom
-        
-        let panValue  =  pan.requestValue(kind: .pan)
-        let tiltValue = tilt.requestValue(kind: .tilt)
-        let zoomValue = zoom.requestValue(kind: .zoom)
-        
-        let panBytes  = panValue.requestBytes
-        let tiltBytes = tiltValue.requestBytes
-        let zoomBytes = zoomValue.requestBytes
+    var bytes: Bytes {
+        let panBytes  = pan.ptzValue.requestBytes
+        let tiltBytes = tilt.ptzValue.requestBytes
+        let zoomBytes = zoom.ptzValue.requestBytes
 
-        self.bytes = [
+        return [
             0x8D,
             0x41,
             0x51,
@@ -202,397 +172,111 @@ struct PTZRequestSetPosition: PTZRequest {
     }
     
     var description: String {
-        return "Move to \(pan.value), \(tilt.value), \(zoom.value)"
+        return "Move to \(pan.rawValue), \(tilt.rawValue), \(zoom.rawValue)"
     }
 }
 
 struct PTZRequestGetPosition: PTZRequest {
-    let bytes: Bytes
-    
-    init() {
-        self.bytes = [0x82, 0x01, 0x50]
-    }
-    
-    var description: String {
-        return "Get position"
-    }
+    var bytes: Bytes { buildBytes([0x01, 0x50]) }
+    var description: String { "Get position" }
 }
 
 struct PTZRequestSetBacklightCompensation: PTZRequest {
-    let bytes: [UInt8]
-    private let enabled: Bool
-    
-    init(enabled: Bool) {
-        self.enabled = enabled
-        self.bytes = [
-            0x83,
-            0x42,
-            0x15,
-            enabled ? 0x01 : 0x00
-        ]
-    }
-    
-    var description: String {
-        return "Set backlight compensation \(enabled.onOffString)"
-    }
-}
-
-struct PTZBrightness: Equatable {
-    let value: Int
-    init(value: Int) {
-        self.value = value
-    }
-
-    static var minValue: Int {
-        return 1
-    }
-    static var maxValue: Int {
-        return 20
-    }
-
-    var isValid: Bool {
-        return value >= type(of: self).minValue && value <= type(of: self).maxValue
-    }
-    
-    var clamped: Int {
-        return Swift.min(type(of: self).maxValue, Swift.max(type(of: self).minValue, value))
-    }
-    
-    var requestValue: UInt16 {
-        let value = 117 + self.clamped
-        return UInt16(value)
-    }
+    let enabled: Bool
+    var bytes: Bytes { buildBytes([0x42, 0x15], PTZBool(rawValue: enabled)) }
+    var description: String { "Set backlight compensation \(enabled.onOffString)" }
 }
 
 struct PTZRequestSetBrightness: PTZRequest {
-    let bytes: Bytes
-    private let brightness: PTZBrightness
-    
-    init(brightness: PTZBrightness) {
-        self.brightness = brightness
+    let brightness: PTZBrightness
+    var bytes: Bytes { buildBytes([0x41, 0x33], brightness) }
+    var description: String { "Set brightness to \(brightness.rawValue)" }
+}
 
-        let brightnessBytes = brightness.requestValue.requestBytes
-        if brightnessBytes.loRetainer {
-            self.bytes = [
-                0x84,
-                0x41,
-                0x33,
-                0x01,
-                brightnessBytes.lo
-            ]
-        }
-        else {
-            self.bytes = [
-                0x83,
-                0x41,
-                0x33,
-                brightnessBytes.lo
-            ]
-        }
-    }
-    
-    var description: String {
-        return "Set brightness to \(brightness.value)"
-    }
+struct PTZRequestGetBrightness: PTZRequest {
+    var bytes: Bytes { buildBytes([0x01, 0x33]) }
+    var description: String { "Get Brightness" }
 }
 
 struct PTZRequestSetInvertMode: PTZRequest {
-    let bytes: Bytes
-    private let inverted: Bool
-    
-    init(inverted: Bool) {
-        self.inverted = inverted
-        self.bytes = [
-            0x83,
-            0x41,
-            0x3E,
-            inverted ? 0x01 : 0x00
-        ]
-    }
-    
-    var description: String {
-        return "Set inverted mode \(inverted.onOffString)"
-    }
-}
-
-struct PTZSaturation {
-    let value: Int
-    init(value: Int) {
-        self.value = value
-    }
-
-    static var minValue: Int {
-        return 1
-    }
-    static var maxValue: Int {
-        return 11
-    }
-
-    var isValid: Bool {
-        return value >= type(of: self).minValue && value <= type(of: self).maxValue
-    }
-    
-    var clamped: Int {
-        return Swift.min(type(of: self).maxValue, Swift.max(type(of: self).minValue, value))
-    }
-    
-    var requestValue: UInt16 {
-        let value = 122 + self.clamped
-        return UInt16(value)
-    }
+    let inverted: Bool
+    var bytes: Bytes { buildBytes([0x41, 0x3e], PTZBool(rawValue: inverted)) }
+    var description: String { "Set inverted mode \(inverted.onOffString)" }
 }
 
 struct PTZRequestSetSaturation: PTZRequest {
-    let bytes: Bytes
-    private let saturation: PTZSaturation
-    
-    init(saturation: PTZSaturation) {
-        self.saturation = saturation
-
-        let saturationBytes = saturation.requestValue.requestBytes
-        if saturationBytes.loRetainer {
-            self.bytes = [
-                0x84,
-                0x43,
-                0x3e,
-                0x01,
-                saturationBytes.lo
-            ]
-        }
-        else {
-            self.bytes = [
-                0x83,
-                0x43,
-                0x3e,
-                saturationBytes.lo
-            ]
-        }
-    }
-    
-    var description: String {
-        return "Set saturation to \(saturation.value)"
-    }
+    let saturation: PTZSaturation
+    var bytes: Bytes { buildBytes([0x43, 0x3e], saturation) }
+    var description: String { "Set saturation to \(saturation.rawValue)" }
 }
 
 struct PTZRequestSetWhiteBalance: PTZRequest {
-    let bytes: Bytes
-    private let mode: Mode
-    
-    enum Mode: Int, CustomStringConvertible {
-        case auto      =  1
-        case manual    =  4
-        case temp2300K =  5
-        case temp2856K =  6
-        case temp3450K =  7
-        case temp4230K =  8
-        case temp5200K =  9
-        case temp6504K = 10
-        
-        var description: String {
-            switch self {
-            case .auto: return "auto"
-            case .manual: return "manual"
-            case .temp2300K: return "2300K"
-            case .temp2856K: return "2856K"
-            case .temp3450K: return "3450K"
-            case .temp4230K: return "4230K"
-            case .temp5200K: return "5200K"
-            case .temp6504K: return "6504K"
-            }
-        }
-    }
-
-    init(mode: Mode) {
-        self.mode = mode
-        self.bytes = [
-            0x83,
-            0x42,
-            0x12,
-            UInt8(mode.rawValue)
-        ]
-    }
-    
-    var description: String {
-        return "Set white balance to \(mode.description)"
-    }
+    let mode: PTZWhiteBalance
+    var bytes: Bytes { buildBytes([0x42, 0x12], mode) }
+    var description: String { "Set white balance to \(mode.description)" }
 }
 
 struct PTZRequestStartManualWhiteBalanceCalibration: PTZRequest {
-    let bytes: Bytes
-    
-    init() {
-        self.bytes = [0x82, 0x45, 0x17]
-    }
-    
-    var description: String {
-        return "Start manual white balance calibration"
-    }
+    var bytes: Bytes { buildBytes([0x45, 0x15]) }
+    var description: String { "Start manual white balance calibration" }
 }
 
 struct PTZRequestSetLed: PTZRequest {
-    let bytes: Bytes
-    private let on: Bool
-    
-    init(on: Bool) {
-        self.on = on
-
-        if on {
-            self.bytes = [0x84, 0x41, 0x21, 0x02, 0x10]
-        }
-        else {
-            self.bytes = [0x84, 0x41, 0x21, 0x00, 0x00]
-        }
-    }
-    
-    var description: String {
-        return "Set LED \(on.onOffString)"
-    }
+    let state: PTZLed
+    #warning("TODO: arg0 should be sent on 2 bytes always....")
+    var bytes: Bytes { buildBytes([0x41, 0x21], state) }
+    var description: String { "Set LED \(state.description)" }
 }
 
 struct PTZRequestSetStandByMode: PTZRequest {
-    let bytes: Bytes
-    private let on: Bool
-    
-    init(on: Bool) {
-        self.on = on
-
-        if on {
-            self.bytes = [0x83, 0x41, 0x00, 0x12]
-        }
-        else {
-            self.bytes = [0x83, 0x41, 0x00, 0x10]
-        }
-    }
-    
-    var description: String {
-        return "Set standby mode \(on.onOffString)"
-    }
+    let state: PTZStandByMode
+    var bytes: Bytes { buildBytes([0x41, 0x00], state) }
+    var description: String { "Set standby mode \(state.description)" }
 }
 
-struct PTZRequestEnableVideoOutput: PTZRequest {
-    let bytes: Bytes
-    
-    init() {
-        self.bytes = [0x83, 0x41, 0x13, 0x1a]
-    }
-    
-    var description: String {
-        return "Set video output on"
-    }
+struct PTZRequestSetVideoOutputMode: PTZRequest {
+    let state: PTZVideoOutput
+    var bytes: Bytes { buildBytes([0x41, 0x13], state) }
+    var description: String { "Set video output \(state.description)" }
 }
 
 struct PTZRequestSetShutterSpeed: PTZRequest {
-    let bytes: Bytes
-    private let speed: Speed
-    
-    enum Speed: CustomStringConvertible {
-        case zero
-        
-        var description: String {
-            switch self {
-            case .zero: return "zero"
-            }
-        }
-    }
-    
-    init(speed: Speed) {
-        self.speed = speed
-        
-        switch speed {
-        case .zero: self.bytes = [0x83, 0x42, 0x14, 0x00]
-        }
-    }
-    
-    var description: String {
-        return "Set shutter speed to \(speed.description)"
-    }
+    let speed: PTZShutterSpeed
+    var bytes: Bytes { buildBytes([0x42, 0x14], speed) }
+    var description: String { "Set shutter speed to \(speed.description)" }
 }
 
 struct PTZRequestSetMuteState: PTZRequest {
-    let bytes: Bytes
-    private let state: State
-    
-    enum State: CustomStringConvertible {
-        case unmute
-        var description: String {
-            switch self {
-            case .unmute: "unmute"
-            }
-        }
-    }
-
-    init(state: State) {
-        self.state = state
-
-        switch state {
-        case .unmute: self.bytes = [0x85, 0x41, 0x25, 0x08, 0x08, 0x08]
-        }
-    }
-    
-    var description: String {
-        return "Set mute state to \(state.description)"
-    }
+    let state: PTZMuteState
+    var bytes: Bytes { buildBytes([0x41, 0x25], state, state, state) }
+    var description: String { "Set mute state to \(state.description)" }
 }
 
-struct PTZRequestSetGain: PTZRequest {
-    let bytes: Bytes
-    private let gain: Gain
-    
-    enum Gain: UInt8, CustomStringConvertible {
-        case r = 0x42
-        case b = 0x43
-        
-        var description: String {
-            switch self {
-            case .r: "R"
-            case .b: "B"
-            }
-        }
-    }
-    
-    init(gain: Gain) {
-        self.gain = gain
-        switch gain {
-        // change auto gainr to 37 => 84 43 42 01 04
-        case .r: self.bytes = [0x84, 0x43, 0x42, 0x01, 0x04]
-        // change auto gainb to 33 => 84 43 43 01 00
-        case .b: self.bytes = [0x84, 0x43, 0x43, 0x01, 0x00]
-        }
-    }
-    
-    var description: String {
-        return "Set \(gain.description) gain"
-    }
+struct PTZRequestSetRedGain: PTZRequest {
+    let gain: PTZGain
+    var bytes: Bytes { buildBytes([0x43, 0x42], gain) }
+    var description: String { "Set red gain to \(gain.rawValue)" }
 }
 
-struct PTZRequestHello: PTZRequest {
-    let bytes: Bytes
-    
-    // 82 6 77
-    // 82 6 7e
-    // 82 6 7f
-    init() {
-        self.bytes = [0x82, 0x06, 0x77]
-    }
-    
-    var description: String {
-        return "Hello"
-    }
+struct PTZRequestSetBlueGain: PTZRequest {
+    let gain: PTZGain
+    var bytes: Bytes { buildBytes([0x43, 0x43], gain) }
+    var description: String { "Set red gain to \(gain.rawValue)" }
 }
 
 func bootSequence() -> [PTZRequest] {
     return [
-        PTZRequestSetStandByMode(on: false),
-        PTZRequestSetLed(on: true),
-        PTZRequestEnableVideoOutput(),
+        PTZRequestSetStandByMode(state: .off),
+        PTZRequestSetLed(state: .on),
+        PTZRequestSetVideoOutputMode(state: .on),
         PTZRequestSetShutterSpeed(speed: .zero),
         PTZRequestSetMuteState(state: .unmute),
-        PTZRequestSetPosition(pan: .init(value: 0), tilt: .init(value: 0), zoom: .init(value: 0)),
+        PTZRequestSetPosition(pan: .init(rawValue: 0), tilt: .init(rawValue: 0), zoom: .init(rawValue: 0)),
         PTZRequestSetInvertMode(inverted: false),
-        PTZRequestSetBrightness(brightness: .init(value: 11)),
-        PTZRequestSetSaturation(saturation: .init(value: 6)),
-        PTZRequestSetGain(gain: .r),
-        PTZRequestSetGain(gain: .b),
+        PTZRequestSetBrightness(brightness: .init(rawValue: 11)),
+        PTZRequestSetSaturation(saturation: .init(rawValue: 6)),
+        PTZRequestSetRedGain(gain: .init(rawValue: 37)),
+        PTZRequestSetBlueGain(gain: .init(rawValue: 33)),
         PTZRequestSetWhiteBalance(mode: .auto),
         PTZRequestSetBacklightCompensation(enabled: false)
     ]
@@ -600,8 +284,8 @@ func bootSequence() -> [PTZRequest] {
 
 func sleepSequence() -> [PTZRequest] {
     return [
-        PTZRequestSetLed(on: false),
-        PTZRequestSetStandByMode(on: true),
+        PTZRequestSetLed(state: .off),
+        PTZRequestSetStandByMode(state: .on),
     ]
 }
 
@@ -643,16 +327,3 @@ func sleepSequence() -> [PTZRequest] {
 45 xx => Move continuously in/Stop for direction xx
 
 */
-
-
-struct PTZRequestGetBrightness: PTZRequest {
-    let bytes: Bytes
-    
-    init() {
-        self.bytes = [0x82, 0x01, 0x33]
-    }
-    
-    var description: String {
-        return "Get Brightness"
-    }
-}

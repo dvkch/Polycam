@@ -45,7 +45,7 @@ class Serial: Loggable {
             receiveRate: .baud9600,
             transmitRate: .baud9600,
             minimumBytesToRead: 1,
-            timeout: 10, /* 0 means wait indefinitely */
+            timeout: 0, /* 0 means wait indefinitely */
             parityType: .even,
             sendTwoStopBits: false, /* 1 stop bit is the default */
             dataBitsSize: .bits8,

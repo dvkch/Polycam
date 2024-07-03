@@ -7,36 +7,28 @@
 
 import Foundation
 
-extension RandomAccessCollection where Self.Index == Int {
-    func last(n: Int) -> [Element] {
-        let firstIndex = Swift.max(0, count - n)
-        let lastIndex = Swift.max(0, count)
-        return Array(self[firstIndex..<lastIndex])
-    }
-}
-
-extension Collection where Element : BinaryInteger {
-    var isZero: Bool {
-        guard !isEmpty else { return true }
-        return filter { $0 == 0 }.count == self.count
-    }
-}
-
-extension Array {
-    static func * (lhs: Self, rhs: Int) -> Self {
-        var accumulator = Self()
-        accumulator.reserveCapacity(Swift.max(1, lhs.count * rhs))
-        for _ in 0..<rhs {
-            accumulator.append(contentsOf: lhs)
-        }
-        return accumulator
-    }
-}
-
 extension Bool {
     var onOffString: String {
         return self ? "on" : "off"
     }
+}
+
+protocol BinaryNumber: SignedNumeric, Comparable {
+    init(_ value: UInt16)
+    static func / (lhs: Self, rhs: Self) -> Self
+    var uint16: UInt16 { get }
+}
+
+extension Int: BinaryNumber {
+    var uint16: UInt16 { return UInt16(self) }
+}
+
+extension Float: BinaryNumber {
+    var uint16: UInt16 { return UInt16(self) }
+}
+
+extension Double: BinaryNumber {
+    var uint16: UInt16 { return UInt16(self) }
 }
 
 //17:28:11.039 DEBUG    SMan: hd[0]: CameraBase: In: Command: 3e8 fa 8b5 1f8

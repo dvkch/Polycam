@@ -15,10 +15,15 @@ struct BatchCommand: ParsableCommand {
     var serialDevice: String?
     
     private func generateRequests() -> [PTZRequest] {
+        let ptzRange = -10_000...10_000
         return (0..<20).map { b in
             [
-                PTZRequestSetBrightness(brightness: .init(value: b)),
-                PTZRequestGetBrightness()
+                PTZRequestSetPosition(
+                    pan: .init(rawValue: ptzRange.randomElement()!),
+                    tilt: .init(rawValue: ptzRange.randomElement()!),
+                    zoom: .init(rawValue: ptzRange.randomElement()!)
+                ),
+                PTZRequestGetPosition()
             ]
         }.reduce([], +)
     }
@@ -33,12 +38,12 @@ struct BatchCommand: ParsableCommand {
             serial.logLevel = .error
 
             let camera = Camera(serial: serial)
-            camera.logLevel = .debug
+            camera.logLevel = .info
 
             for request in generateRequests() {
                 print("-------------")
                 camera.sendRequest(request)
-                Thread.sleep(forTimeInterval: 1)
+                Thread.sleep(forTimeInterval: 0.5)
             }
             serial.stop()
         }

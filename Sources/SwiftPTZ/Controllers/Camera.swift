@@ -21,8 +21,8 @@ class Camera: Loggable {
 
     // MARK: Actions
     @discardableResult
-    func sendRequest(_ request: PTZRequest, replyTimeout: TimeInterval = 1) -> [PTZReplyParsed] {
-        log(.info, "Request: \(request)")
+    func sendRequest(_ request: PTZRequest, replyTimeout: TimeInterval = 1) -> [any PTZReply] {
+        log(.info, request.description)
         serial.sendBytes(request.bytes)
         
         let startDate = Date()
@@ -38,13 +38,13 @@ class Camera: Loggable {
             else {
                 justReceivedBytes = false
             }
-            Thread.sleep(forTimeInterval: 0.1)
+            usleep(20_000)
         }
-        
-        log(.debug, "Reply: \(bytes.stringRepresentation)")
 
-        let replies = PTZReply(bytes: bytes).replies()
-        log(.info, "Replies: \(replies)")
+        log(.debug, bytes.stringRepresentation)
+
+        let replies = PTZMessage.replies(from: bytes)
+        log(.info, replies.map(\.description).joined(separator: ", "))
 
         return replies
     }
