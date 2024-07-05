@@ -22,7 +22,7 @@ class Serial: Loggable {
     private(set) var isOpen: Bool = false
     private(set) var port: SerialPort!
     private let lock = NSLock()
-    private var readBytes: [UInt8] = []
+    private var readBytes: Bytes = []
 
     // MARK: Serial
     private func open(deviceName: String) throws {
@@ -60,7 +60,7 @@ class Serial: Loggable {
     }
     
     // MARK: Outside world
-    func sendBytes(_ bytes: [UInt8], lastTransmission: Bool = false) {
+    func sendBytes(_ bytes: Bytes, lastTransmission: Bool = false) {
         lock.lock()
         defer { lock.unlock() }
 
@@ -77,7 +77,7 @@ class Serial: Loggable {
         }
     }
     
-    func readAllBytes() -> [UInt8] {
+    func readAllBytes() -> Bytes {
         lock.lock()
         defer { lock.unlock() }
 

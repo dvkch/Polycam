@@ -48,9 +48,8 @@ extension PTZMessage {
         fatalError("There is no first argument here")
     }
     
-    func parseArgument<V: PTZValue>(type: V.Type, hiIndex: Int, loIndex: Int, loRetainerIndex: Int, loRetainerMask: UInt8) -> V {
-        let ptzValue = UInt16(from: bytes, loIndex: loIndex, hiIndex: hiIndex, loRetainerIndex: loRetainerIndex, loRetainerMask: loRetainerMask)
-        return V.init(ptzValue: ptzValue)
+    func parseArgument<V: PTZValue>(type: V.Type, hiIndex: Int, loIndex: Int, loRetainerIndex: Int, loRetainerMask: Byte) -> V {
+        return V.init(from: bytes, loIndex: loIndex, hiIndex: hiIndex, loRetainerIndex: loRetainerIndex, loRetainerMask: loRetainerMask)
     }
 }
 

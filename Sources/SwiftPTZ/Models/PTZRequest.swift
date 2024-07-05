@@ -46,14 +46,14 @@ extension PTZRequest {
                     let highestIndex = [hiIndex, loIndex, loRetainerIndex].max()!
                     bytes.ensureLength(highestIndex + 1, filler: 0x00)
 
-                    let ptzValue = arg.value.ptzValue.requestBytes
+                    let ptzValue = arg.value.ptzBytes
                     bytes[hiIndex] = ptzValue.hi
                     bytes[loIndex] = ptzValue.lo
                     bytes[loRetainerIndex] += loRetainerMask * (ptzValue.loRetainer ? 1 : 0)
                     
                 case .index(let index):
                     bytes.ensureLength(index + 1, filler: 0x00)
-                    bytes[index] = UInt8(arg.value.ptzValue)
+                    bytes[index] = Byte(arg.value.ptzValue)
 
                 case .single:
                     fatalError("Unsupported arguments combination")
@@ -61,7 +61,7 @@ extension PTZRequest {
             }
         }
         
-        bytes[0] = 0x80 + UInt8(bytes.count - 1)
+        bytes[0] = 0x80 + Byte(bytes.count - 1)
         return bytes
     }
 }
@@ -84,7 +84,7 @@ struct PTZRequestMove: PTZRequest {
     private let direction: Direction
     private let accelerationPercent: Int
 
-    enum Direction: UInt8, CustomStringConvertible {
+    enum Direction: Byte, CustomStringConvertible {
         case left      = 0x11
         case right     = 0x01
         case up        = 0x03
@@ -92,7 +92,7 @@ struct PTZRequestMove: PTZRequest {
         case zoomIn    = 0x0C
         case zoomOut   = 0x0D
         
-        private var accelerationValues: [UInt8] {
+        private var accelerationValues: Bytes {
             switch self {
             case .left, .right, .up, .down:
                 return [0x11, 0x13, 0x15, 0x17, 0x19]
@@ -101,7 +101,7 @@ struct PTZRequestMove: PTZRequest {
             }
         }
         
-        func accelerationValue(fromPercent percent: Int) -> UInt8 {
+        func accelerationValue(fromPercent percent: Int) -> Byte {
             let index = percent * accelerationValues.count / 100
             return accelerationValues[index]
         }
@@ -138,7 +138,7 @@ struct PTZRequestStopMove: PTZRequest {
     let bytes: Bytes
     private let direction: Direction
 
-    enum Direction: UInt8, CustomStringConvertible {
+    enum Direction: Byte, CustomStringConvertible {
         case horizontal = 0x02
         case vertical   = 0x05
         case zoom       = 0x0E
