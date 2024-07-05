@@ -14,6 +14,7 @@ struct PTZGain: PTZScaledValue {
     static var ptzOffset: Int = 95 // 33 should be 01 00, 37 should be 01 04
     static var ptzScale: Double = 1
     static var testValues: [PTZGain] { Array(minValue...maxValue).map(Self.init(rawValue:)) }
+    static var `default`: PTZGain { .init(rawValue: 35) }
 }
 
 struct PTZRequestSetRedGain: PTZRequest {

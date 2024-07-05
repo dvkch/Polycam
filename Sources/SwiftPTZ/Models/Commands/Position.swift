@@ -14,6 +14,7 @@ struct PTZPositionPan: PTZScaledValue {
     static var ptzOffset: Int = 1_000
     static var ptzScale: Double = 0.02
     static var testValues: [PTZPositionPan] { Array(stride(from: minValue, to: maxValue, by: 10_000)).map(Self.init(rawValue:)) }
+    static var `default`: PTZPositionPan { .init(rawValue: 0) }
 }
 
 struct PTZPositionTilt: PTZScaledValue {
@@ -23,6 +24,7 @@ struct PTZPositionTilt: PTZScaledValue {
     static var ptzOffset: Int = 250
     static var ptzScale: Double = 0.005
     static var testValues: [PTZPositionTilt] { Array(stride(from: minValue, to: maxValue, by: 10_000)).map(Self.init(rawValue:)) }
+    static var `default`: PTZPositionTilt { .init(rawValue: 0) }
 }
 
 struct PTZPositionZoom: PTZScaledValue {
@@ -32,6 +34,7 @@ struct PTZPositionZoom: PTZScaledValue {
     static var ptzOffset: Int = 1146
     static var ptzScale: Double = 0.021739 // <- this one is perfect match to read values, but 0.0217246 is closer to our Set fixtures
     static var testValues: [PTZPositionZoom] { Array(stride(from: minValue, to: maxValue, by: 10_000)).map(Self.init(rawValue:)) }
+    static var `default`: PTZPositionZoom { .init(rawValue: 0) }
     // FROM: (8D 41 51 24 00 03 68 00 00 7A 03) 00 00 40
     // TO:   (8D 41 51 24 00 03 68 00 00 7A 03) 02 05 79
     // 00 40 -> 05 F9

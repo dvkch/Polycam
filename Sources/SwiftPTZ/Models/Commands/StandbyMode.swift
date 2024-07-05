@@ -17,6 +17,8 @@ enum PTZStandbyMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
         case .off:  return "off"
         }
     }
+    
+    static var `default`: PTZStandbyMode { .off }
 }
 
 struct PTZRequestSetStandbyMode: PTZRequest {

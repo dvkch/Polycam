@@ -56,6 +56,8 @@ struct PTZReplyNotExecuted: PTZReply {
             case .commandNotDefined: return "Command not defined"
             }
         }
+        
+        static var `default`: PTZReplyNotExecuted.PTZCommandError { .unknown }
     }
     
     let error: PTZCommandError

@@ -11,6 +11,8 @@ import CoreMedia
 protocol PTZValue: RawRepresentable, Equatable where RawValue: Equatable {
     init(ptzValue: UInt16)
     var ptzValue: UInt16 { get }
+
+    static var `default`: Self { get }
     static var testValues: [Self] { get }
 }
 
@@ -66,6 +68,7 @@ struct PTZInt: PTZValue {
     }
     
     static var testValues: [PTZInt] { [.init(rawValue: 0)] }
+    static var `default`: PTZInt { .init(rawValue: 0) }
 }
 
 struct PTZBool: PTZValue {
@@ -84,6 +87,7 @@ struct PTZBool: PTZValue {
     }
     
     static var testValues: [PTZBool] { [.init(rawValue: true), .init(rawValue: false)] }
+    static var `default`: PTZBool { .init(rawValue: false) }
 }
 
 extension RawRepresentable where Self: CaseIterable, RawValue == UInt16 {

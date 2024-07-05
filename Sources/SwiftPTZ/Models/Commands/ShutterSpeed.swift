@@ -15,6 +15,8 @@ enum PTZShutterSpeed: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
         case .zero: return "zero"
         }
     }
+    
+    static var `default`: PTZShutterSpeed { .zero }
 }
 
 struct PTZRequestSetShutterSpeed: PTZRequest {

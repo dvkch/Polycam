@@ -15,6 +15,8 @@ enum PTZVolume: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
         case .unmute: return "unmute"
         }
     }
+    
+    static var `default`: PTZVolume { .unmute }
 }
 
 struct PTZRequestSetVolume: PTZRequest {

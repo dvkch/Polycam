@@ -20,6 +20,8 @@ enum PTZLedMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
         case .unknown: return "unknown" 
         }
     }
+    
+    static var `default`: PTZLedMode { .on }
 }
 
 struct PTZRequestSetLedMode: PTZRequest {

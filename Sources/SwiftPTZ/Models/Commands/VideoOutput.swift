@@ -15,6 +15,8 @@ enum PTZVideoOutputMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue
         case .on:   return "on"
         }
     }
+    
+    static var `default`: PTZVideoOutputMode { .on }
 }
 
 struct PTZRequestSetVideoOutputMode: PTZRequest {

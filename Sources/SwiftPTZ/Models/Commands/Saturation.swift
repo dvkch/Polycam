@@ -14,6 +14,7 @@ struct PTZSaturation: PTZScaledValue {
     static var ptzOffset: Int = 122
     static var ptzScale: Double = 1
     static var testValues: [PTZSaturation] { Array(minValue...maxValue).map(Self.init(rawValue:)) }
+    static var `default`: PTZSaturation { .init(rawValue: 6) }
 }
 
 struct PTZRequestSetSaturation: PTZRequest {

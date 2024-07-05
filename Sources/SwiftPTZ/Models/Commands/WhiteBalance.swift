@@ -29,6 +29,8 @@ enum PTZWhiteBalance: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
         case .temp6504K: return "6504K"
         }
     }
+    
+    static var `default`: PTZWhiteBalance { .auto }
 }
 
 struct PTZRequestSetWhiteBalance: PTZRequest {
