@@ -31,7 +31,7 @@ extension PTZRequest {
         bytes.append(contentsOf: command)
         
         if args.count == 1, let arg = args.first, case .single = arg.position {
-            let argBytes = arg.value.ptzValue.requestBytes
+            let argBytes = arg.value.ptzBytes
             if argBytes.loRetainer {
                 bytes.append(contentsOf: [0x01, argBytes.lo])
             }

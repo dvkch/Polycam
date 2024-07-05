@@ -38,18 +38,23 @@ extension PTZMessage {
 }
 
 extension PTZMessage {
-    func parseOnlyArgument<V: PTZValue>(type: V.Type) -> V {
-        if bytes.count == 4 {
-            return V.init(ptzValue: UInt16(bytes[3]))
+    func parseArgument<V: PTZValue>(type: V.Type = V.self, position: PTZArgument.Position) -> V {
+        switch position {
+        case .single:
+            if bytes.count == 4 {
+                return V.init(ptzValue: UInt16(bytes[3]))
+            }
+            if bytes.count == 5 {
+                return V.init(ptzValue: UInt16(bytes[3]) + 0x7F + UInt16(bytes[4]))
+            }
+            fatalError("There is no first argument here")
+            
+        case .custom(let hiIndex, let loIndex, let loRetainerIndex, let loRetainerMask):
+            return V.init(from: bytes, loIndex: loIndex, hiIndex: hiIndex, loRetainerIndex: loRetainerIndex, loRetainerMask: loRetainerMask)
+            
+        case .index(let index):
+            return V.init(ptzValue: UInt16(bytes[index]))
         }
-        if bytes.count == 5 {
-            return V.init(ptzValue: UInt16(bytes[3]) + 0x7F + UInt16(bytes[4]))
-        }
-        fatalError("There is no first argument here")
-    }
-    
-    func parseArgument<V: PTZValue>(type: V.Type, hiIndex: Int, loIndex: Int, loRetainerIndex: Int, loRetainerMask: Byte) -> V {
-        return V.init(from: bytes, loIndex: loIndex, hiIndex: hiIndex, loRetainerIndex: loRetainerIndex, loRetainerMask: loRetainerMask)
     }
 }
 

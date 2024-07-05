@@ -7,8 +7,6 @@
 
 import Foundation
 
-#warning("TODO: distinguish message and reply maybe? split on 0xF0 > 0, check for valid length, then parse. should allow for cleaner extensions")
-
 protocol PTZReply: CustomStringConvertible {
     init?(message: PTZMessage)
 }
@@ -62,9 +60,9 @@ struct PTZReplyPosition: PTZReply {
     
     init?(message: PTZMessage) {
         guard message.isValidReply([0x41, 0x50]) else { return nil }
-        self.pan  = message.parseArgument(type: PTZPositionPan.self, hiIndex: 4, loIndex: 5, loRetainerIndex: 3, loRetainerMask: 0x02)
-        self.tilt = message.parseArgument(type: PTZPositionTilt.self, hiIndex: 6, loIndex: 7, loRetainerIndex: 3, loRetainerMask: 0x08)
-        self.zoom = message.parseArgument(type: PTZPositionZoom.self, hiIndex: 8, loIndex: 9, loRetainerIndex: 3, loRetainerMask: 0x20)
+        self.pan  = message.parseArgument(position: .custom(hiIndex: 4, loIndex: 5, loRetainerIndex: 3, loRetainerMask: 0x02))
+        self.tilt = message.parseArgument(position: .custom(hiIndex: 6, loIndex: 7, loRetainerIndex: 3, loRetainerMask: 0x08))
+        self.zoom = message.parseArgument(position: .custom(hiIndex: 8, loIndex: 9, loRetainerIndex: 3, loRetainerMask: 0x20))
     }
     
     var description: String {
@@ -77,7 +75,7 @@ struct PTZReplyBrightness: PTZReply {
     
     init?(message: PTZMessage) {
         guard message.isValidReply([0x41, 0x33]) else { return nil }
-        self.brightness = message.parseOnlyArgument(type: PTZBrightness.self)
+        self.brightness = message.parseArgument(position: .single)
     }
     
     var description: String {
