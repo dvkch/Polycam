@@ -11,18 +11,19 @@ import XCTest
 @testable import SwiftPTZ
 
 final class RequestsTests: XCTestCase {
-    func buildCamera() -> Camera {
-        let serial = try! Serial(tag: "PTZ", name: .firstAvailable!)
-        serial.logLevel = .info
-
-        let camera = Camera(serial: serial)
-        camera.logLevel = .info
-        
+    override class func tearDown() {
+        super.tearDown()
+        buildCamera().powerOff()
+    }
+    
+    static func buildCamera() -> Camera {
+        let serial = try! Serial(name: .firstAvailable!, tag: "PTZ", logLevel: .info)
+        let camera = Camera(serial: serial, logLevel: .info, powerOffAfterUse: false)
         return camera
     }
 
     func testBacklightCompensationRequests() {
-        let camera = buildCamera()
+        let camera = Self.buildCamera()
         for backlightCompensation in PTZBool.testValues {
             let replySet = camera.sendRequest(PTZRequestSetBacklightCompensation(enabled: backlightCompensation.rawValue))
             XCTAssertEqual(replySet.count, 2)
@@ -38,7 +39,7 @@ final class RequestsTests: XCTestCase {
     }
 
     func testBrightnessRequests() {
-        let camera = buildCamera()
+        let camera = Self.buildCamera()
         for brightness in PTZBrightness.testValues {
             let replySet = camera.sendRequest(PTZRequestSetBrightness(brightness: brightness))
             XCTAssertEqual(replySet.count, 2)
@@ -54,7 +55,7 @@ final class RequestsTests: XCTestCase {
     }
 
     func testGainRedRequests() {
-        let camera = buildCamera()
+        let camera = Self.buildCamera()
         for gain in PTZGain.testValues {
             let replySet = camera.sendRequest(PTZRequestSetRedGain(gain: gain))
             XCTAssertEqual(replySet.count, 2)
@@ -70,7 +71,7 @@ final class RequestsTests: XCTestCase {
     }
 
     func testGainBlueRequests() {
-        let camera = buildCamera()
+        let camera = Self.buildCamera()
         for gain in PTZGain.testValues {
             let replySet = camera.sendRequest(PTZRequestSetBlueGain(gain: gain))
             XCTAssertEqual(replySet.count, 2)
@@ -90,7 +91,7 @@ final class RequestsTests: XCTestCase {
     }
 
     func testInvertedModeRequests() {
-        let camera = buildCamera()
+        let camera = Self.buildCamera()
         for invertedMode in PTZBool.testValues {
             let replySet = camera.sendRequest(PTZRequestSetInvertedMode(enabled: invertedMode.rawValue))
             XCTAssertEqual(replySet.count, 2)
@@ -107,7 +108,7 @@ final class RequestsTests: XCTestCase {
 
     func testLedModeRequests() {
         #warning("Fix LED MODE")
-        let camera = buildCamera()
+        let camera = Self.buildCamera()
         for mode in PTZLedMode.testValues {
             let replySet = camera.sendRequest(PTZRequestSetLedMode(mode: mode))
             XCTAssertEqual(replySet.count, 2)
@@ -123,7 +124,7 @@ final class RequestsTests: XCTestCase {
     }
 
     func testPositionRequests() {
-        let camera = buildCamera()
+        let camera = Self.buildCamera()
         var triplets = [(PTZPositionPan, PTZPositionTilt, PTZPositionZoom)]()
         var longPauseIndicies = [Int]()
         
@@ -161,7 +162,7 @@ final class RequestsTests: XCTestCase {
     }
     
     func testSaturationRequests() {
-        let camera = buildCamera()
+        let camera = Self.buildCamera()
         for saturation in PTZSaturation.testValues {
             let replySet = camera.sendRequest(PTZRequestSetSaturation(saturation: saturation))
             XCTAssertEqual(replySet.count, 2)
@@ -177,7 +178,7 @@ final class RequestsTests: XCTestCase {
     }
 
     func testShutterSpeedRequests() {
-        let camera = buildCamera()
+        let camera = Self.buildCamera()
         for speed in PTZShutterSpeed.testValues {
             let replySet = camera.sendRequest(PTZRequestSetShutterSpeed(speed: speed))
             XCTAssertEqual(replySet.count, 2)
@@ -214,7 +215,7 @@ final class RequestsTests: XCTestCase {
     func testVideoOutputRequests() {
 #warning("TODO: parse 93 40 01 00 error")
 #warning("TODO: fix video output mode")
-        let camera = buildCamera()
+        let camera = Self.buildCamera()
         for mode in PTZVideoOutputMode.testValues {
             let replySet = camera.sendRequest(PTZRequestSetVideoOutputMode(mode: mode))
             XCTAssertEqual(replySet.count, 2)
@@ -231,7 +232,7 @@ final class RequestsTests: XCTestCase {
 
     func testVolumeRequests() {
         #warning("TODO: check if there are more possible volumes, and if a mic is actually present and accessible through HDMI")
-        let camera = buildCamera()
+        let camera = Self.buildCamera()
         for volume in PTZVolume.testValues {
             let replySet = camera.sendRequest(PTZRequestSetVolume(volume: volume))
             XCTAssertEqual(replySet.count, 2)
@@ -249,7 +250,7 @@ final class RequestsTests: XCTestCase {
     func testWhiteBalanceRequests() {
         #warning("TODO: parse 93 40 01 12")
         #warning("TODO: make manual calibration work")
-        let camera = buildCamera()
+        let camera = Self.buildCamera()
         for mode in PTZWhiteBalance.testValues {
             let replySet = camera.sendRequest(PTZRequestSetWhiteBalance(mode: mode))
             XCTAssertEqual(replySet.count, 2)

@@ -33,18 +33,14 @@ struct BatchCommand: ParsableCommand {
         }
 
         do {
-            let serial = try Serial(tag: "RS423", name: .init(rawValue: serialDevice))
-            serial.logLevel = .info
-
-            let camera = Camera(serial: serial)
-            camera.logLevel = .info
+            let serial = try Serial(name: .init(rawValue: serialDevice), tag: "RS423", logLevel: .info)
+            let camera = Camera(serial: serial, logLevel: .info, powerOffAfterUse: true)
 
             for request in generateRequests() {
                 print("-------------")
                 camera.sendRequest(request)
                 Thread.sleep(forTimeInterval: 0.5)
             }
-            camera.stop()
         }
         catch {
             print("Error: \(error)")

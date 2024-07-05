@@ -11,13 +11,14 @@ import SwiftSerial
 class Serial: Loggable {
     
     // MARK: Init
-    init(tag: String, name: SerialName) throws {
+    init(name: SerialName, tag: String, logLevel: LogLevel) throws {
+        self.logLevel = logLevel
         self.logTag = "Serial \(tag)"
         try open(deviceName: name.rawValue)
     }
     
     // MARK: Properties
-    var logLevel: LogLevel = .debug
+    let logLevel: LogLevel
     let logTag: String
     private(set) var isOpen: Bool = false
     private(set) var port: SerialPort!
