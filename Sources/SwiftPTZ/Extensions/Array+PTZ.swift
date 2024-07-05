@@ -33,7 +33,7 @@ extension Array {
     }
 }
 
-extension Array where Element == UInt8 {
+extension Array {
     func split(startFilter: (Element) -> Bool) -> [Self] {
         let startIndicies = enumerated().filter { startFilter($0.element) }.map(\.offset)
 
@@ -45,5 +45,11 @@ extension Array where Element == UInt8 {
         }
 
         return subarrays
+    }
+    
+    mutating func ensureLength(_ count: Int, filler: Element) {
+        while self.count < count {
+            self.append(filler)
+        }
     }
 }

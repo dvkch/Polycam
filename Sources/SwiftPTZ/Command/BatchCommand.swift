@@ -15,13 +15,12 @@ struct BatchCommand: ParsableCommand {
     var serialDevice: String?
     
     private func generateRequests() -> [PTZRequest] {
-        let ptzRange = -10_000...10_000
         return (0..<20).map { b in
             [
                 PTZRequestSetPosition(
-                    pan: .init(rawValue: ptzRange.randomElement()!),
-                    tilt: .init(rawValue: ptzRange.randomElement()!),
-                    zoom: .init(rawValue: ptzRange.randomElement()!)
+                    pan: .init(rawValue:  (PTZPositionPan.minValue...PTZPositionPan.maxValue).randomElement()!),
+                    tilt: .init(rawValue: (PTZPositionTilt.minValue...PTZPositionTilt.maxValue).randomElement()!),
+                    zoom: .init(rawValue: (PTZPositionZoom.minValue...PTZPositionZoom.maxValue).randomElement()!)
                 ),
                 PTZRequestGetPosition()
             ]
@@ -35,7 +34,7 @@ struct BatchCommand: ParsableCommand {
 
         do {
             let serial = try Serial(tag: "RS423", name: .init(rawValue: serialDevice))
-            serial.logLevel = .error
+            serial.logLevel = .info
 
             let camera = Camera(serial: serial)
             camera.logLevel = .info
@@ -45,7 +44,7 @@ struct BatchCommand: ParsableCommand {
                 camera.sendRequest(request)
                 Thread.sleep(forTimeInterval: 0.5)
             }
-            serial.stop()
+            camera.stop()
         }
         catch {
             print("Error: \(error)")

@@ -14,6 +14,10 @@ class Camera: Loggable {
         self.serial = serial
     }
     
+    deinit {
+        stop()
+    }
+    
     // MARK: Properties
     private let serial: Serial
     var logLevel: LogLevel = .debug
@@ -23,6 +27,7 @@ class Camera: Loggable {
     @discardableResult
     func sendRequest(_ request: PTZRequest, replyTimeout: TimeInterval = 1) -> [any PTZReply] {
         log(.info, request.description)
+        log(.debug, "> \(request.bytes.stringRepresentation)")
         serial.sendBytes(request.bytes)
         
         let startDate = Date()
@@ -41,11 +46,15 @@ class Camera: Loggable {
             usleep(20_000)
         }
 
-        log(.debug, bytes.stringRepresentation)
+        log(.debug, "< \(bytes.stringRepresentation)")
 
         let replies = PTZMessage.replies(from: bytes)
         log(.info, replies.map(\.description).joined(separator: ", "))
 
         return replies
+    }
+    
+    func stop() {
+        serial.stop()
     }
 }

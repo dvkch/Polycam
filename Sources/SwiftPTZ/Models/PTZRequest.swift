@@ -17,16 +17,21 @@ extension PTZRequest {
     }
     var validLength: Bool {
         let messageLength = bytes.count - 1
-        let expectedLength = (bytes.first ?? 0x80) & 0x0F
+        let expectedLength = Int(bytes.first ?? 0) - 0x80
         return messageLength == expectedLength
     }
+    
+    fileprivate func buildBytes(_ command: Bytes, _ singleArg: any PTZValue) -> Bytes {
+        return self.buildBytes(command, PTZArgument(value: singleArg, position: .single))
+    }
 
-    fileprivate func buildBytes(_ command: Bytes, _ args: (any PTZValue)...) -> Bytes {
+    fileprivate func buildBytes(_ command: Bytes, _ args: (PTZArgument)...) -> Bytes {
         var bytes = Bytes()
+        bytes.append(0x00)
         bytes.append(contentsOf: command)
         
-        if args.count == 1, args[0].ptzValue.requestBytes.hi == 0 {
-            let argBytes = args[0].ptzValue.requestBytes
+        if args.count == 1, let arg = args.first, case .single = arg.position {
+            let argBytes = arg.value.ptzValue.requestBytes
             if argBytes.loRetainer {
                 bytes.append(contentsOf: [0x01, argBytes.lo])
             }
@@ -34,11 +39,29 @@ extension PTZRequest {
                 bytes.append(contentsOf: [argBytes.lo])
             }
         }
-        for arg in args {
-            #warning("TODO: insert arguments")
+        else {
+            for arg in args {
+                switch arg.position {
+                case .custom(let hiIndex, let loIndex, let loRetainerIndex, let loRetainerMask):
+                    let highestIndex = [hiIndex, loIndex, loRetainerIndex].max()!
+                    bytes.ensureLength(highestIndex + 1, filler: 0x00)
+
+                    let ptzValue = arg.value.ptzValue.requestBytes
+                    bytes[hiIndex] = ptzValue.hi
+                    bytes[loIndex] = ptzValue.lo
+                    bytes[loRetainerIndex] += loRetainerMask * (ptzValue.loRetainer ? 1 : 0)
+                    
+                case .index(let index):
+                    bytes.ensureLength(index + 1, filler: 0x00)
+                    bytes[index] = UInt8(arg.value.ptzValue)
+
+                case .single:
+                    fatalError("Unsupported arguments combination")
+                }
+            }
         }
         
-        bytes.insert(0x80 + UInt8(bytes.count), at: 0)
+        bytes[0] = 0x80 + UInt8(bytes.count - 1)
         return bytes
     }
 }
@@ -149,26 +172,13 @@ struct PTZRequestSetPosition: PTZRequest {
     let zoom: PTZPositionZoom
     
     var bytes: Bytes {
-        let panBytes  = pan.ptzValue.requestBytes
-        let tiltBytes = tilt.ptzValue.requestBytes
-        let zoomBytes = zoom.ptzValue.requestBytes
-
-        return [
-            0x8D,
-            0x41,
-            0x51,
-            (panBytes.loRetainer ? 0x4 : 0) + (tiltBytes.loRetainer ? 0x20 : 0),
-            0x00,
-            panBytes.hi,
-            panBytes.lo,
-            0x00,
-            tiltBytes.hi,
-            tiltBytes.lo,
-            0x03,
-            (zoomBytes.loRetainer ? 0x2 : 0),
-            zoomBytes.hi,
-            zoomBytes.lo
-        ]
+        return buildBytes(
+            [0x41, 0x51],
+            PTZArgument(value: pan,  position: .custom(hiIndex:  5, loIndex:  6, loRetainerIndex:  3, loRetainerMask: 0x04)),
+            PTZArgument(value: tilt, position: .custom(hiIndex:  8, loIndex:  9, loRetainerIndex:  3, loRetainerMask: 0x20)),
+            PTZArgument(value: zoom, position: .custom(hiIndex: 12, loIndex: 13, loRetainerIndex: 11, loRetainerMask: 0x02)),
+            PTZArgument(value: PTZInt(rawValue: 0x03), position: .index(10))
+        )
     }
     
     var description: String {
@@ -248,7 +258,14 @@ struct PTZRequestSetShutterSpeed: PTZRequest {
 
 struct PTZRequestSetMuteState: PTZRequest {
     let state: PTZMuteState
-    var bytes: Bytes { buildBytes([0x41, 0x25], state, state, state) }
+    var bytes: Bytes {
+        buildBytes(
+            [0x41, 0x25], 
+            .init(value: state, position: .index(3)),
+            .init(value: state, position: .index(4)),
+            .init(value: state, position: .index(5))
+        )
+    }
     var description: String { "Set mute state to \(state.description)" }
 }
 

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreMedia
 
 protocol PTZValue: RawRepresentable, Equatable where RawValue: Equatable {
     init(ptzValue: UInt16)
@@ -143,38 +144,19 @@ protocol PTZScaledValue: PTZValue where RawValue == Int {
     var rawValue: Int { get set }
     static var minValue: Int { get }
     static var maxValue: Int { get }
-    static var ptzOffset: Double { get }
+    static var ptzOffset: Int { get }
     static var ptzScale: Double { get }
 }
 
 extension PTZScaledValue {
     init(ptzValue: UInt16) {
-        let value = (Double(ptzValue) - Self.ptzOffset) / Self.ptzScale
+        let value = Double(Int(ptzValue) - Self.ptzOffset) / Self.ptzScale
         self.init(rawValue: Int(value))!
     }
 
-    #warning("TODO: extract parameters")
-    /*
-    init(from bytes: Bytes, loIndex: Int, hiIndex: Int, loRetainerIndex: Int, loRetainerMask: UInt8) {
-        assert(loIndex < bytes.count)
-        assert(loRetainerIndex < bytes.count)
-        assert(hiIndex < bytes.count)
-        
-        let hi = bytes[hiIndex]
-        var lo = bytes[loIndex]
-        let lowRetainer = (bytes[loRetainerIndex] & loRetainerMask) > 0
-        if lowRetainer {
-            lo += 128
-        }
-        
-        let parsedValue = UInt16(hi) << 8 + UInt16(lo)
-        let rebasedValue: RawValue = Self.RawValue(parsedValue) - Self.ptzOffset
-        self.init(rawValue: rebasedValue / Self.ptzScale)!
-    }
-     */
-    
     var ptzValue: UInt16 {
-        return UInt16(Self.ptzOffset + (Double(clamped) * Self.ptzScale))
+        let value = Int(Double(clamped) * Self.ptzScale) + Self.ptzOffset
+        return UInt16(value)
     }
 }
 
@@ -192,7 +174,7 @@ struct PTZBrightness: PTZScaledValue {
     var rawValue: Int
     static var minValue: Int = 1
     static var maxValue: Int = 20
-    static var ptzOffset: Double = 117
+    static var ptzOffset: Int = 117
     static var ptzScale: Double = 1
 }
 
@@ -200,7 +182,7 @@ struct PTZSaturation: PTZScaledValue {
     var rawValue: Int
     static var minValue: Int = 1
     static var maxValue: Int = 11
-    static var ptzOffset: Double = 122
+    static var ptzOffset: Int = 122
     static var ptzScale: Double = 1
 }
 
@@ -209,7 +191,7 @@ struct PTZGain: PTZScaledValue {
     static var minValue: Int = 0
     #warning("TODO: find out max gain")
     static var maxValue: Int = 50
-    static var ptzOffset: Double = 95 // 33 should be 01 00, 37 should be 01 04
+    static var ptzOffset: Int = 95 // 33 should be 01 00, 37 should be 01 04
     static var ptzScale: Double = 1
 }
 
@@ -217,7 +199,7 @@ struct PTZPositionPan: PTZScaledValue {
     var rawValue: Int
     static var minValue: Int = -50_000
     static var maxValue: Int =  50_000
-    static var ptzOffset: Double = 1_000
+    static var ptzOffset: Int = 1_000
     static var ptzScale: Double = 0.02
 }
 
@@ -225,14 +207,18 @@ struct PTZPositionTilt: PTZScaledValue {
     var rawValue: Int
     static var minValue: Int = -50_000
     static var maxValue: Int =  50_000
-    static var ptzOffset: Double = 250
+    static var ptzOffset: Int = 250
     static var ptzScale: Double = 0.005
 }
 
 struct PTZPositionZoom: PTZScaledValue {
     var rawValue: Int
-    static var minValue: Int = -50_000
-    static var maxValue: Int =  50_000
-    static var ptzOffset: Double = 1146
-    static var ptzScale: Double = 0.0217246
+    static var minValue: Int = -49_772
+    static var maxValue: Int = 17_663
+    static var ptzOffset: Int = 1146
+    static var ptzScale: Double = 0.021739 // <- this one is perfect match to read values, but 0.0217246 is closer to our Set fixtures
+    // FROM: (8D 41 51 24 00 03 68 00 00 7A 03) 00 00 40
+    // TO:   (8D 41 51 24 00 03 68 00 00 7A 03) 02 05 79
+    // 00 40 -> 05 F9
+    // 64 => 1529
 }

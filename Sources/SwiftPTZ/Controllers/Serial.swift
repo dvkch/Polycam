@@ -14,38 +14,30 @@ class Serial: Loggable {
     init(tag: String, name: SerialName) throws {
         self.logTag = "Serial \(tag)"
         try open(deviceName: name.rawValue)
-        
-        readQueue.async {
-            self.readLoop()
-        }
-        writeQueue.async {
-            self.writeLoop()
-        }
     }
     
     // MARK: Properties
     var logLevel: LogLevel = .debug
     let logTag: String
+    private(set) var isOpen: Bool = false
     private(set) var port: SerialPort!
-    private var shouldStop: Bool = false
-    private let writeLock = NSLock()
-    private let writeQueue = DispatchQueue.global(qos: .userInteractive)
-    private var bytesToSend: [UInt8] = []
-    private let readLock = NSLock()
-    private let readQueue = DispatchQueue.global(qos: .userInteractive)
+    private let lock = NSLock()
     private var readBytes: [UInt8] = []
-    private var lastReadUUID = UUID()
 
     // MARK: Serial
     private func open(deviceName: String) throws {
+        lock.lock()
+        defer { lock.unlock() }
+
+        guard !isOpen else { return }
+
         log(.info, "Opening port...")
-        
-        self.port = SerialPort(path: deviceName)
-        self.port.setSettings(
-            receiveRate: .baud9600,
-            transmitRate: .baud9600,
-            minimumBytesToRead: 1,
-            timeout: 0, /* 0 means wait indefinitely */
+        port = SerialPort(path: deviceName)
+        try port.openPort()
+        try port.setSettings(
+            baudRateSetting: .symmetrical(.baud9600),
+            minimumBytesToRead: 0,
+            timeout: 1, /* 0 means wait indefinitely */
             parityType: .even,
             sendTwoStopBits: false, /* 1 stop bit is the default */
             dataBitsSize: .bits8,
@@ -54,52 +46,30 @@ class Serial: Loggable {
             processOutput: false
             
         )
-        try self.port.openPort()
-        
+        isOpen = true
         log(.info, "> opened!")
-    }
-    
-    // MARK: Read/Write loops
-    private func readLoop() {
-        log(.info, "Starting read loop...")
         
-        do {
-            while !shouldStop {
-                let readUUID = UUID()
-                let byte = try port.readByte()
-                readLock.withLock {
-                    self.lastReadUUID = readUUID
-                    self.readBytes.append(byte)
-                    
-                    DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) {
-                        guard self.lastReadUUID == readUUID else { return }
-                        self.readLock.withLock {
-                            self.log(.debug, "Received \(self.readBytes.count) bytes: \(self.readBytes.stringRepresentation)")
-                        }
-                    }
+        Task {
+            for await byte in (try port.asyncBytes()) {
+                lock.withLock {
+                    readBytes.append(byte)
                 }
             }
         }
-        catch {
-            log(.error, "Error reading: \(error)")
-        }
+        log(.info, "> started reading bytes")
     }
     
-    private func writeLoop() {
-        log(.info, "Starting write loop...")
-        
+    // MARK: Outside world
+    func sendBytes(_ bytes: [UInt8], lastTransmission: Bool = false) {
+        lock.lock()
+        defer { lock.unlock() }
+
+        guard bytes.count > 0 else { return }
+
         do {
-            while !shouldStop {
-                let bytes = writeLock.withLock {
-                    defer { bytesToSend = [] }
-                    return bytesToSend
-                }
-                
-                let writtenBytes = try port.writeData(Data(bytes))
-                if bytes.count > 0 {
-                    log(.debug, "Wrote \(writtenBytes) out of \(bytes.count) bytes: \(bytes.stringRepresentation)")
-                }
-                Thread.sleep(forTimeInterval: 0.1)
+            let writtenBytes = try port.writeData(Data(bytes))
+            if bytes.count > 0 {
+                log(.debug, "Wrote \(writtenBytes) out of \(bytes.count) bytes: \(bytes.stringRepresentation)")
             }
         }
         catch {
@@ -107,22 +77,23 @@ class Serial: Loggable {
         }
     }
     
-    // MARK: Outside world
-    func sendBytes(_ bytes: [UInt8]) {
-        writeLock.withLock {
-            bytesToSend.append(contentsOf: bytes)
-        }
-    }
-    
     func readAllBytes() -> [UInt8] {
-        return readLock.withLock {
-            let bytes = Array(readBytes)
-            readBytes = []
-            return bytes
-        }
+        lock.lock()
+        defer { lock.unlock() }
+
+        let bytes = self.readBytes
+        self.readBytes.removeAll()
+        return bytes
     }
     
     func stop() {
-        shouldStop = true
+        lock.lock()
+        defer { lock.unlock() }
+
+        guard isOpen else { return }
+
+        port.closePort()
+        isOpen = false
+        log(.info, "Closed port")
     }
 }
