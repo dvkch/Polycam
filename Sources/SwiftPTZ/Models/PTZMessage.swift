@@ -22,18 +22,38 @@ struct PTZMessage {
 }
 
 extension PTZMessage {
-    var isValidLength: Bool {
-        let expectedLength = (bytes.first ?? 0x80) & 0x0F
-        return messageLength == expectedLength
+    enum Format {
+        case regular
+        case hello
     }
     
-    var messageLength: Int {
-        return bytes.count - 1
+    var messageFormat: Format {
+        if bytes.count >= 2 && bytes[0] == 0x8F && bytes[1] == 0x30 {
+            return .hello
+        }
+        return .regular
+    }
+
+    var isValidLength: Bool {
+        switch messageFormat {
+        case .regular: return messageLength == ((bytes.first ?? 0x80) & 0x0F)
+        case .hello:   return messageLength == (Int(String(bytes[2], radix: 16), radix: 10)!)
+        }
+    }
+    
+    private var messageLength: Int {
+        switch messageFormat {
+        case .regular: return bytes.count - 1
+        case .hello:   return bytes.count - 3
+        }
     }
     
     func isValidReply(_ command: Bytes) -> Bool {
         guard isValidLength && messageLength >= 2 else { return false }
-        return Array(bytes[1..<3]) == command
+        switch messageFormat {
+        case .regular: return Array(bytes[1..<3]) == command
+        case .hello:   return Array(bytes[3..<5]) == command.reversed()
+        }
     }
 }
 
@@ -56,6 +76,15 @@ extension PTZMessage {
             return V.init(ptzValue: UInt16(bytes[index]))
         }
     }
+    
+    func decodePackedData() -> [Int] {
+        guard messageFormat == .hello else {
+            fatalError("No packed data in this reply")
+        }
+        
+        let packedData = Array(bytes[5...])
+        return packedData.map { Int($0 - 0x30) }
+    }
 }
 
 extension PTZMessage {
@@ -67,7 +96,7 @@ extension PTZMessage {
             PTZReplyBacklightCompensation.self,
             PTZReplyBrightness.self,
             PTZReplyRedGain.self, PTZReplyBlueGain.self,
-            // TODO: add hello replies
+            PTZReplyHelloMPTZ11.self,
             PTZReplyInvertedMode.self,
             PTZReplyLedMode.self,
             PTZReplyPosition.self,

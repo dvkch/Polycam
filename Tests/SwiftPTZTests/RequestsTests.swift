@@ -87,7 +87,11 @@ final class RequestsTests: XCTestCase {
     }
 
     func testHelloRequest() {
-        XCTAssertTrue(false, "Implement!")
+        let camera = Self.buildCamera()
+        let replyHello = camera.sendRequest(PTZRequestHelloMPTZ11())
+        XCTAssertEqual(replyHello.count, 2)
+        XCTAssertTrue(replyHello[0] is PTZReplyAck)
+        XCTAssertTrue(replyHello[1] is PTZReplyHelloMPTZ11)
     }
 
     func testInvertedModeRequests() {

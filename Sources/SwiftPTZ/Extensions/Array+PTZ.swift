@@ -52,4 +52,10 @@ extension Array {
             self.append(filler)
         }
     }
+    
+    mutating func takeFirst(_ n: Int) -> [Element] {
+        let subarray = Array(self[0..<n])
+        removeFirst(n)
+        return subarray
+    }
 }
