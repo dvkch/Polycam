@@ -78,6 +78,10 @@ class Camera: Loggable {
             Thread.sleep(forTimeInterval: 1)
             return sendRequest(request, timeout: timeout, repeatUntilAck: repeatUntilAck)
         }
+        
+        if request.waitingTimeIfExecuted > 0 && replies.contains(where: { $0 is PTZReplyExecuted }) {
+            Thread.sleep(forTimeInterval: request.waitingTimeIfExecuted)
+        }
 
         return replies
     }

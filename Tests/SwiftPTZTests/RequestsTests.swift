@@ -198,26 +198,12 @@ final class RequestsTests: XCTestCase {
     }
 
     func testStandbyModeRequests() {
-        #warning("TODO: test differently, this is not a proper state")
-        let camera = buildCamera()
-        /*
-        for mode in PTZStandbyMode.testValues {
-            let replySet = camera.sendRequest(PTZRequestSetStandbyMode(mode: .off))
-            XCTAssertEqual(replySet.count, 2)
-            XCTAssertTrue(replySet[0] is PTZReplyAck)
-            XCTAssertTrue(replySet[1] is PTZReplyExecuted)
-            
-            let replyGet = camera.sendRequest(PTZRequestGetStandbyMode())
-            XCTAssertEqual(replyGet.count, 2)
-            XCTAssertTrue(replyGet[0] is PTZReplyAck)
-            XCTAssertTrue(replyGet[1] is PTZReplyStandbyMode)
-            XCTAssertEqual((replyGet[1] as! PTZReplyStandbyMode).mode, mode)
-        }
-         */
+        let camera = Self.buildCamera()
+        camera.powerOff()
+        camera.powerOn()
     }
 
     func testVideoOutputRequests() {
-#warning("TODO: parse 93 40 01 00 error")
 #warning("TODO: fix video output mode")
         let camera = Self.buildCamera()
         for mode in PTZVideoOutputMode.testValues {
@@ -252,8 +238,6 @@ final class RequestsTests: XCTestCase {
     }
 
     func testWhiteBalanceRequests() {
-        #warning("TODO: parse 93 40 01 12")
-        #warning("TODO: make manual calibration work")
         let camera = Self.buildCamera()
         for mode in PTZWhiteBalance.testValues {
             let replySet = camera.sendRequest(PTZRequestSetWhiteBalance(mode: mode))
@@ -268,7 +252,18 @@ final class RequestsTests: XCTestCase {
             XCTAssertEqual((replyGet[1] as! PTZReplyWhiteBalance).mode, mode)
         }
 
-        let replySetManual = camera.sendRequest(PTZRequestSetWhiteBalance(mode: .auto))
+        let replySetAuto = camera.sendRequest(PTZRequestSetWhiteBalance(mode: .auto))
+        XCTAssertEqual(replySetAuto.count, 2)
+        XCTAssertTrue(replySetAuto[0] is PTZReplyAck)
+        XCTAssertTrue(replySetAuto[1] is PTZReplyExecuted)
+
+        let replyCalibrateAuto = camera.sendRequest(PTZRequestStartManualWhiteBalanceCalibration())
+        XCTAssertEqual(replyCalibrateAuto.count, 2)
+        XCTAssertTrue(replyCalibrateAuto[0] is PTZReplyAck)
+        XCTAssertTrue(replyCalibrateAuto[1] is PTZReplyNotExecuted)
+        XCTAssertTrue((replyCalibrateAuto[1] as! PTZReplyNotExecuted).error == .unknown)
+
+        let replySetManual = camera.sendRequest(PTZRequestSetWhiteBalance(mode: .manual))
         XCTAssertEqual(replySetManual.count, 2)
         XCTAssertTrue(replySetManual[0] is PTZReplyAck)
         XCTAssertTrue(replySetManual[1] is PTZReplyExecuted)

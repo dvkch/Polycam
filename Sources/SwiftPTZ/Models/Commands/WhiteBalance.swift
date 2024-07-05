@@ -40,7 +40,8 @@ struct PTZRequestSetWhiteBalance: PTZRequest {
 }
 
 struct PTZRequestStartManualWhiteBalanceCalibration: PTZRequest {
-    var bytes: Bytes { buildBytes([0x45, 0x15]) }
+    var bytes: Bytes { buildBytes([0x45, 0x17]) }
+    var waitingTimeIfExecuted: TimeInterval { 2 }
     var description: String { "Start manual white balance calibration" }
 }
 

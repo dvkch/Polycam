@@ -9,6 +9,11 @@ import Foundation
 
 protocol PTZRequest: CustomStringConvertible {
     var bytes: Bytes { get }
+    var waitingTimeIfExecuted: TimeInterval { get }
+}
+
+extension PTZRequest {
+    var waitingTimeIfExecuted: TimeInterval { 0 }
 }
 
 extension PTZRequest {
