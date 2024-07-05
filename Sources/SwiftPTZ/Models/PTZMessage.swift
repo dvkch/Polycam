@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  PTZMessage.swift
 //  
 //
 //  Created by syan on 03/07/2024.
@@ -60,7 +60,24 @@ extension PTZMessage {
 
 extension PTZMessage {
     static var availableReplies: [any PTZReply.Type] {
-        return [PTZReplyAck.self, PTZReplyExecuted.self, PTZReplyNotExecuted.self, PTZReplyPosition.self, PTZReplyBrightness.self]
+        return [
+            PTZReplyAck.self,
+            PTZReplyExecuted.self, PTZReplyNotExecuted.self,
+            
+            PTZReplyBacklightCompensation.self,
+            PTZReplyBrightness.self,
+            PTZReplyRedGain.self, PTZReplyBlueGain.self,
+            // TODO: add hello replies
+            PTZReplyInvertedMode.self,
+            PTZReplyLedMode.self,
+            PTZReplyPosition.self,
+            PTZReplySaturation.self,
+            PTZReplyShutterSpeed.self,
+            PTZReplyStandbyMode.self,
+            PTZReplyVideoOutputMode.self,
+            PTZReplyVolume.self,
+            PTZReplyWhiteBalance.self
+        ]
     }
     
     static func replies(from bytes: Bytes, allowed: [any PTZReply.Type] = availableReplies) -> [any PTZReply] {

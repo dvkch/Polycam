@@ -11,6 +11,7 @@ import CoreMedia
 protocol PTZValue: RawRepresentable, Equatable where RawValue: Equatable {
     init(ptzValue: UInt16)
     var ptzValue: UInt16 { get }
+    static var testValues: [Self] { get }
 }
 
 extension PTZValue {
@@ -63,6 +64,8 @@ struct PTZInt: PTZValue {
     var ptzValue: UInt16 {
         return UInt16(rawValue)
     }
+    
+    static var testValues: [PTZInt] { [.init(rawValue: 0)] }
 }
 
 struct PTZBool: PTZValue {
@@ -79,6 +82,8 @@ struct PTZBool: PTZValue {
     var ptzValue: UInt16 {
         return rawValue ? 0x01 : 0x00
     }
+    
+    static var testValues: [PTZBool] { [.init(rawValue: true), .init(rawValue: false)] }
 }
 
 extension RawRepresentable where Self: CaseIterable, RawValue == UInt16 {
@@ -89,85 +94,8 @@ extension RawRepresentable where Self: CaseIterable, RawValue == UInt16 {
     var ptzValue: UInt16 {
         return UInt16(rawValue)
     }
-}
-
-enum PTZLed: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
-    #warning("TODO: should be sent on 2 bytes always....")
-    case on  = 0x0000
-    case off = 0x0210
     
-    var description: String {
-        switch self {
-        case .on:   return "on"
-        case .off:  return "off"
-        }
-    }
-}
-
-enum PTZStandByMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
-    case on  = 0x12
-    case off = 0x10
-    
-    var description: String {
-        switch self {
-        case .on:   return "on"
-        case .off:  return "off"
-        }
-    }
-}
-
-enum PTZVideoOutput: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
-    case on = 0x1a
-    
-    var description: String {
-        switch self {
-        case .on:   return "on"
-        }
-    }
-}
-
-enum PTZShutterSpeed: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
-    case zero = 0x00
-    
-    var description: String {
-        switch self {
-        case .zero: return "zero"
-        }
-    }
-}
-
-enum PTZMuteState: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
-    case unmute = 0x08
-    
-    var description: String {
-        switch self {
-        case .unmute: return "unmute"
-        }
-    }
-}
-
-enum PTZWhiteBalance: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
-    case auto      =  1
-    case manual    =  4
-    case temp2300K =  5
-    case temp2856K =  6
-    case temp3450K =  7
-    case temp4230K =  8
-    case temp5200K =  9
-    case temp6504K = 10
-    
-    var description: String {
-        switch self {
-        case .auto: return "auto"
-        case .manual: return "manual"
-        case .temp2300K: return "2300K"
-        case .temp2856K: return "2856K"
-        case .temp3450K: return "3450K"
-        case .temp4230K: return "4230K"
-        case .temp5200K: return "5200K"
-        case .temp6504K: return "6504K"
-        }
-    }
+    static var testValues: [Self] { Array(allCases) }
 }
 
 protocol PTZScaledValue: PTZValue where RawValue == Int {
@@ -198,57 +126,4 @@ extension PTZScaledValue {
     var clamped: RawValue {
         return Swift.min(type(of: self).maxValue, Swift.max(type(of: self).minValue, rawValue))
     }
-}
-
-struct PTZBrightness: PTZScaledValue {
-    var rawValue: Int
-    static var minValue: Int = 1
-    static var maxValue: Int = 20
-    static var ptzOffset: Int = 117
-    static var ptzScale: Double = 1
-}
-
-struct PTZSaturation: PTZScaledValue {
-    var rawValue: Int
-    static var minValue: Int = 1
-    static var maxValue: Int = 11
-    static var ptzOffset: Int = 122
-    static var ptzScale: Double = 1
-}
-
-struct PTZGain: PTZScaledValue {
-    var rawValue: Int
-    static var minValue: Int = 0
-    #warning("TODO: find out max gain")
-    static var maxValue: Int = 50
-    static var ptzOffset: Int = 95 // 33 should be 01 00, 37 should be 01 04
-    static var ptzScale: Double = 1
-}
-
-struct PTZPositionPan: PTZScaledValue {
-    var rawValue: Int
-    static var minValue: Int = -50_000
-    static var maxValue: Int =  50_000
-    static var ptzOffset: Int = 1_000
-    static var ptzScale: Double = 0.02
-}
-
-struct PTZPositionTilt: PTZScaledValue {
-    var rawValue: Int
-    static var minValue: Int = -50_000
-    static var maxValue: Int =  50_000
-    static var ptzOffset: Int = 250
-    static var ptzScale: Double = 0.005
-}
-
-struct PTZPositionZoom: PTZScaledValue {
-    var rawValue: Int
-    static var minValue: Int = -49_772
-    static var maxValue: Int = 17_663
-    static var ptzOffset: Int = 1146
-    static var ptzScale: Double = 0.021739 // <- this one is perfect match to read values, but 0.0217246 is closer to our Set fixtures
-    // FROM: (8D 41 51 24 00 03 68 00 00 7A 03) 00 00 40
-    // TO:   (8D 41 51 24 00 03 68 00 00 7A 03) 02 05 79
-    // 00 40 -> 05 F9
-    // 64 => 1529
 }

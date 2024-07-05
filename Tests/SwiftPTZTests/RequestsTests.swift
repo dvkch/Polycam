@@ -20,25 +20,126 @@ final class RequestsTests: XCTestCase {
         
         return camera
     }
-    
+
+    func testBacklightCompensationRequests() {
+        let camera = buildCamera()
+        for backlightCompensation in PTZBool.testValues {
+            let replySet = camera.sendRequest(PTZRequestSetBacklightCompensation(enabled: backlightCompensation.rawValue))
+            XCTAssertEqual(replySet.count, 2)
+            XCTAssertTrue(replySet[0] is PTZReplyAck)
+            XCTAssertTrue(replySet[1] is PTZReplyExecuted)
+            
+            let replyGet = camera.sendRequest(PTZRequestGetBacklightCompensation())
+            XCTAssertEqual(replyGet.count, 2)
+            XCTAssertTrue(replyGet[0] is PTZReplyAck)
+            XCTAssertTrue(replyGet[1] is PTZReplyBacklightCompensation)
+            XCTAssertEqual((replyGet[1] as! PTZReplyBacklightCompensation).enabled, backlightCompensation.rawValue)
+        }
+    }
+
+    func testBrightnessRequests() {
+        let camera = buildCamera()
+        for brightness in PTZBrightness.testValues {
+            let replySet = camera.sendRequest(PTZRequestSetBrightness(brightness: brightness))
+            XCTAssertEqual(replySet.count, 2)
+            XCTAssertTrue(replySet[0] is PTZReplyAck)
+            XCTAssertTrue(replySet[1] is PTZReplyExecuted)
+            
+            let replyGet = camera.sendRequest(PTZRequestGetBrightness())
+            XCTAssertEqual(replyGet.count, 2)
+            XCTAssertTrue(replyGet[0] is PTZReplyAck)
+            XCTAssertTrue(replyGet[1] is PTZReplyBrightness)
+            XCTAssertEqual((replyGet[1] as! PTZReplyBrightness).brightness, brightness)
+        }
+    }
+
+    func testGainRedRequests() {
+        let camera = buildCamera()
+        for gain in PTZGain.testValues {
+            let replySet = camera.sendRequest(PTZRequestSetRedGain(gain: gain))
+            XCTAssertEqual(replySet.count, 2)
+            XCTAssertTrue(replySet[0] is PTZReplyAck)
+            XCTAssertTrue(replySet[1] is PTZReplyExecuted)
+            
+            let replyGet = camera.sendRequest(PTZRequestGetRedGain())
+            XCTAssertEqual(replyGet.count, 2)
+            XCTAssertTrue(replyGet[0] is PTZReplyAck)
+            XCTAssertTrue(replyGet[1] is PTZReplyRedGain)
+            XCTAssertEqual((replyGet[1] as! PTZReplyRedGain).gain, gain)
+        }
+    }
+
+    func testGainBlueRequests() {
+        let camera = buildCamera()
+        for gain in PTZGain.testValues {
+            let replySet = camera.sendRequest(PTZRequestSetBlueGain(gain: gain))
+            XCTAssertEqual(replySet.count, 2)
+            XCTAssertTrue(replySet[0] is PTZReplyAck)
+            XCTAssertTrue(replySet[1] is PTZReplyExecuted)
+            
+            let replyGet = camera.sendRequest(PTZRequestGetBlueGain())
+            XCTAssertEqual(replyGet.count, 2)
+            XCTAssertTrue(replyGet[0] is PTZReplyAck)
+            XCTAssertTrue(replyGet[1] is PTZReplyBlueGain)
+            XCTAssertEqual((replyGet[1] as! PTZReplyBlueGain).gain, gain)
+        }
+    }
+
+    func testHelloRequest() {
+        XCTAssertTrue(false, "Implement!")
+    }
+
+    func testInvertedModeRequests() {
+        let camera = buildCamera()
+        for invertedMode in PTZBool.testValues {
+            let replySet = camera.sendRequest(PTZRequestSetInvertedMode(enabled: invertedMode.rawValue))
+            XCTAssertEqual(replySet.count, 2)
+            XCTAssertTrue(replySet[0] is PTZReplyAck)
+            XCTAssertTrue(replySet[1] is PTZReplyExecuted)
+            
+            let replyGet = camera.sendRequest(PTZRequestGetInvertedMode())
+            XCTAssertEqual(replyGet.count, 2)
+            XCTAssertTrue(replyGet[0] is PTZReplyAck)
+            XCTAssertTrue(replyGet[1] is PTZReplyInvertedMode)
+            XCTAssertEqual((replyGet[1] as! PTZReplyInvertedMode).enabled, invertedMode.rawValue)
+        }
+    }
+
+    func testLedModeRequests() {
+        #warning("Fix LED MODE")
+        let camera = buildCamera()
+        for mode in PTZLedMode.testValues {
+            let replySet = camera.sendRequest(PTZRequestSetLedMode(mode: mode))
+            XCTAssertEqual(replySet.count, 2)
+            XCTAssertTrue(replySet[0] is PTZReplyAck)
+            XCTAssertTrue(replySet[1] is PTZReplyExecuted)
+            
+            let replyGet = camera.sendRequest(PTZRequestGetLedMode())
+            XCTAssertEqual(replyGet.count, 2)
+            XCTAssertTrue(replyGet[0] is PTZReplyAck)
+            XCTAssertTrue(replyGet[1] is PTZReplyLedMode)
+            XCTAssertEqual((replyGet[1] as! PTZReplyLedMode).mode, mode)
+        }
+    }
+
     func testPositionRequests() {
         let camera = buildCamera()
         var triplets = [(PTZPositionPan, PTZPositionTilt, PTZPositionZoom)]()
         var longPauseIndicies = [Int]()
         
         longPauseIndicies.append(triplets.count)
-        for pan in stride(from: PTZPositionPan.minValue, to: PTZPositionPan.maxValue, by: 10_000) {
-            triplets.append((.init(rawValue: pan), .init(rawValue: 0), .init(rawValue: 0)))
+        for pan in PTZPositionPan.testValues {
+            triplets.append((pan, .init(rawValue: 0), .init(rawValue: 0)))
         }
 
         longPauseIndicies.append(triplets.count)
-        for tilt in stride(from: PTZPositionTilt.minValue, to: PTZPositionTilt.maxValue, by: 10_000) {
-            triplets.append((.init(rawValue: 0), .init(rawValue: tilt), .init(rawValue: 0)))
+        for tilt in PTZPositionTilt.testValues {
+            triplets.append((.init(rawValue: 0), tilt, .init(rawValue: 0)))
         }
 
         longPauseIndicies.append(triplets.count)
-        for zoom in stride(from: PTZPositionZoom.minValue, to: PTZPositionZoom.maxValue, by: 10_000) {
-            triplets.append((.init(rawValue: 0), .init(rawValue: 0), .init(rawValue: zoom)))
+        for zoom in PTZPositionZoom.testValues {
+            triplets.append((.init(rawValue: 0), .init(rawValue: 0), zoom))
         }
 
         for (index, triplet) in triplets.enumerated() {
@@ -59,19 +160,117 @@ final class RequestsTests: XCTestCase {
         }
     }
     
-    func testBrighntessRequests() {
+    func testSaturationRequests() {
         let camera = buildCamera()
-        for brightness in stride(from: PTZBrightness.minValue, to: PTZBrightness.maxValue, by: 1) {
-            let replySet = camera.sendRequest(PTZRequestSetBrightness(brightness: .init(rawValue: brightness)))
+        for saturation in PTZSaturation.testValues {
+            let replySet = camera.sendRequest(PTZRequestSetSaturation(saturation: saturation))
             XCTAssertEqual(replySet.count, 2)
             XCTAssertTrue(replySet[0] is PTZReplyAck)
             XCTAssertTrue(replySet[1] is PTZReplyExecuted)
             
-            let replyGet = camera.sendRequest(PTZRequestGetBrightness())
+            let replyGet = camera.sendRequest(PTZRequestGetSaturation())
             XCTAssertEqual(replyGet.count, 2)
             XCTAssertTrue(replyGet[0] is PTZReplyAck)
-            XCTAssertTrue(replyGet[1] is PTZReplyBrightness)
-            XCTAssertEqual((replyGet[1] as! PTZReplyBrightness).brightness.rawValue, brightness)
+            XCTAssertTrue(replyGet[1] is PTZReplySaturation)
+            XCTAssertEqual((replyGet[1] as! PTZReplySaturation).saturation, saturation)
         }
+    }
+
+    func testShutterSpeedRequests() {
+        let camera = buildCamera()
+        for speed in PTZShutterSpeed.testValues {
+            let replySet = camera.sendRequest(PTZRequestSetShutterSpeed(speed: speed))
+            XCTAssertEqual(replySet.count, 2)
+            XCTAssertTrue(replySet[0] is PTZReplyAck)
+            XCTAssertTrue(replySet[1] is PTZReplyExecuted)
+            
+            let replyGet = camera.sendRequest(PTZRequestGetShutterSpeed())
+            XCTAssertEqual(replyGet.count, 2)
+            XCTAssertTrue(replyGet[0] is PTZReplyAck)
+            XCTAssertTrue(replyGet[1] is PTZReplyShutterSpeed)
+            XCTAssertEqual((replyGet[1] as! PTZReplyShutterSpeed).speed, speed)
+        }
+    }
+
+    func testStandbyModeRequests() {
+        #warning("TODO: test differently, this is not a proper state")
+        let camera = buildCamera()
+        /*
+        for mode in PTZStandbyMode.testValues {
+            let replySet = camera.sendRequest(PTZRequestSetStandbyMode(mode: .off))
+            XCTAssertEqual(replySet.count, 2)
+            XCTAssertTrue(replySet[0] is PTZReplyAck)
+            XCTAssertTrue(replySet[1] is PTZReplyExecuted)
+            
+            let replyGet = camera.sendRequest(PTZRequestGetStandbyMode())
+            XCTAssertEqual(replyGet.count, 2)
+            XCTAssertTrue(replyGet[0] is PTZReplyAck)
+            XCTAssertTrue(replyGet[1] is PTZReplyStandbyMode)
+            XCTAssertEqual((replyGet[1] as! PTZReplyStandbyMode).mode, mode)
+        }
+         */
+    }
+
+    func testVideoOutputRequests() {
+#warning("TODO: parse 93 40 01 00 error")
+#warning("TODO: fix video output mode")
+        let camera = buildCamera()
+        for mode in PTZVideoOutputMode.testValues {
+            let replySet = camera.sendRequest(PTZRequestSetVideoOutputMode(mode: mode))
+            XCTAssertEqual(replySet.count, 2)
+            XCTAssertTrue(replySet[0] is PTZReplyAck)
+            XCTAssertTrue(replySet[1] is PTZReplyExecuted)
+            
+            let replyGet = camera.sendRequest(PTZRequestGetVideoOutputMode())
+            XCTAssertEqual(replyGet.count, 2)
+            XCTAssertTrue(replyGet[0] is PTZReplyAck)
+            XCTAssertTrue(replyGet[1] is PTZReplyVideoOutputMode)
+            XCTAssertEqual((replyGet[1] as! PTZReplyVideoOutputMode).mode, mode)
+        }
+    }
+
+    func testVolumeRequests() {
+        #warning("TODO: check if there are more possible volumes, and if a mic is actually present and accessible through HDMI")
+        let camera = buildCamera()
+        for volume in PTZVolume.testValues {
+            let replySet = camera.sendRequest(PTZRequestSetVolume(volume: volume))
+            XCTAssertEqual(replySet.count, 2)
+            XCTAssertTrue(replySet[0] is PTZReplyAck)
+            XCTAssertTrue(replySet[1] is PTZReplyExecuted)
+            
+            let replyGet = camera.sendRequest(PTZRequestGetVolume())
+            XCTAssertEqual(replyGet.count, 2)
+            XCTAssertTrue(replyGet[0] is PTZReplyAck)
+            XCTAssertTrue(replyGet[1] is PTZReplyVolume)
+            XCTAssertEqual((replyGet[1] as! PTZReplyVolume).volume, volume)
+        }
+    }
+
+    func testWhiteBalanceRequests() {
+        #warning("TODO: parse 93 40 01 12")
+        #warning("TODO: make manual calibration work")
+        let camera = buildCamera()
+        for mode in PTZWhiteBalance.testValues {
+            let replySet = camera.sendRequest(PTZRequestSetWhiteBalance(mode: mode))
+            XCTAssertEqual(replySet.count, 2)
+            XCTAssertTrue(replySet[0] is PTZReplyAck)
+            XCTAssertTrue(replySet[1] is PTZReplyExecuted)
+            
+            let replyGet = camera.sendRequest(PTZRequestGetWhiteBalance())
+            XCTAssertEqual(replyGet.count, 2)
+            XCTAssertTrue(replyGet[0] is PTZReplyAck)
+            XCTAssertTrue(replyGet[1] is PTZReplyWhiteBalance)
+            XCTAssertEqual((replyGet[1] as! PTZReplyWhiteBalance).mode, mode)
+        }
+
+        let replySetManual = camera.sendRequest(PTZRequestSetWhiteBalance(mode: .auto))
+        XCTAssertEqual(replySetManual.count, 2)
+        XCTAssertTrue(replySetManual[0] is PTZReplyAck)
+        XCTAssertTrue(replySetManual[1] is PTZReplyExecuted)
+
+        let replyCalibrateManual = camera.sendRequest(PTZRequestStartManualWhiteBalanceCalibration())
+        XCTAssertEqual(replyCalibrateManual.count, 2)
+        XCTAssertTrue(replyCalibrateManual[0] is PTZReplyAck)
+        XCTAssertTrue(replyCalibrateManual[1] is PTZReplyExecuted)
     }
 }

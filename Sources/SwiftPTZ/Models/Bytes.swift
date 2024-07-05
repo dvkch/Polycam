@@ -36,8 +36,6 @@ extension Bytes {
 
 extension String {
     var bytes: Bytes {
-        self
-            .components(separatedBy: " ")
-            .map { Byte($0, radix: 16)! }
+        self.components(separatedBy: " ").map { Byte($0, radix: 16)! }
     }
 }
