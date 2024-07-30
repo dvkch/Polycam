@@ -8,15 +8,21 @@
 import Foundation
 
 enum PTZVideoOutputMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
-    case on = 0x1a
+#warning("TEST ALL RESOLUTIONS")
+#warning("TEST RESOLUTIONS WITHOUT THE EXTRA 0x10 (seems to be a parameter for something else, not sure what)")
+    case resolution720p  = 0x10
+    case resolution1080i = 0x18
+    case resolution1080p = 0x1a
     
     var description: String {
         switch self {
-        case .on:   return "on"
+        case .resolution720p:  return "720p"
+        case .resolution1080i: return "1080i"
+        case .resolution1080p: return "1080p"
         }
     }
     
-    static var `default`: PTZVideoOutputMode { .on }
+    static var `default`: PTZVideoOutputMode { .resolution1080p }
 }
 
 struct PTZRequestSetVideoOutputMode: PTZRequest {

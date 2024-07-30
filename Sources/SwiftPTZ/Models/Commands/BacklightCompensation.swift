@@ -7,8 +7,6 @@
 
 import Foundation
 
-#warning("TODO: try to generalize into PTZAction and PTZState protocols, with helpers to handle 1, 2 or 3 elements")
-
 struct PTZRequestSetBacklightCompensation: PTZRequest {
     let enabled: Bool
     var bytes: Bytes { buildBytes([0x42, 0x15], PTZBool(rawValue: enabled)) }

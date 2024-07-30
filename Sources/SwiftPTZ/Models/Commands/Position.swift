@@ -47,12 +47,13 @@ struct PTZRequestSetPosition: PTZRequest {
     let zoom: PTZPositionZoom
     
     var bytes: Bytes {
+        #warning("There is a `focus` argument, let's try to see where it goes, maybe by analyzing the `get` reply")
         return buildBytes(
             [0x41, 0x51],
             PTZArgument(pan,  .custom(hiIndex:  5, loIndex:  6, loRetainerIndex:  3, loRetainerMask: 0x04)),
             PTZArgument(tilt, .custom(hiIndex:  8, loIndex:  9, loRetainerIndex:  3, loRetainerMask: 0x20)),
             PTZArgument(zoom, .custom(hiIndex: 12, loIndex: 13, loRetainerIndex: 11, loRetainerMask: 0x02)),
-            PTZArgument(PTZInt(rawValue: 0x03), .index(10))
+            PTZArgument(PTZInt(rawValue: 0x03), .raw8(10))
         )
     }
     

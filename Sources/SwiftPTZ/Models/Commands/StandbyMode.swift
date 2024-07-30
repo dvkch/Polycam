@@ -7,7 +7,9 @@
 
 import Foundation
 
+#warning("try sending 00 00 00 00 to wake up")
 enum PTZStandbyMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
+    #warning("try 0x02")
     case on  = 0x12
     case off = 0x10
     
@@ -25,6 +27,9 @@ struct PTZRequestSetStandbyMode: PTZRequest {
     let mode: PTZStandbyMode
     var bytes: Bytes { buildBytes([0x41, 0x00], mode) }
     var description: String { "Set standby mode \(mode.description)" }
+    var waitingTimeIfExecuted: TimeInterval {
+        return mode == .on ? 5 : 0
+    }
 }
 
 struct PTZRequestGetStandbyMode: PTZRequest {

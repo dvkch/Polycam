@@ -7,9 +7,15 @@
 
 import Foundation
 
+infix operator ||= : AssignmentPrecedence
+
 extension Bool {
     var onOffString: String {
         return self ? "on" : "off"
+    }
+    
+    static func ||= (lhs: inout Self, rhs: Self) {
+        lhs = lhs || rhs
     }
 }
 

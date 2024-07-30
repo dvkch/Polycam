@@ -69,11 +69,14 @@ extension PTZMessage {
             }
             fatalError("There is no first argument here")
             
+        case .raw8(let index):
+            return V.init(ptzValue: UInt16(bytes[index]))
+
+        case .raw16(let index):
+            return V.init(ptzValue: UInt16(bytes[index]) << 8 + UInt16(bytes[index + 1]))
+
         case .custom(let hiIndex, let loIndex, let loRetainerIndex, let loRetainerMask):
             return V.init(from: bytes, loIndex: loIndex, hiIndex: hiIndex, loRetainerIndex: loRetainerIndex, loRetainerMask: loRetainerMask)
-            
-        case .index(let index):
-            return V.init(ptzValue: UInt16(bytes[index]))
         }
     }
     
@@ -90,17 +93,20 @@ extension PTZMessage {
 extension PTZMessage {
     static var availableReplies: [any PTZReply.Type] {
         return [
-            PTZReplyAck.self,
+            PTZReplyAck.self, PTZReplyReset.self, PTZReplyFail.self,
             PTZReplyExecuted.self, PTZReplyNotExecuted.self,
-            
+
+            PTZReplyAutoExposure.self,
             PTZReplyBacklightCompensation.self,
             PTZReplyBrightness.self,
-            PTZReplyRedGain.self, PTZReplyBlueGain.self,
+            PTZReplyGainMode.self, PTZReplyRedGain.self, PTZReplyBlueGain.self,
             PTZReplyHelloMPTZ11.self,
             PTZReplyInvertedMode.self,
+            PTZReplyIrisLevel.self,
             PTZReplyLedMode.self,
             PTZReplyPosition.self,
             PTZReplySaturation.self,
+            PTZReplySharpness.self,
             PTZReplyShutterSpeed.self,
             PTZReplyStandbyMode.self,
             PTZReplyVideoOutputMode.self,

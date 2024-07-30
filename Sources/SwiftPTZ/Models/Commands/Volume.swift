@@ -7,24 +7,25 @@
 
 import Foundation
 
-enum PTZVolume: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
-    case unmute = 0x08
-    
-    var description: String {
-        switch self {
-        case .unmute: return "unmute"
-        }
-    }
-    
-    static var `default`: PTZVolume { .unmute }
+#warning("Should be either 080808 or 0F0003")
+#warning("TODO: check if there is sound over HDMI")
+
+struct PTZVolume: PTZScaledValue {
+    var rawValue: Int
+    static var minValue: Int { 0 }
+    static var maxValue: Int { 0x0F }
+    static var ptzOffset: Int { 0 }
+    static var ptzScale: Double { 1 }
+    static var `default`: PTZVolume { .init(rawValue: 0x08) }
+    static var testValues: [PTZVolume] { Array(minValue...maxValue).map(PTZVolume.init(rawValue:)) }
 }
 
 struct PTZRequestSetVolume: PTZRequest {
     let volume: PTZVolume
     var bytes: Bytes {
-        buildBytes([0x41, 0x25], .init(volume, .index(3)), .init(volume, .index(4)), .init(volume, .index(5)))
+        buildBytes([0x41, 0x25], .init(volume, .raw8(3)), .init(volume, .raw8(4)), .init(volume, .raw8(5)))
     }
-    var description: String { "Set volume to \(volume.description)" }
+    var description: String { "Set volume to \(volume.rawValue)" }
 }
 
 struct PTZRequestGetVolume: PTZRequest {
@@ -37,10 +38,10 @@ struct PTZReplyVolume: PTZReply {
     
     init?(message: PTZMessage) {
         guard message.isValidReply([0x41, 0x25]) else { return nil }
-        self.volume = message.parseArgument(position: .index(3))
+        self.volume = message.parseArgument(position: .raw8(3))
     }
     
     var description: String {
-        return "Volume(\(volume.description))"
+        return "Volume(\(volume.rawValue))"
     }
 }

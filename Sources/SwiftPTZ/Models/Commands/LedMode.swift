@@ -7,17 +7,64 @@
 
 import Foundation
 
-enum PTZLedMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
-    #warning("TODO: should be sent on 2 bytes always....")
-    case on  = 0x0000
-    case off = 0x0210
-    case unknown = 0x007F
-
+enum PTZLedColor: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
+    case off    = 0x00
+    case green  = 0x01
+    case blue   = 0x02
+    case cyan   = 0x03
+    case red    = 0x04
+    case yellow = 0x05
+    case purple = 0x06
+    case white  = 0x07
+    
     var description: String {
         switch self {
-        case .on:   return "on"
-        case .off:  return "off"
-        case .unknown: return "unknown" 
+        case .off:      return "off"
+        case .green:    return "green"
+        case .blue:     return "blue"
+        case .cyan:     return "cyan"
+        case .red:      return "red"
+        case .yellow:   return "yellow"
+        case .purple:   return "purple"
+        case .white:    return "white"
+        }
+    }
+    
+    static var `default`: PTZLedColor { .blue }
+}
+
+enum PTZLedMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
+    case off = 0x00
+    case on  = 0x10
+    case onceQuarterSecond  = 0x20
+    case onceHalfSecond     = 0x21
+    case onceOneSecond      = 0x22
+    case onceTwoSeconds     = 0x23
+    case onceThreeSeconds   = 0x24
+    case onceFourSeconds    = 0x25
+    case everyQuarterSecond = 0x30
+    case everyHalfSecond    = 0x31
+    case everyOneSecond     = 0x32
+    case everyTwoSeconds    = 0x33
+    case everyThreeSeconds  = 0x34
+    case everyFourSeconds   = 0x35
+    
+    var description: String {
+        switch self {
+        case .off:                  return "off"
+        case .on:                   return "on"
+        case .onceQuarterSecond:    return "once 0.25s"
+        case .onceHalfSecond:       return "once 0.5s"
+        case .onceOneSecond:        return "once 1s"
+        case .onceTwoSeconds:       return "once 2s"
+        case .onceThreeSeconds:     return "once 3s"
+        case .onceFourSeconds:      return "once 4s"
+        case .everyQuarterSecond:   return "every 0.25s"
+        case .everyHalfSecond:      return "every 0.5s"
+        case .everyOneSecond:       return "every 1s"
+        case .everyTwoSeconds:      return "every 2s"
+        case .everyThreeSeconds:    return "every 3s"
+        case .everyFourSeconds:     return "every 4s"
         }
     }
     
@@ -25,9 +72,10 @@ enum PTZLedMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
 }
 
 struct PTZRequestSetLedMode: PTZRequest {
+    let color: PTZLedColor
     let mode: PTZLedMode
-    var bytes: Bytes { buildBytes([0x41, 0x21], mode) }
-    var description: String { "Set LED \(mode.description)" }
+    var bytes: Bytes { buildBytes([0x41, 0x21], .init(color, .raw8(3)), .init(mode, .raw8(4))) }
+    var description: String { "Set LED \(color.description) \(mode.description)" }
 }
 
 struct PTZRequestGetLedMode: PTZRequest {
@@ -36,14 +84,16 @@ struct PTZRequestGetLedMode: PTZRequest {
 }
 
 struct PTZReplyLedMode: PTZReply {
+    let color: PTZLedColor
     let mode: PTZLedMode
-    
+
     init?(message: PTZMessage) {
         guard message.isValidReply([0x41, 0x21]) else { return nil }
-        self.mode = message.parseArgument(position: .single)
+        self.color = message.parseArgument(position: .raw8(3))
+        self.mode  = message.parseArgument(position: .raw8(4))
     }
     
     var description: String {
-        return "LedMode(\(mode.description))"
+        return "LedMode(\(color.description), \(mode.description))"
     }
 }

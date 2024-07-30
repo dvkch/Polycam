@@ -11,13 +11,15 @@ import SwiftSerial
 class Serial: Loggable {
     
     // MARK: Init
-    init(name: SerialName, tag: String, logLevel: LogLevel) throws {
+    init(device: SerialName, tag: String, logLevel: LogLevel) throws {
+        self.device = device
         self.logLevel = logLevel
         self.logTag = "Serial \(tag)"
-        try open(deviceName: name.rawValue)
+        try open()
     }
     
     // MARK: Properties
+    let device: SerialName
     let logLevel: LogLevel
     let logTag: String
     private(set) var isOpen: Bool = false
@@ -26,14 +28,14 @@ class Serial: Loggable {
     private var readBytes: Bytes = []
 
     // MARK: Serial
-    private func open(deviceName: String) throws {
+    private func open() throws {
         lock.lock()
         defer { lock.unlock() }
 
         guard !isOpen else { return }
 
         log(.info, "Opening port...")
-        port = SerialPort(path: deviceName)
+        port = SerialPort(path: device.rawValue)
         try port.openPort()
         try port.setSettings(
             baudRateSetting: .symmetrical(.baud9600),
@@ -51,9 +53,9 @@ class Serial: Loggable {
         log(.info, "> opened!")
         
         Task {
-            for await byte in (try port.asyncBytes()) {
+            for await data in (try port.asyncData()) {
                 lock.withLock {
-                    readBytes.append(byte)
+                    readBytes.append(contentsOf: data)
                 }
             }
         }

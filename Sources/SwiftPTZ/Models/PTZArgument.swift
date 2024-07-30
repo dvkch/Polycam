@@ -17,7 +17,8 @@ struct PTZArgument {
     
     enum Position {
         case single
-        case index(Int)
+        case raw8(_ index: Int)
+        case raw16(_ index: Int)
         case custom(hiIndex: Int, loIndex: Int, loRetainerIndex: Int, loRetainerMask: Byte)
     }
     let position: Position
