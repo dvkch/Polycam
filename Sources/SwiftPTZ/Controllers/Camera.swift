@@ -57,9 +57,6 @@ class Camera: Loggable {
     func powerOn() {
         let sequence: [any PTZRequest] = [
             PTZRequestSetStandbyMode(mode: .off),
-            PTZRequestSetStandbyMode(mode: .off),
-            PTZRequestSetStandbyMode(mode: .off),
-            PTZRequestSetStandbyMode(mode: .off),
             PTZRequestHelloMPTZ11(),
             PTZRequestSetLedMode(color: .default, mode: .default),
             PTZRequestSetVideoOutputMode(mode: .default),
@@ -67,6 +64,7 @@ class Camera: Loggable {
             PTZRequestSetVolume(volume: .default),
             PTZRequestSetPosition(pan: .default, tilt: .default, zoom: .default),
             PTZRequestSetInvertedMode(enabled: false),
+            PTZRequestSetAutoFocus(enabled: true),
             PTZRequestSetBrightness(brightness: .default),
             PTZRequestSetSaturation(saturation: .default),
             PTZRequestSetMireMode(enabled: false),

@@ -41,6 +41,23 @@ enum PTZZoomSpeed: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
     }
 }
 
+enum PTZFocusSpeed: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
+    case speed1 = 0x00
+    case speed2 = 0x01
+    case speed3 = 0x02
+    case speed4 = 0x03
+    static var `default`: PTZFocusSpeed { .speed1 }
+
+    var description: String {
+        switch self {
+        case .speed1: return "25%"
+        case .speed2: return "50%"
+        case .speed3: return "75%"
+        case .speed4: return "100%"
+        }
+    }
+}
+
 enum PTZDirection: Byte, CaseIterable, CustomStringConvertible {
     case right     = 0x00
     case left      = 0x01
@@ -51,8 +68,9 @@ enum PTZDirection: Byte, CaseIterable, CustomStringConvertible {
     case zoomIn    = 0x0C
     case zoomOut   = 0x0D
     case zoomStop  = 0x0E
-    #warning("try this again")
-    // 0x09, 0x0A and 0x0B might be for focus +/-/stop, but the camera replies with a mode condition error
+    case focusFar = 0x09
+    case focusNear  = 0x0A
+    case focusStop = 0x0B
 
     var description: String {
         switch self {
@@ -65,6 +83,9 @@ enum PTZDirection: Byte, CaseIterable, CustomStringConvertible {
         case .zoomIn:   return "zoom+"
         case .zoomOut:  return "zoom-"
         case .zoomStop: return "zoom stop"
+        case .focusFar: return "focus far"
+        case .focusNear:return "focus near"
+        case .focusStop:return "focus stop"
         }
     }
 }
@@ -73,10 +94,14 @@ struct PTZRequestSetMove: PTZRequest {
     let direction: PTZDirection
     let panTiltSpeed: PTZPanTiltSpeed
     let zoomSpeed: PTZZoomSpeed
+    let focusSpeed: PTZFocusSpeed
 
     var bytes: Bytes {
-        if direction == .panStop || direction == .tiltStop || direction == .zoomStop {
+        if direction == .panStop || direction == .tiltStop || direction == .zoomStop || direction == .focusStop {
             buildBytes([0x45, direction.rawValue])
+        }
+        else if direction == .focusFar || direction == .focusNear {
+            buildBytes([0x45, direction.rawValue], .init(focusSpeed, .single))
         }
         else if direction == .zoomIn || direction == .zoomOut {
             buildBytes([0x45, direction.rawValue], .init(zoomSpeed, .single))
@@ -87,8 +112,11 @@ struct PTZRequestSetMove: PTZRequest {
     }
     
     var description: String {
-        if direction == .panStop || direction == .tiltStop || direction == .zoomStop {
+        if direction == .panStop || direction == .tiltStop || direction == .zoomStop || direction == .focusStop {
             return "Set move \(direction.description)"
+        }
+        else if direction == .focusFar || direction == .focusNear {
+            return "Set move \(direction.description), \(focusSpeed) speed"
         }
         else if direction == .zoomIn || direction == .zoomOut {
             return "Set move \(direction.description), \(zoomSpeed) speed"

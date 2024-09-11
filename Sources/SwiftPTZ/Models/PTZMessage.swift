@@ -97,6 +97,7 @@ extension PTZMessage {
             PTZReplyExecuted.self, PTZReplyNotExecuted.self,
 
             PTZReplyAutoExposure.self,
+            PTZReplyAutoFocus.self,
             PTZReplyBacklightCompensation.self,
             PTZReplyBrightness.self,
             PTZReplyGainMode.self, PTZReplyRedGain.self, PTZReplyBlueGain.self,
