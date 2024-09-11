@@ -37,3 +37,16 @@ extension Double: BinaryNumber {
     var uint16: UInt16 { return UInt16(self) }
 }
 
+func speak<T: CustomStringConvertible>(_ value: T) {
+    speak(value.description)
+}
+
+func speak(_ string: String) {
+    #if os(macOS)
+    let process = Process()
+    process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+    process.arguments = ["say", string]
+    try! process.run()
+    process.waitUntilExit()
+    #endif
+}

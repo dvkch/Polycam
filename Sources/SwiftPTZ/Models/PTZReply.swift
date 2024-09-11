@@ -11,12 +11,6 @@ protocol PTZReply: CustomStringConvertible {
     init?(message: PTZMessage)
 }
 
-struct PTZReplyUnknown: PTZReply {
-    let bytes: Bytes
-    init(message: PTZMessage) { self.bytes = message.bytes }
-    var description: String { return "Unknown(\(bytes.stringRepresentation))" }
-}
-
 struct PTZReplyAck: PTZReply {
     init?(message: PTZMessage) { guard message.bytes.stringRepresentation == "A0" else { return nil } }
     var description: String { "ACK" }

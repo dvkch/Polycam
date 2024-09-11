@@ -9,6 +9,7 @@ import Foundation
 
 enum CameraError {
     case unknown
+    case replyTimeout
     case fail
     case reset
     case notExecuted(error: PTZReplyNotExecuted.PTZCommandError)
@@ -43,7 +44,11 @@ class Camera: Loggable {
         let (_, replies) = sendRequest(request, timeout: 1, repeatUntilAck: false, errorToRetry: nil)
         return replies
     }
-    
+
+    func sendRequest2(_ request: PTZRequest) -> (Bytes, [any PTZReply]) {
+        return sendRequest(request, timeout: 1, repeatUntilAck: false, errorToRetry: nil)
+    }
+
     subscript<T: PTZValue>(_ state: any PTZState<T>) -> T? {
         get {
             let (bytes, _) = sendRequest(state.getRequest(), timeout: 1, repeatUntilAck: false, errorToRetry: nil)
