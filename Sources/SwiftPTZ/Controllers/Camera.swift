@@ -34,7 +34,7 @@ class Camera: Loggable {
     // MARK: Properties
     private let serial: Serial
     private let powerOffAfterUse: Bool
-    private(set) var logLevel: LogLevel
+    var logLevel: LogLevel
     let logTag: String = "Camera"
 
     // MARK: Public actions
@@ -69,6 +69,7 @@ class Camera: Loggable {
             PTZRequestSetInvertedMode(enabled: false),
             PTZRequestSetBrightness(brightness: .default),
             PTZRequestSetSaturation(saturation: .default),
+            PTZRequestSetMireMode(enabled: false),
             PTZRequestSetWhiteBalance(mode: .default),
             PTZRequestSetGainMode(gain: .default),
             PTZRequestSetRedGain(gain: .default),

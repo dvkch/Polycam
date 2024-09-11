@@ -20,7 +20,7 @@ class Serial: Loggable {
     
     // MARK: Properties
     let device: SerialName
-    let logLevel: LogLevel
+    var logLevel: LogLevel
     let logTag: String
     private(set) var isOpen: Bool = false
     private(set) var port: SerialPort!

@@ -20,7 +20,7 @@ enum LogLevel: Int, Comparable {
 }
 
 protocol Loggable {
-    var logLevel: LogLevel { get }
+    var logLevel: LogLevel { get set }
     var logTag: String { get }
 }
 
