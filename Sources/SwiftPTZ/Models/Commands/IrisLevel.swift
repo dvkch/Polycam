@@ -10,7 +10,7 @@ import Foundation
 struct PTZIrisLevel: PTZScaledValue {
     var rawValue: Int
     static var minValue: Int = 0
-    static var maxValue: Int = 1000
+    static var maxValue: Int = 255
     static var ptzOffset: Int = 0
     static var ptzScale: Double = 1
     static var testValues: [PTZIrisLevel] { Array(minValue...maxValue).map(Self.init(rawValue:)) }

@@ -7,23 +7,24 @@
 
 import Foundation
 
+// Kind of an equivalent to ISO
 enum PTZGainMode: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
-    case auto = 0x00
-    case unknown1 = 0x01
-    case unknown2 = 0x02
-    case unknown3 = 0x03
-    case unknown4 = 0x04
-    case unknown5 = 0x05
+    case gain0dB    = 0x00
+    case gain3dB    = 0x01
+    case gain6dB    = 0x02
+    case gain9dB    = 0x03
+    case gain12dB   = 0x04
+    case auto       = 0x05
     static var `default`: PTZGainMode { .auto }
     
     var description: String {
         switch self {
+        case .gain0dB:  return "0dB"
+        case .gain3dB:  return "3dB"
+        case .gain6dB:  return "6dB"
+        case .gain9dB:  return "9dB"
+        case .gain12dB: return "12dB"
         case .auto:     return "auto"
-        case .unknown1: return "1"
-        case .unknown2: return "2"
-        case .unknown3: return "3"
-        case .unknown4: return "4"
-        case .unknown5: return "5"
         }
     }
 }
@@ -38,7 +39,6 @@ struct PTZGain: PTZScaledValue {
     static var `default`: PTZGain { .init(rawValue: 35) } // original system uses 37 for red, 33 for blue
 }
 
-#warning("understand this command, implement its getter and reply")
 struct PTZRequestSetGainMode: PTZRequest {
     let gain: PTZGainMode
     var bytes: Bytes { buildBytes([0x41, 0x31], gain) }

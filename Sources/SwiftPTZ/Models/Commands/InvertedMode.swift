@@ -27,6 +27,6 @@ struct PTZReplyInvertedMode: PTZReply {
     }
     
     var description: String {
-        return "InvertedMode(\(enabled))"
+        return "InvertedMode(\(enabled.onOffString))"
     }
 }

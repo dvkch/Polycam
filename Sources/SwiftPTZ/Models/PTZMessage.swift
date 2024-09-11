@@ -104,6 +104,7 @@ extension PTZMessage {
             PTZReplyInvertedMode.self,
             PTZReplyIrisLevel.self,
             PTZReplyLedMode.self,
+            PTZReplyMireMode.self,
             PTZReplyPosition.self,
             PTZReplySaturation.self,
             PTZReplySharpness.self,
