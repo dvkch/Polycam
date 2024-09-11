@@ -100,6 +100,7 @@ extension PTZMessage {
             PTZReplyAutoFocus.self,
             PTZReplyBacklightCompensation.self,
             PTZReplyBrightness.self,
+            PTZReplyClock.self,
             PTZReplyGainMode.self, PTZReplyRedGain.self, PTZReplyBlueGain.self,
             PTZReplyHelloMPTZ11.self,
             PTZReplyInvertedMode.self,

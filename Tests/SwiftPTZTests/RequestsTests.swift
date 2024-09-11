@@ -55,6 +55,39 @@ final class RequestsTests: XCTestCase {
             XCTAssertEqual((replyGet[1] as! PTZReplyBrightness).brightness, brightness)
         }
     }
+    
+    func testClockRequests() {
+        let camera = Self.buildCamera()
+
+        let testTimes: [(UInt32, UInt32)] = [
+            (0x7E,       0x80),
+            (0xFE,       0x100),
+            (0x7FFE,     0x8000),
+            (0xFFFE,     0x10000),
+            (0x7FFFFE,   0x800000),
+            (0xFFFFFE,   0x1000000),
+            (0x7FFFFFFE, 0x80000000),
+            (0xFFFFFFFE, 0x00)
+        ]
+        
+        for (tStart, tEnd) in testTimes {
+            camera.sendRequest(PTZRequestSetClock(clock: .clock1, time: tStart))
+            camera.sendRequest(PTZRequestSetClock(clock: .clock2, time: tStart))
+            
+            let d = Date()
+            var clock1Success = false
+            var clock2Success = false
+
+            while Date().timeIntervalSince(d) < 5 && (!clock1Success || !clock2Success) {
+                let t1 = (camera.sendRequest(PTZRequestGetClock(clock: .clock1)).last as! PTZReplyClock).time
+                let t2 = (camera.sendRequest(PTZRequestGetClock(clock: .clock2)).last as! PTZReplyClock).time
+                clock1Success ||= t1 == tEnd
+                clock2Success ||= t2 == tEnd
+            }
+            XCTAssertTrue(clock1Success, "Clock 1 did not increase as expected")
+            XCTAssertTrue(clock2Success, "Clock 2 did not increase as expected")
+        }
+    }
 
     func testGainRedRequests() {
         let camera = Self.buildCamera()
