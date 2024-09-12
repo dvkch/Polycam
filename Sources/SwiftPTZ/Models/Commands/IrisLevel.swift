@@ -17,14 +17,17 @@ struct PTZIrisLevel: PTZScaledValue {
     static var `default`: PTZIrisLevel { .init(rawValue: 0) }
 }
 
+// this request always fails with "mode condition". no combination of the known or fuzzed
+// setters ahve been able to make it work. testing 2 level of combination of all those
+// known & fuzzed setters has not helped
 struct PTZRequestSetIrisLevel: PTZRequest {
     let irisLevel: PTZIrisLevel
-    #warning("test this out, check if the extra 0x01 is required, or if its just because we're > 0x7F")
-    var bytes: Bytes { buildBytes([0x43, 0x00, 0x01], irisLevel) }
+    var bytes: Bytes { buildBytes([0x43, 0x00], irisLevel) }
     var description: String { "Set iris level to \(irisLevel.rawValue)" }
 }
 
-struct PTZRequestGetIrisLevel: PTZRequest {
+struct PTZRequestGetIrisLevel: PTZGetRequest {
+    typealias Reply = PTZReplyIrisLevel
     var bytes: Bytes { buildBytes([0x03, 0x00]) }
     var description: String { "Get iris level" }
 }

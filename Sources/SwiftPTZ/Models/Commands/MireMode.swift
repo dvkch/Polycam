@@ -13,7 +13,8 @@ struct PTZRequestSetMireMode: PTZRequest {
     var description: String { "Set mire mode \(enabled.onOffString)" }
 }
 
-struct PTZRequestGetMireMode: PTZRequest {
+struct PTZRequestGetMireMode: PTZGetRequest {
+    typealias Reply = PTZReplyMireMode
     var bytes: Bytes { buildBytes([0x01, 0x10]) }
     var description: String { "Get mire mode" }
 }

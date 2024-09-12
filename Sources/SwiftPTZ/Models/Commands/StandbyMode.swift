@@ -32,7 +32,8 @@ struct PTZRequestSetStandbyMode: PTZRequest {
     }
 }
 
-struct PTZRequestGetStandbyMode: PTZRequest {
+struct PTZRequestGetStandbyMode: PTZGetRequest {
+    typealias Reply = PTZReplyStandbyMode
     var bytes: Bytes { buildBytes([0x01, 0x00]) }
     var description: String { "Get standby mode" }
 }

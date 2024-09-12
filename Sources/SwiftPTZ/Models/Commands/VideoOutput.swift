@@ -29,9 +29,11 @@ struct PTZRequestSetVideoOutputMode: PTZRequest {
     let mode: PTZVideoOutputMode
     var bytes: Bytes { buildBytes([0x41, 0x13], mode) }
     var description: String { "Set video output \(mode.description)" }
+    var waitingTimeIfExecuted: TimeInterval { 2 }
 }
 
-struct PTZRequestGetVideoOutputMode: PTZRequest {
+struct PTZRequestGetVideoOutputMode: PTZGetRequest {
+    typealias Reply = PTZReplyVideoOutputMode
     var bytes: Bytes { buildBytes([0x01, 0x13]) }
     var description: String { "Get video output" }
 }

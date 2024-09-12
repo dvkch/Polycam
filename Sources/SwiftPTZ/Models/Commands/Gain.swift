@@ -57,17 +57,20 @@ struct PTZRequestSetBlueGain: PTZRequest {
     var description: String { "Set blue gain to \(gain.rawValue)" }
 }
 
-struct PTZRequestGetGainMode: PTZRequest {
+struct PTZRequestGetGainMode: PTZGetRequest {
+    typealias Reply = PTZReplyGainMode
     var bytes: Bytes { buildBytes([0x01, 0x31]) }
     var description: String { "Get gain mode" }
 }
 
-struct PTZRequestGetRedGain: PTZRequest {
+struct PTZRequestGetRedGain: PTZGetRequest {
+    typealias Reply = PTZReplyRedGain
     var bytes: Bytes { buildBytes([0x03, 0x42]) }
     var description: String { "Get red gain" }
 }
 
-struct PTZRequestGetBlueGain: PTZRequest {
+struct PTZRequestGetBlueGain: PTZGetRequest {
+    typealias Reply = PTZReplyBlueGain
     var bytes: Bytes { buildBytes([0x03, 0x43]) }
     var description: String { "Get blue gain" }
 }

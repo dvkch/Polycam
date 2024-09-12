@@ -45,7 +45,8 @@ struct PTZRequestStartManualWhiteBalanceCalibration: PTZRequest {
     var description: String { "Start manual white balance calibration" }
 }
 
-struct PTZRequestGetWhiteBalance: PTZRequest {
+struct PTZRequestGetWhiteBalance: PTZGetRequest {
+    typealias Reply = PTZReplyWhiteBalance
     var bytes: Bytes { buildBytes([0x02, 0x12]) }
     var description: String { "Get white balance" }
 }

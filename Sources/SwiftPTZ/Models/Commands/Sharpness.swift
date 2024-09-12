@@ -23,7 +23,8 @@ struct PTZRequestSetSharpness: PTZRequest {
     var description: String { "Set sharpness to \(sharpness.rawValue)" }
 }
 
-struct PTZRequestGetSharpness: PTZRequest {
+struct PTZRequestGetSharpness: PTZGetRequest {
+    typealias Reply = PTZReplySharpness
     var bytes: Bytes { buildBytes([0x03, 0x3d]) }
     var description: String { "Get sharpness" }
 }

@@ -62,7 +62,8 @@ struct PTZRequestSetPosition: PTZRequest {
     }
 }
 
-struct PTZRequestGetPosition: PTZRequest {
+struct PTZRequestGetPosition: PTZGetRequest {
+    typealias Reply = PTZReplyPosition
     var bytes: Bytes { buildBytes([0x01, 0x50]) }
     var description: String { "Get position" }
 }

@@ -13,7 +13,8 @@ struct PTZRequestSetAutoExposure: PTZRequest {
     var description: String { "Set auto exposure \(enabled.onOffString)" }
 }
 
-struct PTZRequestGetAutoExposure: PTZRequest {
+struct PTZRequestGetAutoExposure: PTZGetRequest {
+    typealias Reply = PTZReplyAutoExposure
     var bytes: Bytes { buildBytes([0x02, 0x11]) }
     var description: String { "Get auto exposure" }
 }

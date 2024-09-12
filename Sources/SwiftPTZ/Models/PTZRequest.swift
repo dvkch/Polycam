@@ -12,6 +12,10 @@ protocol PTZRequest: CustomStringConvertible {
     var waitingTimeIfExecuted: TimeInterval { get }
 }
 
+protocol PTZGetRequest<Reply>: PTZRequest {
+    associatedtype Reply: PTZReply
+}
+
 extension PTZRequest {
     var waitingTimeIfExecuted: TimeInterval { 0 }
 }

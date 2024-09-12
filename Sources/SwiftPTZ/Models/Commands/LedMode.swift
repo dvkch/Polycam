@@ -78,7 +78,8 @@ struct PTZRequestSetLedMode: PTZRequest {
     var description: String { "Set LED \(color.description) \(mode.description)" }
 }
 
-struct PTZRequestGetLedMode: PTZRequest {
+struct PTZRequestGetLedMode: PTZGetRequest {
+    typealias Reply = PTZReplyLedMode
     var bytes: Bytes { buildBytes([0x01, 0x21]) }
     var description: String { "Get LED" }
 }

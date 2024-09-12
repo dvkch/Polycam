@@ -7,7 +7,10 @@
 
 import Foundation
 
-struct PTZRequestHelloMPTZ11: PTZRequest {
+#warning("Hello reply doesn't seem to be parsed anymore")
+
+struct PTZRequestHelloMPTZ11: PTZGetRequest {
+    typealias Reply = PTZReplyHelloMPTZ11
     var bytes: Bytes { return buildBytes([0x06, 0x77]) }
     var description: String { return "Hello MPTZ 11" }
 }

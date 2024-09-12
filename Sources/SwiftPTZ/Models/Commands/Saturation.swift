@@ -23,7 +23,8 @@ struct PTZRequestSetSaturation: PTZRequest {
     var description: String { "Set saturation to \(saturation.rawValue)" }
 }
 
-struct PTZRequestGetSaturation: PTZRequest {
+struct PTZRequestGetSaturation: PTZGetRequest {
+    typealias Reply = PTZReplySaturation
     var bytes: Bytes { buildBytes([0x03, 0x3e]) }
     var description: String { "Get saturation" }
 }

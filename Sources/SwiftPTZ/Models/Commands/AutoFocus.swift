@@ -13,7 +13,8 @@ struct PTZRequestSetAutoFocus: PTZRequest {
     var description: String { "Set auto focus \(enabled.onOffString)" }
 }
 
-struct PTZRequestGetAutoFocus: PTZRequest {
+struct PTZRequestGetAutoFocus: PTZGetRequest {
+    typealias Reply = PTZReplyAutoFocus
     var bytes: Bytes { buildBytes([0x02, 0x09]) }
     var description: String { "Get auto focus" }
 }

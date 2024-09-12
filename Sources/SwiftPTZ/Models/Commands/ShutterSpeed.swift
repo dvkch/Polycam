@@ -47,7 +47,8 @@ struct PTZRequestSetShutterSpeed: PTZRequest {
     var description: String { "Set shutter speed to \(speed.description)" }
 }
 
-struct PTZRequestGetShutterSpeed: PTZRequest {
+struct PTZRequestGetShutterSpeed: PTZGetRequest {
+    typealias Reply = PTZReplyShutterSpeed
     var bytes: Bytes { buildBytes([0x02, 0x14]) }
     var description: String { "Get shutter speed" }
 }

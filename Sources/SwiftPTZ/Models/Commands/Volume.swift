@@ -28,7 +28,8 @@ struct PTZRequestSetVolume: PTZRequest {
     var description: String { "Set volume to \(volume.rawValue)" }
 }
 
-struct PTZRequestGetVolume: PTZRequest {
+struct PTZRequestGetVolume: PTZGetRequest {
+    typealias Reply = PTZReplyVolume
     var bytes: Bytes { buildBytes([0x01, 0x25]) }
     var description: String { "Get volume" }
 }

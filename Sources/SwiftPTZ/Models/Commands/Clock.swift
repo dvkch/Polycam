@@ -41,7 +41,8 @@ struct PTZRequestSetClock: PTZRequest {
 }
 
 
-struct PTZRequestGetClock: PTZRequest {
+struct PTZRequestGetClock: PTZGetRequest {
+    typealias Reply = PTZReplyClock
     let clock: PTZClock
     var bytes: Bytes { return buildBytes([0x01, UInt8(clock.rawValue)]) }
     var description: String { return "Get \(clock)" }

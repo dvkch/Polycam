@@ -23,7 +23,8 @@ struct PTZRequestSetBrightness: PTZRequest {
     var description: String { "Set brightness to \(brightness.rawValue)" }
 }
 
-struct PTZRequestGetBrightness: PTZRequest {
+struct PTZRequestGetBrightness: PTZGetRequest {
+    typealias Reply = PTZReplyBrightness
     var bytes: Bytes { buildBytes([0x01, 0x33]) }
     var description: String { "Get Brightness" }
 }

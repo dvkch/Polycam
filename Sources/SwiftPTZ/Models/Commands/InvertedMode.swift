@@ -13,7 +13,8 @@ struct PTZRequestSetInvertedMode: PTZRequest {
     var description: String { "Set inverted mode \(enabled.onOffString)" }
 }
 
-struct PTZRequestGetInvertedMode: PTZRequest {
+struct PTZRequestGetInvertedMode: PTZGetRequest {
+    typealias Reply = PTZReplyInvertedMode
     var bytes: Bytes { buildBytes([0x01, 0x3e]) }
     var description: String { "Get inverted mode" }
 }

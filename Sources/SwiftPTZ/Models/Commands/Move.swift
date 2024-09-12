@@ -7,6 +7,7 @@
 
 import Foundation
 
+#warning("can go from 10 to 1F")
 enum PTZPanTiltSpeed: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
     case speed1 = 0x11
     case speed2 = 0x13
@@ -65,12 +66,12 @@ enum PTZDirection: Byte, CaseIterable, CustomStringConvertible {
     case up        = 0x03
     case down      = 0x04
     case tiltStop  = 0x05
+    case focusFar  = 0x09
+    case focusNear = 0x0A
+    case focusStop = 0x0B
     case zoomIn    = 0x0C
     case zoomOut   = 0x0D
     case zoomStop  = 0x0E
-    case focusFar = 0x09
-    case focusNear  = 0x0A
-    case focusStop = 0x0B
 
     var description: String {
         switch self {

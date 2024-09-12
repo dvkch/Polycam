@@ -13,7 +13,8 @@ struct PTZRequestSetBacklightCompensation: PTZRequest {
     var description: String { "Set backlight compensation \(enabled.onOffString)" }
 }
 
-struct PTZRequestGetBacklightCompensation: PTZRequest {
+struct PTZRequestGetBacklightCompensation: PTZGetRequest {
+    typealias Reply = PTZReplyBacklightCompensation
     var bytes: Bytes { buildBytes([0x02, 0x15]) }
     var description: String { "Get backlight compensation" }
 }
