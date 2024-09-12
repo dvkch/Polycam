@@ -58,4 +58,14 @@ extension Array {
         removeFirst(n)
         return subarray
     }
+    
+    func pick(count: Int) -> [Element] {
+        return (0..<count).compactMap { _ in self.randomElement() }
+    }
+}
+
+extension Array where Element: Collection {
+    var flatten: [Element.Element] {
+        return reduce([], +)
+    }
 }

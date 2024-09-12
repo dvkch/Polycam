@@ -9,7 +9,7 @@ Here are the detected commands, a cross next to it confirms we know it and imple
 - 82 01 0B | 83 41 0B 00                                      |
 - 82 01 10 | 83 41 10 00                                      | MireMode(off)
 - 82 01 13 | 83 41 13 1A                                      | VideoOutputMode(1080p)
-- 82 01 14 | 83 41 14 00                                      | -> Corresponding setter FAILs
+- 82 01 14 | 83 41 14 00                                      | -> Corresponding setter fails
 - 82 01 21 | 84 41 21 02 10                                   | LedMode(blue, on)
 - 82 01 23 | 83 41 23 00                                      |
 - 82 01 24 | 83 41 24 01                                      |
@@ -24,8 +24,8 @@ Here are the detected commands, a cross next to it confirms we know it and imple
 - 82 01 3E | 83 41 3E 00                                      | InvertedMode(off)
 - 82 01 44 | 8F 0F 41 44 7A 00 71 05 71 71 71 4C 05 0C 06 71  | > Randomness?
 - 82 01 50 | 8A 41 50 0A 03 68 00 7A 04 7A 00                 | Position(0, 0, 0)
-- 82 01 5D | 8D 41 5D 02 00 07 2F 32 00 00 00 00 00 00        | > Timer...
-- 82 01 5E | 8D 41 5E 02 00 07 26 0D 00 00 00 00 00 00        | > Timer...
+- 82 01 5D | 8D 41 5D 02 00 07 2F 32 00 00 00 00 00 00        | Clock1(t=...)
+- 82 01 5E | 8D 41 5E 02 00 07 26 0D 00 00 00 00 00 00        | Clock2(t=...)
 - 82 01 60 | 8A 41 60 00 00 00 00 00 00 00 00                 | > Preset?
 - 82 01 61 | 8A 41 61 00 00 00 00 00 00 00 00                 | > Preset? 
 - 82 01 62 | 8A 41 62 00 00 00 00 00 00 00 00                 | > Preset?
@@ -34,9 +34,9 @@ Here are the detected commands, a cross next to it confirms we know it and imple
 - 82 01 65 | 8A 41 65 02 7F 01 07 02 00 00 00                 | > Preset?
 - 82 01 66 | 8A 41 66 03 02 65 01 50 00 00 00                 | > Preset?
 - 82 01 67 | 8A 41 67 01 58 01 44 01 00 00 00                 | > Preset?
-- 82 01 71 | 83 41 71 00                                      | > Corresponding setter FAILs
-- 82 01 72 | 83 41 72 00                                      | AutoFocus(false)
-- 82 02 09 | 83 42 09 01                                      |
+- 82 01 71 | 83 41 71 00                                      | > Corresponding setter fails
+- 82 01 72 | 83 41 72 00                                      | 
+- 82 02 09 | 83 42 09 01                                      | AutoFocus(false)
 - 82 02 11 | 83 42 11 01                                      | AutoExposure(true)
 - 82 02 12 | 83 42 12 01                                      | WhiteBalance(auto)
 - 82 02 14 | 83 42 14 00                                      | ShutterSpeed(auto)
@@ -47,7 +47,7 @@ Here are the detected commands, a cross next to it confirms we know it and imple
 - 82 03 03 | 84 43 03 06 00                                   | 
 - 82 03 04 | 84 43 04 07 68                                   | 
 - 82 03 05 | 84 43 05 01 7A                                   | 
-- 82 03 26 | 83 43 26 14                                      |
+- 82 03 26 | 83 43 26 14                                      | > Corresponding setter fails
 - 82 03 3D | 84 43 3D 01 00                                   | Sharpness(6)
 - 82 03 3E | 84 43 3E 01 00                                   | Saturation(6)
 - 82 03 3F | 83 43 3F 5A                                      |
@@ -81,5 +81,9 @@ Here are the detected commands, a cross next to it confirms we know it and imple
 
 ### Actions, not already implemented
 
-- 83 45 32 | 00 and 01 executed, other ones fail
-- 82 45 71 | mode condition, no arg
+- 82 45 71 | mode condition. after try to set all states to all their possible values, haven't seen a way to run this action
+
+### Unknowns
+
+- 83 04 xx | Not executed: Syntax error
+- 83 44 xx | Not executed: Syntax error
