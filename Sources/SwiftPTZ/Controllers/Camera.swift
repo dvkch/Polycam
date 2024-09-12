@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum CameraError {
+enum CameraError: Error {
     case unknown
     case replyTimeout
     case fail
@@ -39,10 +39,18 @@ class Camera: Loggable {
     let logTag: String = "Camera"
 
     // MARK: Public actions
+    func get<T: PTZReply>(_ request: any PTZGetRequest<T>) throws -> T {
+        let reply: (any PTZReply) = try sendRequest(request)
+        return reply as! T
+    }
+    
     @discardableResult
-    func sendRequest(_ request: PTZRequest) -> [any PTZReply] {
+    func sendRequest(_ request: PTZRequest) throws -> any PTZReply {
         let (_, replies) = sendRequest(request, timeout: 1, repeatUntilAck: false, errorToRetry: nil)
-        return replies
+        guard replies.count == 2, replies[0] is PTZReplyAck else {
+            throw CameraError.unknown
+        }
+        return replies[1]
     }
 
     func sendRequest2(_ request: PTZRequest) -> (Bytes, [any PTZReply]) {
@@ -55,7 +63,7 @@ class Camera: Loggable {
             return state.parseResponse(bytes)
         }
         set {
-            sendRequest(state.setRequest(value: newValue ?? T.default))
+            try! sendRequest(state.setRequest(value: newValue ?? T.default))
         }
     }
 
@@ -92,8 +100,8 @@ class Camera: Loggable {
     
     func powerOff() {
         #warning("set off back")
-        // sendRequest(PTZRequestSetLedMode(mode: .off))
-        sendRequest(PTZRequestSetStandbyMode(mode: .on)) // TODO: maybe it disconnects the port ?
+        _ = sendRequest2(PTZRequestSetLedMode(color: .off, mode: .off))
+        _ = sendRequest2(PTZRequestSetStandbyMode(mode: .on)) // TODO: maybe it disconnects the port ?
         while serial.readAllBytes() != [0x00] {
             Thread.sleep(forTimeInterval: 0.1)
         }

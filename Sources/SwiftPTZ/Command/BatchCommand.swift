@@ -16,6 +16,6 @@ struct BatchCommand: CamerableCommand {
     
     func run(camera: Camera) throws {
         let position = PTZRequestSetPosition(pan: .init(rawValue: 0), tilt: .init(rawValue: 0), zoom: .init(rawValue: 0))
-        camera.sendRequest(position)
+        try camera.sendRequest(position)
     }
 }
