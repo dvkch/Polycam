@@ -101,20 +101,24 @@ extension PTZMessage {
             PTZReplyBacklightCompensation.self,
             PTZReplyBrightness.self,
             PTZReplyClock.self,
+            PTZReplyFocus.self,
             PTZReplyGainMode.self, PTZReplyRedGain.self, PTZReplyBlueGain.self,
             PTZReplyHelloMPTZ11.self,
             PTZReplyInvertedMode.self,
             PTZReplyIrisLevel.self,
             PTZReplyLedMode.self,
             PTZReplyMireMode.self,
+            PTZReplyPan.self,
             PTZReplyPosition.self,
             PTZReplySaturation.self,
             PTZReplySharpness.self,
             PTZReplyShutterSpeed.self,
             PTZReplyStandbyMode.self,
+            PTZReplyTilt.self,
             PTZReplyVideoOutputMode.self,
             PTZReplyVolume.self,
-            PTZReplyWhiteBalance.self
+            PTZReplyWhiteBalance.self,
+            PTZReplyZoom.self,
         ]
     }
     

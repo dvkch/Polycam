@@ -32,10 +32,6 @@ struct TesterCommand: CamerableCommand {
 
             .init(command: (0x42, 0x22), kind: .bool, originalValue: 0x01),
 
-            //.init(command: (0x43, 0x02), kind: .custom(Array(0x00...0x7FFF)), originalValue: 08 7A), // zooms    0040 -> 1135
-            //.init(command: (0x43, 0x03), kind: .custom(Array(0x00...0x7FFF)), originalValue: 05 23), // focus    0170 -> 0600
-            //.init(command: (0x43, 0x04), kind: .custom(Array(0x00...0x7FFF)), originalValue: 07 68), // pan/tilt 0000 -> 0F50
-            //.init(command: (0x43, 0x05), kind: .custom(Array(0x00...0x7FFF)), originalValue: 01 7A), // pan/tilt 0000 -> 0374
             //.init(command: (0x43, 0x40), kind: .custom(Array(0x60...0x9F)),  originalValue: 128), // white balance manual, adjust green to pink, from 60 to 01 1F
             //.init(command: (0x43, 0x41), kind: .custom(Array(0x60...0x9F)),  originalValue: 128), // white balance manual, adjust yellow to blue, from 60 to 01 1F
 
@@ -113,18 +109,6 @@ struct TesterCommand: CamerableCommand {
             //.init(command: (0x43, 0x3F), kind: .custom([0x5A, 0x64]), originalValue: 0x5A),
         ]
         
-        try camera.sendRequest(PTZRequestSetAutoFocus(enabled: false))
-        for register: UInt8 in [3] {
-            print("-----------------------------------")
-            for arg0: UInt8? in [nil] + Array(0..<0x7F) {
-                for arg1: UInt8? in [nil] + Array(0..<0x7F) {
-                    let req = PTZUnknownRequest(commandBytes: [0x43, register, arg0, arg1].compactMap({ $0 }), arg: nil)
-                    try testRequest(req, on: camera, duration: 0.01) { _ in
-                        print("->", req.bytes.stringRepresentation)
-                    }
-                }
-            }
-        }
         /*
         for test in allRequests {
             try testRequest(test, on: camera, duration: 0.1) { req in

@@ -46,15 +46,16 @@ class Camera: Loggable {
     
     @discardableResult
     func sendRequest(_ request: PTZRequest) throws -> any PTZReply {
-        let (_, replies) = sendRequest(request, timeout: 1, repeatUntilAck: false, errorToRetry: nil)
-        guard replies.count == 2, replies[0] is PTZReplyAck else {
-            throw CameraError.unknown
-        }
-        return replies[1]
+        return (try sendRequest2(request)).1
     }
 
-    func sendRequest2(_ request: PTZRequest) -> (Bytes, [any PTZReply]) {
-        return sendRequest(request, timeout: 1, repeatUntilAck: false, errorToRetry: nil)
+    func sendRequest2(_ request: PTZRequest) throws -> (Bytes, any PTZReply){
+        let (bytes, replies) = sendRequest(request, timeout: 1, repeatUntilAck: false, errorToRetry: nil)
+        guard replies.count == 2, replies[0] is PTZReplyAck else {
+            log(.fatal, "Unexpected camera reply: \(replies) (expected ACK, then a reply)")
+            throw CameraError.unknown
+        }
+        return (bytes, replies[1])
     }
 
     subscript<T: PTZValue>(_ state: any PTZState<T>) -> T? {
@@ -100,8 +101,8 @@ class Camera: Loggable {
     
     func powerOff() {
         #warning("set off back")
-        _ = sendRequest2(PTZRequestSetLedMode(color: .off, mode: .off))
-        _ = sendRequest2(PTZRequestSetStandbyMode(mode: .on)) // TODO: maybe it disconnects the port ?
+        _ = try? sendRequest2(PTZRequestSetLedMode(color: .off, mode: .off))
+        _ = try? sendRequest2(PTZRequestSetStandbyMode(mode: .on)) // TODO: maybe it disconnects the port ?
         while serial.readAllBytes() != [0x00] {
             Thread.sleep(forTimeInterval: 0.1)
         }

@@ -37,14 +37,12 @@ extension PTZRequest {
         bytes.append(contentsOf: command)
         
         if args.count == 1, let arg = args.first, case .single = arg.position {
-            #warning("TODO: try sending with a fixed length, the code would be simpler if it worked")
-            let argBytes = arg.value.ptzBytes
-            if argBytes.loRetainer {
-                bytes.append(contentsOf: [0x01, argBytes.lo])
+            let hi = UInt8(arg.value.ptzValue >> 7)
+            let lo = UInt8(arg.value.ptzValue & 0x7F)
+            if hi > 0 {
+                bytes.append(hi)
             }
-            else {
-                bytes.append(contentsOf: [argBytes.lo])
-            }
+            bytes.append(lo)
         }
         else {
             for arg in args {
