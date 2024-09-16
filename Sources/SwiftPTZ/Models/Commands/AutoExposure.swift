@@ -8,9 +8,9 @@
 import Foundation
 
 struct PTZRequestSetAutoExposure: PTZRequest {
-    let enabled: Bool
-    var bytes: Bytes { buildBytes([0x42, 0x11], PTZBool(rawValue: enabled)) }
-    var description: String { "Set auto exposure \(enabled.onOffString)" }
+    let enabled: PTZBool
+    var bytes: Bytes { buildBytes([0x42, 0x11], enabled) }
+    var description: String { "Set auto exposure \(enabled)" }
 }
 
 struct PTZRequestGetAutoExposure: PTZGetRequest {
@@ -20,11 +20,11 @@ struct PTZRequestGetAutoExposure: PTZGetRequest {
 }
 
 struct PTZReplyAutoExposure: PTZReply {
-    let enabled: Bool
+    let enabled: PTZBool
     
     init?(message: PTZMessage) {
         guard message.isValidReply([0x42, 0x11]) else { return nil }
-        self.enabled = message.parseArgument(type: PTZBool.self, position: .single).rawValue
+        self.enabled = message.parseArgument(position: .single)
     }
     
     var description: String {

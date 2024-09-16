@@ -76,16 +76,16 @@ class Camera: Loggable {
             PTZRequestSetShutterSpeed(speed: .default),
             PTZRequestSetVolume(volume: .default),
             PTZRequestSetPosition(pan: .default, tilt: .default, zoom: .default),
-            PTZRequestSetInvertedMode(enabled: false),
-            PTZRequestSetAutoFocus(enabled: true),
+            PTZRequestSetInvertedMode(enabled: .off),
+            PTZRequestSetAutoFocus(enabled: .on),
             PTZRequestSetBrightness(brightness: .default),
             PTZRequestSetSaturation(saturation: .default),
-            PTZRequestSetMireMode(enabled: false),
+            PTZRequestSetMireMode(enabled: .off),
             PTZRequestSetWhiteBalance(mode: .default),
             PTZRequestSetGainMode(gain: .default),
             PTZRequestSetRedGain(gain: .default),
             PTZRequestSetBlueGain(gain: .default),
-            PTZRequestSetBacklightCompensation(enabled: false)
+            PTZRequestSetBacklightCompensation(enabled: .off)
         ]
 
         log(.info, "Starting boot sequence...")

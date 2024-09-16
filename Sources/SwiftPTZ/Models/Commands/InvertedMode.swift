@@ -8,9 +8,9 @@
 import Foundation
 
 struct PTZRequestSetInvertedMode: PTZRequest {
-    let enabled: Bool
-    var bytes: Bytes { buildBytes([0x41, 0x3e], PTZBool(rawValue: enabled)) }
-    var description: String { "Set inverted mode \(enabled.onOffString)" }
+    let enabled: PTZBool
+    var bytes: Bytes { buildBytes([0x41, 0x3e], enabled) }
+    var description: String { "Set inverted mode \(enabled)" }
 }
 
 struct PTZRequestGetInvertedMode: PTZGetRequest {
@@ -20,14 +20,14 @@ struct PTZRequestGetInvertedMode: PTZGetRequest {
 }
 
 struct PTZReplyInvertedMode: PTZReply {
-    let enabled: Bool
+    let enabled: PTZBool
     
     init?(message: PTZMessage) {
         guard message.isValidReply([0x41, 0x3e]) else { return nil }
-        self.enabled = message.parseArgument(type: PTZBool.self, position: .single).rawValue
+        self.enabled = message.parseArgument(position: .single)
     }
     
     var description: String {
-        return "InvertedMode(\(enabled.onOffString))"
+        return "InvertedMode(\(enabled))"
     }
 }

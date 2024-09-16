@@ -8,9 +8,9 @@
 import Foundation
 
 struct PTZRequestSetBacklightCompensation: PTZRequest {
-    let enabled: Bool
-    var bytes: Bytes { buildBytes([0x42, 0x15], PTZBool(rawValue: enabled)) }
-    var description: String { "Set backlight compensation \(enabled.onOffString)" }
+    let enabled: PTZBool
+    var bytes: Bytes { buildBytes([0x42, 0x15], enabled) }
+    var description: String { "Set backlight compensation \(enabled)" }
 }
 
 struct PTZRequestGetBacklightCompensation: PTZGetRequest {
@@ -20,11 +20,11 @@ struct PTZRequestGetBacklightCompensation: PTZGetRequest {
 }
 
 struct PTZReplyBacklightCompensation: PTZReply {
-    let enabled: Bool
+    let enabled: PTZBool
     
     init?(message: PTZMessage) {
         guard message.isValidReply([0x42, 0x15]) else { return nil }
-        self.enabled = message.parseArgument(type: PTZBool.self, position: .single).rawValue
+        self.enabled = message.parseArgument(position: .single)
     }
     
     var description: String {

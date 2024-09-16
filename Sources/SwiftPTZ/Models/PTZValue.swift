@@ -88,6 +88,13 @@ struct PTZBool: PTZValue {
     
     static var testValues: [PTZBool] { [.init(rawValue: true), .init(rawValue: false)] }
     static var `default`: PTZBool { .init(rawValue: false) }
+    
+    static var on: PTZBool { .init(rawValue: true) }
+    static var off: PTZBool { .init(rawValue: false) }
+    
+    var description: String {
+        return rawValue ? "on" : "off"
+    }
 }
 
 extension RawRepresentable where Self: CaseIterable, RawValue == UInt16 {
