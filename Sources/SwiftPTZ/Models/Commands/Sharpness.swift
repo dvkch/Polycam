@@ -13,7 +13,6 @@ struct PTZSharpness: PTZScaledValue {
     static var maxValue: Int = 11
     static var ptzOffset: Int = 122
     static var ptzScale: Double = 1
-    static var testValues: [PTZSharpness] { Array(minValue...maxValue).map(Self.init(rawValue:)) }
     static var `default`: PTZSharpness { .init(rawValue: 6) }
 }
 
@@ -38,6 +37,6 @@ struct PTZReplySharpness: PTZReply {
     }
     
     var description: String {
-        return "Sharpness(\(sharpness.rawValue))"
+        return "Sharpness(\(sharpness))"
     }
 }

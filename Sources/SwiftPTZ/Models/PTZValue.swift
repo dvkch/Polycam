@@ -8,7 +8,7 @@
 import Foundation
 import CoreMedia
 
-protocol PTZValue: RawRepresentable, Equatable where RawValue: Equatable {
+protocol PTZValue: RawRepresentable, CustomStringConvertible, Equatable where RawValue: Equatable {
     init(ptzValue: UInt16)
     var ptzValue: UInt16 { get }
 
@@ -52,23 +52,27 @@ extension PTZValue {
     }
 }
 
-struct PTZInt: PTZValue {
-    let rawValue: Int
+struct PTZUInt: PTZValue {
+    let rawValue: UInt16
 
-    init(rawValue: Int) {
+    init(rawValue: UInt16) {
         self.rawValue = rawValue
     }
 
     init(ptzValue: UInt16) {
-        self.rawValue = Int(ptzValue)
+        self.rawValue = UInt16(ptzValue)
     }
     
     var ptzValue: UInt16 {
         return UInt16(rawValue)
     }
     
-    static var testValues: [PTZInt] { [.init(rawValue: 0)] }
-    static var `default`: PTZInt { .init(rawValue: 0) }
+    static var testValues: [PTZUInt] { [.init(rawValue: 0)] }
+    static var `default`: PTZUInt { .init(rawValue: 0) }
+    
+    var description: String {
+        return String(rawValue)
+    }
 }
 
 struct PTZBool: PTZValue {
@@ -109,6 +113,9 @@ extension RawRepresentable where Self: CaseIterable, RawValue == UInt16 {
     static var testValues: [Self] { Array(allCases) }
 }
 
+#warning("redefine")
+// min/max should be minimum/maximum values supported over the wire
+// and it should be able to init it using a percentage to get the corresponding wire value
 protocol PTZScaledValue: PTZValue where RawValue == Int {
     var rawValue: Int { get set }
     static var minValue: Int { get }
@@ -122,10 +129,35 @@ extension PTZScaledValue {
         let value = Double(Int(ptzValue) - Self.ptzOffset) / Self.ptzScale
         self.init(rawValue: Int(value))!
     }
-
+    
     var ptzValue: UInt16 {
         let value = Int(Double(clamped) * Self.ptzScale) + Self.ptzOffset
         return UInt16(value)
+    }
+    
+    static var testValues: [Self] {
+        var allValues = Array(minValue...maxValue)
+        if allValues.count > 100 {
+            #warning("restore")
+            //allValues = stride(from: minValue, to: maxValue, by: allValues.count / 100) + [maxValue]
+        }
+        return allValues.map { Self.init(rawValue: $0)! }
+    }
+    
+    static var min: Self {
+        return Self.init(rawValue: minValue)!
+    }
+    
+    static var mid: Self {
+        return Self.init(rawValue: (maxValue - minValue) / 2 + minValue)!
+    }
+    
+    static var max: Self {
+        return Self.init(rawValue: maxValue)!
+    }
+    
+    var description: String {
+        return String(rawValue)
     }
 }
 

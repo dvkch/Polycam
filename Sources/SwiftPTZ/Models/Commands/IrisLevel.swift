@@ -13,7 +13,6 @@ struct PTZIrisLevel: PTZScaledValue {
     static var maxValue: Int = 255
     static var ptzOffset: Int = 0
     static var ptzScale: Double = 1
-    static var testValues: [PTZIrisLevel] { Array(minValue...maxValue).map(Self.init(rawValue:)) }
     static var `default`: PTZIrisLevel { .init(rawValue: 0) }
 }
 
@@ -41,6 +40,6 @@ struct PTZReplyIrisLevel: PTZReply {
     }
     
     var description: String {
-        return "IrisLevel(\(irisLevel.rawValue))"
+        return "IrisLevel(\(irisLevel))"
     }
 }

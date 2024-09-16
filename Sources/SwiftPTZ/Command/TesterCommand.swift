@@ -144,13 +144,13 @@ extension TesterCommand {
     struct TestCommand {
         let command: (UInt8, UInt8)
         let kind: Kind
-        let originalValue: Int?
+        let originalValue: UInt16?
         
         enum Kind {
-            case get, bool, int, action, custom([Int?])
+            case get, bool, int, action, custom([UInt16?])
         }
         
-        var testValues: [Int?] { 
+        var testValues: [UInt16?] {
             switch kind {
             case .get:                  [nil]
             case .bool:                 [nil, 0x00, 0x01]

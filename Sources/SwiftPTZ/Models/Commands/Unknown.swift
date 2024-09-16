@@ -9,10 +9,10 @@ import Foundation
 
 struct PTZUnknownRequest: PTZRequest {
     let commandBytes: Bytes
-    let arg: Int?
+    let arg: UInt16?
     var bytes: Bytes {
         if let arg {
-            return buildBytes(commandBytes, .init(PTZInt(rawValue: arg), .single))
+            return buildBytes(commandBytes, .init(PTZUInt(rawValue: arg), .single))
         }
         return buildBytes(commandBytes)
     }

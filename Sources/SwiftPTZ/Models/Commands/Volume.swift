@@ -17,7 +17,6 @@ struct PTZVolume: PTZScaledValue {
     static var ptzOffset: Int { 0 }
     static var ptzScale: Double { 1 }
     static var `default`: PTZVolume { .init(rawValue: 0x08) }
-    static var testValues: [PTZVolume] { Array(minValue...maxValue).map(PTZVolume.init(rawValue:)) }
 }
 
 struct PTZRequestSetVolume: PTZRequest {
@@ -43,6 +42,6 @@ struct PTZReplyVolume: PTZReply {
     }
     
     var description: String {
-        return "Volume(\(volume.rawValue))"
+        return "Volume(\(volume))"
     }
 }

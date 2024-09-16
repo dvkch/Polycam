@@ -53,13 +53,11 @@ struct PTZRequestSetPosition: PTZRequest {
             PTZArgument(pan,  .custom(hiIndex:  5, loIndex:  6, loRetainerIndex:  3, loRetainerMask: 0x04)),
             PTZArgument(tilt, .custom(hiIndex:  8, loIndex:  9, loRetainerIndex:  3, loRetainerMask: 0x20)),
             PTZArgument(zoom, .custom(hiIndex: 12, loIndex: 13, loRetainerIndex: 11, loRetainerMask: 0x02)),
-            PTZArgument(PTZInt(rawValue: 0x03), .raw8(10))
+            PTZArgument(PTZUInt(rawValue: 0x03), .raw8(10))
         )
     }
     
-    var description: String {
-        return "Move to \(pan.rawValue), \(tilt.rawValue), \(zoom.rawValue)"
-    }
+    var description: String { "Move to \(pan), \(tilt), \(zoom)" }
 }
 
 struct PTZRequestGetPosition: PTZGetRequest {
@@ -81,6 +79,6 @@ struct PTZReplyPosition: PTZReply {
     }
     
     var description: String {
-        return "Position(\(pan.rawValue), \(tilt.rawValue), \(zoom.rawValue))"
+        return "Position(\(pan), \(tilt), \(zoom))"
     }
 }

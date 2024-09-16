@@ -35,7 +35,6 @@ struct PTZGain: PTZScaledValue {
     static var maxValue: Int = 64
     static var ptzOffset: Int = 95 // 33 should be 01 00, 37 should be 01 04
     static var ptzScale: Double = 1
-    static var testValues: [PTZGain] { Array(minValue...maxValue).map(Self.init(rawValue:)) }
     static var `default`: PTZGain { .init(rawValue: 35) } // original system uses 37 for red, 33 for blue
 }
 
@@ -84,7 +83,7 @@ struct PTZReplyGainMode: PTZReply {
     }
     
     var description: String {
-        return "GainMode(\(gain.rawValue))"
+        return "GainMode(\(gain))"
     }
 }
 
@@ -97,7 +96,7 @@ struct PTZReplyRedGain: PTZReply {
     }
     
     var description: String {
-        return "RedGain(\(gain.rawValue))"
+        return "RedGain(\(gain))"
     }
 }
 
@@ -110,7 +109,7 @@ struct PTZReplyBlueGain: PTZReply {
     }
     
     var description: String {
-        return "BlueGain(\(gain.rawValue))"
+        return "BlueGain(\(gain))"
     }
 }
 

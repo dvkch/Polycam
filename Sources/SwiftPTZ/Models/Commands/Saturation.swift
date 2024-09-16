@@ -13,7 +13,6 @@ struct PTZSaturation: PTZScaledValue {
     static var maxValue: Int = 11
     static var ptzOffset: Int = 122
     static var ptzScale: Double = 1
-    static var testValues: [PTZSaturation] { Array(minValue...maxValue).map(Self.init(rawValue:)) }
     static var `default`: PTZSaturation { .init(rawValue: 6) }
 }
 
@@ -38,6 +37,6 @@ struct PTZReplySaturation: PTZReply {
     }
     
     var description: String {
-        return "Saturation(\(saturation.rawValue))"
+        return "Saturation(\(saturation))"
     }
 }

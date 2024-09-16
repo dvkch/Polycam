@@ -13,7 +13,6 @@ struct PTZBrightness: PTZScaledValue {
     static var maxValue: Int = 20
     static var ptzOffset: Int = 117
     static var ptzScale: Double = 1
-    static var testValues: [PTZBrightness] { Array(minValue...maxValue).map(Self.init(rawValue:)) }
     static var `default`: PTZBrightness { .init(rawValue: 11) }
 }
 
@@ -38,6 +37,6 @@ struct PTZReplyBrightness: PTZReply {
     }
     
     var description: String {
-        return "Brightness(\(brightness.rawValue))"
+        return "Brightness(\(brightness))"
     }
 }
