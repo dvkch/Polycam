@@ -14,7 +14,7 @@ struct SwiftPTZ: ParsableCommand {
         abstract: "SwiftPTZ",
         version: "1.0",
         subcommands: [BatchCommand.self, FuzzerCommand.self, TesterCommand.self],
-        defaultSubcommand: TesterCommand.self
+        defaultSubcommand: FuzzerCommand.self
     )
 }
 

@@ -69,3 +69,20 @@ extension Array where Element: Collection {
         return reduce([], +)
     }
 }
+
+extension Bytes {
+    func stringRepresentation(condensedWith other: Bytes) -> String {
+        guard self != other else { return self.stringRepresentation }
+
+        var commonLastIndex = 0
+        for i in 0..<(Swift.min(count, other.count)) {
+            if self[0...i] == other[0...i] {
+                commonLastIndex = i
+            }
+        }
+        let part1 = Array( self[(commonLastIndex + 1)..<self.count ]).stringRepresentation
+        let part2 = Array(other[(commonLastIndex + 1)..<other.count]).stringRepresentation
+        return Array(self[0...commonLastIndex]).stringRepresentation + " (" + part1 + " -> " + part2 + ")"
+    }
+
+}
