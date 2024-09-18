@@ -9,6 +9,7 @@ import Foundation
 
 enum CameraError: Error {
     case unknown
+    case missingAck
     case replyTimeout
     case fail
     case reset
@@ -52,8 +53,8 @@ class Camera: Loggable {
     func sendRequest2(_ request: PTZRequest) throws -> (Bytes, any PTZReply){
         let (bytes, replies) = sendRequest(request, timeout: 1, repeatUntilAck: false, errorToRetry: nil)
         guard replies.count == 2, replies[0] is PTZReplyAck else {
-            log(.fatal, "Unexpected camera reply: \(replies) (expected ACK, then a reply)")
-            throw CameraError.unknown
+            log(.fatal, "Unexpected camera reply for \(request): \(replies) (expected ACK, then a reply)")
+            throw CameraError.missingAck
         }
         return (bytes, replies[1])
     }
@@ -90,12 +91,9 @@ class Camera: Loggable {
         ]
 
         log(.info, "Starting boot sequence...")
-        let previousLevel = logLevel
-        logLevel = .debug
         for request in sequence {
             sendRequest(request, timeout: 1, repeatUntilAck: !(request is PTZRequestSetStandbyMode), errorToRetry: .modeCondition)
         }
-        logLevel = previousLevel
         log(.info, "Finished boot sequence")
     }
     
@@ -119,18 +117,20 @@ class Camera: Loggable {
         
         let startDate = Date()
         var bytes = Bytes()
-        var justReceivedBytes = false
+        var receivedMessageInLastLoop = false
 
-        while Date().timeIntervalSince(startDate) < timeout && (bytes.isEmpty || justReceivedBytes) {
+        while Date().timeIntervalSince(startDate) < timeout {
             let newBytes = serial.readAllBytes()
+            receivedMessageInLastLoop = !newBytes.isEmpty
             bytes.append(contentsOf: newBytes)
-            if newBytes.count > 0 {
-                justReceivedBytes = true
+            
+            if !bytes.isEmpty, !receivedMessageInLastLoop, PTZMessage.messages(from: bytes).allSatisfy(\.isValidLength) {
+                break
             }
-            else {
-                justReceivedBytes = false
-            }
-            usleep(20_000)
+
+            // we used to use 20_000us here, allowing us to receive all the message in 2-3 loops, but resulting in ~75ms delay
+            // to get a simple response. by switching to a shorter sleep time we usually get the reply in 15 loops, but in 15ms
+            usleep(1000)
         }
 
         log(.debug, "< \(bytes.stringRepresentation)")

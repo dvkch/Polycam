@@ -21,7 +21,7 @@ extension CamerableCommand {
         }
         
         let serial = try Serial(device: .init(rawValue: serialDevice), tag: "RS423", logLevel: .info)
-        let camera = Camera(serial: serial, logLevel: .debug, powerOffAfterUse: false)
+        let camera = Camera(serial: serial, logLevel: .info, powerOffAfterUse: false)
             
         do {
             try run(camera: camera)

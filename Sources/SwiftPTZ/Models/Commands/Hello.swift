@@ -28,7 +28,11 @@ struct PTZReplyHelloMPTZ11: PTZReply {
     let pkgVer: String
     
     init?(message: PTZMessage) {
-        guard message.isValidReply([0x06, 0x77]) else { return nil }
+        // idk why sometimes it is 0x05, sometimes 0x06... i would have also expected to be waiting for 46 77, which
+        // we do always have, but 46 is also the length of the whole reply... since we don't have any other devices
+        // or commands with similar replies to test theories, let's wait for 8F 30 xx 77 06 or 8F 30 xx 77 05
+        // and use 46 as the length indication
+        guard message.isValidReply([0x06, 0x77]) || message.isValidReply([0x05, 0x77]) else { return nil }
         var packed = message.decodePackedData()
         guard packed.count >= 44 else { return nil }
         sysVer  = packed.takeFirst(8).map { String($0) }.joined()
