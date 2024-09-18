@@ -71,7 +71,7 @@ extension Array where Element: Collection {
 }
 
 extension Bytes {
-    func stringRepresentation(condensedWith other: Bytes) -> String {
+    func stringRepresentation(condensedWith other: Bytes, stoppedEarly: Bool) -> String {
         guard self != other else { return self.stringRepresentation }
 
         var commonLastIndex = 0
@@ -82,7 +82,8 @@ extension Bytes {
         }
         let part1 = Array( self[(commonLastIndex + 1)..<self.count ]).stringRepresentation
         let part2 = Array(other[(commonLastIndex + 1)..<other.count]).stringRepresentation
-        return Array(self[0...commonLastIndex]).stringRepresentation + " (" + part1 + " -> " + part2 + ")"
+        let suffix2 = stoppedEarly ? "+" : ""
+        return Array(self[0...commonLastIndex]).stringRepresentation + " (" + part1 + " -> " + part2 + suffix2 + ")"
     }
 
 }
