@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import SwiftSerial
 
 enum CameraError: Error {
+    case serialError(PortError)
     case unknown
     case missingAck
     case replyTimeout
@@ -19,9 +21,14 @@ enum CameraError: Error {
 class Camera: Loggable {
     
     // MARK: Init
-    init(serial: Serial, logLevel: LogLevel, powerOffAfterUse: Bool) {
+    init(serial: SerialName, logLevel: LogLevel, powerOffAfterUse: Bool) throws(CameraError) {
         self.logLevel = logLevel
-        self.serial = serial
+        do {
+            self.serial = try Serial(device: serial, tag: "RS423", logLevel: logLevel)
+        }
+        catch {
+            throw .serialError(error)
+        }
         self.powerOffAfterUse = powerOffAfterUse
         self.powerOn()
     }
@@ -40,17 +47,17 @@ class Camera: Loggable {
     let logTag: String = "Camera"
 
     // MARK: Public actions
-    func get<T: PTZReply>(_ request: any PTZGetRequest<T>) throws -> T {
+    func get<T: PTZReply>(_ request: any PTZGetRequest<T>) throws(CameraError) -> T {
         let reply: (any PTZReply) = try sendRequest(request)
         return reply as! T
     }
     
     @discardableResult
-    func sendRequest(_ request: PTZRequest) throws -> any PTZReply {
+    func sendRequest(_ request: PTZRequest) throws(CameraError) -> any PTZReply {
         return (try sendRequest2(request)).1
     }
 
-    func sendRequest2(_ request: PTZRequest) throws -> (Bytes, any PTZReply){
+    func sendRequest2(_ request: PTZRequest) throws(CameraError) -> (Bytes, any PTZReply){
         let (bytes, replies) = sendRequest(request, timeout: 1, repeatUntilAck: false, errorToRetry: nil)
         guard replies.count == 2, replies[0] is PTZReplyAck else {
             log(.fatal, "Unexpected camera reply for \(request): \(replies) (expected ACK, then a reply)")

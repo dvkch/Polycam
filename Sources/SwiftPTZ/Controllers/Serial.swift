@@ -11,7 +11,7 @@ import SwiftSerial
 class Serial: Loggable {
     
     // MARK: Init
-    init(device: SerialName, tag: String, logLevel: LogLevel) throws {
+    init(device: SerialName, tag: String, logLevel: LogLevel) throws(PortError) {
         self.device = device
         self.logLevel = logLevel
         self.logTag = "Serial \(tag)"
@@ -28,7 +28,7 @@ class Serial: Loggable {
     private var readBytes: Bytes = []
 
     // MARK: Serial
-    private func open() throws {
+    private func open() throws(PortError) {
         lock.lock()
         defer { lock.unlock() }
 
@@ -36,19 +36,24 @@ class Serial: Loggable {
 
         log(.info, "Opening port...")
         port = SerialPort(path: device.rawValue)
-        try port.openPort()
-        try port.setSettings(
-            baudRateSetting: .symmetrical(.baud9600),
-            minimumBytesToRead: 0,
-            timeout: 1, /* 0 means wait indefinitely */
-            parityType: .even,
-            sendTwoStopBits: false, /* 1 stop bit is the default */
-            dataBitsSize: .bits8,
-            useHardwareFlowControl: false,
-            useSoftwareFlowControl: false,
-            processOutput: false
-            
-        )
+        do {
+            try port.openPort()
+            try port.setSettings(
+                baudRateSetting: .symmetrical(.baud9600),
+                minimumBytesToRead: 0,
+                timeout: 1, /* 0 means wait indefinitely */
+                parityType: .even,
+                sendTwoStopBits: false, /* 1 stop bit is the default */
+                dataBitsSize: .bits8,
+                useHardwareFlowControl: false,
+                useSoftwareFlowControl: false,
+                processOutput: false
+                
+            )
+        }
+        catch {
+            throw error as! PortError
+        }
         isOpen = true
         log(.info, "> opened!")
         

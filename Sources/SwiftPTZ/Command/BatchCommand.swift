@@ -14,7 +14,7 @@ struct BatchCommand: CamerableCommand {
     @Option(name: .customLong("serial-device"), help: "PTZ serial device name")
     var serialDevice: String?
     
-    func run(camera: Camera) throws {
+    func run(camera: Camera) throws(CameraError) {
         let position = PTZRequestSetPosition(pan: .init(rawValue: 0), tilt: .init(rawValue: 0), zoom: .init(rawValue: 0))
         try camera.sendRequest(position)
     }

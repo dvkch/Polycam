@@ -24,7 +24,7 @@ final class RequestsTests: XCTestCase {
         return camera
     }
 
-    func testBacklightCompensationRequests() throws {
+    func testBacklightCompensationRequests() throws(CameraError) {
         let camera = Self.buildCamera()
         print("-----------")
         for backlightCompensation in PTZBool.testValues {

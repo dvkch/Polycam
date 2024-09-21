@@ -17,7 +17,7 @@ struct BenchmarkCommand: CamerableCommand {
     @Option(name: .customLong("duration"), help: "Benchmark duration in seconds")
     var duration: Int = 60
     
-    func run(camera: Camera) throws {
+    func run(camera: Camera) throws(CameraError) {
         camera.logLevel = .error
         
         // we had some issues were working around timings would fuck up the reading of the hello reply, let's make sure it is still working properly

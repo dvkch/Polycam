@@ -18,13 +18,13 @@ struct FuzzerCommand: CamerableCommand {
     private var firstColLength = 25
     private var totalLength = 186
 
-    mutating func run(camera: Camera) throws {
+    mutating func run(camera: Camera) throws(CameraError) {
         camera.logLevel = .error
 
         Thread.sleep(forTimeInterval: 2)
         
         let d = Date()
-        try fuzz(camera: camera, initialState: {
+        try fuzz(camera: camera, initialState: { () throws(CameraError) -> () in
             try camera.sendRequest(PTZRequestSetPosition(pan: .mid, tilt: .mid, zoom: .min))
             try camera.sendRequest(PTZRequestSetAutoExposure(enabled: .off))
             try camera.sendRequest(PTZRequestSetAutoFocus(enabled: .off))
@@ -37,7 +37,7 @@ struct FuzzerCommand: CamerableCommand {
         print("Table row length:", totalLength, "chars")
     }
     
-    private mutating func fuzz(camera: Camera, initialState: () throws -> ()) throws {
+    private mutating func fuzz(camera: Camera, initialState: () throws(CameraError) -> ()) throws(CameraError) {
 #warning("TODO: 82 41 70 -> executed but no ACK ?!")
 
         // here are the possible commands to be found. commands starting by 0x usually are getters, commands starting by 4x are their corresponding setters
@@ -97,7 +97,7 @@ struct FuzzerCommand: CamerableCommand {
                 defer { restoreBlock() }
                 
                 // run the command without any argument first
-                try {
+                try { () throws(CameraError) -> () in
                     let req = PTZUnknownRequest(commandBytes: [category.category, register], arg: nil)
                     let reply = try camera.sendRequest(req)
                     printResult(category: category.category, register: register, args: nil, reply: reply, stoppedEarly: false)

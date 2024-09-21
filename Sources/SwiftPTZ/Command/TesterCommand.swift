@@ -14,7 +14,7 @@ struct TesterCommand: CamerableCommand {
     @Option(name: .customLong("serial-device"), help: "PTZ serial device name")
     var serialDevice: String?
     
-    func run(camera: Camera) throws {
+    func run(camera: Camera) throws(CameraError) {
         let testSetters: [TestCommand] = [
             .init(command: (0x41, 0x01), kind: .custom([nil] + Array(0...0x0A).pick(count: 2)),  originalValue: 0x00),
             .init(command: (0x41, 0x02), kind: .custom([nil, 0, 1, 2, 3]),  originalValue: 0x01), // from 0 to 3

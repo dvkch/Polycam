@@ -11,17 +11,16 @@ import ArgumentParser
 protocol CamerableCommand: ParsableCommand {
     var serialDevice: String? { get }
     
-    mutating func run(camera: Camera) throws
+    mutating func run(camera: Camera) throws(CameraError)
 }
 
 extension CamerableCommand {
-    mutating func run() throws {
+    mutating func run() throws(CameraError) {
         guard let serialDevice = self.serialDevice ?? SerialName.firstAvailable?.rawValue else {
             fatalError("No available serial device")
         }
         
-        let serial = try Serial(device: .init(rawValue: serialDevice), tag: "RS423", logLevel: .info)
-        let camera = Camera(serial: serial, logLevel: .info, powerOffAfterUse: false)
+        let camera = try Camera(serial: .init(rawValue: serialDevice), logLevel: .info, powerOffAfterUse: false)
             
         do {
             try run(camera: camera)
