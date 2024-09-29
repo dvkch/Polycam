@@ -60,8 +60,8 @@ Getters
 8x 03 3D                  | X | Sharpness(6)
 8x 03 3E                  | X | Saturation(6)
 8x 03 3F                  |   | Unknown(83 43 3F 5A)
-8x 03 40                  |   | Unknown(84 43 40 01 00)
-8x 03 41                  |   | Unknown(84 43 41 01 00)
+8x 03 40                  | X | WBTint(128)
+8x 03 41                  | X | WBTemp(128)
 8x 03 42                  | X | RedGain(35)
 8x 03 43                  | X | BlueGain(35)
 8x 03 50                  |   | Unknown(84 43 50 01 00)
@@ -91,66 +91,67 @@ Hello
 
 Setters
 -------
-8x 42 09 (00 -> 01)       | X | Executed
-8x 42 11 (00 -> 01)       |   | Not executed: Mode condition
-8x 42 12 01               | X | Executed
-8x 42 12 (04 -> 0A)       | X | Executed
-8x 42 14 (00 -> 08)       | X | Executed
-8x 42 15 (00 -> 04)       | X | Executed
-8x 42 22 (00 -> 01)       | X | Executed
+8x 42 09 (00 -> 01)       | X | Executed: AutoFocus(off)
+8x 42 11 (00 -> 01)       | X | Not executed: Mode condition: AutoExposure(off)
+8x 42 12 01               | X | Executed: WhiteBalance(auto)
+8x 42 12 (04 -> 0A)       | X | Executed: WhiteBalance(manual)
+8x 42 14 (00 -> 08)       | X | Executed: ShutterSpeed(auto)
+8x 42 15 (00 -> 04)       | X | Executed: BacklightCompensation(off)
+8x 42 22 (00 -> 01)       |   | Executed
 
 
 Setters
 -------
-8x 43 00 (00 -> 02 00+)   |   | Not executed: Mode condition
-8x 43 02 (40 -> 11 35)    | X | Executed
-8x 43 03 (01 70 -> 06 00) | X | Executed
-8x 43 04 (00 -> 0F 50)    | X | Executed
-8x 43 05 (00 -> 03 74)    | X | Executed
-8x 43 3D (7B -> 01 05)    | X | Executed
-8x 43 3E (7B -> 01 05)    | X | Executed
-8x 43 3F 5A               | X | Executed
-8x 43 3F 64               | X | Executed
-8x 43 40 (60 -> 01 01+)   |   | Not executed: Mode condition
-8x 43 41 (60 -> 01 01+)   |   | Not executed: Mode condition
-8x 43 42 (60 -> 01 01+)   |   | Not executed: Mode condition
-8x 43 43 (60 -> 01 01+)   |   | Not executed: Mode condition
-8x 43 50 (7B -> 01 05)    | X | Executed
-8x 43 51 (7B -> 01 05)    | X | Executed
-8x 43 52 (7B -> 01 05)    | X | Executed
-8x 43 53 (7B -> 01 05)    | X | Executed
-8x 43 54 (7B -> 01 05)    | X | Executed
-8x 43 55 (7B -> 01 05)    | X | Executed
-8x 43 56 (76 -> 01 0A)    | X | Executed
-8x 43 57 (76 -> 01 0A)    | X | Executed
-8x 43 58 (76 -> 01 0A)    | X | Executed
-8x 43 59 (76 -> 01 0A)    | X | Executed
-8x 43 5A (76 -> 01 0A)    | X | Executed
-8x 43 5B (76 -> 01 0A)    | X | Executed
-8x 43 5C (76 -> 01 0A)    | X | Executed
-8x 43 5D (76 -> 01 0A)    | X | Executed
-8x 43 5E (76 -> 01 0A)    | X | Executed
-8x 43 5F (76 -> 01 0A)    | X | Executed
-8x 43 60 (76 -> 01 0A)    | X | Executed
-8x 43 61 (76 -> 01 0A)    | X | Executed
+8x 43 00 (00 -> 02 00+)   | X | Not executed: Mode condition: IrisLevel(0)
+8x 43 02 (40 -> 11 35)    | X | Executed: Zoom(64)
+8x 43 03 (01 70 -> 06 00) | X | Executed: Focus(240)
+8x 43 04 (00 -> 0F 50)    | X | Executed: Pan(0)
+8x 43 05 (00 -> 03 74)    | X | Executed: Tilt(0)
+8x 43 3D (7B -> 01 05)    | X | Executed: Sharpness(1)
+8x 43 3E (7B -> 01 05)    | X | Executed: Saturation(1)
+8x 43 3F 5A               |   | Executed
+8x 43 3F 64               |   | Executed
+8x 43 40 (60 -> 01 01+)   | X | Not executed: Mode condition: WBTint(96)
+8x 43 41 (60 -> 01 01+)   | X | Not executed: Mode condition: WBTemp(96)
+8x 43 42 (60 -> 01 01+)   | X | Not executed: Mode condition: RedGain(1)
+8x 43 43 (60 -> 01 01+)   | X | Not executed: Mode condition: BlueGain(1)
+8x 43 50 (7B -> 01 05)    |   | Executed
+8x 43 51 (7B -> 01 05)    |   | Executed
+8x 43 52 (7B -> 01 05)    |   | Executed
+8x 43 53 (7B -> 01 05)    |   | Executed
+8x 43 54 (7B -> 01 05)    |   | Executed
+8x 43 55 (7B -> 01 05)    |   | Executed
+8x 43 56 (76 -> 01 0A)    |   | Executed
+8x 43 57 (76 -> 01 0A)    |   | Executed
+8x 43 58 (76 -> 01 0A)    |   | Executed
+8x 43 59 (76 -> 01 0A)    |   | Executed
+8x 43 5A (76 -> 01 0A)    |   | Executed
+8x 43 5B (76 -> 01 0A)    |   | Executed
+8x 43 5C (76 -> 01 0A)    |   | Executed
+8x 43 5D (76 -> 01 0A)    |   | Executed
+8x 43 5E (76 -> 01 0A)    |   | Executed
+8x 43 5F (76 -> 01 0A)    |   | Executed
+8x 43 60 (76 -> 01 0A)    |   | Executed
+8x 43 61 (76 -> 01 0A)    |   | Executed
 
 
 Actions
 -------
-8x 45 00 (10 -> 1F)       | X | Executed
-8x 45 01 (10 -> 1F)       | X | Executed
-8x 45 02                  | X | Executed
-8x 45 03 (10 -> 1F)       | X | Executed
-8x 45 04 (10 -> 1F)       | X | Executed
-8x 45 05                  | X | Executed
-8x 45 09 (00 -> 03)       | X | Executed
-8x 45 0A (00 -> 03)       | X | Executed
-8x 45 0B                  | X | Executed
-8x 45 0C (00 -> 03)       | X | Executed
-8x 45 0D (00 -> 03)       | X | Executed
-8x 45 0E                  | X | Executed
-8x 45 17                  |   | Not executed: Mode condition
-8x 45 32 00               | X | Executed
+8x 45 00 (10 -> 1F)       | X | Executed: Move pan right
+8x 45 01 (10 -> 1F)       | X | Executed: Move pan left
+8x 45 02                  | X | Executed: Move pan stop
+8x 45 03 (10 -> 1F)       | X | Executed: Move tilt up
+8x 45 04 (10 -> 1F)       | X | Executed: Move tilt down
+8x 45 05                  | X | Executed: Move tilt stop
+8x 45 09 (00 -> 03)       | X | Executed: Move focus far
+8x 45 0A (00 -> 01)       | X | Executed: Move focus near
+8x 45 0A 03               | X | Executed: Move focus near
+8x 45 0B                  | X | Executed: Move focus stop
+8x 45 0C (00 -> 03)       | X | Executed: Move zoom+
+8x 45 0D (00 -> 03)       | X | Executed: Move zoom-
+8x 45 0E                  | X | Executed: Move zoom stop
+8x 45 17                  | X | Not executed: Mode condition: Start manual white balance calibration
+8x 45 32 00               | X | Executed: Resetting sensor and motors
 8x 45 33                  |   | Not executed: Mode condition
 8x 45 33 00               |   | Not executed: Mode condition
 8x 45 70                  |   | Not executed: Mode condition
@@ -160,12 +161,5 @@ Actions
 
 Stats
 -----
-Duration: 344 seconds
+Duration: 314 seconds
 First column width: 25 chars
-Table row length: 186 chars
-
-Unknowns
---------
-
-83 04 xx | Not executed: Syntax error
-83 44 xx | Not executed: Syntax error
