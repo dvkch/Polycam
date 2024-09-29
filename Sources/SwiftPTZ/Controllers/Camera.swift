@@ -148,6 +148,8 @@ class Camera: Loggable {
         var shouldRetry = false
         shouldRetry ||= errorToRetry != nil && replies.compactMap({ $0 as? PTZReplyNotExecuted }).first?.error == errorToRetry
         shouldRetry ||= repeatUntilAck && !replies.contains(where: { $0 is PTZReplyAck })
+        
+        #warning("support PTZRequest.modeConditionRescueRequest")
 
         if shouldRetry {
             Thread.sleep(forTimeInterval: 0.2)

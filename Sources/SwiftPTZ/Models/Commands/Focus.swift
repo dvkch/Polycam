@@ -20,6 +20,7 @@ struct PTZRequestSetFocus: PTZRequest {
     let focus: PTZFocus
     var bytes: Bytes { buildBytes([0x43, 0x03], focus) }
     var description: String { "Set focus to \(focus.rawValue)" }
+    var modeConditioRescueRequest: (any PTZRequest)? { PTZRequestSetAutoFocus(enabled: .off) }
 }
 
 struct PTZRequestGetFocus: PTZGetRequest {

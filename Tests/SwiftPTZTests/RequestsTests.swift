@@ -109,11 +109,29 @@ final class RequestsTests: XCTestCase {
     func testInvertedModeRequests() throws {
         let camera = Self.buildCamera()
         for invertedMode in PTZBool.testValues {
-            let replySet = try camera.sendRequest(PTZRequestSetInvertedMode(enabled: invertedMode.rawValue))
+            let replySet = try camera.sendRequest(PTZRequestSetInvertedMode(enabled: invertedMode))
             XCTAssertTrue(replySet is PTZReplyExecuted)
             
             let replyGet = try camera.get(PTZRequestGetInvertedMode())
-            XCTAssertEqual(replyGet.enabled, invertedMode.rawValue)
+            XCTAssertEqual(replyGet.enabled, invertedMode)
+        }
+    }
+
+    func testIrisLevelRequests() throws {
+        let camera = Self.buildCamera()
+        
+        try camera.sendRequest(PTZRequestSetGainMode(gain: .auto))
+        let replyAuto = try camera.sendRequest(PTZRequestSetIrisLevel(irisLevel: .mid))
+        XCTAssertTrue(replyAuto is PTZReplyNotExecuted)
+        XCTAssertEqual((replyAuto as! PTZReplyNotExecuted).error, .modeCondition)
+
+        try camera.sendRequest(PTZRequestSetGainMode(gain: .gain0dB))
+        for irisLevel in PTZIrisLevel.testValues {
+            let replySet = try camera.sendRequest(PTZRequestSetIrisLevel(irisLevel: irisLevel))
+            XCTAssertTrue(replySet is PTZReplyExecuted)
+            
+            let replyGet = try camera.get(PTZRequestGetIrisLevel())
+            XCTAssertEqual(replyGet.irisLevel, irisLevel)
         }
     }
 
