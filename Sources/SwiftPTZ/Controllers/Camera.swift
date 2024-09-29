@@ -87,13 +87,13 @@ class Camera: Loggable {
             PTZRequestSetPosition(pan: .default, tilt: .default, zoom: .default),
             PTZRequestSetInvertedMode(enabled: .off),
             PTZRequestSetAutoFocus(enabled: .on),
-            PTZRequestSetBrightness(brightness: .default),
-            PTZRequestSetSaturation(saturation: .default),
-            PTZRequestSetMireMode(enabled: .off),
             PTZRequestSetWhiteBalance(mode: .default),
             PTZRequestSetGainMode(gain: .default),
             PTZRequestSetRedGain(gain: .default),
             PTZRequestSetBlueGain(gain: .default),
+            PTZRequestSetBrightness(brightness: .default),
+            PTZRequestSetSaturation(saturation: .default),
+            PTZRequestSetMireMode(enabled: .off),
             PTZRequestSetBacklightCompensation(enabled: .off)
         ]
 

@@ -19,20 +19,18 @@ final class RequestsTests: XCTestCase {
     }
     
     static func buildCamera() -> Camera {
-        let serial = try! Serial(device: .firstAvailable!, tag: "PTZ", logLevel: .info)
-        let camera = Camera(serial: serial, logLevel: .info, powerOffAfterUse: false)
-        return camera
+        return try! Camera(serial: .firstAvailable!, logLevel: .info, powerOffAfterUse: false)
     }
 
     func testBacklightCompensationRequests() throws(CameraError) {
         let camera = Self.buildCamera()
         print("-----------")
         for backlightCompensation in PTZBool.testValues {
-            let replySet = try camera.sendRequest(PTZRequestSetBacklightCompensation(enabled: backlightCompensation.rawValue))
+            let replySet = try camera.sendRequest(PTZRequestSetBacklightCompensation(enabled: backlightCompensation))
             XCTAssertTrue(replySet is PTZReplyExecuted)
             
             let replyGet = try camera.get(PTZRequestGetBacklightCompensation())
-            XCTAssertEqual(replyGet.enabled, backlightCompensation.rawValue)
+            XCTAssertEqual(replyGet.enabled, backlightCompensation)
         }
     }
 

@@ -32,9 +32,6 @@ struct TesterCommand: CamerableCommand {
 
             .init(command: (0x42, 0x22), kind: .bool, originalValue: 0x01),
 
-            //.init(command: (0x43, 0x40), kind: .custom(Array(0x60...0x9F)),  originalValue: 128), // white balance manual, adjust green to pink, from 60 to 01 1F
-            //.init(command: (0x43, 0x41), kind: .custom(Array(0x60...0x9F)),  originalValue: 128), // white balance manual, adjust yellow to blue, from 60 to 01 1F
-
             .init(command: (0x43, 0x50), kind: .int,  originalValue: 128), // amount of red, 7B to 01 05
             .init(command: (0x43, 0x51), kind: .int,  originalValue: 128), // same, veeeeeery small increments
             .init(command: (0x43, 0x52), kind: .int,  originalValue: 128),
@@ -78,6 +75,7 @@ struct TesterCommand: CamerableCommand {
             PTZRequestSetVolume(volume: .init(rawValue: PTZVolume.minValue)),
             PTZRequestSetVolume(volume: .default),
             PTZRequestSetGainMode(gain: .gain0dB),
+            PTZRequestSetGainMode(gain: .gain3dB),
             PTZRequestSetGainMode(gain: .auto),
             PTZRequestSetBrightness(brightness: .init(rawValue: PTZBrightness.minValue)),
             PTZRequestSetBrightness(brightness: .default),
@@ -102,25 +100,29 @@ struct TesterCommand: CamerableCommand {
 
         let allRequests = testStates + testSetters.map(\.requests).flatten
         let cmdsToMakeWork: [TestCommand] = [
-            .init(command: (0x41, 0x14), kind: .custom(Array(0x00...0xFF)), originalValue: 0x00),
-            .init(command: (0x41, 0x71), kind: .custom(Array(0x00...0xFF)), originalValue: 0x00),
-            .init(command: (0x43, 0x26), kind: .custom(Array(0x00...0xFF)), originalValue: 0x46),
+            //setters fails
+            .init(command: (0x41, 0x14), kind: .custom([nil] + Array(0x00...0xFF)), originalValue: 0x00),
+            .init(command: (0x41, 0x71), kind: .custom([nil] + Array(0x00...0xFF)), originalValue: 0x00),
+            .init(command: (0x43, 0x26), kind: .custom([nil] + Array(0x00...0xFF)), originalValue: 0x46),
+
+            // mode condition
+            .init(command: (0x45, 0x33), kind: .custom([nil, 0x00]), originalValue: 0x00),
+            .init(command: (0x45, 0x70), kind: .custom([nil] + Array(0x00...0x3D)), originalValue: 0x00),
+            .init(command: (0x45, 0x71), kind: .custom([nil]), originalValue: nil),
 
             //.init(command: (0x43, 0x3F), kind: .custom([0x5A, 0x64]), originalValue: 0x5A),
         ]
         
-        /*
         for test in allRequests {
-            try testRequest(test, on: camera, duration: 0.1) { req in
+            try testRequest(test, on: camera, duration: 0.1) { (req) throws(CameraError) in
                 print("===", req.bytes.stringRepresentation, "===")
                 for cmd in cmdsToMakeWork {
                     try testCommand(cmd, on: camera, duration: 0.1) { r in
-                        print("-------> YOOOOOOO", r.bytes.stringRepresentation)
+                        print("------->", r.bytes.stringRepresentation, r.arg.map(String.init) ?? "<nil>")
                     }
                 }
             }
         }
-         */
     }
 }
 
@@ -151,13 +153,13 @@ extension TesterCommand {
         }
     }
     
-    func testCommand(_ testCommand: TestCommand, on camera: Camera, duration: TimeInterval, after: (any PTZRequest) throws -> ()) throws {
+    func testCommand(_ testCommand: TestCommand, on camera: Camera, duration: TimeInterval, after: (PTZUnknownRequest) throws(CameraError) -> ()) throws(CameraError) {
         for request in testCommand.requests {
             try testRequest(request, on: camera, duration: duration, after: after)
         }
     }
     
-    func testRequest(_ request: any PTZRequest, on camera: Camera, duration: TimeInterval, after: (any PTZRequest) throws -> ()) throws {
+    func testRequest<T: PTZRequest>(_ request: T, on camera: Camera, duration: TimeInterval, after: (T) throws(CameraError) -> ()) throws(CameraError) {
         let reply = try camera.sendRequest(request)
         guard reply is PTZReplyExecuted else {
             //print("=>", reply)

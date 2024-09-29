@@ -118,6 +118,8 @@ extension PTZMessage {
             PTZReplyVideoOutputMode.self,
             PTZReplyVolume.self,
             PTZReplyWhiteBalance.self,
+            PTZReplyWhiteBalanceTemp.self,
+            PTZReplyWhiteBalanceTint.self,
             PTZReplyZoom.self,
         ]
     }
