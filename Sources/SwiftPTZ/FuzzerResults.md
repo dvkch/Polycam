@@ -27,14 +27,14 @@ Getters
 8x 01 50                  | X | Position(1000, 250, 64)
 8x 01 5D                  | X | Clock 1 (t=594142)
 8x 01 5E                  | X | Clock 2 (t=594140)
-8x 01 60                  |   | > Preset?
-8x 01 61                  |   | > Preset?
-8x 01 62                  |   | > Preset?
-8x 01 63                  |   | > Preset?
-8x 01 64                  |   | > Preset?
-8x 01 65                  |   | > Preset?
-8x 01 66                  |   | > Preset?
-8x 01 67                  |   | > Preset?
+8x 01 60                  | X | Preset(one: 0, 0, 0)
+8x 01 61                  | X | Preset(two: 0, 0, 0)
+8x 01 62                  | X | Preset(three: 0, 0, 0)
+8x 01 63                  | X | Preset(four: 770, 30720, 0)
+8x 01 64                  | X | Preset(five: 766, 515, 0)
+8x 01 65                  | X | Preset(six: 32641, 1794, 0)
+8x 01 66                  | X | Preset(seven: 741, 336, 0)
+8x 01 67                  | X | Preset(eight: 22529, 17409, 0)
 8x 01 71                  |   | > Corresponding setter fails
 8x 01 72                  |   | Unknown(83 41 72 00)
 

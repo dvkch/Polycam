@@ -110,6 +110,7 @@ extension PTZMessage {
             PTZReplyMireMode.self,
             PTZReplyPan.self,
             PTZReplyPosition.self,
+            PTZReplyPreset.self,
             PTZReplySaturation.self,
             PTZReplySharpness.self,
             PTZReplyShutterSpeed.self,
