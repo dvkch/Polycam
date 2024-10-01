@@ -7,6 +7,11 @@
 
 import Foundation
 
+struct PTZRawRequest: PTZRequest {
+    var bytes: Bytes
+    var description: String { "Raw request: \(bytes.stringRepresentation)" }
+}
+
 struct PTZUnknownRequest: PTZRequest {
     let commandBytes: Bytes
     let arg: UInt16?

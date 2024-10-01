@@ -138,8 +138,7 @@ extension PTZScaledValue {
     static var testValues: [Self] {
         var allValues = Array(minValue...maxValue)
         if allValues.count > 100 {
-            #warning("restore")
-            //allValues = stride(from: minValue, to: maxValue, by: allValues.count / 100) + [maxValue]
+            allValues = stride(from: minValue, to: maxValue, by: allValues.count / 100) + [maxValue]
         }
         return allValues.map { Self.init(rawValue: $0)! }
     }
@@ -154,6 +153,10 @@ extension PTZScaledValue {
     
     static var max: Self {
         return Self.init(rawValue: maxValue)!
+    }
+    
+    static var random: Self {
+        return Self.init(rawValue: (minValue...maxValue).randomElement()!)!
     }
     
     var description: String {

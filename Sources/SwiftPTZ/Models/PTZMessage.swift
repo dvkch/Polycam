@@ -121,6 +121,7 @@ extension PTZMessage {
             PTZReplyWhiteBalance.self,
             PTZReplyWhiteBalanceTemp.self,
             PTZReplyWhiteBalanceTint.self,
+            PTZReplyWhiteLevel.self,
             PTZReplyZoom.self,
         ]
     }

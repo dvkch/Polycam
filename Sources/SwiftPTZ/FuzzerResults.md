@@ -2,6 +2,12 @@ Running all possible commands from 00 00 to 0A 7F, then from 40 00 to 4A 7F, wit
 
 Here are the detected commands, a cross next to it confirms we know it and implement it.
 
+Marks:
+
+- `X` means the command is known
+- `/` means we gave up on undertsanding it (reason should be written after the reply string)
+- ` ` means the command is still being explored
+
 Getters
 -------
 8x 01 00                  | X | StandbyMode(unknown 1 (0x00))
@@ -10,7 +16,7 @@ Getters
 8x 01 0B                  |   | Unknown(83 41 0B 00)
 8x 01 10                  | X | MireMode(off)
 8x 01 13                  | X | VideoOutputMode(1080p)
-8x 01 14                  |   | -> Corresponding setter fails
+8x 01 14                  | / | Unknown(83 41 14 00) -> Corresponding setter fails
 8x 01 21                  | X | LedMode(blue, on)
 8x 01 23                  |   | Unknown(83 41 23 00)
 8x 01 24                  |   | Unknown(83 41 24 01)
@@ -23,7 +29,7 @@ Getters
 8x 01 3C                  |   | Unknown(83 41 3C 01)
 8x 01 3D                  |   | Unknown(83 41 3D 01)
 8x 01 3E                  | X | InvertedMode(off)
-8x 01 44                  |   | > Randomness?
+8x 01 44                  | / | Unknown(8F 0F 41 44 7A 00 4C 04 4C 4C 4C 78 04 44 08 4C) > Randomness? value changes every time we read it, and it is not settable (syntax error)
 8x 01 50                  | X | Position(1000, 250, 64)
 8x 01 5D                  | X | Clock 1 (t=594142)
 8x 01 5E                  | X | Clock 2 (t=594140)
@@ -35,7 +41,7 @@ Getters
 8x 01 65                  | X | Preset(six: 32641, 1794, 0)
 8x 01 66                  | X | Preset(seven: 741, 336, 0)
 8x 01 67                  | X | Preset(eight: 22529, 17409, 0)
-8x 01 71                  |   | > Corresponding setter fails
+8x 01 71                  | / | Unknown(83 41 71 00) -> Corresponding setter fails
 8x 01 72                  |   | Unknown(83 41 72 00)
 
 
@@ -56,10 +62,10 @@ Getters
 8x 03 03                  | X | Focus(133)
 8x 03 04                  | X | Pan(238)
 8x 03 05                  | X | Tilt(250)
-8x 03 26                  |   | > Corresponding setter fails
+8x 03 26                  | / | Unknown(83 43 26 46) > Corresponding setter fails
 8x 03 3D                  | X | Sharpness(6)
 8x 03 3E                  | X | Saturation(6)
-8x 03 3F                  |   | Unknown(83 43 3F 5A)
+8x 03 3F                  | X | WhiteLevel(90%)
 8x 03 40                  | X | WBTint(128)
 8x 03 41                  | X | WBTemp(128)
 8x 03 42                  | X | RedGain(35)
@@ -109,8 +115,8 @@ Setters
 8x 43 05 (00 -> 03 74)    | X | Executed: Tilt(0)
 8x 43 3D (7B -> 01 05)    | X | Executed: Sharpness(1)
 8x 43 3E (7B -> 01 05)    | X | Executed: Saturation(1)
-8x 43 3F 5A               |   | Executed
-8x 43 3F 64               |   | Executed
+8x 43 3F 5A               | X | Executed: WhiteLevel(90%)
+8x 43 3F 64               | X | Executed: WhiteLevel(100%)
 8x 43 40 (60 -> 01 01+)   | X | Not executed: Mode condition: WBTint(96)
 8x 43 41 (60 -> 01 01+)   | X | Not executed: Mode condition: WBTemp(96)
 8x 43 42 (60 -> 01 01+)   | X | Not executed: Mode condition: RedGain(1)

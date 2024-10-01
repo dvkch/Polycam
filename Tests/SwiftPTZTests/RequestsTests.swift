@@ -10,6 +10,7 @@ import Foundation
 import XCTest
 @testable import SwiftPTZ
 
+#warning("complete test coverage with new states and actions")
 #warning("add tests for actual byte responses")
 final class RequestsTests: XCTestCase {
     override class func tearDown() {
