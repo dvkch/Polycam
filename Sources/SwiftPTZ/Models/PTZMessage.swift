@@ -123,7 +123,7 @@ extension PTZMessage {
             PTZReplyBrightness.self,
             PTZReplyClock.self,
             PTZReplyFocus.self,
-            PTZReplyGainMode.self, PTZReplyRedGain.self, PTZReplyBlueGain.self,
+            PTZReplyGainMode.self, PTZReplyEffectiveGain.self, PTZReplyRedGain.self, PTZReplyBlueGain.self,
             PTZReplyHelloMPTZ11.self,
             PTZReplyInvertedMode.self,
             PTZReplyIrisLevel.self,
