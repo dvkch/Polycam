@@ -42,7 +42,6 @@ func speak(_ string: String) {
     let process = Process()
     process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
     process.arguments = ["say", string]
-    try! process.run()
-    process.waitUntilExit()
+    try? process.run()
     #endif
 }

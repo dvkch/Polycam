@@ -122,6 +122,8 @@ extension PTZMessage {
             PTZReplyBacklightCompensation.self,
             PTZReplyBrightness.self,
             PTZReplyClock.self,
+            PTZReplyDevMode.self,
+            PTZReplyDrunkTestPhase.self,
             PTZReplyFocus.self,
             PTZReplyGainMode.self, PTZReplyEffectiveGain.self, PTZReplyRedGain.self, PTZReplyBlueGain.self,
             PTZReplyHelloMPTZ11.self,

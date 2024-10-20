@@ -8,12 +8,13 @@ Marks:
 - `/` means we gave up on undertsanding it (reason should be written after the reply string)
 - ` ` means the command is still being explored
 
+
 Getters
 -------
 8x 01 00                  | X | StandbyMode(unknown 1 (0x00))
 8x 01 01                  |   | Unknown(83 41 01 00)
 8x 01 02                  |   | Unknown(83 41 02 00)
-8x 01 0B                  |   | Unknown(83 41 0B 00)
+8x 01 0B                  | X | DevMode(on)
 8x 01 10                  | X | MireMode(off)
 8x 01 13                  | X | VideoOutputMode(1080p)
 8x 01 14                  | / | Unknown(83 41 14 00) -> No corresponding setter, sometimes replies 01 when requested in between random requests, no pattern found
@@ -25,14 +26,22 @@ Getters
 8x 01 32                  |   | Unknown(84 41 32 01 00)
 8x 01 33                  | X | Brightness(11)
 8x 01 34                  |   | Unknown(83 41 34 01)
+8x 01 3A                  |   | Unknown(83 41 3A 01)
 8x 01 3B                  |   | Unknown(83 41 3B 01)
 8x 01 3C                  |   | Unknown(83 41 3C 01)
 8x 01 3D                  |   | Unknown(83 41 3D 01)
 8x 01 3E                  | X | InvertedMode(off)
+8x 01 41                  |   | Unknown(88 41 41 00 00 00 00 00 00)
+8x 01 42                  | X | DrunkTestPhase(Never launched)
+8x 01 43                  |   | Unknown(83 41 43 01)
 8x 01 44                  | / | Unknown(8F 0F 41 44 7A 00 4C 04 4C 4C 4C 78 04 44 08 4C) > Randomness? value changes every time we read it, and it is not settable (syntax error)
 8x 01 50                  | X | Position(1000, 250, 64)
-8x 01 5D                  | X | Clock 1 (t=3307368)
-8x 01 5E                  | X | Clock 2 (t=3305132)
+8x 01 59                  |   | Unknown(8D 41 59 01 35 00 00 00 00 00 00 00 00 00)
+8x 01 5A                  |   | Unknown(8D 41 5A 0C 00 31 14 53 00 00 17 01 27 00)
+8x 01 5B                  |   | Unknown(8D 41 5B 00 00 00 00 00 00 00 5D 00 35 00)
+8x 01 5C                  |   | Unknown(8D 41 5C 0C 00 00 50 02 00 00 20 01 16 00)
+8x 01 5D                  | X | Clock 1 (t=3308789)
+8x 01 5E                  | X | Clock 2 (t=3306553)
 8x 01 60                  | X | Preset(one: 0, 0, 0)
 8x 01 61                  | X | Preset(two: 0, 0, 0)
 8x 01 62                  | X | Preset(three: 0, 0, 0)
@@ -57,9 +66,9 @@ Getters
 
 Getters
 -------
-8x 03 00                  | X | IrisLevel(220)
+8x 03 00                  | X | IrisLevel(222)
 8x 03 02                  | X | Zoom(64)
-8x 03 03                  | X | Focus(159)
+8x 03 03                  | X | Focus(133)
 8x 03 04                  | X | Pan(238)
 8x 03 05                  | X | Tilt(250)
 8x 03 26                  | X | EffectiveGain(14dB)
@@ -181,6 +190,7 @@ Actions
 8x 45 0C (00 -> 03)       | X | Executed: Move zoom+
 8x 45 0D (00 -> 03)       | X | Executed: Move zoom-
 8x 45 0E                  | X | Executed: Move zoom stop
+8x 45 13                  |   | Executed
 8x 45 14                  | X | Skipped: DrunkTest
 8x 45 17                  | X | Not executed: Mode condition: Start manual white balance calibration
 8x 45 32                  | X | Skipped: Reset
@@ -189,4 +199,4 @@ Actions
 
 Stats
 -----
-Duration: 621 seconds
+Duration: 605 seconds

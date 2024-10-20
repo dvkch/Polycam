@@ -24,6 +24,7 @@ struct FuzzerCommand: CamerableCommand {
         
         let d = Date()
         try fuzz(camera: camera, initialState: { () throws(CameraError) -> () in
+            try camera.sendRequest(PTZRequestSetDevMode(enabled: .on))
             try camera.sendRequest(PTZRequestSetPosition(pan: .mid, tilt: .mid, zoom: .min))
             try camera.sendRequest(PTZRequestSetAutoFocus(enabled: .off))
         })
@@ -41,6 +42,7 @@ struct FuzzerCommand: CamerableCommand {
             ([0x41, 0x13], "Video output"), // Video output: slow to restore itself
             ([0x41, 0x21], "LED mode"),     // LED mode: sometimes the reply isn't properly parsable
             ([0x41, 0x70], "Unknown"),      // Unknown: weird things happen there (missing ACKs, etc)...
+            ([0x45, 0x14], "DrunkTest"),    // DrunkTest: runs for 2min and keeps the camera unusable while it does
             ([0x45, 0x32], "Reset"),        // Reset: takes a while to recover
         ]
         
