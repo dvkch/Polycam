@@ -11,6 +11,8 @@ struct PTZRequestSetAutoExposure: PTZRequest {
     let enabled: PTZBool
     var bytes: Bytes { buildBytes([0x42, 0x11], enabled) }
     var description: String { "Set auto exposure \(enabled)" }
+    var waitingTimeIfExecuted: TimeInterval { 1 }
+    var modeConditionRescueRequests: [any PTZRequest] { [PTZRequestSetBacklightCompensation(enabled: .on)] }
 }
 
 struct PTZRequestGetAutoExposure: PTZGetRequest {

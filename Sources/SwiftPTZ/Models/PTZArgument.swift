@@ -12,6 +12,11 @@ struct PTZArgument {
         self.value = value
         self.position = position
     }
+
+    init(_ rawByte: Byte, index8: Int) {
+        self.value = PTZUInt(rawValue: UInt16(rawByte))
+        self.position = .raw8(index8)
+    }
     
     let value: any PTZValue
     

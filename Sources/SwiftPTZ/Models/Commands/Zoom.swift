@@ -13,7 +13,7 @@ struct PTZZoom: PTZScaledValue {
     static var maxValue: Int = 2229 // max bytes are 11 35
     static var ptzOffset: Int = 0
     static var ptzScale: Double = 1
-    static var `default`: PTZZoom { .init(rawValue: 0) }
+    static var `default`: PTZZoom { .min }
 }
 
 struct PTZZoomOriginalAPI: PTZScaledValue {

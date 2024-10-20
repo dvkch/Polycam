@@ -8,8 +8,9 @@
 import Foundation
 
 enum PTZVideoOutputMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
-#warning("TEST ALL RESOLUTIONS")
+#warning("Integrate new resolutions: 00, 0A, 10, 1A (18 or 08 never seemed to work)")
 #warning("TEST RESOLUTIONS WITHOUT THE EXTRA 0x10 (seems to be a parameter for something else, not sure what)")
+    #warning("FUZZ TO FIND ALL OTHER RESOLUTIONS")
     case resolution720p  = 0x10
     case resolution1080i = 0x18
     case resolution1080p = 0x1a
@@ -29,7 +30,7 @@ struct PTZRequestSetVideoOutputMode: PTZRequest {
     let mode: PTZVideoOutputMode
     var bytes: Bytes { buildBytes([0x41, 0x13], mode) }
     var description: String { "Set video output \(mode.description)" }
-    var waitingTimeIfExecuted: TimeInterval { 2 }
+    var waitingTimeIfExecuted: TimeInterval { 6 }
 }
 
 struct PTZRequestGetVideoOutputMode: PTZGetRequest {

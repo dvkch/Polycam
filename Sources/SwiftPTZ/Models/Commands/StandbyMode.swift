@@ -7,8 +7,8 @@
 
 import Foundation
 
-#warning("try sending 00 00 00 00 to wake up")
 enum PTZStandbyMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
+    #warning("fuzz all possible values")
     #warning("try 0x02")
     #warning("not sure why it sometimes reply 0")
     case on  = 0x12

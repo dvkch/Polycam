@@ -13,7 +13,7 @@ struct PTZPan: PTZScaledValue {
     static var maxValue: Int = 2000 // max bytes are 0F 50
     static var ptzOffset: Int = 0
     static var ptzScale: Double = 1
-    static var `default`: PTZPan { .init(rawValue: 0) }
+    static var `default`: PTZPan { .mid }
 }
 
 struct PTZPanOriginalAPI: PTZScaledValue {

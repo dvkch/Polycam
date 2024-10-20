@@ -109,10 +109,13 @@ extension RawRepresentable where Self: CaseIterable, RawValue == UInt16 {
     var ptzValue: UInt16 {
         return UInt16(rawValue)
     }
-    
+}
+
+extension RawRepresentable where Self: CaseIterable {
     static var testValues: [Self] { Array(allCases) }
 }
 
+#warning("add Unit property, use it in description, rewite scales for most of defined scaled values to use it properly")
 #warning("redefine")
 // min/max should be minimum/maximum values supported over the wire
 // and it should be able to init it using a percentage to get the corresponding wire value

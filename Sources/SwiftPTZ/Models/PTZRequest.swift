@@ -10,7 +10,7 @@ import Foundation
 protocol PTZRequest: CustomStringConvertible {
     var bytes: Bytes { get }
     var waitingTimeIfExecuted: TimeInterval { get }
-    var modeConditioRescueRequest: (any PTZRequest)? { get }
+    var modeConditionRescueRequests: [any PTZRequest] { get }
 }
 
 protocol PTZGetRequest<Reply>: PTZRequest {
@@ -19,7 +19,7 @@ protocol PTZGetRequest<Reply>: PTZRequest {
 
 extension PTZRequest {
     var waitingTimeIfExecuted: TimeInterval { 0 }
-    var modeConditioRescueRequest: (any PTZRequest)? { nil }
+    var modeConditionRescueRequests: [any PTZRequest] { [] }
 }
 
 extension PTZRequest {

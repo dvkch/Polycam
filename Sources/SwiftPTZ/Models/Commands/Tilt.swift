@@ -13,7 +13,7 @@ struct PTZTilt: PTZScaledValue {
     static var maxValue: Int = 500 // max bytes are 03 74
     static var ptzOffset: Int = 0
     static var ptzScale: Double = 1
-    static var `default`: PTZTilt { .init(rawValue: 0) }
+    static var `default`: PTZTilt { .mid }
 }
 
 struct PTZTiltOriginalAPI: PTZScaledValue {

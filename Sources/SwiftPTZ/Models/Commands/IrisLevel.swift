@@ -20,7 +20,11 @@ struct PTZRequestSetIrisLevel: PTZRequest {
     let irisLevel: PTZIrisLevel
     var bytes: Bytes { buildBytes([0x43, 0x00], irisLevel) }
     var description: String { "Set iris level to \(irisLevel.rawValue)" }
-    var modeConditioRescueRequest: (any PTZRequest)? { PTZRequestSetGainMode(gain: .gain0dB) }
+    var modeConditionRescueRequests: [any PTZRequest] { [
+        PTZRequestSetAutoExposure(enabled: .off),
+        PTZRequestSetGainMode(gain: .gain0dB),
+        PTZRequestSetBacklightCompensation(enabled: .off)
+    ] }
 }
 
 struct PTZRequestGetIrisLevel: PTZGetRequest {
