@@ -22,6 +22,7 @@ struct PTZReplyReset: PTZReply {
 }
 
 struct PTZReplyFail: PTZReply {
+    init() {}
     init?(message: PTZMessage) { guard message.bytes.stringRepresentation == "F0" else { return nil } }
     var description: String { "FAIL" }
 }

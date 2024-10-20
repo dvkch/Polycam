@@ -87,12 +87,11 @@ class Serial: Loggable {
     }
     
     func readAllBytes() -> Bytes {
-        lock.lock()
-        defer { lock.unlock() }
-
-        let bytes = self.readBytes
-        self.readBytes.removeAll()
-        return bytes
+        lock.withLock {
+            let bytes = self.readBytes
+            self.readBytes.removeAll()
+            return bytes
+        }
     }
     
     func stop() {

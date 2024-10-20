@@ -8,6 +8,16 @@
 import Foundation
 
 struct PTZMessage {
+    static func receptionComplete(from bytes: Bytes) -> Bool {
+        let messages = PTZMessage.messages(from: bytes)
+        guard messages.allSatisfy(\.isValidLength) else { return false }
+  
+        if let first = messages.first, PTZReplyAck(message: first) != nil  {
+            return messages.count > 1
+        }
+        return true
+    }
+    
     static func messages(from bytes: Bytes) -> [PTZMessage] {
         return bytes
             .split(startFilter: { $0 >= 0x80 })
@@ -24,6 +34,7 @@ struct PTZMessage {
 extension PTZMessage {
     enum Format {
         case regular
+        case long
         case hello
     }
     
@@ -31,28 +42,38 @@ extension PTZMessage {
         if bytes.count >= 2 && bytes[0] == 0x8F && bytes[1] == 0x30 {
             return .hello
         }
+        if bytes.count >= 1 && bytes[0] == 0x8F {
+            return .long
+        }
         return .regular
     }
 
     var isValidLength: Bool {
+        return receivedLength == givenLength
+    }
+    
+    private var givenLength: Int {
         switch messageFormat {
-        case .regular: return messageLength == ((bytes.first ?? 0x80) & 0x0F)
-        case .hello:   return messageLength == (Int(String(bytes[2], radix: 16), radix: 10)!)
+        case .regular:  return Int(bytes[0] & 0x0F)
+        case .long:     return Int(bytes[1])
+        case .hello:    return Int(String(bytes[2], radix: 16), radix: 10)!
         }
     }
     
-    private var messageLength: Int {
+    private var receivedLength: Int {
         switch messageFormat {
-        case .regular: return bytes.count - 1
-        case .hello:   return bytes.count - 3
+        case .regular:  return bytes.count - 1
+        case .long:     return bytes.count - 1
+        case .hello:    return bytes.count - 3
         }
     }
     
     func isValidReply(_ command: Bytes) -> Bool {
-        guard isValidLength && messageLength >= 2 else { return false }
+        guard isValidLength && receivedLength >= 2 else { return false }
         switch messageFormat {
-        case .regular: return Array(bytes[1..<3]) == command
-        case .hello:   return Array(bytes[3..<5]) == command.reversed()
+        case .regular:  return Array(bytes[1..<3]) == command
+        case .long:     return Array(bytes[2..<4]) == command
+        case .hello:    return Array(bytes[3..<5]) == command.reversed()
         }
     }
 }

@@ -43,6 +43,7 @@ class Camera: Loggable {
     // MARK: Properties
     private let serial: Serial
     private let powerOffAfterUse: Bool
+    private let requestLock: NSLock = .init()
     var logLevel: LogLevel
     let logTag: String = "Camera"
 
@@ -53,22 +54,34 @@ class Camera: Loggable {
     }
     
     @discardableResult
-    func sendRequest(_ request: PTZRequest) throws(CameraError) -> any PTZReply {
-        return (try sendRequest2(request)).1
+    func sendRequest(_ request: PTZRequest, expectValidResponse: Bool = false) throws(CameraError) -> any PTZReply {
+        let response = (try sendRequest2(request)).1
+        if expectValidResponse {
+            if response is PTZReplyReset {
+                throw .reset
+            }
+            if response is PTZReplyFail {
+                throw .fail
+            }
+            if let r = response as? PTZReplyNotExecuted {
+                throw .notExecuted(error: r.error)
+            }
+        }
+        return response
     }
 
-    func sendRequest2(_ request: PTZRequest) throws(CameraError) -> (Bytes, any PTZReply){
-        let (bytes, replies) = sendRequest(request, timeout: 1, repeatUntilAck: false, errorToRetry: nil)
-        guard replies.count == 2, replies[0] is PTZReplyAck else {
-            log(.fatal, "Unexpected camera reply for \(request): \(replies) (expected ACK, then a reply)")
+    func sendRequest2(_ request: PTZRequest) throws(CameraError) -> (Bytes, any PTZReply) {
+        let (bytes, replies) = sendRequest(request, repeatUntilAck: false, errorToRetry: nil)
+        guard replies.first is PTZReplyAck else {
+            log(.fatal, "Unexpected camera reply for \(request), expected ACK then a reply, got: \(replies)")
             throw CameraError.missingAck
         }
-        return (bytes, replies[1])
+        return (bytes, replies.last ?? PTZReplyFail())
     }
 
     subscript<T: PTZValue>(_ state: any PTZState<T>) -> T? {
         get {
-            let (bytes, _) = sendRequest(state.getRequest(), timeout: 1, repeatUntilAck: false, errorToRetry: nil)
+            let (bytes, _) = sendRequest(state.getRequest(), repeatUntilAck: false, errorToRetry: nil)
             return state.parseResponse(bytes)
         }
         set {
@@ -79,6 +92,7 @@ class Camera: Loggable {
     func powerOn() {
         let sequence: [any PTZRequest] = [
             PTZRequestSetStandbyMode(mode: .off),
+            PTZRequestSetMireMode(enabled: .off),
             PTZRequestHelloMPTZ11(),
             PTZRequestSetLedMode(color: .default, mode: .default),
             PTZRequestSetVideoOutputMode(mode: .default),
@@ -93,13 +107,12 @@ class Camera: Loggable {
             PTZRequestSetBlueGain(gain: .default),
             PTZRequestSetBrightness(brightness: .default),
             PTZRequestSetSaturation(saturation: .default),
-            PTZRequestSetMireMode(enabled: .off),
             PTZRequestSetBacklightCompensation(enabled: .off)
         ]
 
         log(.info, "Starting boot sequence...")
         for request in sequence {
-            sendRequest(request, timeout: 1, repeatUntilAck: !(request is PTZRequestSetStandbyMode), errorToRetry: .modeCondition)
+            sendRequest(request, repeatUntilAck: !(request is PTZRequestSetStandbyMode), errorToRetry: .modeCondition)
         }
         log(.info, "Finished boot sequence")
     }
@@ -117,7 +130,10 @@ class Camera: Loggable {
 
     // MARK: Actions
     @discardableResult
-    private func sendRequest(_ request: PTZRequest, timeout: TimeInterval, repeatUntilAck: Bool, errorToRetry: PTZReplyNotExecuted.PTZCommandError?) -> (Bytes, [any PTZReply]) {
+    private func sendRequest(_ request: PTZRequest, repeatUntilAck: Bool, errorToRetry: PTZReplyNotExecuted.PTZCommandError?) -> (Bytes, [any PTZReply]) {
+        requestLock.lock()
+        defer { requestLock.unlock() }
+        
         log(.info, request.description)
         log(.debug, "> \(request.bytes.stringRepresentation)")
         serial.sendBytes(request.bytes)
@@ -126,12 +142,12 @@ class Camera: Loggable {
         var bytes = Bytes()
         var receivedMessageInLastLoop = false
 
-        while Date().timeIntervalSince(startDate) < timeout {
+        while Date().timeIntervalSince(startDate) < 0.5 {
             let newBytes = serial.readAllBytes()
             receivedMessageInLastLoop = !newBytes.isEmpty
             bytes.append(contentsOf: newBytes)
             
-            if !bytes.isEmpty, !receivedMessageInLastLoop, PTZMessage.messages(from: bytes).allSatisfy(\.isValidLength) {
+            if !bytes.isEmpty, !receivedMessageInLastLoop, PTZMessage.receptionComplete(from: bytes) {
                 break
             }
 
@@ -153,7 +169,11 @@ class Camera: Loggable {
 
         if shouldRetry {
             Thread.sleep(forTimeInterval: 0.2)
-            return sendRequest(request, timeout: timeout, repeatUntilAck: repeatUntilAck, errorToRetry: errorToRetry)
+
+            requestLock.unlock()
+            let r = sendRequest(request, repeatUntilAck: repeatUntilAck, errorToRetry: errorToRetry)
+            requestLock.lock()
+            return r
         }
         
         if request.waitingTimeIfExecuted > 0 && replies.contains(where: { $0 is PTZReplyExecuted }) {
