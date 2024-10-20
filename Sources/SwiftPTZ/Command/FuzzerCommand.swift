@@ -25,7 +25,6 @@ struct FuzzerCommand: CamerableCommand {
         let d = Date()
         try fuzz(camera: camera, initialState: { () throws(CameraError) -> () in
             try camera.sendRequest(PTZRequestSetPosition(pan: .mid, tilt: .mid, zoom: .min))
-            try camera.sendRequest(PTZRequestSetAutoExposure(enabled: .off))
             try camera.sendRequest(PTZRequestSetAutoFocus(enabled: .off))
         })
         speak("Done")
@@ -36,29 +35,36 @@ struct FuzzerCommand: CamerableCommand {
     }
     
     private mutating func fuzz(camera: Camera, initialState: () throws(CameraError) -> ()) throws(CameraError) {
-#warning("TODO: 82 41 70 -> executed but no ACK ?!")
-
+        let forbiddenCommands: [(Bytes, String)] = [
+            ([0x41, 0x00], "Standby mode"), // Standby mode: affects the next commands
+            ([0x41, 0x10], "Mire mode"),    // Mire mode: affects the next commands
+            ([0x41, 0x13], "Video output"), // Video output: slow to restore itself
+            ([0x41, 0x21], "LED mode"),     // LED mode: sometimes the reply isn't properly parsable
+            ([0x41, 0x70], "Unknown"),      // Unknown: weird things happen there (missing ACKs, etc)...
+            ([0x45, 0x32], "Reset"),        // Reset: takes a while to recover
+        ]
+        
         // here are the possible commands to be found. commands starting by 0x usually are getters, commands starting by 4x are their corresponding setters
         let categories: [FuzzerCategory] = [
             .init(0x01, "Getters"),
             .init(0x02, "Getters"),
             .init(0x03, "Getters"),
-            // .init(0x04, args: true, "Unknown"),                  // - not executed: syntax error
-            // .init(0x05, args: true, "Unknown"),                  // - not executed: command not defined
+            // .init(0x04, "Unknown"),                              // - not executed: syntax error
+            // .init(0x05, "Unknown"),                              // - not executed: command not defined
             .init(0x06, "Hello"),
-            // .init(0x07, args: true, "Unknown"),                  // - not executed: syntax error
-            // .init(0x08, args: true, "Unknown"),                  // - not executed: syntax error
-            // .init(0x09, args: true, "Unknown"),                  // - not executed: syntax error
-            // .init(0x0A, args: true, "Unknown"),                  // - not executed: syntax error
-            // .init(0x0B, args: true, "Unknown"),                  // - not executed: syntax error
-            // .init(0x0C, args: true, "Unknown"),                  // - not executed: syntax error
-            // .init(0x0D, args: true, "Unknown"),                  // - not executed: syntax error
-            // .init(0x0E, args: true, "Unknown"),                  // - not executed: syntax error
-            // .init(0x0F, args: true, "Unknown"),                  // - not executed: syntax error
+            // .init(0x07, "Unknown"),                              // - not executed: syntax error
+            // .init(0x08, "Unknown"),                              // - not executed: syntax error
+            // .init(0x09, "Unknown"),                              // - not executed: syntax error
+            // .init(0x0A, "Unknown"),                              // - not executed: syntax error
+            // .init(0x0B, "Unknown"),                              // - not executed: syntax error
+            // .init(0x0C, "Unknown"),                              // - not executed: syntax error
+            // .init(0x0D, "Unknown"),                              // - not executed: syntax error
+            // .init(0x0E, "Unknown"),                              // - not executed: syntax error
+            // .init(0x0F, "Unknown"),                              // - not executed: syntax error
 
-            // .init(0x41, args: true, restore: true, "Setters"),   // let's avoid playing with them randomly (power off, video output, etc)
-            .init(0x42, args: true, restore: true, "Setters"),      // should be safe to play with them
-            .init(0x43, args: true, restore: true, "Setters"),      // should be safe to play with them
+            .init(0x41, args: true, restore: true, "Setters"),
+            .init(0x42, args: true, restore: true, "Setters"),
+            .init(0x43, args: true, restore: true, "Setters"),
             // .init(0x44, args: true, "Unknown"),                  // - not executed: syntax error
             .init(0x45, args: true, "Actions"),                     //
             // .init(0x46, args: true, "Unknown"),                  // - not executed: command not defined
@@ -80,6 +86,11 @@ struct FuzzerCommand: CamerableCommand {
             try initialState()
 
             for register in category.registers {
+                if let forbidden = forbiddenCommands.first(where: { $0.0 == [category.category, register] }) {
+                    printSkipped(cat: category.category, reg: register, description: forbidden.1)
+                    continue
+                }
+                
                 // before playing with some setters, let's make sure we can reset them afterwards
                 var restoreBlock: () -> () = {}
                 restore: if category.restore {
@@ -95,20 +106,21 @@ struct FuzzerCommand: CamerableCommand {
                 defer { restoreBlock() }
                 
                 // run the command without any argument first
-                try { () throws(CameraError) -> () in
+                do {
                     let req = PTZUnknownRequest(commandBytes: [category.category, register], arg: nil)
                     let (replyBytes, reply) = try camera.sendRequest2(req)
                     printResult(.init(category: category.category, register: register, reply: reply, replyBytes: replyBytes, sentArg: false, firstArg: 0, lastArg: 0))
-                }()
+                }
+                catch {}
                 
                 // try the given range of arguments, group the results by type of reply to reduce the amount of information printed
                 guard category.testArgs else { continue }
                 var replies: [FuzzerResult] = []
                 for arg: UInt16 in 0..<0x4000 {
-                    if category.category == 0x43 {
+                    if category.category == 0x43 || category.category == 0x45 {
                         // moving pan, tilt, zoom and focus sometimes replies with Mode condition error when going too
                         // fast, let's make this section a wee bit slower to prevent those intermittent errors
-                        usleep(5_000)
+                        usleep(10_000)
                     }
 
                     let req = PTZUnknownRequest(commandBytes: [category.category, register], arg: arg)
@@ -159,6 +171,11 @@ struct FuzzerCommand: CamerableCommand {
         print(String(repeating: "-", count: name.count))
     }
     
+    private func printSkipped(cat: UInt8, reg: UInt8, description: String) {
+        let requestName = ("8x " + [cat, reg].stringRepresentation).padding(toLength: firstColLength, withPad: " ", startingAt: 0)
+        print("\(requestName) | X | Skipped: \(description)")
+    }
+
     private mutating func printResult(_ result: FuzzerResult) {
         guard result.shouldBeIncludedInOutput else { return }
 

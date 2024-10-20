@@ -12,15 +12,15 @@ Getters
 -------
 8x 01 00                  | X | StandbyMode(unknown 1 (0x00))
 8x 01 01                  |   | Unknown(83 41 01 00)
-8x 01 02                  |   | Unknown(83 41 02 01)
+8x 01 02                  |   | Unknown(83 41 02 00)
 8x 01 0B                  |   | Unknown(83 41 0B 00)
 8x 01 10                  | X | MireMode(off)
 8x 01 13                  | X | VideoOutputMode(1080p)
-8x 01 14                  | / | Unknown(83 41 14 00) -> Corresponding setter fails
+8x 01 14                  | / | Unknown(83 41 14 00) -> No corresponding setter, sometimes replies 01 when requested in between random requests, no pattern found
 8x 01 21                  | X | LedMode(blue, on)
 8x 01 23                  |   | Unknown(83 41 23 00)
-8x 01 24                  |   | Unknown(83 41 24 01)
-8x 01 25                  | X | Volume(8)
+8x 01 24                  |   | Unknown(83 41 24 00)
+8x 01 25                  | X | Volume(default)
 8x 01 31                  | X | GainMode(auto)
 8x 01 32                  |   | Unknown(84 41 32 01 00)
 8x 01 33                  | X | Brightness(11)
@@ -31,17 +31,17 @@ Getters
 8x 01 3E                  | X | InvertedMode(off)
 8x 01 44                  | / | Unknown(8F 0F 41 44 7A 00 4C 04 4C 4C 4C 78 04 44 08 4C) > Randomness? value changes every time we read it, and it is not settable (syntax error)
 8x 01 50                  | X | Position(1000, 250, 64)
-8x 01 5D                  | X | Clock 1 (t=594142)
-8x 01 5E                  | X | Clock 2 (t=594140)
+8x 01 5D                  | X | Clock 1 (t=3307368)
+8x 01 5E                  | X | Clock 2 (t=3305132)
 8x 01 60                  | X | Preset(one: 0, 0, 0)
 8x 01 61                  | X | Preset(two: 0, 0, 0)
 8x 01 62                  | X | Preset(three: 0, 0, 0)
-8x 01 63                  | X | Preset(four: 770, 30720, 0)
-8x 01 64                  | X | Preset(five: 766, 515, 0)
-8x 01 65                  | X | Preset(six: 32641, 1794, 0)
-8x 01 66                  | X | Preset(seven: 741, 336, 0)
-8x 01 67                  | X | Preset(eight: 22529, 17409, 0)
-8x 01 71                  | / | Unknown(83 41 71 00) -> Corresponding setter fails
+8x 01 63                  | X | Preset(four: 770, 30467, 0)
+8x 01 64                  | X | Preset(five: 766, 6, 0)
+8x 01 65                  | X | Preset(six: 642, 2050, 0)
+8x 01 66                  | X | Preset(seven: 725, 316, 0)
+8x 01 67                  | X | Preset(eight: 11265, 7169, 0)
+8x 01 71                  | / | Unknown(83 41 71 00) -> No corresponding setter, couldn't make it reply anything else than 00
 8x 01 72                  |   | Unknown(83 41 72 00)
 
 
@@ -57,15 +57,15 @@ Getters
 
 Getters
 -------
-8x 03 00                  | X | IrisLevel(255)
+8x 03 00                  | X | IrisLevel(220)
 8x 03 02                  | X | Zoom(64)
-8x 03 03                  | X | Focus(133)
+8x 03 03                  | X | Focus(159)
 8x 03 04                  | X | Pan(238)
 8x 03 05                  | X | Tilt(250)
-8x 03 26                  | / | Unknown(83 43 26 46) > Corresponding setter fails
-8x 03 3D                  | X | Sharpness(6)
+8x 03 26                  | X | EffectiveGain(14dB)
+8x 03 3D                  | X | Sharpness(11)
 8x 03 3E                  | X | Saturation(6)
-8x 03 3F                  | X | WhiteLevel(90%)
+8x 03 3F                  | X | WhiteLevel(100%)
 8x 03 40                  | X | WBTint(128)
 8x 03 41                  | X | WBTemp(128)
 8x 03 42                  | X | RedGain(35)
@@ -93,6 +93,32 @@ Getters
 Hello
 -----
 8x 06 77                  | X | MPTZ 11(sysVer=01000057 camVer=01010052 backVer=01000021 bootVer=01000006 splVer=2950 pkgVer=01010048)
+
+
+Setters
+-------
+8x 41 00                  | X | Skipped: Standby mode
+8x 41 01 (00 -> 30)       |   | Executed
+8x 41 02 (00 -> 02)       |   | Executed
+8x 41 0B (00 -> 01)       | X | Executed: DevMode(off)
+8x 41 0C 01 (00 -> 01)    |   | Executed
+8x 41 10                  | X | Skipped: Mire mode
+8x 41 13                  | X | Skipped: Video output
+8x 41 21                  | X | Skipped: LED mode
+8x 41 23 (00 -> 10)       |   | Executed
+8x 41 24 (00 -> 01)       |   | Executed
+8x 41 31 (00 -> 05)       | X | Executed: GainMode(0dB)
+8x 41 32 (76 -> 01 0A)    |   | Executed
+8x 41 33 (76 -> 01 0A)    | X | Executed: Brightness(1)
+8x 41 34 (00 -> 01)       |   | Executed
+8x 41 3A (00 -> 01)       |   | Executed
+8x 41 3B (00 -> 01)       |   | Executed
+8x 41 3C (00 -> 01)       |   | Executed
+8x 41 3D (00 -> 01)       |   | Executed
+8x 41 3E (00 -> 01)       | X | Executed: InvertedMode(off)
+8x 41 43 (01 -> 7F)       |   | Executed
+8x 41 70                  | X | Skipped: Unknown
+8x 41 72 (00 -> 01)       |   | Executed
 
 
 Setters
@@ -150,22 +176,17 @@ Actions
 8x 45 04 (10 -> 1F)       | X | Executed: Move tilt down
 8x 45 05                  | X | Executed: Move tilt stop
 8x 45 09 (00 -> 03)       | X | Executed: Move focus far
-8x 45 0A (00 -> 01)       | X | Executed: Move focus near
-8x 45 0A 03               | X | Executed: Move focus near
+8x 45 0A (00 -> 03)       | X | Executed: Move focus near
 8x 45 0B                  | X | Executed: Move focus stop
 8x 45 0C (00 -> 03)       | X | Executed: Move zoom+
 8x 45 0D (00 -> 03)       | X | Executed: Move zoom-
 8x 45 0E                  | X | Executed: Move zoom stop
+8x 45 14                  | X | Skipped: DrunkTest
 8x 45 17                  | X | Not executed: Mode condition: Start manual white balance calibration
-8x 45 32 00               | X | Executed: Resetting sensor and motors
-8x 45 33                  |   | Not executed: Mode condition
-8x 45 33 00               |   | Not executed: Mode condition
-8x 45 70                  |   | Not executed: Mode condition
-8x 45 70 (00 -> 3D)       |   | Not executed: Mode condition
-8x 45 71                  |   | Not executed: Mode condition // after try to set all states to all their possible values, haven't seen a way to run this action
+8x 45 32                  | X | Skipped: Reset
+8x 45 71                  | / | Not executed: Mode condition > couldn't find a request to run before this one to handle the "mode condition"
 
 
 Stats
 -----
-Duration: 314 seconds
-First column width: 25 chars
+Duration: 621 seconds
