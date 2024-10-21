@@ -95,14 +95,11 @@ struct FuzzerCommand: CamerableCommand {
                 
                 // before playing with some setters, let's make sure we can reset them afterwards
                 var restoreBlock: () -> () = {}
-                restore: if category.restore {
-                    let cmd = [category.category, register].stringRepresentation
-                    let reply = try camera.sendRequest(PTZUnknownRequest(commandBytes: [category.category - 0x40, register], arg: nil))
-                    guard let replyBytes = (reply as? PTZReplyUnknown)?.bytes else { break restore }
-                    guard replyBytes.count > 2, replyBytes[1] == category.category, replyBytes[2] == register else { fatalError("Unexpected current value for \(cmd), got \(reply)") }
-
-                    restoreBlock = {
-                        _ = try? camera.sendRequest(PTZUnknownRequest(commandBytes: Array(replyBytes.dropFirst()), arg: nil))
+                if category.restore {
+                    let (replyBytes, _) = try camera.sendRequest2(PTZUnknownRequest(commandBytes: [category.category - 0x40, register], arg: nil))
+                    let restoreBytes = Array(replyBytes.dropFirst(2))
+                    if restoreBytes.count > 2, restoreBytes[0] == category.category, restoreBytes[1] == register {
+                        restoreBlock = { _ = try? camera.sendRequest(PTZUnknownRequest(commandBytes: restoreBytes, arg: nil)) }
                     }
                 }
                 defer { restoreBlock() }

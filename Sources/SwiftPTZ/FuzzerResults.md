@@ -37,11 +37,11 @@ Getters
 8x 01 44                  | / | Unknown(8F 0F 41 44 7A 00 4C 04 4C 4C 4C 78 04 44 08 4C) > Randomness? value changes every time we read it, and it is not settable (syntax error)
 8x 01 50                  | X | Position(1000, 250, 64)
 8x 01 59                  |   | Unknown(8D 41 59 01 35 00 00 00 00 00 00 00 00 00)
-8x 01 5A                  |   | Unknown(8D 41 5A 08 00 32 29 7C 00 00 17 01 31 00)
-8x 01 5B                  |   | Unknown(8D 41 5B 00 00 00 00 00 00 00 5D 01 35 00)
-8x 01 5C                  |   | Unknown(8D 41 5C 04 00 00 60 0A 00 00 20 01 22 00)
-8x 01 5D                  | X | Clock 1 (t=3353454)
-8x 01 5E                  | X | Clock 2 (t=3351218)
+8x 01 5A                  |   | Unknown(8D 41 5A 08 00 32 35 6A 00 00 17 01 45 00)
+8x 01 5B                  |   | Unknown(8D 41 5B 00 00 00 00 00 00 00 5D 01 70 00)
+8x 01 5C                  |   | Unknown(8D 41 5C 04 00 00 7F 4A 00 00 20 01 34 00)
+8x 01 5D                  | X | Clock 1 (t=3358547)
+8x 01 5E                  | X | Clock 2 (t=3356311)
 8x 01 60                  | X | Preset(one: 0, 0, 0)
 8x 01 61                  | X | Preset(two: 0, 0, 0)
 8x 01 62                  | X | Preset(three: 0, 0, 0)
@@ -66,12 +66,12 @@ Getters
 
 Getters
 -------
-8x 03 00                  | X | IrisLevel(222)
+8x 03 00                  | X | IrisLevel(163)
 8x 03 02                  | X | Zoom(64)
-8x 03 03                  | X | Focus(133)
+8x 03 03                  | X | Focus(198)
 8x 03 04                  | X | Pan(238)
 8x 03 05                  | X | Tilt(250)
-8x 03 26                  | X | EffectiveGain(14dB)
+8x 03 26                  | X | EffectiveGain(0dB)
 8x 03 3D                  | X | Sharpness(11)
 8x 03 3E                  | X | Saturation(6)
 8x 03 3F                  | X | WhiteLevel(100%)
@@ -154,8 +154,8 @@ Setters
 8x 43 3F 64               | X | Executed: WhiteLevel(100%)
 8x 43 40 (60 -> 01 01+)   | X | Not executed: Mode condition: WBTint(96)
 8x 43 41 (60 -> 01 01+)   | X | Not executed: Mode condition: WBTemp(96)
-8x 43 42 (60 -> 01 01+)   | X | Not executed: Mode condition: RedGain(1)
-8x 43 43 (60 -> 01 01+)   | X | Not executed: Mode condition: BlueGain(1)
+8x 43 42 (60 -> 01 1F)    | X | Executed: RedGain(1)
+8x 43 43 (60 -> 01 1F)    | X | Executed: BlueGain(1)
 8x 43 50 (7B -> 01 05)    |   | Executed
 8x 43 51 (7B -> 01 05)    |   | Executed
 8x 43 52 (7B -> 01 05)    |   | Executed
