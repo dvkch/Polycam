@@ -45,3 +45,10 @@ func speak(_ string: String) {
     try? process.run()
     #endif
 }
+
+func during(seconds: TimeInterval, action: () -> ()) {
+    let startDate = Date()
+    while Date().timeIntervalSince(startDate) <= seconds {
+        action()
+    }
+}

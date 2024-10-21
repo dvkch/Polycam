@@ -285,6 +285,10 @@ extension FuzzerResult {
                 isRequestKnown = true
                 replyName += ": Move \(direction)"
             }
+            else if category == 0x45, register == 0x13 {
+                isRequestKnown = true
+                replyName += ": \(PTZRequestStartFocus())"
+            }
             else if category == 0x45, register == 0x17 {
                 isRequestKnown = true
                 replyName += ": \(PTZRequestStartManualWhiteBalanceCalibration())"

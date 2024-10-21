@@ -23,25 +23,25 @@ Getters
 8x 01 24                  |   | Unknown(83 41 24 00)
 8x 01 25                  | X | Volume(default)
 8x 01 31                  | X | GainMode(auto)
-8x 01 32                  |   | Unknown(84 41 32 01 00)
+8x 01 32                  | X | Contrast(20)
 8x 01 33                  | X | Brightness(11)
 8x 01 34                  |   | Unknown(83 41 34 01)
-8x 01 3A                  |   | Unknown(83 41 3A 01)
-8x 01 3B                  |   | Unknown(83 41 3B 01)
-8x 01 3C                  |   | Unknown(83 41 3C 01)
-8x 01 3D                  |   | Unknown(83 41 3D 01)
+8x 01 3A                  | X | Colors(on)
+8x 01 3B                  | X | SensorSmoothing(on)
+8x 01 3C                  | X | NoiseReduction(on)
+8x 01 3D                  | X | VignetteCorrection(on)
 8x 01 3E                  | X | InvertedMode(off)
 8x 01 41                  |   | Unknown(88 41 41 00 00 00 00 00 00)
 8x 01 42                  | X | DrunkTestPhase(Never launched)
-8x 01 43                  |   | Unknown(83 41 43 01)
+8x 01 43                  |   | Unknown(83 41 43 7E)
 8x 01 44                  | / | Unknown(8F 0F 41 44 7A 00 4C 04 4C 4C 4C 78 04 44 08 4C) > Randomness? value changes every time we read it, and it is not settable (syntax error)
 8x 01 50                  | X | Position(1000, 250, 64)
 8x 01 59                  |   | Unknown(8D 41 59 01 35 00 00 00 00 00 00 00 00 00)
-8x 01 5A                  |   | Unknown(8D 41 5A 0C 00 31 14 53 00 00 17 01 27 00)
-8x 01 5B                  |   | Unknown(8D 41 5B 00 00 00 00 00 00 00 5D 00 35 00)
-8x 01 5C                  |   | Unknown(8D 41 5C 0C 00 00 50 02 00 00 20 01 16 00)
-8x 01 5D                  | X | Clock 1 (t=3308789)
-8x 01 5E                  | X | Clock 2 (t=3306553)
+8x 01 5A                  |   | Unknown(8D 41 5A 08 00 32 29 7C 00 00 17 01 31 00)
+8x 01 5B                  |   | Unknown(8D 41 5B 00 00 00 00 00 00 00 5D 01 35 00)
+8x 01 5C                  |   | Unknown(8D 41 5C 04 00 00 60 0A 00 00 20 01 22 00)
+8x 01 5D                  | X | Clock 1 (t=3353454)
+8x 01 5E                  | X | Clock 2 (t=3351218)
 8x 01 60                  | X | Preset(one: 0, 0, 0)
 8x 01 61                  | X | Preset(two: 0, 0, 0)
 8x 01 62                  | X | Preset(three: 0, 0, 0)
@@ -110,20 +110,20 @@ Setters
 8x 41 01 (00 -> 30)       |   | Executed
 8x 41 02 (00 -> 02)       |   | Executed
 8x 41 0B (00 -> 01)       | X | Executed: DevMode(off)
-8x 41 0C 01 (00 -> 01)    |   | Executed
+8x 41 0C 01 (00 -> 01)    | / | Executed -> in Dev mode there is a whole subrange of boolean registers, from 01 0C 00 to 01 0C 2B. Couldn't find their use
 8x 41 10                  | X | Skipped: Mire mode
 8x 41 13                  | X | Skipped: Video output
 8x 41 21                  | X | Skipped: LED mode
 8x 41 23 (00 -> 10)       |   | Executed
 8x 41 24 (00 -> 01)       |   | Executed
 8x 41 31 (00 -> 05)       | X | Executed: GainMode(0dB)
-8x 41 32 (76 -> 01 0A)    |   | Executed
+8x 41 32 (76 -> 01 0A)    | X | Executed: Contrast(0)
 8x 41 33 (76 -> 01 0A)    | X | Executed: Brightness(1)
 8x 41 34 (00 -> 01)       |   | Executed
-8x 41 3A (00 -> 01)       |   | Executed
-8x 41 3B (00 -> 01)       |   | Executed
-8x 41 3C (00 -> 01)       |   | Executed
-8x 41 3D (00 -> 01)       |   | Executed
+8x 41 3A (00 -> 01)       | X | Executed: Colors(off)
+8x 41 3B (00 -> 01)       | X | Executed: SensorSmoothing(off)
+8x 41 3C (00 -> 01)       | X | Executed: NoiseReduction(off)
+8x 41 3D (00 -> 01)       | X | Executed: VignetteCorrection(off)
 8x 41 3E (00 -> 01)       | X | Executed: InvertedMode(off)
 8x 41 43 (01 -> 7F)       |   | Executed
 8x 41 70                  | X | Skipped: Unknown
@@ -190,7 +190,7 @@ Actions
 8x 45 0C (00 -> 03)       | X | Executed: Move zoom+
 8x 45 0D (00 -> 03)       | X | Executed: Move zoom-
 8x 45 0E                  | X | Executed: Move zoom stop
-8x 45 13                  |   | Executed
+8x 45 13                  | X | Executed: Start focus
 8x 45 14                  | X | Skipped: DrunkTest
 8x 45 17                  | X | Not executed: Mode condition: Start manual white balance calibration
 8x 45 32                  | X | Skipped: Reset
@@ -199,4 +199,4 @@ Actions
 
 Stats
 -----
-Duration: 605 seconds
+Duration: 616 seconds

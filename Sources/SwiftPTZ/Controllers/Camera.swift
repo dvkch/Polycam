@@ -91,9 +91,11 @@ class Camera: Loggable {
 
     func powerOn() {
         let sequence: [any PTZRequest] = [
-            PTZRequestSetStandbyMode(mode: .off),
-            PTZRequestSetMireMode(enabled: .off),
+            PTZRequestSetStandbyMode(mode: .unknown1), // off ?
             PTZRequestHelloMPTZ11(),
+            PTZRequestSetDevMode(enabled: .on),
+            PTZRequestSetMireMode(enabled: .off),
+            PTZRequestSetColors(enabled: .on),
             PTZRequestSetLedMode(color: .default, mode: .default),
             PTZRequestSetVideoOutputMode(mode: .default),
             PTZRequestSetShutterSpeed(speed: .default),
