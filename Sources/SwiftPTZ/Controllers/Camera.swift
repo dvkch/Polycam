@@ -100,7 +100,7 @@ class Camera: Loggable {
             PTZRequestSetVideoOutputMode(mode: .default),
             PTZRequestSetShutterSpeed(speed: .default),
             PTZRequestSetVolume(volume: .default),
-            PTZRequestSetPosition(pan: .default, tilt: .default, zoom: .default),
+            // PTZRequestSetPosition(pan: .default, tilt: .default, zoom: .default),
             PTZRequestSetInvertedMode(enabled: .off),
             PTZRequestSetAutoFocus(enabled: .on),
             PTZRequestSetWhiteBalance(mode: .default),

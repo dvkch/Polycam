@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "swiftcurses",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Jomy10/SwiftCurses.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "fbd2cb84d38d408120433cedc168db62f59ccfb9"
+      }
+    },
+    {
       "identity" : "swiftserial",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mredig/SwiftSerial.git",

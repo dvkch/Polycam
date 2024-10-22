@@ -70,6 +70,30 @@ extension Array where Element: Collection {
     }
 }
 
+extension Array where Element: Equatable {
+    func elementAfter(_ element: Element, or defElement: Element) -> Element {
+        guard let index = self.firstIndex(of: element) else { return defElement }
+        guard index + 1 < count else { return defElement }
+        return self[index + 1]
+    }
+
+    func elementBefore(_ element: Element, or defElement: Element) -> Element {
+        guard let index = self.firstIndex(of: element) else { return defElement }
+        guard index - 1 >= 0 else { return defElement }
+        return self[index - 1]
+    }
+}
+
+extension Array where Element == UInt16 {
+    func closest(to element: Element) -> Element? {
+        guard !isEmpty else { return nil }
+        let distances = self.map { abs(Int32($0) - Int32(element)) }
+        let smallestDistance = distances.min()!
+        let indexOfClosest = distances.firstIndex(of: smallestDistance)!
+        return self[indexOfClosest]
+    }
+}
+
 extension Bytes {
     func stringRepresentation(condensedWith other: Bytes, stoppedEarly: Bool) -> String {
         guard self != other else { return self.stringRepresentation }

@@ -60,11 +60,11 @@ struct PTZUInt: PTZValue {
     }
 
     init(ptzValue: UInt16) {
-        self.rawValue = UInt16(ptzValue)
+        self.rawValue = ptzValue
     }
     
     var ptzValue: UInt16 {
-        return UInt16(rawValue)
+        return rawValue
     }
     
     static var testValues: [PTZUInt] { [.init(rawValue: 0)] }
