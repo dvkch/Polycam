@@ -86,7 +86,7 @@ extension PTZMessage {
                 return V.init(ptzValue: UInt16(bytes[3]))
             }
             if bytes.count == 5 {
-                return V.init(ptzValue: UInt16(bytes[3]) + 0x7F + UInt16(bytes[4]))
+                return V.init(ptzValue: UInt16(bytes[3]) * 0x80 + UInt16(bytes[4]))
             }
             fatalError("There is no first argument here")
             
