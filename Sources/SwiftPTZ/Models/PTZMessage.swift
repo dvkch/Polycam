@@ -134,6 +134,7 @@ extension PTZMessage {
             PTZReplyIrisLevel.self,
             PTZReplyLedMode.self,
             PTZReplyMireMode.self,
+            PTZReplyMotorStats.self,
             PTZReplyNoiseReduction.self,
             PTZReplyPan.self,
             PTZReplyPosition.self,
@@ -151,6 +152,7 @@ extension PTZMessage {
             PTZReplyWhiteBalanceTemp.self,
             PTZReplyWhiteBalanceTint.self,
             PTZReplyWhiteLevel.self,
+            PTZReplyWideDynamicRange.self,
             PTZReplyZoom.self,
         ]
     }

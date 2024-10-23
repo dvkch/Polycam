@@ -19,7 +19,7 @@ struct InteractiveCommand: CamerableCommand {
     func run(camera: Camera) throws(CameraError) {
         camera.logLevel = .error
         try camera.sendRequest(PTZRequestSetDevMode(enabled: .on))
-
+        
         #warning("find a way to use properly defined states instead")
         let content: [any Interactive.Element] = [
             Interactive.Line("Let's have some fun!"),
@@ -33,7 +33,13 @@ struct InteractiveCommand: CamerableCommand {
                 Interactive.Group("Focus", [
                     Interactive.State("Auto", cat: 0x02, r: 0x09, values: [0, 1], default: 1),
                     Interactive.State("Manual", cat: 0x03, r: 0x03, value: PTZFocus.self),
-                ])
+                ]),
+                Interactive.Group("Move", PTZDirection.allCases.map { dir in
+                    Interactive.Action(name: dir.description, state: "") { _ in
+                        try! camera.sendRequest(PTZRequestSetMove(direction: dir, panTiltSpeed: .speed3, zoomSpeed: .speed2, focusSpeed: .speed3))
+                        return ""
+                    }
+                })
             ]),
             Interactive.Group("--- Exposure ---", [
                 Interactive.State("Shutter speed", cat: 0x02, r: 0x14, value: PTZShutterSpeed.self),
@@ -65,7 +71,7 @@ struct InteractiveCommand: CamerableCommand {
         }
         
         do {
-            try initScreen(settings: [.noEcho, .cbreak], windowSettings: [.keypad(true)]) { scr in
+            try initScreen(settings: [.noEcho, .cbreak], windowSettings: [.keypad(true), .timeout(1000)]) { scr in
                 try tui(scr: scr, content: content, camera: camera)
             }
         }
@@ -98,7 +104,9 @@ struct InteractiveCommand: CamerableCommand {
                 try scr.move(row: Int32(selectedElement.0), col: 0)
             }
 
-            let char = try scr.getChar()
+            let charOrError = Result(catching: { try scr.getChar() })
+            guard case let .success(char) = charOrError else { continue }
+
             if let selectedElement, selectedElement.1.input(char: char, camera: camera) {
                 continue
             }
@@ -202,6 +210,33 @@ fileprivate struct Interactive {
         }
     }
     
+    class Action<T: CustomStringConvertible>: Interactive.Element {
+        let id = UUID().uuidString
+        let name: String
+        var state: T
+        let action: (T) -> T
+        
+        init(name: String, state: T, action: @escaping (T) -> T) {
+            self.name = name
+            self.state = state
+            self.action = action
+        }
+        
+        // InteractiveElement
+        var output: String { "\(name) (\(state))" }
+        var selectable: Bool { true }
+        var children: [any Interactive.Element] { [] }
+        func input(char: WideChar, camera: Camera) -> Bool {
+            switch (char) {
+            case .char(" "): // space
+                state = action(state)
+            default:
+                return false
+            }
+            return true
+        }
+    }
+    
     class State: Interactive.Element {
         let id = UUID().uuidString
         let name: String
@@ -210,6 +245,7 @@ fileprivate struct Interactive {
         private(set) var values: Array<UInt16>
         let `default`: UInt16
         private var currentValue: UInt16 = 0
+        private var setError: String? = nil
 
         convenience init<T: PTZScaledValue>(_ name: String, cat category: UInt8, r register: UInt8, value: T.Type) {
             self.init(name, cat: category, r: register, values: T.min.ptzValue...T.max.ptzValue, default: T.default.ptzValue)
@@ -239,8 +275,9 @@ fileprivate struct Interactive {
         
         func set(for camera: Camera, to value: UInt16) {
             let req = PTZUnknownRequest(commandBytes: [category + 0x40, register], arg: value)
-            try! camera.sendRequest(req)
+            let reply = try! camera.sendRequest(req)
             currentValue = values.closest(to: value) ?? value
+            setError = (reply is PTZReplyExecuted) ? nil : "\(req.bytes.stringRepresentation) => \(reply.description)"
         }
         
         // InteractiveElement
@@ -254,6 +291,9 @@ fileprivate struct Interactive {
                 string += (currentValue == v) ? "O" : "·"
             }
             string += ">"
+            if let setError {
+                string += " \(setError)"
+            }
             return string
         }
         var selectable: Bool { true }

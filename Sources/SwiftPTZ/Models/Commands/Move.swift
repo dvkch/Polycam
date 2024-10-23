@@ -96,6 +96,13 @@ struct PTZRequestSetMove: PTZRequest {
     let panTiltSpeed: PTZPanTiltSpeed
     let zoomSpeed: PTZZoomSpeed
     let focusSpeed: PTZFocusSpeed
+    
+    init(direction: PTZDirection, panTiltSpeed: PTZPanTiltSpeed = .default, zoomSpeed: PTZZoomSpeed = .default, focusSpeed: PTZFocusSpeed = .default) {
+        self.direction = direction
+        self.panTiltSpeed = panTiltSpeed
+        self.zoomSpeed = zoomSpeed
+        self.focusSpeed = focusSpeed
+    }
 
     var bytes: Bytes {
         if direction == .panStop || direction == .tiltStop || direction == .zoomStop || direction == .focusStop {
