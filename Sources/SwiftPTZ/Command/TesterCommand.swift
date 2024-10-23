@@ -26,40 +26,7 @@ struct TesterCommand: CamerableCommand {
         try camera.sendRequest(PTZRequestSetGainMode(gain: .auto))
         try camera.sendRequest(PTZRequestSetWhiteBalance(mode: .auto))
         
-        let r1: [UInt16] = Array(0x7B...0x85) // + Array(0x7B...0x85).reversed()
-        let r2: [UInt16] = Array(0x76...0x8A) // + Array(0x76...0x8A).reversed()
-
         let cmdsToMakeWork: [[TestCommand]] = [
-            [
-                .init((0x43, 0x50), .custom(r1), org: 128), // amount of red, 7B to 01 05
-                .init((0x43, 0x56), .custom(r2), org: 128), // amount of red (smaller increments)
-                .init((0x43, 0x5C), .custom(r2), org: 128), // saturation/ présence de rouge (skin tone changé mais pas coussin vert)
-            ],
-            [
-                .init((0x43, 0x51), .custom(r1), org: 128), // same, veeeeeery small increments
-                .init((0x43, 0x57), .custom(r2), org: 128), // amount of green, smaller increments), joue sur la luminosité un peu, ou balance des couleurs mais plus globale à l'image
-                .init((0x43, 0x5D), .custom(r2), org: 128), // amount of yellow? jaune change, mais pas vert, ni autre ?
-            ],
-            [
-                .init((0x43, 0x53), .custom(r1), org: 128), // r
-                .init((0x43, 0x59), .custom(r2), org: 128), // highlights de blancs +/-
-                .init((0x43, 0x5F), .custom(r2), org: 128), // quantité de bleu dans les highlights (coin de fenetre qui se bleute)
-            ],
-            [
-                .init((0x43, 0x54), .custom(r1), org: 128), // lum bleu
-                .init((0x43, 0x5A), .custom(r2), org: 128), // à quel point la feuille de papier est bleue
-                .init((0x43, 0x60), .custom(r2), org: 128), // feuille de appier se bleute à nouveau
-            ],
-            [
-                .init((0x43, 0x52), .custom(r1), org: 128), // r
-                .init((0x43, 0x58), .custom(r2), org: 128), // rien
-                .init((0x43, 0x5E), .custom(r2), org: 128), //
-            ],
-            [
-                .init((0x43, 0x55), .custom(r1), org: 128), // r
-                .init((0x43, 0x5B), .custom(r2), org: 128), // r
-                .init((0x43, 0x61), .custom(r2), org: 128), //
-            ]
         ]
 
         for cmd in cmdsToMakeWork.flatten {

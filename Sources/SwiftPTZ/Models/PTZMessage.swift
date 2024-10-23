@@ -121,6 +121,7 @@ extension PTZMessage {
             PTZReplyAutoFocus.self,
             PTZReplyBacklightCompensation.self,
             PTZReplyBrightness.self,
+            PTZReplyCalibrationHue.self, PTZReplyCalibrationLuminance.self, PTZReplyCalibrationSaturation.self,
             PTZReplyClock.self,
             PTZReplyColors.self,
             PTZReplyContrast.self,

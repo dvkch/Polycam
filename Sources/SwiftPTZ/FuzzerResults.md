@@ -37,19 +37,19 @@ Getters
 8x 01 44                  | / | Unknown(8F 0F 41 44 7A 00 4C 04 4C 4C 4C 78 04 44 08 4C) > Randomness? value changes every time we read it, and it is not settable (syntax error)
 8x 01 50                  | X | Position(1000, 250, 64)
 8x 01 59                  |   | Unknown(8D 41 59 01 35 00 00 00 00 00 00 00 00 00)
-8x 01 5A                  |   | Unknown(8D 41 5A 08 00 32 35 6A 00 00 17 01 45 00)
-8x 01 5B                  |   | Unknown(8D 41 5B 00 00 00 00 00 00 00 5D 01 70 00)
-8x 01 5C                  |   | Unknown(8D 41 5C 04 00 00 7F 4A 00 00 20 01 34 00)
-8x 01 5D                  | X | Clock 1 (t=3358547)
-8x 01 5E                  | X | Clock 2 (t=3356311)
+8x 01 5A                  |   | Unknown(8D 41 5A 08 00 32 42 11 00 00 17 01 52 00)
+8x 01 5B                  |   | Unknown(8D 41 5B 00 00 00 00 00 00 00 5E 00 3B 00)
+8x 01 5C                  |   | Unknown(8D 41 5C 08 00 01 02 36 00 00 35 01 0D 00)
+8x 01 5D                  | X | Clock 1 (t=3515819)
+8x 01 5E                  | X | Clock 2 (t=3513582)
 8x 01 60                  | X | Preset(one: 0, 0, 0)
 8x 01 61                  | X | Preset(two: 0, 0, 0)
 8x 01 62                  | X | Preset(three: 0, 0, 0)
-8x 01 63                  | X | Preset(four: 770, 30467, 0)
-8x 01 64                  | X | Preset(five: 766, 6, 0)
-8x 01 65                  | X | Preset(six: 642, 2050, 0)
-8x 01 66                  | X | Preset(seven: 725, 316, 0)
-8x 01 67                  | X | Preset(eight: 11265, 7169, 0)
+8x 01 63                  | X | Preset(four: 770, 30466, 0)
+8x 01 64                  | X | Preset(five: 766, 7, 0)
+8x 01 65                  | X | Preset(six: 2690, 2306, 0)
+8x 01 66                  | X | Preset(seven: 597, 318, 0)
+8x 01 67                  | X | Preset(eight: 11265, 7681, 0)
 8x 01 71                  | / | Unknown(83 41 71 00) -> No corresponding setter, couldn't make it reply anything else than 00
 8x 01 72                  |   | Unknown(83 41 72 00)
 
@@ -66,37 +66,37 @@ Getters
 
 Getters
 -------
-8x 03 00                  | X | IrisLevel(163)
+8x 03 00                  | X | IrisLevel(155)
 8x 03 02                  | X | Zoom(64)
-8x 03 03                  | X | Focus(198)
-8x 03 04                  | X | Pan(238)
+8x 03 03                  | X | Focus(391)
+8x 03 04                  | X | Pan(1000)
 8x 03 05                  | X | Tilt(250)
 8x 03 26                  | X | EffectiveGain(0dB)
-8x 03 3D                  | X | Sharpness(11)
+8x 03 3D                  | X | Sharpness(6)
 8x 03 3E                  | X | Saturation(6)
-8x 03 3F                  | X | WhiteLevel(100%)
-8x 03 40                  | X | WBTint(128)
-8x 03 41                  | X | WBTemp(128)
+8x 03 3F                  | X | WhiteLevel(90%)
+8x 03 40                  | X | WBTint(149)
+8x 03 41                  | X | WBTemp(127)
 8x 03 42                  | X | RedGain(35)
 8x 03 43                  | X | BlueGain(35)
-8x 03 50                  |   | Unknown(84 43 50 01 00)
-8x 03 51                  |   | Unknown(84 43 51 01 00)
-8x 03 52                  |   | Unknown(84 43 52 01 00)
-8x 03 53                  |   | Unknown(84 43 53 01 00)
-8x 03 54                  |   | Unknown(84 43 54 01 00)
-8x 03 55                  |   | Unknown(84 43 55 01 00)
-8x 03 56                  |   | Unknown(84 43 56 01 00)
-8x 03 57                  |   | Unknown(84 43 57 01 00)
-8x 03 58                  |   | Unknown(84 43 58 01 00)
-8x 03 59                  |   | Unknown(84 43 59 01 00)
-8x 03 5A                  |   | Unknown(84 43 5A 01 00)
-8x 03 5B                  |   | Unknown(84 43 5B 01 00)
-8x 03 5C                  |   | Unknown(84 43 5C 01 00)
-8x 03 5D                  |   | Unknown(84 43 5D 01 00)
-8x 03 5E                  |   | Unknown(84 43 5E 01 00)
-8x 03 5F                  |   | Unknown(84 43 5F 01 00)
-8x 03 60                  |   | Unknown(84 43 60 01 00)
-8x 03 61                  |   | Unknown(84 43 61 01 00)
+8x 03 50                  | X | CalibrationHue(red, 128)
+8x 03 51                  | X | CalibrationHue(orange, 128)
+8x 03 52                  | X | CalibrationHue(green, 128)
+8x 03 53                  | X | CalibrationHue(cyan, 128)
+8x 03 54                  | X | CalibrationHue(blue, 128)
+8x 03 55                  | X | CalibrationHue(purple, 128)
+8x 03 56                  | X | CalibrationLuminance(red, 128)
+8x 03 57                  | X | CalibrationLuminance(orange, 128)
+8x 03 58                  | X | CalibrationLuminance(green, 128)
+8x 03 59                  | X | CalibrationLuminance(cyan, 128)
+8x 03 5A                  | X | CalibrationLuminance(blue, 128)
+8x 03 5B                  | X | CalibrationLuminance(purple, 128)
+8x 03 5C                  | X | CalibrationSaturation(red, 128)
+8x 03 5D                  | X | CalibrationSaturation(orange, 128)
+8x 03 5E                  | X | CalibrationSaturation(green, 128)
+8x 03 5F                  | X | CalibrationSaturation(cyan, 128)
+8x 03 60                  | X | CalibrationSaturation(blue, 128)
+8x 03 61                  | X | CalibrationSaturation(purple, 128)
 
 
 Hello
@@ -156,24 +156,24 @@ Setters
 8x 43 41 (60 -> 01 01+)   | X | Not executed: Mode condition: WBTemp(96)
 8x 43 42 (60 -> 01 1F)    | X | Executed: RedGain(1)
 8x 43 43 (60 -> 01 1F)    | X | Executed: BlueGain(1)
-8x 43 50 (7B -> 01 05)    |   | Executed
-8x 43 51 (7B -> 01 05)    |   | Executed
-8x 43 52 (7B -> 01 05)    |   | Executed
-8x 43 53 (7B -> 01 05)    |   | Executed
-8x 43 54 (7B -> 01 05)    |   | Executed
-8x 43 55 (7B -> 01 05)    |   | Executed
-8x 43 56 (76 -> 01 0A)    |   | Executed
-8x 43 57 (76 -> 01 0A)    |   | Executed
-8x 43 58 (76 -> 01 0A)    |   | Executed
-8x 43 59 (76 -> 01 0A)    |   | Executed
-8x 43 5A (76 -> 01 0A)    |   | Executed
-8x 43 5B (76 -> 01 0A)    |   | Executed
-8x 43 5C (76 -> 01 0A)    |   | Executed
-8x 43 5D (76 -> 01 0A)    |   | Executed
-8x 43 5E (76 -> 01 0A)    |   | Executed
-8x 43 5F (76 -> 01 0A)    |   | Executed
-8x 43 60 (76 -> 01 0A)    |   | Executed
-8x 43 61 (76 -> 01 0A)    |   | Executed
+8x 43 50 (7B -> 01 05)    | X | Executed: CalibrationHue(red, 123)
+8x 43 51 (7B -> 01 05)    | X | Executed: CalibrationHue(orange, 123)
+8x 43 52 (7B -> 01 05)    | X | Executed: CalibrationHue(green, 123)
+8x 43 53 (7B -> 01 05)    | X | Executed: CalibrationHue(cyan, 123)
+8x 43 54 (7B -> 01 05)    | X | Executed: CalibrationHue(blue, 123)
+8x 43 55 (7B -> 01 05)    | X | Executed: CalibrationHue(purple, 123)
+8x 43 56 (76 -> 01 0A)    | X | Executed: CalibrationLuminance(red, 118)
+8x 43 57 (76 -> 01 0A)    | X | Executed: CalibrationLuminance(orange, 118)
+8x 43 58 (76 -> 01 0A)    | X | Executed: CalibrationLuminance(green, 118)
+8x 43 59 (76 -> 01 0A)    | X | Executed: CalibrationLuminance(cyan, 118)
+8x 43 5A (76 -> 01 0A)    | X | Executed: CalibrationLuminance(blue, 118)
+8x 43 5B (76 -> 01 0A)    | X | Executed: CalibrationLuminance(purple, 118)
+8x 43 5C (76 -> 01 0A)    | X | Executed: CalibrationSaturation(red, 118)
+8x 43 5D (76 -> 01 0A)    | X | Executed: CalibrationSaturation(orange, 118)
+8x 43 5E (76 -> 01 0A)    | X | Executed: CalibrationSaturation(green, 118)
+8x 43 5F (76 -> 01 0A)    | X | Executed: CalibrationSaturation(cyan, 118)
+8x 43 60 (76 -> 01 0A)    | X | Executed: CalibrationSaturation(blue, 118)
+8x 43 61 (76 -> 01 0A)    | X | Executed: CalibrationSaturation(purple, 118)
 
 
 Actions
@@ -199,4 +199,4 @@ Actions
 
 Stats
 -----
-Duration: 616 seconds
+Duration: 605 seconds
