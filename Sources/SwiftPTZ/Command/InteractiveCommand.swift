@@ -18,18 +18,9 @@ struct InteractiveCommand: CamerableCommand {
     
     func run(camera: Camera) throws(CameraError) {
         camera.logLevel = .error
-
         try camera.sendRequest(PTZRequestSetDevMode(enabled: .on))
-        try camera.sendRequest(PTZRequestSetNoiseReduction(enabled: .on))
-        try camera.sendRequest(PTZRequestSetContrast(contrast: .default))
-        try camera.sendRequest(PTZRequestSetVignetteCorrection(enabled: .on))
-        try camera.sendRequest(PTZRequestSetGainMode(gain: .auto))
-        try camera.sendRequest(PTZRequestSetWhiteBalance(mode: .auto))
-        try camera.sendRequest(PTZRequestSetAutoFocus(enabled: .off))
 
-        let r1: [UInt16] = Array(0x7B...0x85) // + Array(0x7B...0x85).reversed()
-        let r2: [UInt16] = Array(0x76...0x8A) // + Array(0x76...0x8A).reversed()
-
+        #warning("find a way to use properly defined states instead")
         let content: [any Interactive.Element] = [
             Interactive.Line("Let's have some fun!"),
             Interactive.Line(""),
@@ -44,9 +35,18 @@ struct InteractiveCommand: CamerableCommand {
                     Interactive.State("Manual", cat: 0x03, r: 0x03, value: PTZFocus.self),
                 ])
             ]),
+            Interactive.Group("--- Exposure ---", [
+                Interactive.State("Shutter speed", cat: 0x02, r: 0x14, value: PTZShutterSpeed.self),
+                Interactive.State("Auto exposure", cat: 0x02, r: 0x11, values: [0, 1], default: 1),
+                Interactive.State("Gain",  cat: 0x01, r: 0x31, value: PTZGainMode.self),
+                Interactive.State("Backlight compensation", cat: 0x02, r: 0x15, values: [0, 1], default: 1),
+                Interactive.State("Iris level", cat: 0x03, r: 0x00, value: PTZIrisLevel.self),
+                Interactive.State("Vignette correction", cat: 0x01, r: 0x3D, values: [0, 1], default: 1),
+                Interactive.State("Noise reduction", cat: 0x01, r: 0x3C, values: [0, 1], default: 1),
+            ]),
             Interactive.Group("--- Colors ---", [
                 Interactive.State("Brightness", cat: 0x01, r: 0x33, value: PTZBrightness.self),
-                Interactive.State("Contrast", cat: 0x01, r: 0x32, value: PTZContrast.self),
+                Interactive.State("Contrast",   cat: 0x01, r: 0x32, value: PTZContrast.self),
                 Interactive.State("Saturation", cat: 0x03, r: 0x3e, value: PTZSaturation.self),
                 Interactive.Group("WhiteBalance", [
                     Interactive.State("Mode", cat: 0x02, r: 0x12, value: PTZWhiteBalance.self),
@@ -55,60 +55,6 @@ struct InteractiveCommand: CamerableCommand {
                 ]),
                 Interactive.State("GainR", cat: 0x03, r: 0x42, value: PTZColorGain.self),
                 Interactive.State("GainB", cat: 0x03, r: 0x43, value: PTZColorGain.self),
-            ]),
-            /*
-            Interactive.Group("--- Group 0 ---", [
-                Interactive.State("50", cat: 0x03, r: 0x50, values: r1, default: 128), // amount of red, 7B to 01 05
-                Interactive.State("51", cat: 0x03, r: 0x51, values: r1, default: 128), // same, veeeeeery small increments
-                Interactive.State("52", cat: 0x03, r: 0x52, values: r1, default: 128), // r
-                Interactive.State("53", cat: 0x03, r: 0x53, values: r1, default: 128), // r
-                Interactive.State("54", cat: 0x03, r: 0x54, values: r1, default: 128), // lum bleu
-                Interactive.State("55", cat: 0x03, r: 0x55, values: r1, default: 128), // r
-                Interactive.Line(""),
-                Interactive.State("56", cat: 0x03, r: 0x56, values: r2, default: 128), // amount of red (smaller increments)
-                Interactive.State("57", cat: 0x03, r: 0x57, values: r2, default: 128), // amount of green, smaller increments), joue sur la luminosité un peu, ou balance des couleurs mais plus globale à l'image
-                Interactive.State("58", cat: 0x03, r: 0x58, values: r2, default: 128), // rien
-                Interactive.State("59", cat: 0x03, r: 0x59, values: r2, default: 128), // highlights de blancs +/-
-                Interactive.State("5A", cat: 0x03, r: 0x5A, values: r2, default: 128), // à quel point la feuille de papier est bleue
-                Interactive.State("5B", cat: 0x03, r: 0x5B, values: r2, default: 128), // r
-                Interactive.Line(""),
-                Interactive.State("5C", cat: 0x03, r: 0x5C, values: r2, default: 128), // saturation/ présence de rouge (skin tone changé mais pas coussin vert)
-                Interactive.State("5D", cat: 0x03, r: 0x5D, values: r2, default: 128), // amount of yellow? jaune change, mais pas vert, ni autre ?
-                Interactive.State("5E", cat: 0x03, r: 0x5E, values: r2, default: 128), //
-                Interactive.State("5F", cat: 0x03, r: 0x5F, values: r2, default: 128), // quantité de bleu dans les highlights (coin de fenetre qui se bleute)
-                Interactive.State("60", cat: 0x03, r: 0x60, values: r2, default: 128), // feuille de appier se bleute à nouveau
-                Interactive.State("61", cat: 0x03, r: 0x61, values: r2, default: 128), //
-            ]),
-            */
-            Interactive.Group("--- Group 0 ---", [
-                Interactive.State("50", cat: 0x03, r: 0x50, values: r1, default: 128), // amount of red, 7B to 01 05
-                Interactive.State("56", cat: 0x03, r: 0x56, values: r2, default: 128), // amount of red (smaller increments)
-                Interactive.State("5C", cat: 0x03, r: 0x5C, values: r2, default: 128), // saturation/ présence de rouge (skin tone changé mais pas coussin vert)
-            ]),
-            Interactive.Group("--- Group 1 ---", [
-                Interactive.State("51", cat: 0x03, r: 0x51, values: r1, default: 128), // same, veeeeeery small increments
-                Interactive.State("57", cat: 0x03, r: 0x57, values: r2, default: 128), // amount of green, smaller increments), joue sur la luminosité un peu, ou balance des couleurs mais plus globale à l'image
-                Interactive.State("5D", cat: 0x03, r: 0x5D, values: r2, default: 128), // amount of yellow? jaune change, mais pas vert, ni autre ?
-            ]),
-            Interactive.Group("--- Group 3 ---", [
-                Interactive.State("53", cat: 0x03, r: 0x53, values: r1, default: 128), // r
-                Interactive.State("59", cat: 0x03, r: 0x59, values: r2, default: 128), // highlights de blancs +/-
-                Interactive.State("5F", cat: 0x03, r: 0x5F, values: r2, default: 128), // quantité de bleu dans les highlights (coin de fenetre qui se bleute)
-            ]),
-            Interactive.Group("--- Group 4 ---", [
-                Interactive.State("54", cat: 0x03, r: 0x54, values: r1, default: 128), // lum bleu
-                Interactive.State("5A", cat: 0x03, r: 0x5A, values: r2, default: 128), // à quel point la feuille de papier est bleue
-                Interactive.State("60", cat: 0x03, r: 0x60, values: r2, default: 128), // feuille de appier se bleute à nouveau
-            ]),
-            Interactive.Group("--- Group 2 ---", [
-                Interactive.State("52", cat: 0x03, r: 0x52, values: r1, default: 128), // r
-                Interactive.State("58", cat: 0x03, r: 0x58, values: r2, default: 128), // rien
-                Interactive.State("5E", cat: 0x03, r: 0x5E, values: r2, default: 128), //
-            ]),
-            Interactive.Group("--- Group 5 ---", [
-                Interactive.State("55", cat: 0x03, r: 0x55, values: r1, default: 128), // r
-                Interactive.State("5B", cat: 0x03, r: 0x5B, values: r2, default: 128), // r
-                Interactive.State("61", cat: 0x03, r: 0x61, values: r2, default: 128), //
             ]),
         ]
 
