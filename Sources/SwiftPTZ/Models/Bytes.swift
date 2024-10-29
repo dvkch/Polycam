@@ -14,6 +14,15 @@ extension Bytes {
         self.map(\.stringRepresentation).joined(separator: " ")
     }
     
+    var binRepresentation: String {
+        self.map(\.binRepresentation).joined(separator: " ")
+    }
+    
+    var description: String {
+        #warning("tester")
+        return stringRepresentation
+    }
+    
     enum Comparison {
         case equal, closeEnough, different
     }

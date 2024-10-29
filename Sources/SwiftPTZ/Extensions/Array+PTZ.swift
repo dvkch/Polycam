@@ -33,6 +33,16 @@ extension Array {
     }
 }
 
+extension String {
+    func leftPad(count: Int, padding: Element) -> Self {
+        var copy = self
+        while copy.count < count {
+            copy.insert(padding, at: startIndex)
+        }
+        return copy
+    }
+}
+
 extension Array {
     func split(startFilter: (Element) -> Bool) -> [Self] {
         let startIndicies = enumerated().filter { startFilter($0.element) }.map(\.offset)
@@ -54,8 +64,9 @@ extension Array {
     }
     
     mutating func takeFirst(_ n: Int) -> [Element] {
-        let subarray = Array(self[0..<n])
-        removeFirst(n)
+        let taken = Swift.min(n, count)
+        let subarray = Array(self[0..<taken])
+        removeFirst(taken)
         return subarray
     }
     
