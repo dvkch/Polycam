@@ -119,6 +119,7 @@ extension PTZMessage {
 
             PTZReplyAutoExposure.self,
             PTZReplyAutoFocus.self,
+            PTZReplyAutoSleep.self,
             PTZReplyBacklightCompensation.self,
             PTZReplyBrightness.self,
             PTZReplyCalibrationHue.self, PTZReplyCalibrationLuminance.self, PTZReplyCalibrationSaturation.self,
