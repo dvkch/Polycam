@@ -28,7 +28,7 @@ struct PTZPanOriginalAPI: PTZScaledValue {
 struct PTZRequestSetPan: PTZRequest {
     let pan: PTZPan
     var bytes: Bytes { buildBytes([0x43, 0x04], pan) }
-    var description: String { "Set pan to \(pan.rawValue)" }
+    var description: String { "Set pan to \(pan)" }
 }
 
 struct PTZRequestGetPan: PTZGetRequest {

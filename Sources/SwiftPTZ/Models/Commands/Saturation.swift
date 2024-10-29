@@ -19,7 +19,7 @@ struct PTZSaturation: PTZScaledValue {
 struct PTZRequestSetSaturation: PTZRequest {
     let saturation: PTZSaturation
     var bytes: Bytes { buildBytes([0x43, 0x3e], saturation) }
-    var description: String { "Set saturation to \(saturation.rawValue)" }
+    var description: String { "Set saturation to \(saturation)" }
 }
 
 struct PTZRequestGetSaturation: PTZGetRequest {

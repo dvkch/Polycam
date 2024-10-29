@@ -28,7 +28,7 @@ struct PTZTiltOriginalAPI: PTZScaledValue {
 struct PTZRequestSetTilt: PTZRequest {
     let tilt: PTZTilt
     var bytes: Bytes { buildBytes([0x43, 0x05], tilt) }
-    var description: String { "Set tilt to \(tilt.rawValue)" }
+    var description: String { "Set tilt to \(tilt)" }
 }
 
 struct PTZRequestGetTilt: PTZGetRequest {

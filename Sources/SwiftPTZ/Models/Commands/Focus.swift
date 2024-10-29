@@ -24,7 +24,7 @@ struct PTZRequestStartFocus: PTZRequest {
 struct PTZRequestSetFocus: PTZRequest {
     let focus: PTZFocus
     var bytes: Bytes { buildBytes([0x43, 0x03], focus) }
-    var description: String { "Set focus to \(focus.rawValue)" }
+    var description: String { "Set focus to \(focus)" }
     var modeConditionRescueRequests: [any PTZRequest]? { [PTZRequestSetAutoFocus(enabled: .off)] } /* setting mire mode to True also works */
 }
 

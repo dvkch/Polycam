@@ -32,7 +32,7 @@ struct PTZZoomOriginalAPI: PTZScaledValue {
 struct PTZRequestSetZoom: PTZRequest {
     let zoom: PTZZoom
     var bytes: Bytes { buildBytes([0x43, 0x02], zoom) }
-    var description: String { "Set zoom to \(zoom.rawValue)" }
+    var description: String { "Set zoom to \(zoom)" }
 }
 
 struct PTZRequestGetZoom: PTZGetRequest {

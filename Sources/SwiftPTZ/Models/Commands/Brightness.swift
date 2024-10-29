@@ -19,7 +19,7 @@ struct PTZBrightness: PTZScaledValue {
 struct PTZRequestSetBrightness: PTZRequest {
     let brightness: PTZBrightness
     var bytes: Bytes { buildBytes([0x41, 0x33], brightness) }
-    var description: String { "Set brightness to \(brightness.rawValue)" }
+    var description: String { "Set brightness to \(brightness)" }
 }
 
 struct PTZRequestGetBrightness: PTZGetRequest {

@@ -18,7 +18,7 @@ struct PTZWhiteBalanceTemp: PTZScaledValue {
 struct PTZRequestSetWhiteBalanceTemp: PTZRequest {
     let temp: PTZWhiteBalanceTemp
     var bytes: Bytes { buildBytes([0x43, 0x41], temp) }
-    var description: String { "Set wb temp to \(temp.rawValue)" }
+    var description: String { "Set wb temp to \(temp)" }
 }
 
 struct PTZRequestGetWhiteBalanceTemp: PTZGetRequest {

@@ -18,7 +18,7 @@ struct PTZWhiteBalanceTint: PTZScaledValue {
 struct PTZRequestSetWhiteBalanceTint: PTZRequest {
     let tint: PTZWhiteBalanceTint
     var bytes: Bytes { buildBytes([0x43, 0x40], tint) }
-    var description: String { "Set wb tint to \(tint.rawValue)" }
+    var description: String { "Set wb tint to \(tint)" }
     #warning("set up all mode conditions rescues for all requests")
 }
 

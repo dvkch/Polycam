@@ -19,7 +19,7 @@ struct PTZSharpness: PTZScaledValue {
 struct PTZRequestSetSharpness: PTZRequest {
     let sharpness: PTZSharpness
     var bytes: Bytes { buildBytes([0x43, 0x3d], sharpness) }
-    var description: String { "Set sharpness to \(sharpness.rawValue)" }
+    var description: String { "Set sharpness to \(sharpness)" }
 }
 
 struct PTZRequestGetSharpness: PTZGetRequest {
