@@ -136,7 +136,7 @@ class Camera: Loggable {
         defer { requestLock.unlock() }
         
         log(.info, request.description)
-        log(.debug, "> \(request.bytes.stringRepresentation)")
+        log(.debug, "> \(request.bytes.hexString)")
         serial.sendBytes(request.bytes)
         
         let startDate = Date()
@@ -157,7 +157,7 @@ class Camera: Loggable {
             usleep(1000)
         }
 
-        log(.debug, "< \(bytes.stringRepresentation)")
+        log(.debug, "< \(bytes.hexString)")
 
         let replies = PTZMessage.replies(from: bytes)
         log(.info, replies.map(\.description).joined(separator: ", "))

@@ -9,7 +9,7 @@ import Foundation
 
 struct PTZRawRequest: PTZRequest {
     var bytes: Bytes
-    var description: String { "Raw request: \(bytes.stringRepresentation)" }
+    var description: String { "Raw request: \(bytes.hexString)" }
 }
 
 struct PTZUnknownRequest: PTZRequest {
@@ -21,11 +21,11 @@ struct PTZUnknownRequest: PTZRequest {
         }
         return buildBytes(commandBytes)
     }
-    var description: String { "Unknown request: \(bytes.stringRepresentation)" }
+    var description: String { "Unknown request: \(bytes.hexString)" }
 }
 
 struct PTZReplyUnknown: PTZReply {
     let bytes: Bytes
     init(message: PTZMessage) { self.bytes = message.bytes }
-    var description: String { return "Unknown(\(bytes.stringRepresentation))" }
+    var description: String { return "Unknown(\(bytes.hexString))" }
 }

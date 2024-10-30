@@ -106,8 +106,8 @@ extension Array where Element == UInt16 {
 }
 
 extension Bytes {
-    func stringRepresentation(condensedWith other: Bytes, stoppedEarly: Bool) -> String {
-        guard self != other else { return self.stringRepresentation }
+    func hexString(condensedWith other: Bytes, stoppedEarly: Bool) -> String {
+        guard self != other else { return self.hexString }
 
         var commonLastIndex = 0
         for i in 0..<(Swift.min(count, other.count)) {
@@ -115,10 +115,10 @@ extension Bytes {
                 commonLastIndex = i
             }
         }
-        let part1 = Array( self[(commonLastIndex + 1)..<self.count ]).stringRepresentation
-        let part2 = Array(other[(commonLastIndex + 1)..<other.count]).stringRepresentation
+        let part1 = Array( self[(commonLastIndex + 1)..<self.count ]).hexString
+        let part2 = Array(other[(commonLastIndex + 1)..<other.count]).hexString
         let suffix2 = stoppedEarly ? "+" : ""
-        return Array(self[0...commonLastIndex]).stringRepresentation + " (" + part1 + " -> " + part2 + suffix2 + ")"
+        return Array(self[0...commonLastIndex]).hexString + " (" + part1 + " -> " + part2 + suffix2 + ")"
     }
 
 }

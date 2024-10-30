@@ -78,7 +78,7 @@ class Serial: Loggable {
             readBytes.removeAll()
             let writtenBytes = try port.writeData(Data(bytes))
             if bytes.count > 0 {
-                log(.debug, "Wrote \(writtenBytes) out of \(bytes.count) bytes: \(bytes.stringRepresentation)")
+                log(.debug, "Wrote \(writtenBytes) out of \(bytes.count) bytes: \(bytes.hexString)")
             }
         }
         catch {

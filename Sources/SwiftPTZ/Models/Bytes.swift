@@ -10,17 +10,17 @@ import Foundation
 typealias Bytes = [UInt8]
 
 extension Bytes {
-    var stringRepresentation: String {
-        self.map(\.stringRepresentation).joined(separator: " ")
+    var hexString: String {
+        self.map(\.hexString).joined(separator: " ")
     }
     
-    var binRepresentation: String {
-        self.map(\.binRepresentation).joined(separator: " ")
+    var binString: String {
+        self.map(\.binString).joined(separator: " ")
     }
     
     var description: String {
         #warning("tester")
-        return stringRepresentation
+        return hexString
     }
     
     enum Comparison {

@@ -46,7 +46,7 @@ struct TesterCommand: CamerableCommand {
             
             let tS      = String(format: "%5.03lf", t.timeIntervalSince(startDate)).leftPad(count: 8, padding: " ")
             let tSince  = String(format: "%5.03lf", t.timeIntervalSince(lastDateUnequal)).leftPad(count: 8, padding: " ")
-            print("| \(tS) | \(tSince) | \(currentIsUnequal ? "X" : " ") | \(current.stringRepresentation) | \(current.binRepresentation)")
+            print("| \(tS) | \(tSince) | \(currentIsUnequal ? "X" : " ") | \(current.hexString) | \(current.binString)")
         }
     }
 }

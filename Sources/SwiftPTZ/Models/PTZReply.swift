@@ -12,23 +12,22 @@ protocol PTZReply: CustomStringConvertible {
 }
 
 struct PTZReplyAck: PTZReply {
-    init?(message: PTZMessage) { guard message.bytes.stringRepresentation == "A0" else { return nil } }
+    init?(message: PTZMessage) { guard message.bytes == [0xA0] else { return nil } }
     var description: String { "ACK" }
 }
 
 struct PTZReplyReset: PTZReply {
-    init?(message: PTZMessage) { guard message.bytes.stringRepresentation == "E0" else { return nil } }
+    init?(message: PTZMessage) { guard message.bytes == [0xE0] else { return nil } }
     var description: String { "RESET" }
 }
 
 struct PTZReplyFail: PTZReply {
-    init() {}
-    init?(message: PTZMessage) { guard message.bytes.stringRepresentation == "F0" else { return nil } }
+    init?(message: PTZMessage) { guard message.bytes == [0xF0] else { return nil } }
     var description: String { "FAIL" }
 }
 
 struct PTZReplyExecuted: PTZReply {
-    init?(message: PTZMessage) { guard message.bytes.stringRepresentation == "92 40 00" else { return nil } }
+    init?(message: PTZMessage) { guard message.bytes == [0x92, 0x40, 0x00] else { return nil } }
     var description: String { return "Executed" }
 }
 
@@ -62,7 +61,7 @@ struct PTZReplyNotExecuted: PTZReply {
     let error: PTZCommandError
 
     init?(message: PTZMessage) {
-        guard message.bytes.stringRepresentation.starts(with: "93 40 01") else { return nil }
+        guard message.bytes.starts(with: [0x93, 0x40, 0x01]) else { return nil }
         self.error = message.parseArgument(position: .raw8(3))
     }
     
