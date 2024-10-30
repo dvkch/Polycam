@@ -85,7 +85,7 @@ struct FuzzerCommand: CamerableCommand {
     
     private mutating func fuzz(camera: Camera, initialState: () throws(CameraError) -> ()) throws(CameraError) -> Int {
         let forbiddenCommands: [(Bytes, String)] = [
-            ([0x41, 0x00], "Standby mode"), // Affects the next commands
+            ([0x41, 0x00], "Power mode"),   // Affects the next commands
             ([0x41, 0x10], "Mire mode"),    // Affects the next commands
             ([0x41, 0x13], "Video output"), // Slow to restore itself
             ([0x41, 0x21], "LED mode"),     // Sometimes the reply isn't properly parsable
