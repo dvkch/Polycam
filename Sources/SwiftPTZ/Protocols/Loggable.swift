@@ -33,4 +33,12 @@ extension Loggable {
             print("\(logTag): \(message)")
         }
     }
+    
+    mutating func withLogLevel(_ level: LogLevel, closure: (Self) throws -> ()) rethrows {
+        let prevLevel = self.logLevel
+        defer { self.logLevel = prevLevel }
+
+        self.logLevel = level
+        try closure(self)
+    }
 }
