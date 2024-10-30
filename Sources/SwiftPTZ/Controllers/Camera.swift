@@ -91,15 +91,15 @@ class Camera: Loggable {
 
     func powerOn() {
         let sequence: [any PTZRequest] = [
-            PTZRequestSetStandbyMode(mode: .unknown1), // off ?
+            PTZRequestSetPowerMode(mode: .on),
             PTZRequestHelloMPTZ11(),
             PTZRequestSetDevMode(enabled: .on),
             PTZRequestSetMireMode(enabled: .off),
             PTZRequestSetColors(enabled: .on),
             PTZRequestSetLedMode(color: .default, mode: .default),
+            PTZRequestSetLedIntensity(red: .default, green: .default, blue: .default),
             PTZRequestSetVideoOutputMode(mode: .default),
             PTZRequestSetShutterSpeed(speed: .default),
-            PTZRequestSetVolume(volume: .default),
             // PTZRequestSetPosition(pan: .default, tilt: .default, zoom: .default),
             PTZRequestSetInvertedMode(enabled: .off),
             PTZRequestSetAutoFocus(enabled: .on),
@@ -114,15 +114,14 @@ class Camera: Loggable {
 
         log(.info, "Starting boot sequence...")
         for request in sequence {
-            sendRequest(request, repeatUntilAck: !(request is PTZRequestSetStandbyMode), errorToRetry: .modeCondition)
+            sendRequest(request, repeatUntilAck: !(request is PTZRequestSetPowerMode), errorToRetry: .modeCondition)
         }
         log(.info, "Finished boot sequence")
     }
     
     func powerOff() {
-        #warning("set off back")
         _ = try? sendRequest2(PTZRequestSetLedMode(color: .off, mode: .off))
-        _ = try? sendRequest2(PTZRequestSetStandbyMode(mode: .on)) // TODO: maybe it disconnects the port ?
+        _ = try? sendRequest2(PTZRequestSetPowerMode(mode: .standby))
         while serial.readAllBytes() != [0x00] {
             Thread.sleep(forTimeInterval: 0.1)
         }

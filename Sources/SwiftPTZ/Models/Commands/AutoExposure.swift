@@ -7,6 +7,7 @@
 
 import Foundation
 
+#warning("Add comments to all the states, explaning how they were found and how they work")
 struct PTZRequestSetAutoExposure: PTZRequest {
     let enabled: PTZBool
     var bytes: Bytes { buildBytes([0x42, 0x11], enabled) }

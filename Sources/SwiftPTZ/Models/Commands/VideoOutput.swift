@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  VideoOutput.swift
+//
 //
 //  Created by syan on 05/07/2024.
 //
@@ -8,22 +8,21 @@
 import Foundation
 
 enum PTZVideoOutputMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
-#warning("Integrate new resolutions: 00, 0A, 10, 1A (18 or 08 never seemed to work)")
-#warning("TEST RESOLUTIONS WITHOUT THE EXTRA 0x10 (seems to be a parameter for something else, not sure what)")
-    #warning("FUZZ TO FIND ALL OTHER RESOLUTIONS")
-    case resolution720p  = 0x10
-    case resolution1080i = 0x18
-    case resolution1080p = 0x1a
+    case unknown00         = 0x00
+    case unknown0A         = 0x0a
+    case resolution720p60  = 0x10
+    case resolution1080p60 = 0x1a
     
     var description: String {
         switch self {
-        case .resolution720p:  return "720p"
-        case .resolution1080i: return "1080i"
-        case .resolution1080p: return "1080p"
+        case .unknown00:         return "Unknown(00)"
+        case .unknown0A:         return "Unknown(0A)"
+        case .resolution720p60:  return "720p60"
+        case .resolution1080p60: return "1080p60"
         }
     }
     
-    static var `default`: PTZVideoOutputMode { .resolution1080p }
+    static var `default`: PTZVideoOutputMode { .resolution1080p60 }
 }
 
 struct PTZRequestSetVideoOutputMode: PTZRequest {

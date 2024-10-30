@@ -288,7 +288,7 @@ extension FuzzerResult {
             }
             else if category == 0x45, register == 0x32 {
                 isRequestKnown = true
-                replyName += ": \(PTZRequestReset(reset: .sensorAndMotors))"
+                replyName += ": \(PTZRequestReset(reset: .settings))"
             }
             else {
                 isRequestKnown = false

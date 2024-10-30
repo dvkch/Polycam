@@ -13,7 +13,6 @@ struct PTZRequestSetPosition: PTZRequest {
     let zoom: PTZZoom
     
     var bytes: Bytes {
-        #warning("There is a `focus` argument, let's try to see where it goes, maybe by analyzing the `get` reply")
         return buildBytes(
             [0x41, 0x51],
             PTZArgument(pan,  .custom(hiIndex:  5, loIndex:  6, loRetainerIndex:  3, loRetainerMask: 0x04)),

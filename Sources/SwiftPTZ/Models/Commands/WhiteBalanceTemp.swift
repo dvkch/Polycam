@@ -5,11 +5,10 @@
 //  Created by syan on 22/09/2024.
 //
 
-#warning("confirm min/max")
 struct PTZWhiteBalanceTemp: PTZScaledValue {
     var rawValue: Int
-    static var minValue: Int = 95
-    static var maxValue: Int = 160
+    static var minValue: Int = 96
+    static var maxValue: Int = 159
     static var ptzOffset: Int = 0
     static var ptzScale: Double = 1
     static var `default`: PTZWhiteBalanceTemp { .init(rawValue: 128) }
@@ -19,6 +18,7 @@ struct PTZRequestSetWhiteBalanceTemp: PTZRequest {
     let temp: PTZWhiteBalanceTemp
     var bytes: Bytes { buildBytes([0x43, 0x41], temp) }
     var description: String { "Set wb temp to \(temp)" }
+    var modeConditionRescueRequests: [any PTZRequest] { [PTZRequestSetWhiteBalance(mode: .manual)] }
 }
 
 struct PTZRequestGetWhiteBalanceTemp: PTZGetRequest {
