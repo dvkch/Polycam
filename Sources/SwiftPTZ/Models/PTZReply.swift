@@ -31,6 +31,12 @@ struct PTZReplyExecuted: PTZReply {
     var description: String { return "Executed" }
 }
 
+struct PTZReplyTimeout: PTZReply {
+    init() {}
+    init?(message: PTZMessage) {}
+    var description: String { return "TIMEOUT" }
+}
+
 struct PTZReplyNotExecuted: PTZReply {
     enum PTZCommandError: UInt16, RawRepresentable, CaseIterable, CustomStringConvertible, PTZValue {
         case modeCondition      = 0x00

@@ -76,7 +76,7 @@ class Camera: Loggable {
             log(.fatal, "Unexpected camera reply for \(request), expected ACK then a reply, got: \(replies)")
             throw CameraError.missingAck
         }
-        return (bytes, replies.last ?? PTZReplyFail())
+        return (bytes, replies.element(at: 1) ?? PTZReplyTimeout())
     }
 
     subscript<T: PTZValue>(_ state: any PTZState<T>) -> T? {

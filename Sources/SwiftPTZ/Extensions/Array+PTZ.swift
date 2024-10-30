@@ -13,6 +13,13 @@ extension RandomAccessCollection where Self.Index == Int {
         let lastIndex = Swift.max(0, count)
         return Array(self[firstIndex..<lastIndex])
     }
+    
+    func element(at index: Int) -> Element? {
+        if index < count {
+            return self[index]
+        }
+        return nil
+    }
 }
 
 extension Collection where Element : BinaryInteger {

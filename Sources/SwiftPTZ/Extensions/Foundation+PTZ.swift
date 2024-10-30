@@ -15,6 +15,10 @@ extension Bool {
     }
 }
 
+func with<T, U>(_ value: T, _ closure: (T) -> U) -> U {
+    closure(value)
+}
+
 protocol BinaryNumber: SignedNumeric, Comparable {
     init(_ value: UInt16)
     static func / (lhs: Self, rhs: Self) -> Self
