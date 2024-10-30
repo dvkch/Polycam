@@ -9,7 +9,7 @@ import Foundation
 import ArgumentParser
 
 struct BenchmarkCommand: CamerableCommand {
-    static var configuration: CommandConfiguration = .init(commandName: "batch")
+    static var configuration: CommandConfiguration = .init(commandName: "benchmark")
     
     @Option(name: .customLong("serial-device"), help: "PTZ serial device name")
     var serialDevice: String?

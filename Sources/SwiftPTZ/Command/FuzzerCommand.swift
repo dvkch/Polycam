@@ -15,8 +15,6 @@ struct FuzzerCommand: CamerableCommand {
     @Option(name: .customLong("serial-device"), help: "PTZ serial device name")
     var serialDevice: String?
     
-    private var firstColLength = 25
-
     mutating func run(camera: Camera) throws(CameraError) {
         camera.logLevel = .error
 
@@ -30,9 +28,8 @@ struct FuzzerCommand: CamerableCommand {
         })
         speak("Done")
 
-        printCategoryName("Stats")
+        Printer.printHeader("Stats")
         print("Duration:", Int(Date().timeIntervalSince(d)), "seconds")
-        print("First column width:", firstColLength, "chars")
     }
     
     private mutating func fuzz(camera: Camera, initialState: () throws(CameraError) -> ()) throws(CameraError) {
@@ -68,7 +65,7 @@ struct FuzzerCommand: CamerableCommand {
             .init(0x42, args: true, restore: true, "Setters"),
             .init(0x43, args: true, restore: true, "Setters"),
             // .init(0x44, args: true, "Unknown"),                  // - not executed: syntax error
-            .init(0x45, args: true, "Actions"),                     //
+            .init(0x45, args: true, "Actions"),
             // .init(0x46, args: true, "Unknown"),                  // - not executed: command not defined
             // .init(0x47, args: true, "Unknown"),                  // - not executed: syntax error
             // .init(0x48, args: true, "Unknown"),                  // - not executed: syntax error
@@ -84,12 +81,12 @@ struct FuzzerCommand: CamerableCommand {
         for category in categories {
             guard !category.registers.isEmpty else { continue }
 
-            printCategoryName(category.name)
+            var resultTable = [[String]]()
             try initialState()
 
             for register in category.registers {
                 if let forbidden = forbiddenCommands.first(where: { $0.0 == [category.category, register] }) {
-                    printSkipped(cat: category.category, reg: register, description: forbidden.1)
+                    printSkipped(cat: category.category, reg: register, description: forbidden.1, table: &resultTable)
                     continue
                 }
                 
@@ -108,7 +105,7 @@ struct FuzzerCommand: CamerableCommand {
                 do {
                     let req = PTZUnknownRequest(commandBytes: [category.category, register], arg: nil)
                     let (replyBytes, reply) = try camera.sendRequest2(req)
-                    printResult(.init(category: category.category, register: register, reply: reply, replyBytes: replyBytes, sentArg: false, firstArg: 0, lastArg: 0))
+                    printResult(.init(category: category.category, register: register, reply: reply, replyBytes: replyBytes, sentArg: false, firstArg: 0, lastArg: 0), to: &resultTable)
                 }
                 catch {}
                 
@@ -157,32 +154,31 @@ struct FuzzerCommand: CamerableCommand {
                 
                 // print all argument ranges that we found
                 for reply in replies {
-                    printResult(reply)
+                    printResult(reply, to: &resultTable)
                 }
             }
+
+            Printer.printHeader(category.name)
+            Printer.printTable(resultTable, headers: ["Request", "Status", "Reply & notes"], closeLastColumn: false)
         }
     }
     
-    mutating func printCategoryName(_ name: String) {
-        print("")
-        print("")
-        print(name)
-        print(String(repeating: "-", count: name.count))
-    }
-    
-    private func printSkipped(cat: UInt8, reg: UInt8, description: String) {
-        let requestName = ("8x " + [cat, reg].stringRepresentation).padding(toLength: firstColLength, withPad: " ", startingAt: 0)
-        print("\(requestName) | X | Skipped: \(description)")
+    private func printSkipped(cat: UInt8, reg: UInt8, description: String, table: inout [[String]]) {
+        table.append([
+            ("8x " + [cat, reg].stringRepresentation),
+            "  √",
+            "Skipped: \(description)"
+        ])
     }
 
-    private mutating func printResult(_ result: FuzzerResult) {
+    private func printResult(_ result: FuzzerResult, to table: inout [[String]]) {
         guard result.shouldBeIncludedInOutput else { return }
-
-        var outputDetails = result.outputDetails
-        firstColLength = max(firstColLength, outputDetails.requestName.count)
-        outputDetails.requestName = outputDetails.requestName.padding(toLength: firstColLength, withPad: " ", startingAt: 0)
-
-        print("\(outputDetails.requestName) | \(outputDetails.reqKnown ? "X" : " ") | \(outputDetails.replyName)")
+        
+        table.append([
+            result.outputDetails.requestName,
+            result.outputDetails.reqKnown ? "  √" : " ",
+            result.outputDetails.replyName
+        ])
     }
 }
 
