@@ -16,27 +16,13 @@ struct PTZContrast: PTZScaledValue {
     static var `default`: PTZContrast { .init(rawValue: 10) }
 }
 
-struct PTZRequestSetContrast: PTZRequest {
-    let contrast: PTZContrast
-    var message: PTZMessage { .init([0x41, 0x32], contrast) }
-    var description: String { "Set contrast to \(contrast)" }
-}
+struct PTZContrastState: PTZSingleValueState {
+    static var name: String = "Contrast"
+    static var register: (UInt8, UInt8) = (0x01, 0x32)
 
-struct PTZRequestGetContrast: PTZGetRequest {
-    typealias Reply = PTZReplyContrast
-    var message: PTZMessage { .init([0x01, 0x32]) }
-    var description: String { "Get contrast" }
-}
-
-struct PTZReplyContrast: PTZSpecificReply {
-    let contrast: PTZContrast
+    var value: PTZContrast
     
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x41, 0x32]) else { return nil }
-        self.contrast = message.parseArgument(position: .single)
-    }
-    
-    var description: String {
-        return "Contrast(\(contrast))"
+    init(_ value: PTZContrast) {
+        self.value = value
     }
 }

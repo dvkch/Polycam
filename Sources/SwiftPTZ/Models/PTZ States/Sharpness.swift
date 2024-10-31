@@ -16,27 +16,13 @@ struct PTZSharpness: PTZScaledValue {
     static var `default`: PTZSharpness { .init(rawValue: 6) }
 }
 
-struct PTZRequestSetSharpness: PTZRequest {
-    let sharpness: PTZSharpness
-    var message: PTZMessage { .init([0x43, 0x3d], sharpness) }
-    var description: String { "Set sharpness to \(sharpness)" }
-}
-
-struct PTZRequestGetSharpness: PTZGetRequest {
-    typealias Reply = PTZReplySharpness
-    var message: PTZMessage { .init([0x03, 0x3d]) }
-    var description: String { "Get sharpness" }
-}
-
-struct PTZReplySharpness: PTZSpecificReply {
-    let sharpness: PTZSharpness
+struct PTZSharpnessState: PTZSingleValueState {
+    static var name: String = "Sharpness"
+    static var register: (UInt8, UInt8) = (0x03, 0x3D)
     
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x43, 0x3d]) else { return nil }
-        self.sharpness = message.parseArgument(position: .single)
-    }
+    var value: PTZSharpness
     
-    var description: String {
-        return "Sharpness(\(sharpness))"
+    init(_ value: PTZSharpness) {
+        self.value = value
     }
 }

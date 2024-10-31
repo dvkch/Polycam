@@ -14,29 +14,23 @@ struct PTZWhiteBalanceTemp: PTZScaledValue {
     static var `default`: PTZWhiteBalanceTemp { .init(rawValue: 128) }
 }
 
-struct PTZRequestSetWhiteBalanceTemp: PTZRequest {
-    let temp: PTZWhiteBalanceTemp
-    var message: PTZMessage { .init([0x43, 0x41], temp) }
-    var description: String { "Set wb temp to \(temp)" }
-    var modeConditionRescueRequests: [any PTZRequest] { [PTZRequestSetWhiteBalance(mode: .manual)] }
-}
+struct PTZWhiteBalanceTempState: PTZSingleValueState {
+    static var name: String = "WhiteBalanceTemp"
+    static var register: (UInt8, UInt8) = (0x03, 0x41)
 
-struct PTZRequestGetWhiteBalanceTemp: PTZGetRequest {
-    typealias Reply = PTZReplyWhiteBalanceTemp
-    var message: PTZMessage { .init([0x03, 0x41]) }
-    var description: String { "Get wb temp" }
-}
-
-struct PTZReplyWhiteBalanceTemp: PTZSpecificReply {
-    let temp: PTZWhiteBalanceTemp
+    var value: PTZWhiteBalanceTemp
     
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x43, 0x41]) else { return nil }
-        self.temp = message.parseArgument(position: .single)
+    init(_ value: PTZWhiteBalanceTemp) {
+        self.value = value
     }
     
-    var description: String {
-        return "WBTemp(\(temp))"
+    func set() -> any PTZRequest {
+        return PTZStateRequest(
+            name: "Set \(description)",
+            message: .init([Self.register.0 + 0x40, Self.register.1], value),
+            modeConditionRescueRequests: [PTZWhiteBalanceState(.manual).set()]
+        )
+#warning("set up all mode conditions rescues for all requests")
     }
 }
 

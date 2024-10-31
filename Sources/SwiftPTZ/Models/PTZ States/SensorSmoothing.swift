@@ -7,27 +7,13 @@
 
 import Foundation
 
-struct PTZRequestSetSensorSmoothing: PTZRequest {
-    let enabled: PTZBool
-    var message: PTZMessage { .init([0x41, 0x3B], enabled) }
-    var description: String { "Set sensor smoothing \(enabled)" }
-}
+struct PTZSensorSmoothingState: PTZSingleValueState {
+    static var name: String = "SensorSmoothing"
+    static var register: (UInt8, UInt8) = (0x01, 0x3B)
 
-struct PTZRequestGetSensorSmoothing: PTZGetRequest {
-    typealias Reply = PTZReplySensorSmoothing
-    var message: PTZMessage { .init([0x01, 0x3B]) }
-    var description: String { "Get sensor smoothing" }
-}
-
-struct PTZReplySensorSmoothing: PTZSpecificReply {
-    let enabled: PTZBool
+    var value: PTZBool
     
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x41, 0x3B]) else { return nil }
-        self.enabled = message.parseArgument(position: .single)
-    }
-    
-    var description: String {
-        return "SensorSmoothing(\(enabled))"
+    init(_ value: PTZBool) {
+        self.value = value
     }
 }

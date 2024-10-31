@@ -14,30 +14,23 @@ struct PTZWhiteBalanceTint: PTZScaledValue {
     static var `default`: PTZWhiteBalanceTint { .init(rawValue: 128) }
 }
 
-struct PTZRequestSetWhiteBalanceTint: PTZRequest {
-    let tint: PTZWhiteBalanceTint
-    var message: PTZMessage { .init([0x43, 0x40], tint) }
-    var description: String { "Set wb tint to \(tint)" }
-    var modeConditionRescueRequests: [any PTZRequest] { [PTZRequestSetWhiteBalance(mode: .manual)] }
-    #warning("set up all mode conditions rescues for all requests")
-}
+struct PTZWhiteBalanceTintState: PTZSingleValueState {
+    static var name: String = "WhiteBalanceTint"
+    static var register: (UInt8, UInt8) = (0x03, 0x40)
 
-struct PTZRequestGetWhiteBalanceTint: PTZGetRequest {
-    typealias Reply = PTZReplyWhiteBalanceTint
-    var message: PTZMessage { .init([0x03, 0x40]) }
-    var description: String { "Get wb tint" }
-}
-
-struct PTZReplyWhiteBalanceTint: PTZSpecificReply {
-    let tint: PTZWhiteBalanceTint
+    var value: PTZWhiteBalanceTint
     
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x43, 0x40]) else { return nil }
-        self.tint = message.parseArgument(position: .single)
+    init(_ value: PTZWhiteBalanceTint) {
+        self.value = value
     }
     
-    var description: String {
-        return "WBTint(\(tint))"
+    func set() -> any PTZRequest {
+        return PTZStateRequest(
+            name: "Set \(description)",
+            message: .init([Self.register.0 + 0x40, Self.register.1], value),
+            modeConditionRescueRequests: [PTZWhiteBalanceState(.manual).set()]
+        )
+#warning("set up all mode conditions rescues for all requests")
     }
 }
 

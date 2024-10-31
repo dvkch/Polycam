@@ -1,6 +1,6 @@
 //
 //  Brightness.swift
-//  
+//
 //
 //  Created by syan on 05/07/2024.
 //
@@ -16,27 +16,13 @@ struct PTZBrightness: PTZScaledValue {
     static var `default`: PTZBrightness { .init(rawValue: 11) }
 }
 
-struct PTZRequestSetBrightness: PTZRequest {
-    let brightness: PTZBrightness
-    var message: PTZMessage { .init([0x41, 0x33], brightness) }
-    var description: String { "Set brightness to \(brightness)" }
-}
+struct PTZBrightnessState: PTZSingleValueState {
+    static var name: String = "Brightness"
+    static var register: (UInt8, UInt8) = (0x01, 0x33)
 
-struct PTZRequestGetBrightness: PTZGetRequest {
-    typealias Reply = PTZReplyBrightness
-    var message: PTZMessage { .init([0x01, 0x33]) }
-    var description: String { "Get Brightness" }
-}
-
-struct PTZReplyBrightness: PTZSpecificReply {
-    let brightness: PTZBrightness
+    var value: PTZBrightness
     
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x41, 0x33]) else { return nil }
-        self.brightness = message.parseArgument(position: .single)
-    }
-    
-    var description: String {
-        return "Brightness(\(brightness))"
+    init(_ value: PTZBrightness) {
+        self.value = value
     }
 }

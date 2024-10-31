@@ -7,27 +7,13 @@
 
 import Foundation
 
-struct PTZRequestSetVignetteCorrection: PTZRequest {
-    let enabled: PTZBool
-    var message: PTZMessage { .init([0x41, 0x3D], enabled) }
-    var description: String { "Set vignette correction \(enabled)" }
-}
+struct PTZVignetteCorrectionState: PTZSingleValueState {
+    static var name: String = "VignetteCorrection"
+    static var register: (UInt8, UInt8) = (0x01, 0x3D)
 
-struct PTZRequestGetVignetteCorrection: PTZGetRequest {
-    typealias Reply = PTZReplyVignetteCorrection
-    var message: PTZMessage { .init([0x01, 0x3D]) }
-    var description: String { "Get vignette correction" }
-}
-
-struct PTZReplyVignetteCorrection: PTZSpecificReply {
-    let enabled: PTZBool
+    var value: PTZBool
     
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x41, 0x3D]) else { return nil }
-        self.enabled = message.parseArgument(position: .single)
-    }
-    
-    var description: String {
-        return "VignetteCorrection(\(enabled))"
+    init(_ value: PTZBool) {
+        self.value = value
     }
 }

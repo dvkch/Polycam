@@ -33,33 +33,19 @@ enum PTZWhiteBalance: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     static var `default`: PTZWhiteBalance { .auto }
 }
 
-struct PTZRequestSetWhiteBalance: PTZRequest {
-    let mode: PTZWhiteBalance
-    var message: PTZMessage { .init([0x42, 0x12], mode) }
-    var description: String { "Set white balance to \(mode.description)" }
+struct PTZWhiteBalanceState: PTZSingleValueState {
+    static var name: String = "WhiteBalance"
+    static var register: (UInt8, UInt8) = (0x02, 0x12)
+
+    var value: PTZWhiteBalance
+    
+    init(_ value: PTZWhiteBalance) {
+        self.value = value
+    }
 }
 
 struct PTZRequestStartManualWhiteBalanceCalibration: PTZRequest {
     var message: PTZMessage { .init([0x45, 0x17]) }
     var waitingTimeIfExecuted: TimeInterval { 2 }
     var description: String { "Start manual white balance calibration" }
-}
-
-struct PTZRequestGetWhiteBalance: PTZGetRequest {
-    typealias Reply = PTZReplyWhiteBalance
-    var message: PTZMessage { .init([0x02, 0x12]) }
-    var description: String { "Get white balance" }
-}
-
-struct PTZReplyWhiteBalance: PTZSpecificReply {
-    let mode: PTZWhiteBalance
-
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x42, 0x12]) else { return nil }
-        self.mode = message.parseArgument(position: .single)
-    }
-    
-    var description: String {
-        return "WhiteBalance(\(mode.description))"
-    }
 }

@@ -16,32 +16,19 @@ struct PTZIrisLevel: PTZScaledValue {
     static var `default`: PTZIrisLevel { .init(rawValue: 0) }
 }
 
-struct PTZRequestSetIrisLevel: PTZRequest {
-    let irisLevel: PTZIrisLevel
-    var message: PTZMessage { .init([0x43, 0x00], irisLevel) }
-    var description: String { "Set iris level to \(irisLevel)" }
+struct PTZIrisLevelState: PTZSingleValueState {
+    static var name: String = "IrisLevel"
+    static var register: (UInt8, UInt8) = (0x03, 0x00)
+    
+    var value: PTZIrisLevel
+    
+    init(_ value: PTZIrisLevel) {
+        self.value = value
+    }
+    
     var modeConditionRescueRequests: [any PTZRequest] { [
-        PTZRequestSetAutoExposure(enabled: .off),
-        PTZRequestSetGainMode(gain: .gain0dB),
-        PTZRequestSetBacklightCompensation(enabled: .off)
+        PTZAutoExposureState(.off).set(),
+        PTZGainModeState(.gain0dB).set(),
+        PTZBacklightCompensationState(.off).set()
     ] }
-}
-
-struct PTZRequestGetIrisLevel: PTZGetRequest {
-    typealias Reply = PTZReplyIrisLevel
-    var message: PTZMessage { .init([0x03, 0x00]) }
-    var description: String { "Get iris level" }
-}
-
-struct PTZReplyIrisLevel: PTZSpecificReply {
-    let irisLevel: PTZIrisLevel
-    
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x43, 0x00]) else { return nil }
-        self.irisLevel = message.parseArgument(position: .single)
-    }
-    
-    var description: String {
-        return "IrisLevel(\(irisLevel))"
-    }
 }

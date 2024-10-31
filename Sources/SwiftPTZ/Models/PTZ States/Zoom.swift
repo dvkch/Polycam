@@ -29,27 +29,13 @@ struct PTZZoomOriginalAPI: PTZScaledValue {
     // 64 => 1529
 }
 
-struct PTZRequestSetZoom: PTZRequest {
-    let zoom: PTZZoom
-    var message: PTZMessage { .init([0x43, 0x02], zoom) }
-    var description: String { "Set zoom to \(zoom)" }
-}
-
-struct PTZRequestGetZoom: PTZGetRequest {
-    typealias Reply = PTZReplyZoom
-    var message: PTZMessage { .init([0x03, 0x02]) }
-    var description: String { "Get zoom" }
-}
-
-struct PTZReplyZoom: PTZSpecificReply {
-    let zoom: PTZZoom
+struct PTZZoomState: PTZSingleValueState {
+    static var name: String = "Zoom"
+    static var register: (UInt8, UInt8) = (0x03, 0x02)
     
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x43, 0x02]) else { return nil }
-        self.zoom = message.parseArgument(position: .single)
-    }
+    var value: PTZZoom
     
-    var description: String {
-        return "Zoom(\(zoom))"
+    init(_ value: PTZZoom) {
+        self.value = value
     }
 }

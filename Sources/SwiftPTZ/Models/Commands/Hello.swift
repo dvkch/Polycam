@@ -7,23 +7,28 @@
 
 import Foundation
 
-struct PTZRequestHelloMPTZ11: PTZGetRequest {
-    typealias Reply = PTZReplyHelloMPTZ11
-    var message: PTZMessage { .init([0x06, 0x77]) }
-    var description: String { return "Hello MPTZ 11" }
-}
-
 // 8f 30 46 77 06 30 31 30 30 30 30 35 37 30 31 30 31 30 30 35 32 30 31 30 30 30 30 32 31 30 31 30 30 30 30 30 36 32 39 35 30 30 31 30 31 30 30 34 38
 // 8f 30 46 77 06 01000057 01010052 01000021 01000006 2950 01010048
 // From logs: MPTZ_11, sysver = "01000057", camver = "01010052", lensver = "", promver = "", backver = "01000021", bootver = "01000006", splver = "2950", pkgver = "01010048"
 
-struct PTZReplyHelloMPTZ11: PTZSpecificReply {
-    let sysVer: String
-    let camVer: String
-    let backVer: String
-    let bootVer: String
-    let splVer: String
-    let pkgVer: String
+struct PTZHelloState: PTZInvariantState {
+    static var name: String = "Hello"
+    static var register: (UInt8, UInt8) = (0x06, 0x77)
+    
+#warning("Find way to define tuple on the fly (macro?) as proper type and make it CustomStringConvertible")
+    struct Details: Equatable {
+        let sysVer: String
+        let camVer: String
+        let backVer: String
+        let bootVer: String
+        let splVer: String
+        let pkgVer: String
+    }
+    var value: Details
+    
+    init(_ value: Details) {
+        self.value = value
+    }
     
     init?(message: PTZMessage) {
         // idk why sometimes it is 0x05, sometimes 0x06... i would have also expected to be waiting for 46 77, which
@@ -33,15 +38,22 @@ struct PTZReplyHelloMPTZ11: PTZSpecificReply {
         guard message.isValidReply([0x06, 0x77]) || message.isValidReply([0x05, 0x77]) else { return nil }
         var packed = message.decodePackedData()
         guard packed.count >= 44 else { return nil }
-        sysVer  = packed.takeFirst(8).map { String($0) }.joined()
-        camVer  = packed.takeFirst(8).map { String($0) }.joined()
-        backVer = packed.takeFirst(8).map { String($0) }.joined()
-        bootVer = packed.takeFirst(8).map { String($0) }.joined()
-        splVer  = packed.takeFirst(4).map { String($0) }.joined()
-        pkgVer  = packed.takeFirst(8).map { String($0) }.joined()
+        self.value = .init(
+            sysVer:  packed.takeFirst(8).map { String($0) }.joined(),
+            camVer:  packed.takeFirst(8).map { String($0) }.joined(),
+            backVer: packed.takeFirst(8).map { String($0) }.joined(),
+            bootVer: packed.takeFirst(8).map { String($0) }.joined(),
+            splVer:  packed.takeFirst(4).map { String($0) }.joined(),
+            pkgVer:  packed.takeFirst(8).map { String($0) }.joined()
+        )
     }
     
+    func set() -> any PTZRequest {
+        return PTZStateRequest(name: "READONLY", message: .init([]))
+    }
+    
+#warning("mark as readonly")
     var description: String {
-        return "MPTZ 11(sysVer=\(sysVer) camVer=\(camVer) backVer=\(backVer) bootVer=\(bootVer) splVer=\(splVer) pkgVer=\(pkgVer))"
+        return "MPTZ 11(sysVer=\(value.sysVer) camVer=\(value.camVer) backVer=\(value.backVer) bootVer=\(value.bootVer) splVer=\(value.splVer) pkgVer=\(value.pkgVer))"
     }
 }

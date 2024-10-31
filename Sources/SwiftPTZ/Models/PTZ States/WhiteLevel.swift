@@ -21,27 +21,13 @@ enum PTZWhiteLevel: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     static var `default`: PTZWhiteLevel { .reduced }
 }
 
-struct PTZRequestSetWhiteLevel: PTZRequest {
-    let level: PTZWhiteLevel
-    var message: PTZMessage { .init([0x43, 0x3F], level) }
-    var description: String { "Set white level \(level.description)" }
-}
+struct PTZWhiteLevelState: PTZSingleValueState {
+    static var name: String = "WhiteLevel"
+    static var register: (UInt8, UInt8) = (0x03, 0x3F)
 
-struct PTZRequestGetWhiteLevel: PTZGetRequest {
-    typealias Reply = PTZReplyWhiteLevel
-    var message: PTZMessage { .init([0x03, 0x3F]) }
-    var description: String { "Get white level" }
-}
-
-struct PTZReplyWhiteLevel: PTZSpecificReply {
-    let level: PTZWhiteLevel
-
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x43, 0x3F]) else { return nil }
-        self.level = message.parseArgument(position: .single)
-    }
+    var value: PTZWhiteLevel
     
-    var description: String {
-        return "WhiteLevel(\(level.description))"
+    init(_ value: PTZWhiteLevel) {
+        self.value = value
     }
 }

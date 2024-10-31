@@ -15,6 +15,7 @@ enum PTZReply: CustomStringConvertible {
     case executed
     case notExecuted(error: CommandError)
     case specific(bytes: Bytes, content: any PTZSpecificReply)
+    case state(bytes: Bytes, state: any PTZState)
     case unknown(bytes: Bytes)
 
     enum CommandError: UInt16, RawRepresentable, CaseIterable, CustomStringConvertible, PTZValue {
@@ -61,6 +62,9 @@ enum PTZReply: CustomStringConvertible {
         else if let reply = Self.availableSpecificReplies.compactMap({ $0.init(message: message) }).first {
             self = .specific(bytes: message.bytes, content: reply)
         }
+        else if let state = Self.availableStates.compactMap({ $0.init(message: message) }).first {
+            self = .state(bytes: message.bytes, state: state)
+        }
         else {
             self = .unknown(bytes: message.bytes)
         }
@@ -75,6 +79,7 @@ enum PTZReply: CustomStringConvertible {
         case .executed:             return [0x92, 0x40, 0x00]
         case .notExecuted(let e):   return [0x93, 0x40, 0x01, UInt8(e.rawValue)]
         case .specific(let b, _):   return b
+        case .state(let b, _):      return b
         case .unknown(let b):       return b
         }
     }
@@ -102,6 +107,7 @@ enum PTZReply: CustomStringConvertible {
         case .executed:             return "Executed"
         case .notExecuted(let e):   return "Not executed: \(e)"
         case .specific(_, let r):   return r.description
+        case .state(_, let s):      return s.description
         case .unknown(let b):       return "Unknown(\(b.hexString)"
         }
     }
@@ -113,6 +119,7 @@ extension PTZReply: Equatable {
     }
 }
 
+#warning("remove this ASAP")
 protocol PTZSpecificReply: CustomStringConvertible {
     init?(message: PTZMessage)
 }
@@ -120,44 +127,49 @@ protocol PTZSpecificReply: CustomStringConvertible {
 extension PTZReply {
     static var availableSpecificReplies: [any PTZSpecificReply.Type] {
         return [
-            PTZReplyAutoExposure.self,
-            PTZReplyAutoFocus.self,
-            PTZReplyAutoSleep.self,
-            PTZReplyBacklightCompensation.self,
-            PTZReplyBrightness.self,
-            PTZReplyCalibrationHue.self, PTZReplyCalibrationLuminance.self, PTZReplyCalibrationSaturation.self,
-            PTZReplyClock.self,
-            PTZReplyColors.self,
-            PTZReplyContrast.self,
-            PTZReplyDevMode.self,
             PTZReplyDrunkTestPhase.self,
-            PTZReplyFocus.self,
-            PTZReplyGainMode.self, PTZReplyEffectiveGain.self, PTZReplyRedGain.self, PTZReplyBlueGain.self,
-            PTZReplyHelloMPTZ11.self,
-            PTZReplyInvertedMode.self,
-            PTZReplyIrisLevel.self,
-            PTZReplyLedIntensity.self,
-            PTZReplyLedMode.self,
-            PTZReplyMireMode.self,
             PTZReplyMotorStats.self,
-            PTZReplyNoiseReduction.self,
-            PTZReplyPan.self,
             PTZReplyPosition.self,
-            PTZReplyPowerMode.self,
             PTZReplyPreset.self,
-            PTZReplySaturation.self,
-            PTZReplySensorSmoothing.self,
-            PTZReplySharpness.self,
-            PTZReplyShutterSpeed.self,
-            PTZReplyTilt.self,
-            PTZReplyVideoOutputMode.self,
-            PTZReplyVignetteCorrection.self,
-            PTZReplyWhiteBalance.self,
-            PTZReplyWhiteBalanceTemp.self,
-            PTZReplyWhiteBalanceTint.self,
-            PTZReplyWhiteLevel.self,
-            PTZReplyWideDynamicRange.self,
-            PTZReplyZoom.self,
+        ]
+    }
+    
+    static var availableStates: [any PTZState.Type] {
+        return [
+            PTZAutoExposureState.self,
+            PTZAutoFocusState.self,
+            PTZBacklightCompensationState.self,
+            PTZBrightnessState.self,
+            PTZCalibrationHueState.self, PTZCalibrationLuminanceState.self, PTZCalibrationSaturationState.self,
+            PTZClockState.self,
+            PTZColorsState.self,
+            PTZContrastState.self,
+            PTZDevModeState.self,
+            PTZFocusState.self,
+            PTZGainModeState.self, PTZEffectiveGainState.self, PTZRedGainState.self, PTZBlueGainState.self,
+            PTZHelloState.self,
+            PTZInvertedState.self,
+            PTZIrisLevelState.self,
+            PTZLedIntensityState.self,
+            PTZLedState.self,
+            PTZMireState.self,
+            PTZNoiseReductionState.self,
+            PTZPanState.self,
+            PTZPowerState.self,
+            PTZSaturationState.self,
+            PTZSensorSmoothingState.self,
+            PTZSharpnessState.self,
+            PTZShutterSpeedState.self,
+            PTZSleepTimeoutState.self,
+            PTZTiltState.self,
+            PTZVideoOutputState.self,
+            PTZVignetteCorrectionState.self,
+            PTZWhiteBalanceState.self,
+            PTZWhiteBalanceTempState.self,
+            PTZWhiteBalanceTintState.self,
+            PTZWhiteLevelState.self,
+            PTZWideDynamicRangeState.self,
+            PTZZoomState.self,
         ]
     }
 }

@@ -1,5 +1,5 @@
 //
-//  LedMode.swift
+//  Led.swift
 //
 //
 //  Created by syan on 05/07/2024.
@@ -71,30 +71,34 @@ enum PTZLedMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     static var `default`: PTZLedMode { .on }
 }
 
-struct PTZRequestSetLedMode: PTZRequest {
-    let color: PTZLedColor
-    let mode: PTZLedMode
-    var message: PTZMessage { .init([0x41, 0x21], .init(color, .raw8(3)), .init(mode, .raw8(4))) }
-    var description: String { "Set LED \(color.description) \(mode.description)" }
-}
-
-struct PTZRequestGetLedMode: PTZGetRequest {
-    typealias Reply = PTZReplyLedMode
-    var message: PTZMessage { .init([0x01, 0x21]) }
-    var description: String { "Get LED" }
-}
-
-struct PTZReplyLedMode: PTZSpecificReply {
-    let color: PTZLedColor
-    let mode: PTZLedMode
-
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x41, 0x21]) else { return nil }
-        self.color = message.parseArgument(position: .raw8(3))
-        self.mode  = message.parseArgument(position: .raw8(4))
+struct PTZLedState: PTZInvariantState {
+    static var name: String = "Led"
+    static var register: (UInt8, UInt8) = (0x01, 0x21)
+    
+    struct Value: Equatable {
+        var color: PTZLedColor
+        var mode: PTZLedMode
+    }
+    var value: Value
+    
+    init(_ value: Value) {
+        self.value = value
     }
     
-    var description: String {
-        return "LedMode(\(color.description), \(mode.description))"
+    init?(message: PTZMessage) {
+        guard message.isValidReply([Self.register.0 + 0x40, Self.register.1]) else { return nil }
+        self.value = .init(
+            color: message.parseArgument(position: .raw8(3)),
+            mode: message.parseArgument(position: .raw8(4))
+        )
     }
+    
+    func set() -> any PTZRequest {
+        return PTZStateRequest(
+            name: "Set \(description)",
+            message: .init([Self.register.0 + 0x40, Self.register.1], .init(value.color, .raw8(3)), .init(value.mode, .raw8(4)))
+        )
+    }
+    
+    var description: String { "\(Self.name)(\(value.color), \(value.mode))" }
 }

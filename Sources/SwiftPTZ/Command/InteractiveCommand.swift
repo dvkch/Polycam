@@ -18,7 +18,7 @@ struct InteractiveCommand: CamerableCommand {
     
     func run(camera: Camera) throws(CameraError) {
         camera.logLevel = .error
-        camera.send(PTZRequestSetDevMode(enabled: .on))
+        try camera.set(PTZDevModeState(.on))
         
         #warning("find a way to use properly defined states instead")
         let content: [any Interactive.Element] = [

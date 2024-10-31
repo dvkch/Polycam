@@ -1,36 +1,23 @@
 //
 //  AutoExposure.swift
+//  SwiftPTZ
 //
-//
-//  Created by syan on 10/07/2024.
+//  Created by syan on 31/10/2024.
 //
 
 import Foundation
 
 #warning("Add comments to all the states, explaning how they were found and how they work")
-struct PTZRequestSetAutoExposure: PTZRequest {
-    let enabled: PTZBool
-    var message: PTZMessage { .init([0x42, 0x11], enabled) }
-    var description: String { "Set auto exposure \(enabled)" }
+struct PTZAutoExposureState: PTZSingleValueState {
+    static var name: String = "AutoExposure"
+    static var register: (UInt8, UInt8) = (0x02, 0x11)
+
+    var value: PTZBool
+    
+    init(_ value: PTZBool) {
+        self.value = value
+    }
+    
     var waitingTimeIfExecuted: TimeInterval { 1 }
-    var modeConditionRescueRequests: [any PTZRequest] { [PTZRequestSetBacklightCompensation(enabled: .on)] }
-}
-
-struct PTZRequestGetAutoExposure: PTZGetRequest {
-    typealias Reply = PTZReplyAutoExposure
-    var message: PTZMessage { .init([0x02, 0x11]) }
-    var description: String { "Get auto exposure" }
-}
-
-struct PTZReplyAutoExposure: PTZSpecificReply {
-    let enabled: PTZBool
-    
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x42, 0x11]) else { return nil }
-        self.enabled = message.parseArgument(position: .single)
-    }
-    
-    var description: String {
-        return "AutoExposure(\(enabled))"
-    }
+    var modeConditionRescueRequests: [any PTZRequest] { [PTZBacklightCompensationState(.on).set()] }
 }

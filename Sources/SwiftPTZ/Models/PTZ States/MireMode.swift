@@ -7,27 +7,13 @@
 
 import Foundation
 
-struct PTZRequestSetMireMode: PTZRequest {
-    let enabled: PTZBool
-    var message: PTZMessage { .init([0x41, 0x10], enabled) }
-    var description: String { "Set mire mode \(enabled)" }
-}
+struct PTZMireState: PTZSingleValueState {
+    static var name: String = "Mire"
+    static var register: (UInt8, UInt8) = (0x01, 0x10)
 
-struct PTZRequestGetMireMode: PTZGetRequest {
-    typealias Reply = PTZReplyMireMode
-    var message: PTZMessage { .init([0x01, 0x10]) }
-    var description: String { "Get mire mode" }
-}
-
-struct PTZReplyMireMode: PTZSpecificReply {
-    let enabled: PTZBool
-
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x41, 0x10]) else { return nil }
-        self.enabled = message.parseArgument(position: .single)
-    }
+    var value: PTZBool
     
-    var description: String {
-        return "MireMode(\(enabled))"
+    init(_ value: PTZBool) {
+        self.value = value
     }
 }

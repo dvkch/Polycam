@@ -25,27 +25,14 @@ struct PTZPanOriginalAPI: PTZScaledValue {
     static var `default`: PTZPanOriginalAPI { .init(rawValue: 0) }
 }
 
-struct PTZRequestSetPan: PTZRequest {
-    let pan: PTZPan
-    var message: PTZMessage { .init([0x43, 0x04], pan) }
-    var description: String { "Set pan to \(pan)" }
-}
 
-struct PTZRequestGetPan: PTZGetRequest {
-    typealias Reply = PTZReplyPan
-    var message: PTZMessage { .init([0x03, 0x04]) }
-    var description: String { "Get pan" }
-}
-
-struct PTZReplyPan: PTZSpecificReply {
-    let pan: PTZPan
+struct PTZPanState: PTZSingleValueState {
+    static var name: String = "Pan"
+    static var register: (UInt8, UInt8) = (0x03, 0x04)
     
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x43, 0x04]) else { return nil }
-        self.pan = message.parseArgument(position: .single)
-    }
+    var value: PTZPan
     
-    var description: String {
-        return "Pan(\(pan))"
+    init(_ value: PTZPan) {
+        self.value = value
     }
 }

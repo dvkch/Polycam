@@ -149,7 +149,7 @@ extension Camera {
 
 // MARK: High level communication
 extension Camera {
-    func run(_ request: PTZActionRequest, rescueModeCondition: Bool = false) throws(CameraError) {
+    func run(_ request: PTZRequest, rescueModeCondition: Bool = false) throws(CameraError) {
         let reply = send(request, retries: RetryConditions.modeCondition(rescueModeCondition))
         switch reply {
         case .ack:                  return
@@ -159,6 +159,7 @@ extension Camera {
         case .executed:             return
         case .notExecuted(let e):   throw .notExecuted(error: e)
         case .specific:             return
+        case .state:                return
         case .unknown:              return
         }
     }
@@ -173,7 +174,34 @@ extension Camera {
         case .executed:             throw .missingReply
         case .notExecuted(let e):   throw .notExecuted(error: e)
         case .specific(_, let r):   return r as! T
+        case .state:                throw .wrongReply(reply)
         case .unknown:              throw .wrongReply(reply)
         }
+    }
+    
+    func get<T: PTZState>(_ state: T.Type, for variant: T.Variant, rescueModeCondition: Bool = false) throws(CameraError) -> T.Value {
+        let reply = send(state.get(for: variant), retries: RetryConditions.modeCondition(rescueModeCondition))
+        switch reply {
+        case .ack:                  throw .missingReply
+        case .reset:                throw .reset
+        case .fail:                 throw .fail
+        case .timeout:              throw .timeout
+        case .executed:             throw .missingReply
+        case .notExecuted(let e):   throw .notExecuted(error: e)
+        case .specific:             throw .wrongReply(reply)
+        case .state(_, let s):      return (s as! T).value
+        case .unknown:              throw .wrongReply(reply)
+        }
+    }
+    
+    func get<T: PTZInvariantState>(_ state: T.Type, rescueModeCondition: Bool = false) throws(CameraError) -> T.Value {
+        return try get(state, for: (), rescueModeCondition: rescueModeCondition)
+    }
+    
+    func set<T: PTZState>(_ state: T, debounce: Bool = false, rescueModeCondition: Bool = false) throws(CameraError) {
+        if debounce, try get(T.self, for: state.variant) == state.value {
+            return
+        }
+        try run(state.set(), rescueModeCondition: rescueModeCondition)
     }
 }

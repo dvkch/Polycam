@@ -48,98 +48,50 @@ struct PTZColorGain: PTZScaledValue {
     static var `default`: PTZColorGain { .init(rawValue: 35) } // original system uses 37 for red, 33 for blue
 }
 
-struct PTZRequestSetGainMode: PTZRequest {
-    let gain: PTZGainMode
-    var message: PTZMessage { .init([0x41, 0x31], gain) }
-    var description: String { "Set gain mode to \(gain)" }
+struct PTZGainModeState: PTZSingleValueState {
+    static var name: String = "GainMode"
+    static var register: (UInt8, UInt8) = (0x01, 0x31)
+    
+    var value: PTZGainMode
+    
+    init(_ value: PTZGainMode) {
+        self.value = value
+    }
+    
     var waitingTimeIfExecuted: TimeInterval { 0.5 }
 }
 
-struct PTZRequestSetRedGain: PTZRequest {
-    let gain: PTZColorGain
-    var message: PTZMessage { .init([0x43, 0x42], gain) }
-    var description: String { "Set red gain to \(gain)" }
-}
-
-struct PTZRequestSetBlueGain: PTZRequest {
-    let gain: PTZColorGain
-    var message: PTZMessage { .init([0x43, 0x43], gain) }
-    var description: String { "Set blue gain to \(gain)" }
-}
-
-struct PTZRequestGetGainMode: PTZGetRequest {
-    typealias Reply = PTZReplyGainMode
-    var message: PTZMessage { .init([0x01, 0x31]) }
-    var description: String { "Get gain mode" }
-}
-
-struct PTZRequestGetEffectiveGain: PTZGetRequest {
-    typealias Reply = PTZReplyEffectiveGain
-    var message: PTZMessage { .init([0x03, 0x26]) }
-    var description: String { "Get effective gain" }
-}
-
-struct PTZRequestGetRedGain: PTZGetRequest {
-    typealias Reply = PTZReplyRedGain
-    var message: PTZMessage { .init([0x03, 0x42]) }
-    var description: String { "Get red gain" }
-}
-
-struct PTZRequestGetBlueGain: PTZGetRequest {
-    typealias Reply = PTZReplyBlueGain
-    var message: PTZMessage { .init([0x03, 0x43]) }
-    var description: String { "Get blue gain" }
-}
-
-struct PTZReplyGainMode: PTZSpecificReply {
-    let gain: PTZGainMode
+struct PTZRedGainState: PTZSingleValueState {
+    static var name: String = "RedGain"
+    static var register: (UInt8, UInt8) = (0x03, 0x42)
     
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x41, 0x31]) else { return nil }
-        self.gain = message.parseArgument(position: .single)
+    var value: PTZColorGain
+    
+    init(_ value: PTZColorGain) {
+        self.value = value
+    }
+}
+
+struct PTZBlueGainState: PTZSingleValueState {
+    static var name: String = "BlueGain"
+    static var register: (UInt8, UInt8) = (0x03, 0x43)
+    
+    var value: PTZColorGain
+    
+    init(_ value: PTZColorGain) {
+        self.value = value
+    }
+}
+
+struct PTZEffectiveGainState: PTZSingleValueState {
+    static var name: String = "EffectiveGain"
+    static var register: (UInt8, UInt8) = (0x03, 0x26)
+    
+    var value: PTZEffectiveGain
+    
+    init(_ value: PTZEffectiveGain) {
+        self.value = value
     }
     
-    var description: String {
-        return "GainMode(\(gain))"
-    }
+    #warning("mark is read only")
 }
-
-struct PTZReplyEffectiveGain: PTZSpecificReply {
-    let gain: PTZEffectiveGain
-    
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x43, 0x26]) else { return nil }
-        self.gain = message.parseArgument(position: .single)
-    }
-    
-    var description: String {
-        return "EffectiveGain(\(gain))"
-    }
-}
-
-struct PTZReplyRedGain: PTZSpecificReply {
-    let gain: PTZColorGain
-    
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x43, 0x42]) else { return nil }
-        self.gain = message.parseArgument(position: .single)
-    }
-    
-    var description: String {
-        return "RedGain(\(gain))"
-    }
-}
-
-struct PTZReplyBlueGain: PTZSpecificReply {
-    let gain: PTZColorGain
-
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x43, 0x43]) else { return nil }
-        self.gain = message.parseArgument(position: .single)
-    }
-    
-    var description: String {
-        return "BlueGain(\(gain))"
-    }
-}
-

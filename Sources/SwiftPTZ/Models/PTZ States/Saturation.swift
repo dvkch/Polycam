@@ -16,27 +16,13 @@ struct PTZSaturation: PTZScaledValue {
     static var `default`: PTZSaturation { .init(rawValue: 6) }
 }
 
-struct PTZRequestSetSaturation: PTZRequest {
-    let saturation: PTZSaturation
-    var message: PTZMessage { .init([0x43, 0x3e], saturation) }
-    var description: String { "Set saturation to \(saturation)" }
-}
-
-struct PTZRequestGetSaturation: PTZGetRequest {
-    typealias Reply = PTZReplySaturation
-    var message: PTZMessage { .init([0x03, 0x3e]) }
-    var description: String { "Get saturation" }
-}
-
-struct PTZReplySaturation: PTZSpecificReply {
-    let saturation: PTZSaturation
+struct PTZSaturationState: PTZSingleValueState {
+    static var name: String = "Saturation"
+    static var register: (UInt8, UInt8) = (0x03, 0x3E)
     
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x43, 0x3e]) else { return nil }
-        self.saturation = message.parseArgument(position: .single)
-    }
+    var value: PTZSaturation
     
-    var description: String {
-        return "Saturation(\(saturation))"
+    init(_ value: PTZSaturation) {
+        self.value = value
     }
 }

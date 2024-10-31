@@ -7,27 +7,13 @@
 
 import Foundation
 
-struct PTZRequestSetInvertedMode: PTZRequest {
-    let enabled: PTZBool
-    var message: PTZMessage { .init([0x41, 0x3e], enabled) }
-    var description: String { "Set inverted mode \(enabled)" }
-}
+struct PTZInvertedState: PTZSingleValueState {
+    static var name: String = "Inverted"
+    static var register: (UInt8, UInt8) = (0x01, 0x3E)
 
-struct PTZRequestGetInvertedMode: PTZGetRequest {
-    typealias Reply = PTZReplyInvertedMode
-    var message: PTZMessage { .init([0x01, 0x3e]) }
-    var description: String { "Get inverted mode" }
-}
-
-struct PTZReplyInvertedMode: PTZSpecificReply {
-    let enabled: PTZBool
+    var value: PTZBool
     
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x41, 0x3e]) else { return nil }
-        self.enabled = message.parseArgument(position: .single)
-    }
-    
-    var description: String {
-        return "InvertedMode(\(enabled))"
+    init(_ value: PTZBool) {
+        self.value = value
     }
 }

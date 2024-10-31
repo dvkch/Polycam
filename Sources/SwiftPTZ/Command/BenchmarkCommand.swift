@@ -21,13 +21,13 @@ struct BenchmarkCommand: CamerableCommand {
         camera.logLevel = .error
         
         // we had some issues were working around timings would fuck up the reading of the hello reply, let's make sure it is still working properly
-        _ = try camera.get(PTZRequestHelloMPTZ11())
+        _ = try camera.get(PTZHelloState.self)
         
         // proper benchmarking
         let d = Date()
         var count = 0
         while Date().timeIntervalSince(d) < TimeInterval(duration) {
-            camera.send(PTZRequestSetSharpness(sharpness: .mid))
+            try camera.set(PTZSharpnessState(.mid))
             count += 1
         }
         print(count, "requests")

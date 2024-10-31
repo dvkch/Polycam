@@ -7,27 +7,13 @@
 
 import Foundation
 
-struct PTZRequestSetWideDynamicRange: PTZRequest {
-    let enabled: PTZBool
-    var message: PTZMessage { .init([0x41, 0x34], enabled) }
-    var description: String { "Set wide dynamic range \(enabled)" }
-}
+struct PTZWideDynamicRangeState: PTZSingleValueState {
+    static var name: String = "WideDynamicRange"
+    static var register: (UInt8, UInt8) = (0x01, 0x34)
 
-struct PTZRequestGetWideDynamicRange: PTZGetRequest {
-    typealias Reply = PTZReplyWideDynamicRange
-    var message: PTZMessage { .init([0x01, 0x34]) }
-    var description: String { "Get wide dynamic range" }
-}
-
-struct PTZReplyWideDynamicRange: PTZSpecificReply {
-    let enabled: PTZBool
+    var value: PTZBool
     
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x41, 0x34]) else { return nil }
-        self.enabled = message.parseArgument(position: .single)
-    }
-    
-    var description: String {
-        return "WideDynamicRange(\(enabled))"
+    init(_ value: PTZBool) {
+        self.value = value
     }
 }

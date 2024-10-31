@@ -7,27 +7,13 @@
 
 import Foundation
 
-struct PTZRequestSetDevMode: PTZRequest {
-    let enabled: PTZBool
-    var message: PTZMessage { .init([0x41, 0x0B], enabled) }
-    var description: String { "Set dev mode \(enabled)" }
-}
+struct PTZDevModeState: PTZSingleValueState {
+    static var name: String = "DevMode"
+    static var register: (UInt8, UInt8) = (0x01, 0x0B)
 
-struct PTZRequestGetDevMode: PTZGetRequest {
-    typealias Reply = PTZReplyDevMode
-    var message: PTZMessage { .init([0x01, 0x0B]) }
-    var description: String { "Get dev mode" }
-}
-
-struct PTZReplyDevMode: PTZSpecificReply {
-    let enabled: PTZBool
+    var value: PTZBool
     
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x41, 0x0B]) else { return nil }
-        self.enabled = message.parseArgument(position: .single)
-    }
-    
-    var description: String {
-        return "DevMode(\(enabled))"
+    init(_ value: PTZBool) {
+        self.value = value
     }
 }

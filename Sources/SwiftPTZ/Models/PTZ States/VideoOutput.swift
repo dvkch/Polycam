@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PTZVideoOutputMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
+enum PTZVideoOutput: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     case unknown00         = 0x00
     case unknown0A         = 0x0a
     case resolution720p60  = 0x10
@@ -22,31 +22,18 @@ enum PTZVideoOutputMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue
         }
     }
     
-    static var `default`: PTZVideoOutputMode { .resolution1080p60 }
+    static var `default`: PTZVideoOutput { .resolution1080p60 }
 }
 
-struct PTZRequestSetVideoOutputMode: PTZRequest {
-    let mode: PTZVideoOutputMode
-    var message: PTZMessage { .init([0x41, 0x13], mode) }
-    var description: String { "Set video output \(mode.description)" }
-    var waitingTimeIfExecuted: TimeInterval { 6 }
-}
-
-struct PTZRequestGetVideoOutputMode: PTZGetRequest {
-    typealias Reply = PTZReplyVideoOutputMode
-    var message: PTZMessage { .init([0x01, 0x13]) }
-    var description: String { "Get video output" }
-}
-
-struct PTZReplyVideoOutputMode: PTZSpecificReply {
-    let mode: PTZVideoOutputMode
-
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x41, 0x13]) else { return nil }
-        self.mode = message.parseArgument(position: .single)
+struct PTZVideoOutputState: PTZSingleValueState {
+    static var name: String = "VideoOutput"
+    static var register: (UInt8, UInt8) = (0x01, 0x13)
+    
+    var value: PTZVideoOutput
+    
+    init(_ value: PTZVideoOutput) {
+        self.value = value
     }
     
-    var description: String {
-        return "VideoOutputMode(\(mode.description))"
-    }
+    var waitingTimeIfExecuted: TimeInterval { 6 }
 }

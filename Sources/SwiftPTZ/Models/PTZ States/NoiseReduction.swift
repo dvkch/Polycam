@@ -7,27 +7,13 @@
 
 import Foundation
 
-struct PTZRequestSetNoiseReduction: PTZRequest {
-    let enabled: PTZBool
-    var message: PTZMessage { .init([0x41, 0x3C], enabled) }
-    var description: String { "Set noise reduction \(enabled)" }
-}
+struct PTZNoiseReductionState: PTZSingleValueState {
+    static var name: String = "NoiseReduction"
+    static var register: (UInt8, UInt8) = (0x01, 0x3C)
 
-struct PTZRequestGetNoiseReduction: PTZGetRequest {
-    typealias Reply = PTZReplyNoiseReduction
-    var message: PTZMessage { .init([0x01, 0x3C]) }
-    var description: String { "Get noise reduction" }
-}
-
-struct PTZReplyNoiseReduction: PTZSpecificReply {
-    let enabled: PTZBool
+    var value: PTZBool
     
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x41, 0x3C]) else { return nil }
-        self.enabled = message.parseArgument(position: .single)
-    }
-    
-    var description: String {
-        return "NoiseReduction(\(enabled))"
+    init(_ value: PTZBool) {
+        self.value = value
     }
 }

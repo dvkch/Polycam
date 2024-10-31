@@ -25,9 +25,9 @@ struct FuzzerCommand: CamerableCommand {
         
         let d = Date()
         let count = try fuzz(camera: camera, initialState: { () throws(CameraError) -> () in
-            camera.send(PTZRequestSetDevMode(enabled: .on))
+            try camera.set(PTZDevModeState(.on))
             camera.send(PTZRequestSetPosition(pan: .mid, tilt: .mid, zoom: .min))
-            camera.send(PTZRequestSetAutoFocus(enabled: .off))
+            try camera.set(PTZAutoFocusState(.off))
         })
         speak("Done")
 
@@ -264,6 +264,7 @@ private struct FuzzerResult {
         // most common cases
         case .executed:     return 5
         case .specific:     return 6
+        case .state:        return 6
         case .unknown:      return 6
         }
     }
@@ -279,6 +280,7 @@ extension FuzzerResult {
         case .executed:             return true
         case .notExecuted(let e):   return e == .commandNotDefined
         case .specific:             return true
+        case .state:                return true
         case .unknown:              return true
         }
     }

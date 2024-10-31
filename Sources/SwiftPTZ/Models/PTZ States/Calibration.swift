@@ -56,77 +56,80 @@ enum PTZCalibrationRange: UInt16, CaseIterable, PTZValue {
     }
 }
 
-struct PTZRequestSetCalibrationHue: PTZRequest {
-    let range: PTZCalibrationRange
-    let hue: PTZCalibrationHue
-    var message: PTZMessage { .init([0x43, 0x50 + UInt8(range.rawValue)], hue) }
-    var description: String { "Calibrate \(range) hue to \(hue)" }
-}
-
-struct PTZRequestGetCalibrationHue: PTZGetRequest {
-    typealias Reply = PTZReplyCalibrationHue
-    let range: PTZCalibrationRange
-    var message: PTZMessage { .init([0x03, 0x50 + UInt8(range.rawValue)]) }
-    var description: String { "Get \(range) calibration hue" }
-}
-
-struct PTZReplyCalibrationHue: PTZSpecificReply {
-    let range: PTZCalibrationRange
-    let hue: PTZCalibrationHue
+struct PTZCalibrationHueState: PTZState {
+    static var name: String = "CalibrationHue"
+    
+    var variant: PTZCalibrationRange
+    var value: PTZCalibrationHue
+    
+    init(_ value: Value, for variant: Variant) {
+        self.value = value
+        self.variant = variant
+    }
+    
     init?(message: PTZMessage) {
         guard let range = PTZCalibrationRange.allCases.first(where: { message.isValidReply([0x43, 0x50 + UInt8($0.rawValue)]) }) else { return nil }
-        self.range = range
-        self.hue = message.parseArgument(position: .single)
+        self.variant = range
+        self.value = message.parseArgument(position: .single)
     }
-    var description: String { "CalibrationHue(\(range), \(hue))" }
+    
+    func set() -> any PTZRequest {
+        return PTZStateRequest(name: "Set \(description)", message: .init([0x03, 0x50 + UInt8(variant.rawValue)]))
+    }
+    
+    static func get(for variant: PTZCalibrationRange) -> any PTZRequest {
+        return PTZStateRequest(name: name, message: .init([0x03, 0x50 + UInt8(variant.rawValue)]))
+    }
 }
 
-struct PTZRequestSetCalibrationLuminance: PTZRequest {
-    let range: PTZCalibrationRange
-    let luminance: PTZCalibrationLuminance
-    var message: PTZMessage { .init([0x43, 0x56 + UInt8(range.rawValue)], luminance) }
-    var description: String { "Calibrate \(range) luminance to \(luminance)" }
-}
-
-struct PTZRequestGetCalibrationLuminance: PTZGetRequest {
-    typealias Reply = PTZReplyCalibrationLuminance
-    let range: PTZCalibrationRange
-    var message: PTZMessage { .init([0x03, 0x56 + UInt8(range.rawValue)]) }
-    var description: String { "Get \(range) calibration luminance" }
-}
-
-struct PTZReplyCalibrationLuminance: PTZSpecificReply {
-    let range: PTZCalibrationRange
-    let luminance: PTZCalibrationLuminance
+struct PTZCalibrationLuminanceState: PTZState {
+    static var name: String = "CalibrationLuminance"
+    
+    var variant: PTZCalibrationRange
+    var value: PTZCalibrationLuminance
+    
+    init(_ value: Value, for variant: Variant) {
+        self.value = value
+        self.variant = variant
+    }
+    
     init?(message: PTZMessage) {
         guard let range = PTZCalibrationRange.allCases.first(where: { message.isValidReply([0x43, 0x56 + UInt8($0.rawValue)]) }) else { return nil }
-        self.range = range
-        self.luminance = message.parseArgument(position: .single)
+        self.variant = range
+        self.value = message.parseArgument(position: .single)
     }
-    var description: String { "CalibrationLuminance(\(range), \(luminance))" }
+    
+    func set() -> any PTZRequest {
+        return PTZStateRequest(name: "Set \(description)", message: .init([0x03, 0x56 + UInt8(variant.rawValue)]))
+    }
+    
+    static func get(for variant: PTZCalibrationRange) -> any PTZRequest {
+        return PTZStateRequest(name: name, message: .init([0x03, 0x56 + UInt8(variant.rawValue)]))
+    }
 }
 
-struct PTZRequestSetCalibrationSaturation: PTZRequest {
-    let range: PTZCalibrationRange
-    let saturation: PTZCalibrationSaturation
-    var message: PTZMessage { .init([0x43, 0x5C + UInt8(range.rawValue)], saturation) }
-    var description: String { "Calibrate \(range) saturation to \(saturation)" }
-}
-
-struct PTZRequestGetCalibrationSaturation: PTZGetRequest {
-    typealias Reply = PTZReplyCalibrationSaturation
-    let range: PTZCalibrationRange
-    var message: PTZMessage { .init([0x03, 0x5C + UInt8(range.rawValue)]) }
-    var description: String { "Get \(range) calibration saturation" }
-}
-
-struct PTZReplyCalibrationSaturation: PTZSpecificReply {
-    let range: PTZCalibrationRange
-    let saturation: PTZCalibrationSaturation
+struct PTZCalibrationSaturationState: PTZState {
+    static var name: String = "CalibrationSaturation"
+    
+    var variant: PTZCalibrationRange
+    var value: PTZCalibrationSaturation
+    
+    init(_ value: Value, for variant: Variant) {
+        self.value = value
+        self.variant = variant
+    }
+    
     init?(message: PTZMessage) {
         guard let range = PTZCalibrationRange.allCases.first(where: { message.isValidReply([0x43, 0x5C + UInt8($0.rawValue)]) }) else { return nil }
-        self.range = range
-        self.saturation = message.parseArgument(position: .single)
+        self.variant = range
+        self.value = message.parseArgument(position: .single)
     }
-    var description: String { "CalibrationSaturation(\(range), \(saturation))" }
+    
+    func set() -> any PTZRequest {
+        return PTZStateRequest(name: "Set \(description)", message: .init([0x03, 0x5C + UInt8(variant.rawValue)]))
+    }
+    
+    static func get(for variant: PTZCalibrationRange) -> any PTZRequest {
+        return PTZStateRequest(name: name, message: .init([0x03, 0x5C + UInt8(variant.rawValue)]))
+    }
 }

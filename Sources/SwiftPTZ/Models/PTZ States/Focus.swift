@@ -16,33 +16,26 @@ struct PTZFocus: PTZScaledValue {
     static var `default`: PTZFocus { .init(rawValue: 0) }
 }
 
+struct PTZFocusState: PTZSingleValueState {
+    static var name: String = "Focus"
+    static var register: (UInt8, UInt8) = (0x03, 0x03)
+
+    var value: PTZFocus
+    
+    init(_ value: PTZFocus) {
+        self.value = value
+    }
+    
+    func set() -> any PTZRequest {
+        return PTZStateRequest(
+            name: "Set \(description)",
+            message: .init([Self.register.0 + 0x40, Self.register.1], value),
+            modeConditionRescueRequests: [PTZAutoFocusState(.off).set()]
+        )
+    }
+}
+
 struct PTZRequestStartFocus: PTZRequest {
     var message: PTZMessage { .init([0x45, 0x13]) }
     var description: String { "Start focus" } // takes about 5s to settle down
-}
-
-struct PTZRequestSetFocus: PTZRequest {
-    let focus: PTZFocus
-    var message: PTZMessage { .init([0x43, 0x03], focus) }
-    var description: String { "Set focus to \(focus)" }
-    var modeConditionRescueRequests: [any PTZRequest]? { [PTZRequestSetAutoFocus(enabled: .off)] } /* setting mire mode to True also works */
-}
-
-struct PTZRequestGetFocus: PTZGetRequest {
-    typealias Reply = PTZReplyFocus
-    var message: PTZMessage { .init([0x03, 0x03]) }
-    var description: String { "Get focus" }
-}
-
-struct PTZReplyFocus: PTZSpecificReply {
-    let focus: PTZFocus
-    
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x43, 0x03]) else { return nil }
-        self.focus = message.parseArgument(position: .single)
-    }
-    
-    var description: String {
-        return "Focus(\(focus))"
-    }
 }
