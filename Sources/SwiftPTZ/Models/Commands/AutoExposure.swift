@@ -22,7 +22,7 @@ struct PTZRequestGetAutoExposure: PTZGetRequest {
     var description: String { "Get auto exposure" }
 }
 
-struct PTZReplyAutoExposure: PTZReply {
+struct PTZReplyAutoExposure: PTZSpecificReply {
     let enabled: PTZBool
     
     init?(message: PTZMessage) {

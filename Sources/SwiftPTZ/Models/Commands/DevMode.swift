@@ -19,7 +19,7 @@ struct PTZRequestGetDevMode: PTZGetRequest {
     var description: String { "Get dev mode" }
 }
 
-struct PTZReplyDevMode: PTZReply {
+struct PTZReplyDevMode: PTZSpecificReply {
     let enabled: PTZBool
     
     init?(message: PTZMessage) {

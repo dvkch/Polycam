@@ -28,7 +28,7 @@ struct PTZRequestGetContrast: PTZGetRequest {
     var description: String { "Get contrast" }
 }
 
-struct PTZReplyContrast: PTZReply {
+struct PTZReplyContrast: PTZSpecificReply {
     let contrast: PTZContrast
     
     init?(message: PTZMessage) {

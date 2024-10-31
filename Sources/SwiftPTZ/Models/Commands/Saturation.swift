@@ -28,7 +28,7 @@ struct PTZRequestGetSaturation: PTZGetRequest {
     var description: String { "Get saturation" }
 }
 
-struct PTZReplySaturation: PTZReply {
+struct PTZReplySaturation: PTZSpecificReply {
     let saturation: PTZSaturation
     
     init?(message: PTZMessage) {

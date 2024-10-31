@@ -19,7 +19,7 @@ struct PTZRequestGetInvertedMode: PTZGetRequest {
     var description: String { "Get inverted mode" }
 }
 
-struct PTZReplyInvertedMode: PTZReply {
+struct PTZReplyInvertedMode: PTZSpecificReply {
     let enabled: PTZBool
     
     init?(message: PTZMessage) {

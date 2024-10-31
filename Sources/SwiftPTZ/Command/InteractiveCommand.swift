@@ -18,7 +18,7 @@ struct InteractiveCommand: CamerableCommand {
     
     func run(camera: Camera) throws(CameraError) {
         camera.logLevel = .error
-        try camera.sendRequest(PTZRequestSetDevMode(enabled: .on))
+        camera.send(PTZRequestSetDevMode(enabled: .on))
         
         #warning("find a way to use properly defined states instead")
         let content: [any Interactive.Element] = [
@@ -37,7 +37,7 @@ struct InteractiveCommand: CamerableCommand {
                 ]),
                 Interactive.Group("Move", PTZDirection.allCases.map { dir in
                     Interactive.Action(name: dir.description, state: "") { _ in
-                        try! camera.sendRequest(PTZRequestSetMove(direction: dir, panTiltSpeed: .speed3, zoomSpeed: .speed2, focusSpeed: .speed3))
+                        camera.send(PTZRequestSetMove(direction: dir, panTiltSpeed: .speed3, zoomSpeed: .speed2, focusSpeed: .speed3))
                         return ""
                     }
                 })

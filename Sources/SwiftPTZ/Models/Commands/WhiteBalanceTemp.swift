@@ -27,7 +27,7 @@ struct PTZRequestGetWhiteBalanceTemp: PTZGetRequest {
     var description: String { "Get wb temp" }
 }
 
-struct PTZReplyWhiteBalanceTemp: PTZReply {
+struct PTZReplyWhiteBalanceTemp: PTZSpecificReply {
     let temp: PTZWhiteBalanceTemp
     
     init?(message: PTZMessage) {

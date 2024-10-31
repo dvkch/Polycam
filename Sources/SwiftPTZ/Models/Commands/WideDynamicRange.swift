@@ -19,7 +19,7 @@ struct PTZRequestGetWideDynamicRange: PTZGetRequest {
     var description: String { "Get wide dynamic range" }
 }
 
-struct PTZReplyWideDynamicRange: PTZReply {
+struct PTZReplyWideDynamicRange: PTZSpecificReply {
     let enabled: PTZBool
     
     init?(message: PTZMessage) {

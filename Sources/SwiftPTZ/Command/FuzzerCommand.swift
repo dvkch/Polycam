@@ -25,9 +25,9 @@ struct FuzzerCommand: CamerableCommand {
         
         let d = Date()
         let count = try fuzz(camera: camera, initialState: { () throws(CameraError) -> () in
-            try camera.sendRequest(PTZRequestSetDevMode(enabled: .on))
-            try camera.sendRequest(PTZRequestSetPosition(pan: .mid, tilt: .mid, zoom: .min))
-            try camera.sendRequest(PTZRequestSetAutoFocus(enabled: .off))
+            camera.send(PTZRequestSetDevMode(enabled: .on))
+            camera.send(PTZRequestSetPosition(pan: .mid, tilt: .mid, zoom: .min))
+            camera.send(PTZRequestSetAutoFocus(enabled: .off))
         })
         speak("Done")
 
@@ -117,10 +117,10 @@ struct FuzzerCommand: CamerableCommand {
                 var restoreBlock: () -> () = {}
                 if category.restore {
                     requestsSent += 1
-                    let (replyBytes, _) = try camera.sendRequest2(PTZUnknownRequest(commandBytes: [category.category - 0x40, register], arg: nil))
+                    let replyBytes = camera.send(PTZUnknownRequest(commandBytes: [category.category - 0x40, register], arg: nil)).bytes
                     let restoreBytes = Array(replyBytes.dropFirst(2))
                     if restoreBytes.count > 2, restoreBytes[0] == category.category, restoreBytes[1] == register {
-                        restoreBlock = { _ = try? camera.sendRequest(PTZUnknownRequest(commandBytes: restoreBytes, arg: nil)) }
+                        restoreBlock = { camera.send(PTZUnknownRequest(commandBytes: restoreBytes, arg: nil)) }
                     }
                 }
                 defer { restoreBlock() }
@@ -129,9 +129,9 @@ struct FuzzerCommand: CamerableCommand {
                 do {
                     requestsSent += 1
                     let req = PTZUnknownRequest(commandBytes: [category.category, register], arg: nil)
-                    let (replyBytes, reply) = try camera.sendRequest2(req)
+                    let reply = camera.send(req)
                     
-                    let result = FuzzerResult(category: category.category, register: register, reply: reply, replyBytes: replyBytes, sentArg: false, firstArg: 0, lastArg: 0)
+                    let result = FuzzerResult(category: category.category, register: register, reply: reply, sentArg: false, firstArg: 0, lastArg: 0)
                     if result.shouldBeIncludedInOutput {
                         resultTable.append([
                             result.outputDetails.requestName,
@@ -140,7 +140,6 @@ struct FuzzerCommand: CamerableCommand {
                         ])
                     }
                 }
-                catch {}
                 
                 // try the given range of arguments, group the results by type of reply to reduce the amount of information printed
                 guard category.testArgs else { continue }
@@ -154,21 +153,21 @@ struct FuzzerCommand: CamerableCommand {
 
                     requestsSent += 1
                     let req = PTZUnknownRequest(commandBytes: [category.category, register], arg: arg)
-                    let (replyBytes, reply) = try camera.sendRequest2(req)
-                    if (reply as? PTZReplyNotExecuted)?.error == .commandNotDefined { break }
+                    let reply = camera.send(req)
+                    if reply == .notExecuted(error: .commandNotDefined) { break }
 
                     // this command has a new kind of reply, let's create a new group
-                    if replyBytes != replies.last?.replyBytes {
-                        replies.append(.init(category: category.category, register: register, reply: reply, replyBytes: replyBytes, sentArg: true, firstArg: arg, lastArg: arg))
+                    if reply.bytes != replies.last?.reply.bytes {
+                        replies.append(.init(category: category.category, register: register, reply: reply, sentArg: true, firstArg: arg, lastArg: arg))
                     }
                     
                     // let's move the dial on the last possible argument to receive this specific reply
                     replies[replies.count - 1].lastArg = arg
                     
                     // getting an error (intermittent or final)
-                    if !complete, with(replies.last!.reply, { $0 is PTZReplyTimeout || $0 is PTZReplyFail || $0 is PTZReplyNotExecuted }) {
+                    if !complete, with(replies.last!.reply, { $0 == .timeout || $0 == .fail || $0.isNotExecuted }) {
                         // not receiving any answer for some time now, let's stop
-                        if (replies.last!.reply is PTZReplyTimeout), replies.last!.argSpan > 0x04 {
+                        if (replies.last!.reply == .timeout), replies.last!.argSpan > 0x04 {
                             replies[replies.count - 1].stoppedEarly = true
                             break
                         }
@@ -234,7 +233,6 @@ private struct FuzzerResult {
     let category: UInt8
     let register: UInt8
     let reply: PTZReply
-    let replyBytes: Bytes
     let sentArg: Bool
     let firstArg: UInt16
     var lastArg: UInt16
@@ -248,39 +246,47 @@ private struct FuzzerResult {
     var stoppedEarly: Bool = false
     
     var validityLevel: Int /* 0 is worst validity */ {
+        switch reply {
         // those shouldn't happen, but just in case...
-        if (reply is PTZReplyAck)       { return 1 }
-        if (reply is PTZReplyReset)     { return 0 }
-        if (reply is PTZReplyFail)      { return 0 }
-        if (reply is PTZReplyTimeout)   { return 0 }
-
-        // most common cases
-        if (reply is PTZReplyExecuted)  { return 5 }
-        if let r = reply as? PTZReplyNotExecuted {
-            switch r.error {
+        case .ack:          return 1
+        case .reset:        return 0
+        case .fail:         return 0
+        case .timeout:      return 0
+            
+        // possible error cases
+        case .notExecuted(let error):
+            switch error {
             case .modeCondition:    return 4
             case .syntaxError:      return 3
             default:                return 2
             }
+
+        // most common cases
+        case .executed:     return 5
+        case .specific:     return 6
+        case .unknown:      return 6
         }
-        
-        // reply is none of the error cases or basic success, it has to be a worded reply (getter reply or unknown)
-        return 6
     }
 }
 
 extension FuzzerResult {
     var shouldBeIncludedInOutput: Bool {
-        guard !(reply is PTZReplyFail) else { return false }
-        guard (reply as? PTZReplyNotExecuted)?.error != .commandNotDefined else { return false }
-        guard argRange?.isEmpty != true else { return false }
-        return true
+        switch reply {
+        case .ack:                  return false
+        case .reset:                return false
+        case .fail:                 return false
+        case .timeout:              return false
+        case .executed:             return true
+        case .notExecuted(let e):   return e == .commandNotDefined
+        case .specific:             return true
+        case .unknown:              return true
+        }
     }
     
     var outputDetails: (requestName: String, replyName: String, reqKnown: Bool) {
         var requestName: String
         var replyName: String
-        var isRequestKnown = (!(reply is PTZReplyUnknown) && !(reply is PTZReplyNotExecuted))
+        var isRequestKnown = reply == .executed || reply.specific != nil
         
         // Pretty printing of the request string, could be "8x 06 77" as well as "8x 43 00 (00 -> 02 00+)"
         if let argRange {
@@ -296,8 +302,8 @@ extension FuzzerResult {
         // Setters only reply using "Executed". Since the message format is symetrical (meaning the reply from a getter uses the exact same bytes as the corresponding
         // setter request for the same value), we can try to add more information to our output
         replyName = reply.description
-        if (reply is PTZReplyExecuted || reply is PTZReplyNotExecuted) {
-            if let equivalentRequest = PTZMessage.replies(from: PTZUnknownRequest(commandBytes: [category, register], arg: argRange?.first).bytes).first, !(equivalentRequest is PTZReplyUnknown) {
+        if reply == .executed || reply.isNotExecuted {
+            if let equivalentRequest = PTZMessage.replies(from: PTZUnknownRequest(commandBytes: [category, register], arg: argRange?.first).bytes).first?.specific {
                 isRequestKnown = true
                 replyName += ": \(equivalentRequest)"
             }

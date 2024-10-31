@@ -38,7 +38,7 @@ struct PTZRequestGetVideoOutputMode: PTZGetRequest {
     var description: String { "Get video output" }
 }
 
-struct PTZReplyVideoOutputMode: PTZReply {
+struct PTZReplyVideoOutputMode: PTZSpecificReply {
     let mode: PTZVideoOutputMode
 
     init?(message: PTZMessage) {

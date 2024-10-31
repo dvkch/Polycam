@@ -8,11 +8,19 @@
 import Foundation
 
 struct PTZMessage {
+    let bytes: Bytes
+
+    private init(bytes: Bytes) {
+        self.bytes = bytes
+    }
+}
+
+extension PTZMessage {
     static func receptionComplete(from bytes: Bytes) -> Bool {
         let messages = PTZMessage.messages(from: bytes)
         guard messages.allSatisfy(\.isValidLength) else { return false }
   
-        if let first = messages.first, PTZReplyAck(message: first) != nil  {
+        if let first = messages.first, case .ack = PTZReply(message: first)  {
             return messages.count > 1
         }
         return true
@@ -24,10 +32,8 @@ struct PTZMessage {
             .map { self.init(bytes: $0) }
     }
     
-    let bytes: Bytes
-
-    private init(bytes: Bytes) {
-        self.bytes = bytes
+    static func replies(from bytes: Bytes) -> [PTZReply] {
+        return PTZMessage.messages(from: bytes).map { PTZReply(message: $0) }
     }
 }
 
@@ -109,60 +115,4 @@ extension PTZMessage {
         let packedData = Array(bytes[5...])
         return packedData.map { Int($0 - 0x30) }
     }
-}
-
-extension PTZMessage {
-    static var availableReplies: [any PTZReply.Type] {
-        return [
-            PTZReplyAck.self, PTZReplyReset.self, PTZReplyFail.self,
-            PTZReplyExecuted.self, PTZReplyNotExecuted.self,
-
-            PTZReplyAutoExposure.self,
-            PTZReplyAutoFocus.self,
-            PTZReplyAutoSleep.self,
-            PTZReplyBacklightCompensation.self,
-            PTZReplyBrightness.self,
-            PTZReplyCalibrationHue.self, PTZReplyCalibrationLuminance.self, PTZReplyCalibrationSaturation.self,
-            PTZReplyClock.self,
-            PTZReplyColors.self,
-            PTZReplyContrast.self,
-            PTZReplyDevMode.self,
-            PTZReplyDrunkTestPhase.self,
-            PTZReplyFocus.self,
-            PTZReplyGainMode.self, PTZReplyEffectiveGain.self, PTZReplyRedGain.self, PTZReplyBlueGain.self,
-            PTZReplyHelloMPTZ11.self,
-            PTZReplyInvertedMode.self,
-            PTZReplyIrisLevel.self,
-            PTZReplyLedIntensity.self,
-            PTZReplyLedMode.self,
-            PTZReplyMireMode.self,
-            PTZReplyMotorStats.self,
-            PTZReplyNoiseReduction.self,
-            PTZReplyPan.self,
-            PTZReplyPosition.self,
-            PTZReplyPowerMode.self,
-            PTZReplyPreset.self,
-            PTZReplySaturation.self,
-            PTZReplySensorSmoothing.self,
-            PTZReplySharpness.self,
-            PTZReplyShutterSpeed.self,
-            PTZReplyTilt.self,
-            PTZReplyVideoOutputMode.self,
-            PTZReplyVignetteCorrection.self,
-            PTZReplyWhiteBalance.self,
-            PTZReplyWhiteBalanceTemp.self,
-            PTZReplyWhiteBalanceTint.self,
-            PTZReplyWhiteLevel.self,
-            PTZReplyWideDynamicRange.self,
-            PTZReplyZoom.self,
-        ]
-    }
-    
-    static func replies(from bytes: Bytes, allowed: [any PTZReply.Type] = availableReplies) -> [any PTZReply] {
-        let messages = PTZMessage.messages(from: bytes)
-        return messages.map { message in
-            allowed.compactMap({ $0.init(message: message) }).first ?? PTZReplyUnknown(message: message)
-        }
-    }
-
 }

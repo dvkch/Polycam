@@ -5,6 +5,7 @@
 //  Created by syan on 30/09/2024.
 //
 
+#warning("make simplified command to use those (save current position to preset, set current position to preset)")
 enum PTZPreset: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     case one    = 0x00
     case two    = 0x01
@@ -57,7 +58,7 @@ struct PTZRequestGetPreset: PTZGetRequest {
     var description: String { "Get preset \(preset)" }
 }
 
-struct PTZReplyPreset: PTZReply {
+struct PTZReplyPreset: PTZSpecificReply {
     let preset: PTZPreset
     let pan: PTZPan
     let tilt: PTZTilt

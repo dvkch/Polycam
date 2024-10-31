@@ -17,7 +17,7 @@ struct PTZRequestHelloMPTZ11: PTZGetRequest {
 // 8f 30 46 77 06 01000057 01010052 01000021 01000006 2950 01010048
 // From logs: MPTZ_11, sysver = "01000057", camver = "01010052", lensver = "", promver = "", backver = "01000021", bootver = "01000006", splver = "2950", pkgver = "01010048"
 
-struct PTZReplyHelloMPTZ11: PTZReply {
+struct PTZReplyHelloMPTZ11: PTZSpecificReply {
     let sysVer: String
     let camVer: String
     let backVer: String

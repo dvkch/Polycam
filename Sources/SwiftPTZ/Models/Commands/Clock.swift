@@ -48,7 +48,7 @@ struct PTZRequestGetClock: PTZGetRequest {
     var description: String { return "Get \(clock)" }
 }
 
-struct PTZReplyClock: PTZReply {
+struct PTZReplyClock: PTZSpecificReply {
     
     let clock: PTZClock
     let time: UInt32

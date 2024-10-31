@@ -28,7 +28,7 @@ struct PTZRequestGetWhiteBalanceTint: PTZGetRequest {
     var description: String { "Get wb tint" }
 }
 
-struct PTZReplyWhiteBalanceTint: PTZReply {
+struct PTZReplyWhiteBalanceTint: PTZSpecificReply {
     let tint: PTZWhiteBalanceTint
     
     init?(message: PTZMessage) {

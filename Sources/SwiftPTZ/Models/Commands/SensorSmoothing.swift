@@ -19,7 +19,7 @@ struct PTZRequestGetSensorSmoothing: PTZGetRequest {
     var description: String { "Get sensor smoothing" }
 }
 
-struct PTZReplySensorSmoothing: PTZReply {
+struct PTZReplySensorSmoothing: PTZSpecificReply {
     let enabled: PTZBool
     
     init?(message: PTZMessage) {

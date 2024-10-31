@@ -22,6 +22,12 @@ extension RandomAccessCollection where Self.Index == Int {
     }
 }
 
+extension RandomAccessCollection {
+    var isNotEmpty: Bool {
+        return !isEmpty
+    }
+}
+
 extension Collection where Element : BinaryInteger {
     var isZero: Bool {
         guard !isEmpty else { return true }

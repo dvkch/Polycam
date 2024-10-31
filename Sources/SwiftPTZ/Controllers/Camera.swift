@@ -10,18 +10,18 @@ import SwiftSerial
 
 enum CameraError: Error {
     case serialError(PortError)
-    case unknown
-    case missingAck
-    case replyTimeout
+    case timeout
     case fail
     case reset
-    case notExecuted(error: PTZReplyNotExecuted.PTZCommandError)
+    case notExecuted(error: PTZReply.CommandError)
+    case missingReply
+    case wrongReply(PTZReply)
 }
 
 class Camera: Loggable {
     
     // MARK: Init
-    init(serial: SerialName, logLevel: LogLevel, powerOffAfterUse: Bool) throws(CameraError) {
+    init(serial: Serial.Name, logLevel: LogLevel, powerOffAfterUse: Bool) throws(CameraError) {
         self.logLevel = logLevel
         do {
             self.serial = try Serial(device: serial, tag: "RS423", logLevel: logLevel)
@@ -46,99 +46,21 @@ class Camera: Loggable {
     private let requestLock: NSLock = .init()
     var logLevel: LogLevel
     let logTag: String = "Camera"
+}
 
-    // MARK: Public actions
-    func get<T: PTZReply>(_ request: any PTZGetRequest<T>) throws(CameraError) -> T {
-        let reply: (any PTZReply) = try sendRequest(request)
-        return reply as! T
-    }
-    
-    @discardableResult
-    func sendRequest(_ request: PTZRequest, expectValidResponse: Bool = false) throws(CameraError) -> any PTZReply {
-        let response = (try sendRequest2(request)).1
-        if expectValidResponse {
-            if response is PTZReplyReset {
-                throw .reset
-            }
-            if response is PTZReplyFail {
-                throw .fail
-            }
-            if let r = response as? PTZReplyNotExecuted {
-                throw .notExecuted(error: r.error)
-            }
-        }
-        return response
-    }
-
-    func sendRequest2(_ request: PTZRequest) throws(CameraError) -> (Bytes, any PTZReply) {
-        let (bytes, replies) = sendRequest(request, repeatUntilAck: false, errorToRetry: nil)
-        guard replies.first is PTZReplyAck else {
-            log(.fatal, "Unexpected camera reply for \(request), expected ACK then a reply, got: \(replies)")
-            throw CameraError.missingAck
-        }
-        return (bytes, replies.element(at: 1) ?? PTZReplyTimeout())
-    }
-
-    subscript<T: PTZValue>(_ state: any PTZState<T>) -> T? {
-        get {
-            let (bytes, _) = sendRequest(state.getRequest(), repeatUntilAck: false, errorToRetry: nil)
-            return state.parseResponse(bytes)
-        }
-        set {
-            try! sendRequest(state.setRequest(value: newValue ?? T.default))
-        }
-    }
-
-    func powerOn() {
-        let sequence: [any PTZRequest] = [
-            PTZRequestSetPowerMode(mode: .on),
-            PTZRequestHelloMPTZ11(),
-            PTZRequestSetDevMode(enabled: .on),
-            PTZRequestSetMireMode(enabled: .off),
-            PTZRequestSetColors(enabled: .on),
-            PTZRequestSetLedMode(color: .default, mode: .default),
-            PTZRequestSetLedIntensity(red: .default, green: .default, blue: .default),
-            PTZRequestSetVideoOutputMode(mode: .default),
-            PTZRequestSetShutterSpeed(speed: .default),
-            // PTZRequestSetPosition(pan: .default, tilt: .default, zoom: .default),
-            PTZRequestSetInvertedMode(enabled: .off),
-            PTZRequestSetAutoFocus(enabled: .on),
-            PTZRequestSetWhiteBalance(mode: .default),
-            PTZRequestSetGainMode(gain: .default),
-            PTZRequestSetRedGain(gain: .default),
-            PTZRequestSetBlueGain(gain: .default),
-            PTZRequestSetBrightness(brightness: .default),
-            PTZRequestSetSaturation(saturation: .default),
-            PTZRequestSetBacklightCompensation(enabled: .off)
-        ]
-
-        log(.info, "Starting boot sequence...")
-        for request in sequence {
-            sendRequest(request, repeatUntilAck: !(request is PTZRequestSetPowerMode), errorToRetry: .modeCondition)
-        }
-        log(.info, "Finished boot sequence")
-    }
-    
-    func powerOff() {
-        _ = try? sendRequest2(PTZRequestSetLedMode(color: .off, mode: .off))
-        _ = try? sendRequest2(PTZRequestSetPowerMode(mode: .standby))
-        while serial.readAllBytes() != [0x00] {
-            Thread.sleep(forTimeInterval: 0.1)
-        }
-
-        serial.stop()
-    }
-
-    // MARK: Actions
-    @discardableResult
-    private func sendRequest(_ request: PTZRequest, repeatUntilAck: Bool, errorToRetry: PTZReplyNotExecuted.PTZCommandError?) -> (Bytes, [any PTZReply]) {
+// MARK: Base level communication
+extension Camera {
+    private func communicate(_ request: PTZRequest) -> Bytes {
+        // Prevent multiple requests to be run concurrently
         requestLock.lock()
         defer { requestLock.unlock() }
         
+        // Send bytes
         log(.info, request.description)
         log(.debug, "> \(request.bytes.hexString)")
         serial.sendBytes(request.bytes)
         
+        // Read bytes, up until we have received complete messages or timeout
         let startDate = Date()
         var bytes = Bytes()
         var receivedMessageInLastLoop = false
@@ -156,31 +78,98 @@ class Camera: Loggable {
             // to get a simple response. by switching to a shorter sleep time we usually get the reply in 15 loops, but in 15ms
             usleep(1000)
         }
-
         log(.debug, "< \(bytes.hexString)")
 
-        let replies = PTZMessage.replies(from: bytes)
-        log(.info, replies.map(\.description).joined(separator: ", "))
+        return bytes
+    }
 
-        var shouldRetry = false
-        shouldRetry ||= errorToRetry != nil && replies.compactMap({ $0 as? PTZReplyNotExecuted }).first?.error == errorToRetry
-        shouldRetry ||= repeatUntilAck && !replies.contains(where: { $0 is PTZReplyAck })
+    enum RetryConditions {
+        case untilAck
+        case onError(PTZReply.CommandError)
+        case rescueModeCondition(maxTries: Int)
+    }
+
+    @discardableResult
+    func send(_ request: PTZRequest, retries: [RetryConditions] = []) -> PTZReply {
+        var bytes: Bytes
         
-        #warning("support PTZRequest.modeConditionRescueRequest")
+        while true {
+            // Serial communication
+            bytes = communicate(request)
+            
+            // Parse reply
+            let replies = PTZMessage.replies(from: bytes)
+            log(.info, replies.map(\.description).joined(separator: ", "))
+            
+            // Handle retries
+            var shouldRetry: Bool = false
+            for retry in retries {
+                switch retry {
+                case .untilAck:
+                    if !replies.contains(where: { if case .ack = $0 { true } else { false } }) {
+                        Thread.sleep(forTimeInterval: 0.2)
+                        shouldRetry = true
+                    }
+                    
+                case .onError(let error):
+                    if replies.contains(where: { $0 == .notExecuted(error: error) }) {
+                        Thread.sleep(forTimeInterval: 0.2)
+                        shouldRetry = true
+                    }
 
-        if shouldRetry {
-            Thread.sleep(forTimeInterval: 0.2)
-
-            requestLock.unlock()
-            let r = sendRequest(request, repeatUntilAck: repeatUntilAck, errorToRetry: errorToRetry)
-            requestLock.lock()
-            return r
+                case .rescueModeCondition(let max):
+                    if replies.contains(where: { $0 == .notExecuted(error: .modeCondition) }) && request.modeConditionRescueRequests.isNotEmpty {
+                        for rescue in request.modeConditionRescueRequests {
+                            _ = self.send(rescue, retries: max > 0 ? [.rescueModeCondition(maxTries: max - 1)] : [])
+                        }
+                        shouldRetry = true
+                    }
+                }
+            }
+            
+            if !shouldRetry {
+                break
+            }
         }
-        
-        if request.waitingTimeIfExecuted > 0 && replies.contains(where: { $0 is PTZReplyExecuted }) {
+
+        let replies = PTZMessage.replies(from: bytes)
+
+        // Wait a bit if needed
+        if request.waitingTimeIfExecuted > 0 && replies.contains(where: { if case .executed = $0 { true } else { false } }) {
             Thread.sleep(forTimeInterval: request.waitingTimeIfExecuted)
         }
 
-        return (bytes, replies)
+        return replies.element(at: 1) ?? .timeout
+    }
+}
+
+// MARK: High level communication
+extension Camera {
+    func run(_ request: PTZActionRequest, rescueModeCondition: Bool = false) throws(CameraError) {
+        let reply = send(request, retries: rescueModeCondition ? [.rescueModeCondition(maxTries: 3)] : [])
+        switch reply {
+        case .ack:                  return
+        case .reset:                throw .reset
+        case .fail:                 throw .fail
+        case .timeout:              throw .timeout
+        case .executed:             return
+        case .notExecuted(let e):   throw .notExecuted(error: e)
+        case .specific:             return
+        case .unknown:              return
+        }
+    }
+    
+    func get<T: PTZSpecificReply>(_ request: any PTZGetRequest<T>, rescueModeCondition: Bool = false) throws(CameraError) -> T {
+        let reply = send(request, retries: rescueModeCondition ? [.rescueModeCondition(maxTries: 3)] : [])
+        switch reply {
+        case .ack:                  throw .missingReply
+        case .reset:                throw .reset
+        case .fail:                 throw .fail
+        case .timeout:              throw .timeout
+        case .executed:             throw .missingReply
+        case .notExecuted(let e):   throw .notExecuted(error: e)
+        case .specific(_, let r):   return r as! T
+        case .unknown:              throw .wrongReply(reply)
+        }
     }
 }

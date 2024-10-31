@@ -20,7 +20,7 @@ struct PTZRequestGetAutoFocus: PTZGetRequest {
     var description: String { "Get auto focus" }
 }
 
-struct PTZReplyAutoFocus: PTZReply {
+struct PTZReplyAutoFocus: PTZSpecificReply {
     let enabled: PTZBool
     
     init?(message: PTZMessage) {

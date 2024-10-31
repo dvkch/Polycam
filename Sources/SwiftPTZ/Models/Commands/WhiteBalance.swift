@@ -51,7 +51,7 @@ struct PTZRequestGetWhiteBalance: PTZGetRequest {
     var description: String { "Get white balance" }
 }
 
-struct PTZReplyWhiteBalance: PTZReply {
+struct PTZReplyWhiteBalance: PTZSpecificReply {
     let mode: PTZWhiteBalance
 
     init?(message: PTZMessage) {

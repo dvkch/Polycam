@@ -53,7 +53,7 @@ struct PTZRequestGetShutterSpeed: PTZGetRequest {
     var description: String { "Get shutter speed" }
 }
 
-struct PTZReplyShutterSpeed: PTZReply {
+struct PTZReplyShutterSpeed: PTZSpecificReply {
     let speed: PTZShutterSpeed
     
     init?(message: PTZMessage) {

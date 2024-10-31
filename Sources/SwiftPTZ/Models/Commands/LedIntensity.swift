@@ -32,7 +32,7 @@ struct PTZRequestGetLedIntensity: PTZGetRequest {
     var description: String { "Get led intensity" }
 }
 
-struct PTZReplyLedIntensity: PTZReply {
+struct PTZReplyLedIntensity: PTZSpecificReply {
     let red: PTZLedIntensity
     let green: PTZLedIntensity
     let blue: PTZLedIntensity

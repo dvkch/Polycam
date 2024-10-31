@@ -37,7 +37,7 @@ struct PTZRequestGetTilt: PTZGetRequest {
     var description: String { "Get tilt" }
 }
 
-struct PTZReplyTilt: PTZReply {
+struct PTZReplyTilt: PTZSpecificReply {
     let tilt: PTZTilt
     
     init?(message: PTZMessage) {

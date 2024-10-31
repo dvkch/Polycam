@@ -31,7 +31,7 @@ struct PTZRequestGetAutoSleep: PTZGetRequest {
     var description: String { "Get auto sleep" }
 }
 
-struct PTZReplyAutoSleep: PTZReply {
+struct PTZReplyAutoSleep: PTZSpecificReply {
     let timeout: PTZAutoSleepTimeout
 
     init?(message: PTZMessage) {

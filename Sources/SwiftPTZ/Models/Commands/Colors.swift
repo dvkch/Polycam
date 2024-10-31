@@ -19,7 +19,7 @@ struct PTZRequestGetColors: PTZGetRequest {
     var description: String { "Get colors" }
 }
 
-struct PTZReplyColors: PTZReply {
+struct PTZReplyColors: PTZSpecificReply {
     let enabled: PTZBool
     
     init?(message: PTZMessage) {

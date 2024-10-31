@@ -19,7 +19,7 @@ struct PTZRequestGetMireMode: PTZGetRequest {
     var description: String { "Get mire mode" }
 }
 
-struct PTZReplyMireMode: PTZReply {
+struct PTZReplyMireMode: PTZSpecificReply {
     let enabled: PTZBool
 
     init?(message: PTZMessage) {

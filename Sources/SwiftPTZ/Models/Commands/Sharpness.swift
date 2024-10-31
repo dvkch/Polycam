@@ -28,7 +28,7 @@ struct PTZRequestGetSharpness: PTZGetRequest {
     var description: String { "Get sharpness" }
 }
 
-struct PTZReplySharpness: PTZReply {
+struct PTZReplySharpness: PTZSpecificReply {
     let sharpness: PTZSharpness
     
     init?(message: PTZMessage) {

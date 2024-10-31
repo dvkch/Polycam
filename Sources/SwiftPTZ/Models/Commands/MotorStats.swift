@@ -33,7 +33,7 @@ struct PTZRequestGetMotorStats: PTZGetRequest {
     var description: String { "Get motors stats" }
 }
 
-struct PTZReplyMotorStats: PTZReply {
+struct PTZReplyMotorStats: PTZSpecificReply {
     let stats: PTZMotorsStats
     let valueLeft: UInt32
     let valueRight: UInt32

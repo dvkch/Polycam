@@ -34,7 +34,7 @@ struct PTZRequestGetFocus: PTZGetRequest {
     var description: String { "Get focus" }
 }
 
-struct PTZReplyFocus: PTZReply {
+struct PTZReplyFocus: PTZSpecificReply {
     let focus: PTZFocus
     
     init?(message: PTZMessage) {

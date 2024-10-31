@@ -23,9 +23,3 @@ struct PTZUnknownRequest: PTZRequest {
     }
     var description: String { "Unknown request: \(bytes.hexString)" }
 }
-
-struct PTZReplyUnknown: PTZReply {
-    let bytes: Bytes
-    init(message: PTZMessage) { self.bytes = message.bytes }
-    var description: String { return "Unknown(\(bytes.hexString))" }
-}

@@ -19,7 +19,7 @@ struct PTZRequestGetNoiseReduction: PTZGetRequest {
     var description: String { "Get noise reduction" }
 }
 
-struct PTZReplyNoiseReduction: PTZReply {
+struct PTZReplyNoiseReduction: PTZSpecificReply {
     let enabled: PTZBool
     
     init?(message: PTZMessage) {

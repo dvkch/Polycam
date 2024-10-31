@@ -91,7 +91,7 @@ struct PTZRequestGetBlueGain: PTZGetRequest {
     var description: String { "Get blue gain" }
 }
 
-struct PTZReplyGainMode: PTZReply {
+struct PTZReplyGainMode: PTZSpecificReply {
     let gain: PTZGainMode
     
     init?(message: PTZMessage) {
@@ -104,7 +104,7 @@ struct PTZReplyGainMode: PTZReply {
     }
 }
 
-struct PTZReplyEffectiveGain: PTZReply {
+struct PTZReplyEffectiveGain: PTZSpecificReply {
     let gain: PTZEffectiveGain
     
     init?(message: PTZMessage) {
@@ -117,7 +117,7 @@ struct PTZReplyEffectiveGain: PTZReply {
     }
 }
 
-struct PTZReplyRedGain: PTZReply {
+struct PTZReplyRedGain: PTZSpecificReply {
     let gain: PTZColorGain
     
     init?(message: PTZMessage) {
@@ -130,7 +130,7 @@ struct PTZReplyRedGain: PTZReply {
     }
 }
 
-struct PTZReplyBlueGain: PTZReply {
+struct PTZReplyBlueGain: PTZSpecificReply {
     let gain: PTZColorGain
 
     init?(message: PTZMessage) {

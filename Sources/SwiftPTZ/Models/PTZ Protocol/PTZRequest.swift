@@ -14,7 +14,10 @@ protocol PTZRequest: CustomStringConvertible {
 }
 
 protocol PTZGetRequest<Reply>: PTZRequest {
-    associatedtype Reply: PTZReply
+    associatedtype Reply: PTZSpecificReply
+}
+
+protocol PTZActionRequest: PTZRequest {
 }
 
 extension PTZRequest {

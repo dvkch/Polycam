@@ -84,7 +84,7 @@ struct PTZRequestGetLedMode: PTZGetRequest {
     var description: String { "Get LED" }
 }
 
-struct PTZReplyLedMode: PTZReply {
+struct PTZReplyLedMode: PTZSpecificReply {
     let color: PTZLedColor
     let mode: PTZLedMode
 

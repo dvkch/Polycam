@@ -19,7 +19,7 @@ struct PTZRequestGetVignetteCorrection: PTZGetRequest {
     var description: String { "Get vignette correction" }
 }
 
-struct PTZReplyVignetteCorrection: PTZReply {
+struct PTZReplyVignetteCorrection: PTZSpecificReply {
     let enabled: PTZBool
     
     init?(message: PTZMessage) {

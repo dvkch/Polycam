@@ -33,7 +33,7 @@ struct PTZRequestGetIrisLevel: PTZGetRequest {
     var description: String { "Get iris level" }
 }
 
-struct PTZReplyIrisLevel: PTZReply {
+struct PTZReplyIrisLevel: PTZSpecificReply {
     let irisLevel: PTZIrisLevel
     
     init?(message: PTZMessage) {

@@ -148,16 +148,16 @@ extension Interactive {
         }
         
         func refresh(for camera: Camera) {
-            let (bytes, _) = try! camera.sendRequest2(PTZUnknownRequest(commandBytes: [category, register], arg: nil))
-            let value = PTZMessage.messages(from: bytes).last!.parseArgument(type: PTZUInt.self, position: .single).ptzValue
+            let reply = camera.send(PTZUnknownRequest(commandBytes: [category, register], arg: nil))
+            let value = PTZMessage.messages(from: reply.bytes).last!.parseArgument(type: PTZUInt.self, position: .single).ptzValue
             currentValue = values.closest(to: value) ?? value
         }
         
         func set(for camera: Camera, to value: UInt16) {
             let req = PTZUnknownRequest(commandBytes: [category + 0x40, register], arg: value)
-            let reply = try! camera.sendRequest(req)
+            let reply = camera.send(req)
             currentValue = values.closest(to: value) ?? value
-            setError = (reply is PTZReplyExecuted) ? nil : "\(req.bytes.hexString) => \(reply.description)"
+            setError = if case .executed = reply { nil } else { "\(req.bytes.hexString) => \(reply.description)" }
         }
         
         // InteractiveElement

@@ -37,7 +37,7 @@ struct PTZRequestGetPan: PTZGetRequest {
     var description: String { "Get pan" }
 }
 
-struct PTZReplyPan: PTZReply {
+struct PTZReplyPan: PTZSpecificReply {
     let pan: PTZPan
     
     init?(message: PTZMessage) {

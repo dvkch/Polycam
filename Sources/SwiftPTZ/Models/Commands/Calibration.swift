@@ -70,7 +70,7 @@ struct PTZRequestGetCalibrationHue: PTZGetRequest {
     var description: String { "Get \(range) calibration hue" }
 }
 
-struct PTZReplyCalibrationHue: PTZReply {
+struct PTZReplyCalibrationHue: PTZSpecificReply {
     let range: PTZCalibrationRange
     let hue: PTZCalibrationHue
     init?(message: PTZMessage) {
@@ -95,7 +95,7 @@ struct PTZRequestGetCalibrationLuminance: PTZGetRequest {
     var description: String { "Get \(range) calibration luminance" }
 }
 
-struct PTZReplyCalibrationLuminance: PTZReply {
+struct PTZReplyCalibrationLuminance: PTZSpecificReply {
     let range: PTZCalibrationRange
     let luminance: PTZCalibrationLuminance
     init?(message: PTZMessage) {
@@ -120,7 +120,7 @@ struct PTZRequestGetCalibrationSaturation: PTZGetRequest {
     var description: String { "Get \(range) calibration saturation" }
 }
 
-struct PTZReplyCalibrationSaturation: PTZReply {
+struct PTZReplyCalibrationSaturation: PTZSpecificReply {
     let range: PTZCalibrationRange
     let saturation: PTZCalibrationSaturation
     init?(message: PTZMessage) {

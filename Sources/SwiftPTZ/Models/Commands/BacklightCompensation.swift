@@ -19,7 +19,7 @@ struct PTZRequestGetBacklightCompensation: PTZGetRequest {
     var description: String { "Get backlight compensation" }
 }
 
-struct PTZReplyBacklightCompensation: PTZReply {
+struct PTZReplyBacklightCompensation: PTZSpecificReply {
     let enabled: PTZBool
     
     init?(message: PTZMessage) {

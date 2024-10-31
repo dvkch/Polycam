@@ -41,7 +41,7 @@ struct PTZRequestGetZoom: PTZGetRequest {
     var description: String { "Get zoom" }
 }
 
-struct PTZReplyZoom: PTZReply {
+struct PTZReplyZoom: PTZSpecificReply {
     let zoom: PTZZoom
     
     init?(message: PTZMessage) {

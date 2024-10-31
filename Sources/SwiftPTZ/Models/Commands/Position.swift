@@ -31,7 +31,7 @@ struct PTZRequestGetPosition: PTZGetRequest {
     var description: String { "Get position" }
 }
 
-struct PTZReplyPosition: PTZReply {
+struct PTZReplyPosition: PTZSpecificReply {
     let pan: PTZPan
     let tilt: PTZTilt
     let zoom: PTZZoom

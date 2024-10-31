@@ -40,7 +40,7 @@ struct PTZRequestGetPowerMode: PTZGetRequest {
     var description: String { "Get power mode" }
 }
 
-struct PTZReplyPowerMode: PTZReply {
+struct PTZReplyPowerMode: PTZSpecificReply {
     let mode: PTZPowerMode
 
     init?(message: PTZMessage) {

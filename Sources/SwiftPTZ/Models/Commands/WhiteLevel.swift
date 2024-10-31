@@ -33,7 +33,7 @@ struct PTZRequestGetWhiteLevel: PTZGetRequest {
     var description: String { "Get white level" }
 }
 
-struct PTZReplyWhiteLevel: PTZReply {
+struct PTZReplyWhiteLevel: PTZSpecificReply {
     let level: PTZWhiteLevel
 
     init?(message: PTZMessage) {

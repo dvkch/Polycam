@@ -43,7 +43,7 @@ struct PTZRequestGetDrunkTestPhase: PTZGetRequest {
     var description: String { "Get drunk test phase" }
 }
 
-struct PTZReplyDrunkTestPhase: PTZReply {
+struct PTZReplyDrunkTestPhase: PTZSpecificReply {
     let phase: PTZDrunkTestPhase
     
     init?(message: PTZMessage) {
