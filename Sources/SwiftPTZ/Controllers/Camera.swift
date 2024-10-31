@@ -87,6 +87,10 @@ extension Camera {
         case untilAck
         case onError(PTZReply.CommandError)
         case rescueModeCondition(maxTries: Int)
+        
+        static func modeCondition(_ rescue: Bool) -> [RetryConditions] {
+            return rescue ? [.rescueModeCondition(maxTries: 3)] : []
+        }
     }
 
     @discardableResult
@@ -146,7 +150,7 @@ extension Camera {
 // MARK: High level communication
 extension Camera {
     func run(_ request: PTZActionRequest, rescueModeCondition: Bool = false) throws(CameraError) {
-        let reply = send(request, retries: rescueModeCondition ? [.rescueModeCondition(maxTries: 3)] : [])
+        let reply = send(request, retries: RetryConditions.modeCondition(rescueModeCondition))
         switch reply {
         case .ack:                  return
         case .reset:                throw .reset
