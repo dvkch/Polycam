@@ -290,12 +290,12 @@ extension FuzzerResult {
         
         // Pretty printing of the request string, could be "8x 06 77" as well as "8x 43 00 (00 -> 02 00+)"
         if let argRange {
-            let bytes1 = Array(PTZUnknownRequest(commandBytes: [category, register], arg: argRange.first!).bytes.dropFirst())
-            let bytes2 = Array(PTZUnknownRequest(commandBytes: [category, register], arg: argRange.last!).bytes.dropFirst())
+            let bytes1 = Array(PTZUnknownRequest(commandBytes: [category, register], arg: argRange.first!).message.bytes.dropFirst())
+            let bytes2 = Array(PTZUnknownRequest(commandBytes: [category, register], arg: argRange.last!).message.bytes.dropFirst())
             requestName = "8x " + bytes1.hexString(condensedWith: bytes2, stoppedEarly: stoppedEarly)
         }
         else {
-            requestName = "8x " + Array(PTZUnknownRequest(commandBytes: [category, register], arg: nil).bytes.dropFirst()).hexString
+            requestName = "8x " + Array(PTZUnknownRequest(commandBytes: [category, register], arg: nil).message.bytes.dropFirst()).hexString
             requestName += stoppedEarly ? "+" : ""
         }
         
@@ -303,7 +303,7 @@ extension FuzzerResult {
         // setter request for the same value), we can try to add more information to our output
         replyName = reply.description
         if reply == .executed || reply.isNotExecuted {
-            if let equivalentRequest = PTZMessage.replies(from: PTZUnknownRequest(commandBytes: [category, register], arg: argRange?.first).bytes).first?.specific {
+            if let equivalentRequest = PTZMessage.replies(from: PTZUnknownRequest(commandBytes: [category, register], arg: argRange?.first).message.bytes).first?.specific {
                 isRequestKnown = true
                 replyName += ": \(equivalentRequest)"
             }

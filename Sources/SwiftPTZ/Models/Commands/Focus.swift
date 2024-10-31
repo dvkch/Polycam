@@ -17,20 +17,20 @@ struct PTZFocus: PTZScaledValue {
 }
 
 struct PTZRequestStartFocus: PTZRequest {
-    var bytes: Bytes { buildBytes([0x45, 0x13]) }
+    var message: PTZMessage { .init([0x45, 0x13]) }
     var description: String { "Start focus" } // takes about 5s to settle down
 }
 
 struct PTZRequestSetFocus: PTZRequest {
     let focus: PTZFocus
-    var bytes: Bytes { buildBytes([0x43, 0x03], focus) }
+    var message: PTZMessage { .init([0x43, 0x03], focus) }
     var description: String { "Set focus to \(focus)" }
     var modeConditionRescueRequests: [any PTZRequest]? { [PTZRequestSetAutoFocus(enabled: .off)] } /* setting mire mode to True also works */
 }
 
 struct PTZRequestGetFocus: PTZGetRequest {
     typealias Reply = PTZReplyFocus
-    var bytes: Bytes { buildBytes([0x03, 0x03]) }
+    var message: PTZMessage { .init([0x03, 0x03]) }
     var description: String { "Get focus" }
 }
 

@@ -35,19 +35,19 @@ enum PTZWhiteBalance: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
 
 struct PTZRequestSetWhiteBalance: PTZRequest {
     let mode: PTZWhiteBalance
-    var bytes: Bytes { buildBytes([0x42, 0x12], mode) }
+    var message: PTZMessage { .init([0x42, 0x12], mode) }
     var description: String { "Set white balance to \(mode.description)" }
 }
 
 struct PTZRequestStartManualWhiteBalanceCalibration: PTZRequest {
-    var bytes: Bytes { buildBytes([0x45, 0x17]) }
+    var message: PTZMessage { .init([0x45, 0x17]) }
     var waitingTimeIfExecuted: TimeInterval { 2 }
     var description: String { "Start manual white balance calibration" }
 }
 
 struct PTZRequestGetWhiteBalance: PTZGetRequest {
     typealias Reply = PTZReplyWhiteBalance
-    var bytes: Bytes { buildBytes([0x02, 0x12]) }
+    var message: PTZMessage { .init([0x02, 0x12]) }
     var description: String { "Get white balance" }
 }
 

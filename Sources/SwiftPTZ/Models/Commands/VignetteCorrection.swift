@@ -9,13 +9,13 @@ import Foundation
 
 struct PTZRequestSetVignetteCorrection: PTZRequest {
     let enabled: PTZBool
-    var bytes: Bytes { buildBytes([0x41, 0x3D], enabled) }
+    var message: PTZMessage { .init([0x41, 0x3D], enabled) }
     var description: String { "Set vignette correction \(enabled)" }
 }
 
 struct PTZRequestGetVignetteCorrection: PTZGetRequest {
     typealias Reply = PTZReplyVignetteCorrection
-    var bytes: Bytes { buildBytes([0x01, 0x3D]) }
+    var message: PTZMessage { .init([0x01, 0x3D]) }
     var description: String { "Get vignette correction" }
 }
 

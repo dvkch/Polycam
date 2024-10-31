@@ -9,13 +9,13 @@ import Foundation
 
 struct PTZRequestSetInvertedMode: PTZRequest {
     let enabled: PTZBool
-    var bytes: Bytes { buildBytes([0x41, 0x3e], enabled) }
+    var message: PTZMessage { .init([0x41, 0x3e], enabled) }
     var description: String { "Set inverted mode \(enabled)" }
 }
 
 struct PTZRequestGetInvertedMode: PTZGetRequest {
     typealias Reply = PTZReplyInvertedMode
-    var bytes: Bytes { buildBytes([0x01, 0x3e]) }
+    var message: PTZMessage { .init([0x01, 0x3e]) }
     var description: String { "Get inverted mode" }
 }
 

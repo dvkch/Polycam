@@ -43,13 +43,13 @@ enum PTZShutterSpeed: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
 
 struct PTZRequestSetShutterSpeed: PTZRequest {
     let speed: PTZShutterSpeed
-    var bytes: Bytes { buildBytes([0x42, 0x14], speed) }
+    var message: PTZMessage { .init([0x42, 0x14], speed) }
     var description: String { "Set shutter speed to \(speed.description)" }
 }
 
 struct PTZRequestGetShutterSpeed: PTZGetRequest {
     typealias Reply = PTZReplyShutterSpeed
-    var bytes: Bytes { buildBytes([0x02, 0x14]) }
+    var message: PTZMessage { .init([0x02, 0x14]) }
     var description: String { "Get shutter speed" }
 }
 

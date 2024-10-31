@@ -27,13 +27,13 @@ struct PTZPanOriginalAPI: PTZScaledValue {
 
 struct PTZRequestSetPan: PTZRequest {
     let pan: PTZPan
-    var bytes: Bytes { buildBytes([0x43, 0x04], pan) }
+    var message: PTZMessage { .init([0x43, 0x04], pan) }
     var description: String { "Set pan to \(pan)" }
 }
 
 struct PTZRequestGetPan: PTZGetRequest {
     typealias Reply = PTZReplyPan
-    var bytes: Bytes { buildBytes([0x03, 0x04]) }
+    var message: PTZMessage { .init([0x03, 0x04]) }
     var description: String { "Get pan" }
 }
 

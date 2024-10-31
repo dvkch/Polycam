@@ -9,13 +9,13 @@ import Foundation
 
 struct PTZRequestSetSensorSmoothing: PTZRequest {
     let enabled: PTZBool
-    var bytes: Bytes { buildBytes([0x41, 0x3B], enabled) }
+    var message: PTZMessage { .init([0x41, 0x3B], enabled) }
     var description: String { "Set sensor smoothing \(enabled)" }
 }
 
 struct PTZRequestGetSensorSmoothing: PTZGetRequest {
     typealias Reply = PTZReplySensorSmoothing
-    var bytes: Bytes { buildBytes([0x01, 0x3B]) }
+    var message: PTZMessage { .init([0x01, 0x3B]) }
     var description: String { "Get sensor smoothing" }
 }
 

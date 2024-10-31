@@ -16,14 +16,14 @@ struct PTZWhiteBalanceTemp: PTZScaledValue {
 
 struct PTZRequestSetWhiteBalanceTemp: PTZRequest {
     let temp: PTZWhiteBalanceTemp
-    var bytes: Bytes { buildBytes([0x43, 0x41], temp) }
+    var message: PTZMessage { .init([0x43, 0x41], temp) }
     var description: String { "Set wb temp to \(temp)" }
     var modeConditionRescueRequests: [any PTZRequest] { [PTZRequestSetWhiteBalance(mode: .manual)] }
 }
 
 struct PTZRequestGetWhiteBalanceTemp: PTZGetRequest {
     typealias Reply = PTZReplyWhiteBalanceTemp
-    var bytes: Bytes { buildBytes([0x03, 0x41]) }
+    var message: PTZMessage { .init([0x03, 0x41]) }
     var description: String { "Get wb temp" }
 }
 

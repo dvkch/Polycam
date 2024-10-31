@@ -18,13 +18,13 @@ struct PTZSaturation: PTZScaledValue {
 
 struct PTZRequestSetSaturation: PTZRequest {
     let saturation: PTZSaturation
-    var bytes: Bytes { buildBytes([0x43, 0x3e], saturation) }
+    var message: PTZMessage { .init([0x43, 0x3e], saturation) }
     var description: String { "Set saturation to \(saturation)" }
 }
 
 struct PTZRequestGetSaturation: PTZGetRequest {
     typealias Reply = PTZReplySaturation
-    var bytes: Bytes { buildBytes([0x03, 0x3e]) }
+    var message: PTZMessage { .init([0x03, 0x3e]) }
     var description: String { "Get saturation" }
 }
 

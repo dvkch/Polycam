@@ -157,7 +157,7 @@ extension Interactive {
             let req = PTZUnknownRequest(commandBytes: [category + 0x40, register], arg: value)
             let reply = camera.send(req)
             currentValue = values.closest(to: value) ?? value
-            setError = if case .executed = reply { nil } else { "\(req.bytes.hexString) => \(reply.description)" }
+            setError = if case .executed = reply { nil } else { "\(req.message.bytes.hexString) => \(reply.description)" }
         }
         
         // InteractiveElement

@@ -9,13 +9,13 @@ import Foundation
 
 struct PTZRequestSetWideDynamicRange: PTZRequest {
     let enabled: PTZBool
-    var bytes: Bytes { buildBytes([0x41, 0x34], enabled) }
+    var message: PTZMessage { .init([0x41, 0x34], enabled) }
     var description: String { "Set wide dynamic range \(enabled)" }
 }
 
 struct PTZRequestGetWideDynamicRange: PTZGetRequest {
     typealias Reply = PTZReplyWideDynamicRange
-    var bytes: Bytes { buildBytes([0x01, 0x34]) }
+    var message: PTZMessage { .init([0x01, 0x34]) }
     var description: String { "Get wide dynamic range" }
 }
 

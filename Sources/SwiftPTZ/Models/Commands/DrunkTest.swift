@@ -33,13 +33,13 @@ enum PTZDrunkTestPhase: UInt16, CaseIterable, PTZValue {
 }
 
 struct PTZRequestStartDrunkTest: PTZRequest {
-    var bytes: Bytes { buildBytes([0x45, 0x14, 0x01]) }
+    var message: PTZMessage { .init([0x45, 0x14, 0x01]) }
     var description: String { "Start drunk test" }
 }
 
 struct PTZRequestGetDrunkTestPhase: PTZGetRequest {
     typealias Reply = PTZReplyDrunkTestPhase
-    var bytes: Bytes { buildBytes([0x01, 0x42]) }
+    var message: PTZMessage { .init([0x01, 0x42]) }
     var description: String { "Get drunk test phase" }
 }
 

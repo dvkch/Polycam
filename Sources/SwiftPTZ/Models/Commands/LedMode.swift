@@ -74,13 +74,13 @@ enum PTZLedMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
 struct PTZRequestSetLedMode: PTZRequest {
     let color: PTZLedColor
     let mode: PTZLedMode
-    var bytes: Bytes { buildBytes([0x41, 0x21], .init(color, .raw8(3)), .init(mode, .raw8(4))) }
+    var message: PTZMessage { .init([0x41, 0x21], .init(color, .raw8(3)), .init(mode, .raw8(4))) }
     var description: String { "Set LED \(color.description) \(mode.description)" }
 }
 
 struct PTZRequestGetLedMode: PTZGetRequest {
     typealias Reply = PTZReplyLedMode
-    var bytes: Bytes { buildBytes([0x01, 0x21]) }
+    var message: PTZMessage { .init([0x01, 0x21]) }
     var description: String { "Get LED" }
 }
 

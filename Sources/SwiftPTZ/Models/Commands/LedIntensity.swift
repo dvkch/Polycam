@@ -20,15 +20,13 @@ struct PTZRequestSetLedIntensity: PTZRequest {
     let red: PTZLedIntensity
     let green: PTZLedIntensity
     let blue: PTZLedIntensity
-    var bytes: Bytes {
-        buildBytes([0x41, 0x25], .init(red, .raw8(3)), .init(blue, .raw8(4)), .init(green, .raw8(5)))
-    }
+    var message: PTZMessage { .init([0x41, 0x25], .init(red, .raw8(3)), .init(blue, .raw8(4)), .init(green, .raw8(5))) }
     var description: String { "Set led intensity to (R=\(red), G=\(green), B=\(blue))" }
 }
 
 struct PTZRequestGetLedIntensity: PTZGetRequest {
     typealias Reply = PTZReplyLedIntensity
-    var bytes: Bytes { buildBytes([0x01, 0x25]) }
+    var message: PTZMessage { .init([0x01, 0x25]) }
     var description: String { "Get led intensity" }
 }
 

@@ -9,13 +9,13 @@ import Foundation
 
 struct PTZRequestSetColors: PTZRequest {
     let enabled: PTZBool
-    var bytes: Bytes { buildBytes([0x41, 0x3A], enabled) }
+    var message: PTZMessage { .init([0x41, 0x3A], enabled) }
     var description: String { "Set colors \(enabled)" }
 }
 
 struct PTZRequestGetColors: PTZGetRequest {
     typealias Reply = PTZReplyColors
-    var bytes: Bytes { buildBytes([0x01, 0x3A]) }
+    var message: PTZMessage { .init([0x01, 0x3A]) }
     var description: String { "Get colors" }
 }
 

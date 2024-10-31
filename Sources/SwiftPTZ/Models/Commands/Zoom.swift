@@ -31,13 +31,13 @@ struct PTZZoomOriginalAPI: PTZScaledValue {
 
 struct PTZRequestSetZoom: PTZRequest {
     let zoom: PTZZoom
-    var bytes: Bytes { buildBytes([0x43, 0x02], zoom) }
+    var message: PTZMessage { .init([0x43, 0x02], zoom) }
     var description: String { "Set zoom to \(zoom)" }
 }
 
 struct PTZRequestGetZoom: PTZGetRequest {
     typealias Reply = PTZReplyZoom
-    var bytes: Bytes { buildBytes([0x03, 0x02]) }
+    var message: PTZMessage { .init([0x03, 0x02]) }
     var description: String { "Get zoom" }
 }
 

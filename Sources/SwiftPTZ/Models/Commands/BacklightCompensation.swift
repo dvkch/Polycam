@@ -9,13 +9,13 @@ import Foundation
 
 struct PTZRequestSetBacklightCompensation: PTZRequest {
     let enabled: PTZBool
-    var bytes: Bytes { buildBytes([0x42, 0x15], enabled) }
+    var message: PTZMessage { .init([0x42, 0x15], enabled) }
     var description: String { "Set backlight compensation \(enabled)" }
 }
 
 struct PTZRequestGetBacklightCompensation: PTZGetRequest {
     typealias Reply = PTZReplyBacklightCompensation
-    var bytes: Bytes { buildBytes([0x02, 0x15]) }
+    var message: PTZMessage { .init([0x02, 0x15]) }
     var description: String { "Get backlight compensation" }
 }
 

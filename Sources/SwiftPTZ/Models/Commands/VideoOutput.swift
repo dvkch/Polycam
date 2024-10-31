@@ -27,14 +27,14 @@ enum PTZVideoOutputMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue
 
 struct PTZRequestSetVideoOutputMode: PTZRequest {
     let mode: PTZVideoOutputMode
-    var bytes: Bytes { buildBytes([0x41, 0x13], mode) }
+    var message: PTZMessage { .init([0x41, 0x13], mode) }
     var description: String { "Set video output \(mode.description)" }
     var waitingTimeIfExecuted: TimeInterval { 6 }
 }
 
 struct PTZRequestGetVideoOutputMode: PTZGetRequest {
     typealias Reply = PTZReplyVideoOutputMode
-    var bytes: Bytes { buildBytes([0x01, 0x13]) }
+    var message: PTZMessage { .init([0x01, 0x13]) }
     var description: String { "Get video output" }
 }
 

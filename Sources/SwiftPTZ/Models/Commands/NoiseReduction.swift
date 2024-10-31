@@ -9,13 +9,13 @@ import Foundation
 
 struct PTZRequestSetNoiseReduction: PTZRequest {
     let enabled: PTZBool
-    var bytes: Bytes { buildBytes([0x41, 0x3C], enabled) }
+    var message: PTZMessage { .init([0x41, 0x3C], enabled) }
     var description: String { "Set noise reduction \(enabled)" }
 }
 
 struct PTZRequestGetNoiseReduction: PTZGetRequest {
     typealias Reply = PTZReplyNoiseReduction
-    var bytes: Bytes { buildBytes([0x01, 0x3C]) }
+    var message: PTZMessage { .init([0x01, 0x3C]) }
     var description: String { "Get noise reduction" }
 }
 

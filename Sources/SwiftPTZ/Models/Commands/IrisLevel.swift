@@ -18,7 +18,7 @@ struct PTZIrisLevel: PTZScaledValue {
 
 struct PTZRequestSetIrisLevel: PTZRequest {
     let irisLevel: PTZIrisLevel
-    var bytes: Bytes { buildBytes([0x43, 0x00], irisLevel) }
+    var message: PTZMessage { .init([0x43, 0x00], irisLevel) }
     var description: String { "Set iris level to \(irisLevel)" }
     var modeConditionRescueRequests: [any PTZRequest] { [
         PTZRequestSetAutoExposure(enabled: .off),
@@ -29,7 +29,7 @@ struct PTZRequestSetIrisLevel: PTZRequest {
 
 struct PTZRequestGetIrisLevel: PTZGetRequest {
     typealias Reply = PTZReplyIrisLevel
-    var bytes: Bytes { buildBytes([0x03, 0x00]) }
+    var message: PTZMessage { .init([0x03, 0x00]) }
     var description: String { "Get iris level" }
 }
 

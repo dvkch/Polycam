@@ -50,44 +50,44 @@ struct PTZColorGain: PTZScaledValue {
 
 struct PTZRequestSetGainMode: PTZRequest {
     let gain: PTZGainMode
-    var bytes: Bytes { buildBytes([0x41, 0x31], gain) }
+    var message: PTZMessage { .init([0x41, 0x31], gain) }
     var description: String { "Set gain mode to \(gain)" }
     var waitingTimeIfExecuted: TimeInterval { 0.5 }
 }
 
 struct PTZRequestSetRedGain: PTZRequest {
     let gain: PTZColorGain
-    var bytes: Bytes { buildBytes([0x43, 0x42], gain) }
+    var message: PTZMessage { .init([0x43, 0x42], gain) }
     var description: String { "Set red gain to \(gain)" }
 }
 
 struct PTZRequestSetBlueGain: PTZRequest {
     let gain: PTZColorGain
-    var bytes: Bytes { buildBytes([0x43, 0x43], gain) }
+    var message: PTZMessage { .init([0x43, 0x43], gain) }
     var description: String { "Set blue gain to \(gain)" }
 }
 
 struct PTZRequestGetGainMode: PTZGetRequest {
     typealias Reply = PTZReplyGainMode
-    var bytes: Bytes { buildBytes([0x01, 0x31]) }
+    var message: PTZMessage { .init([0x01, 0x31]) }
     var description: String { "Get gain mode" }
 }
 
 struct PTZRequestGetEffectiveGain: PTZGetRequest {
     typealias Reply = PTZReplyEffectiveGain
-    var bytes: Bytes { buildBytes([0x03, 0x26]) }
+    var message: PTZMessage { .init([0x03, 0x26]) }
     var description: String { "Get effective gain" }
 }
 
 struct PTZRequestGetRedGain: PTZGetRequest {
     typealias Reply = PTZReplyRedGain
-    var bytes: Bytes { buildBytes([0x03, 0x42]) }
+    var message: PTZMessage { .init([0x03, 0x42]) }
     var description: String { "Get red gain" }
 }
 
 struct PTZRequestGetBlueGain: PTZGetRequest {
     typealias Reply = PTZReplyBlueGain
-    var bytes: Bytes { buildBytes([0x03, 0x43]) }
+    var message: PTZMessage { .init([0x03, 0x43]) }
     var description: String { "Get blue gain" }
 }
 

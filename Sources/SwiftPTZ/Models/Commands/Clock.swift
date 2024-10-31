@@ -24,12 +24,12 @@ enum PTZClock: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
 struct PTZRequestSetClock: PTZRequest {
     let clock: PTZClock
     let time: UInt32
-    var bytes: Bytes { 
+    var message: PTZMessage {
         let timePart0 = UInt16( time        & 0xFF)
         let timePart1 = UInt16((time >>  8) & 0xFF)
         let timePart2 = UInt16((time >> 16) & 0xFF)
         let timePart3 = UInt16((time >> 24) & 0xFF)
-        return buildBytes(
+        return .init(
             [0x41, UInt8(clock.rawValue)],
             .init(PTZUInt(rawValue: timePart0), .custom(hiIndex: 13, loIndex: 7, loRetainerIndex: 3, loRetainerMask: 0x08)),
             .init(PTZUInt(rawValue: timePart1), .custom(hiIndex: 13, loIndex: 6, loRetainerIndex: 3, loRetainerMask: 0x04)),
@@ -44,7 +44,7 @@ struct PTZRequestSetClock: PTZRequest {
 struct PTZRequestGetClock: PTZGetRequest {
     typealias Reply = PTZReplyClock
     let clock: PTZClock
-    var bytes: Bytes { return buildBytes([0x01, UInt8(clock.rawValue)]) }
+    var message: PTZMessage { .init([0x01, UInt8(clock.rawValue)]) }
     var description: String { return "Get \(clock)" }
 }
 

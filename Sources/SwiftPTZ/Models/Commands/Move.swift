@@ -104,18 +104,18 @@ struct PTZRequestSetMove: PTZRequest {
         self.focusSpeed = focusSpeed
     }
 
-    var bytes: Bytes {
+    var message: PTZMessage {
         if direction == .panStop || direction == .tiltStop || direction == .zoomStop || direction == .focusStop {
-            buildBytes([0x45, direction.rawValue])
+            .init([0x45, direction.rawValue])
         }
         else if direction == .focusFar || direction == .focusNear {
-            buildBytes([0x45, direction.rawValue], .init(focusSpeed, .single))
+            .init([0x45, direction.rawValue], .init(focusSpeed, .single))
         }
         else if direction == .zoomIn || direction == .zoomOut {
-            buildBytes([0x45, direction.rawValue], .init(zoomSpeed, .single))
+            .init([0x45, direction.rawValue], .init(zoomSpeed, .single))
         }
         else {
-            buildBytes([0x45, direction.rawValue], .init(panTiltSpeed, .single))
+            .init([0x45, direction.rawValue], .init(panTiltSpeed, .single))
         }
     }
     

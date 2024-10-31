@@ -29,7 +29,7 @@ enum PTZMotorsStats: UInt16, CaseIterable, PTZValue {
 struct PTZRequestGetMotorStats: PTZGetRequest {
     typealias Reply = PTZReplyMotorStats
     let stats: PTZMotorsStats
-    var bytes: Bytes { buildBytes([0x01, UInt8(stats.rawValue)]) }
+    var message: PTZMessage { .init([0x01, UInt8(stats.rawValue)]) }
     var description: String { "Get motors stats" }
 }
 

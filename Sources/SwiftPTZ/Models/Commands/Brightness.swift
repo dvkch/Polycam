@@ -18,13 +18,13 @@ struct PTZBrightness: PTZScaledValue {
 
 struct PTZRequestSetBrightness: PTZRequest {
     let brightness: PTZBrightness
-    var bytes: Bytes { buildBytes([0x41, 0x33], brightness) }
+    var message: PTZMessage { .init([0x41, 0x33], brightness) }
     var description: String { "Set brightness to \(brightness)" }
 }
 
 struct PTZRequestGetBrightness: PTZGetRequest {
     typealias Reply = PTZReplyBrightness
-    var bytes: Bytes { buildBytes([0x01, 0x33]) }
+    var message: PTZMessage { .init([0x01, 0x33]) }
     var description: String { "Get Brightness" }
 }
 

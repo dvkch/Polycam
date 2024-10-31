@@ -27,13 +27,13 @@ struct PTZTiltOriginalAPI: PTZScaledValue {
 
 struct PTZRequestSetTilt: PTZRequest {
     let tilt: PTZTilt
-    var bytes: Bytes { buildBytes([0x43, 0x05], tilt) }
+    var message: PTZMessage { .init([0x43, 0x05], tilt) }
     var description: String { "Set tilt to \(tilt)" }
 }
 
 struct PTZRequestGetTilt: PTZGetRequest {
     typealias Reply = PTZReplyTilt
-    var bytes: Bytes { buildBytes([0x03, 0x05]) }
+    var message: PTZMessage { .init([0x03, 0x05]) }
     var description: String { "Get tilt" }
 }
 

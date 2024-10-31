@@ -21,13 +21,13 @@ struct PTZAutoSleepTimeout: PTZScaledValue {
 
 struct PTZRequestSetAutoSleep: PTZRequest {
     let timeout: PTZAutoSleepTimeout
-    var bytes: Bytes { buildBytes([0x41, 0x01], timeout) }
+    var message: PTZMessage { .init([0x41, 0x01], timeout) }
     var description: String { "Set auto sleep to \(timeout)" }
 }
 
 struct PTZRequestGetAutoSleep: PTZGetRequest {
     typealias Reply = PTZReplyAutoSleep
-    var bytes: Bytes { buildBytes([0x01, 0x01]) }
+    var message: PTZMessage { .init([0x01, 0x01]) }
     var description: String { "Get auto sleep" }
 }
 

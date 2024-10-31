@@ -22,7 +22,7 @@ enum PTZResetKind: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
 
 struct PTZRequestReset: PTZRequest {
     let reset: PTZResetKind
-    var bytes: Bytes { buildBytes([0x45, 0x32], reset) }
+    var message: PTZMessage { .init([0x45, 0x32], reset) }
     var description: String { "Resetting \(reset)" }
     var waitingTimeIfExecuted: TimeInterval {
         switch reset {

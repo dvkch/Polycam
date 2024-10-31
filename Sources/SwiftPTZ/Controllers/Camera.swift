@@ -57,8 +57,8 @@ extension Camera {
         
         // Send bytes
         log(.info, request.description)
-        log(.debug, "> \(request.bytes.hexString)")
-        serial.sendBytes(request.bytes)
+        log(.debug, "> \(request.message.bytes.hexString)")
+        serial.sendBytes(request.message.bytes)
         
         // Read bytes, up until we have received complete messages or timeout
         let startDate = Date()

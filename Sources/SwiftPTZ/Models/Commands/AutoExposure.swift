@@ -10,7 +10,7 @@ import Foundation
 #warning("Add comments to all the states, explaning how they were found and how they work")
 struct PTZRequestSetAutoExposure: PTZRequest {
     let enabled: PTZBool
-    var bytes: Bytes { buildBytes([0x42, 0x11], enabled) }
+    var message: PTZMessage { .init([0x42, 0x11], enabled) }
     var description: String { "Set auto exposure \(enabled)" }
     var waitingTimeIfExecuted: TimeInterval { 1 }
     var modeConditionRescueRequests: [any PTZRequest] { [PTZRequestSetBacklightCompensation(enabled: .on)] }
@@ -18,7 +18,7 @@ struct PTZRequestSetAutoExposure: PTZRequest {
 
 struct PTZRequestGetAutoExposure: PTZGetRequest {
     typealias Reply = PTZReplyAutoExposure
-    var bytes: Bytes { buildBytes([0x02, 0x11]) }
+    var message: PTZMessage { .init([0x02, 0x11]) }
     var description: String { "Get auto exposure" }
 }
 

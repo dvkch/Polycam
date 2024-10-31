@@ -18,13 +18,13 @@ struct PTZContrast: PTZScaledValue {
 
 struct PTZRequestSetContrast: PTZRequest {
     let contrast: PTZContrast
-    var bytes: Bytes { buildBytes([0x41, 0x32], contrast) }
+    var message: PTZMessage { .init([0x41, 0x32], contrast) }
     var description: String { "Set contrast to \(contrast)" }
 }
 
 struct PTZRequestGetContrast: PTZGetRequest {
     typealias Reply = PTZReplyContrast
-    var bytes: Bytes { buildBytes([0x01, 0x32]) }
+    var message: PTZMessage { .init([0x01, 0x32]) }
     var description: String { "Get contrast" }
 }
 

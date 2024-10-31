@@ -12,8 +12,8 @@ struct PTZRequestSetPosition: PTZRequest {
     let tilt: PTZTilt
     let zoom: PTZZoom
     
-    var bytes: Bytes {
-        return buildBytes(
+    var message: PTZMessage {
+        return .init(
             [0x41, 0x51],
             PTZArgument(pan,  .custom(hiIndex:  5, loIndex:  6, loRetainerIndex:  3, loRetainerMask: 0x04)),
             PTZArgument(tilt, .custom(hiIndex:  8, loIndex:  9, loRetainerIndex:  3, loRetainerMask: 0x20)),
@@ -27,7 +27,7 @@ struct PTZRequestSetPosition: PTZRequest {
 
 struct PTZRequestGetPosition: PTZGetRequest {
     typealias Reply = PTZReplyPosition
-    var bytes: Bytes { buildBytes([0x01, 0x50]) }
+    var message: PTZMessage { .init([0x01, 0x50]) }
     var description: String { "Get position" }
 }
 

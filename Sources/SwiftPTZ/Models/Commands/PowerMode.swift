@@ -27,7 +27,7 @@ enum PTZPowerMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
 
 struct PTZRequestSetPowerMode: PTZRequest {
     let mode: PTZPowerMode
-    var bytes: Bytes { buildBytes([0x41, 0x00], mode) }
+    var message: PTZMessage { .init([0x41, 0x00], mode) }
     var description: String { "Set power \(mode.description)" }
     var waitingTimeIfExecuted: TimeInterval {
         return mode == .on ? 5 : 0
@@ -36,7 +36,7 @@ struct PTZRequestSetPowerMode: PTZRequest {
 
 struct PTZRequestGetPowerMode: PTZGetRequest {
     typealias Reply = PTZReplyPowerMode
-    var bytes: Bytes { buildBytes([0x01, 0x00]) }
+    var message: PTZMessage { .init([0x01, 0x00]) }
     var description: String { "Get power mode" }
 }
 

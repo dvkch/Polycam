@@ -9,13 +9,13 @@ import Foundation
 
 struct PTZRequestSetDevMode: PTZRequest {
     let enabled: PTZBool
-    var bytes: Bytes { buildBytes([0x41, 0x0B], enabled) }
+    var message: PTZMessage { .init([0x41, 0x0B], enabled) }
     var description: String { "Set dev mode \(enabled)" }
 }
 
 struct PTZRequestGetDevMode: PTZGetRequest {
     typealias Reply = PTZReplyDevMode
-    var bytes: Bytes { buildBytes([0x01, 0x0B]) }
+    var message: PTZMessage { .init([0x01, 0x0B]) }
     var description: String { "Get dev mode" }
 }
 

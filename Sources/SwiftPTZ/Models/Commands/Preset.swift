@@ -38,8 +38,8 @@ struct PTZRequestSetPreset: PTZRequest {
     let tilt: PTZTilt
     let zoom: PTZZoom
     
-    var bytes: Bytes {
-        return buildBytes(
+    var message: PTZMessage {
+        return .init(
             [0x41, 0x60 + UInt8(preset.rawValue)],
             PTZArgument(pan,  .custom(hiIndex:  5, loIndex:  6, loRetainerIndex:  3, loRetainerMask: 0x04)),
             PTZArgument(tilt, .custom(hiIndex:  8, loIndex:  9, loRetainerIndex:  3, loRetainerMask: 0x20)),
@@ -54,7 +54,7 @@ struct PTZRequestSetPreset: PTZRequest {
 struct PTZRequestGetPreset: PTZGetRequest {
     typealias Reply = PTZReplyPreset
     let preset: PTZPreset
-    var bytes: Bytes { buildBytes([0x01, 0x60 + UInt8(preset.rawValue)]) }
+    var message: PTZMessage { .init([0x01, 0x60 + UInt8(preset.rawValue)]) }
     var description: String { "Get preset \(preset)" }
 }
 

@@ -59,14 +59,14 @@ enum PTZCalibrationRange: UInt16, CaseIterable, PTZValue {
 struct PTZRequestSetCalibrationHue: PTZRequest {
     let range: PTZCalibrationRange
     let hue: PTZCalibrationHue
-    var bytes: Bytes { buildBytes([0x43, 0x50 + UInt8(range.rawValue)], hue) }
+    var message: PTZMessage { .init([0x43, 0x50 + UInt8(range.rawValue)], hue) }
     var description: String { "Calibrate \(range) hue to \(hue)" }
 }
 
 struct PTZRequestGetCalibrationHue: PTZGetRequest {
     typealias Reply = PTZReplyCalibrationHue
     let range: PTZCalibrationRange
-    var bytes: Bytes { buildBytes([0x03, 0x50 + UInt8(range.rawValue)]) }
+    var message: PTZMessage { .init([0x03, 0x50 + UInt8(range.rawValue)]) }
     var description: String { "Get \(range) calibration hue" }
 }
 
@@ -84,14 +84,14 @@ struct PTZReplyCalibrationHue: PTZSpecificReply {
 struct PTZRequestSetCalibrationLuminance: PTZRequest {
     let range: PTZCalibrationRange
     let luminance: PTZCalibrationLuminance
-    var bytes: Bytes { buildBytes([0x43, 0x56 + UInt8(range.rawValue)], luminance) }
+    var message: PTZMessage { .init([0x43, 0x56 + UInt8(range.rawValue)], luminance) }
     var description: String { "Calibrate \(range) luminance to \(luminance)" }
 }
 
 struct PTZRequestGetCalibrationLuminance: PTZGetRequest {
     typealias Reply = PTZReplyCalibrationLuminance
     let range: PTZCalibrationRange
-    var bytes: Bytes { buildBytes([0x03, 0x56 + UInt8(range.rawValue)]) }
+    var message: PTZMessage { .init([0x03, 0x56 + UInt8(range.rawValue)]) }
     var description: String { "Get \(range) calibration luminance" }
 }
 
@@ -109,14 +109,14 @@ struct PTZReplyCalibrationLuminance: PTZSpecificReply {
 struct PTZRequestSetCalibrationSaturation: PTZRequest {
     let range: PTZCalibrationRange
     let saturation: PTZCalibrationSaturation
-    var bytes: Bytes { buildBytes([0x43, 0x5C + UInt8(range.rawValue)], saturation) }
+    var message: PTZMessage { .init([0x43, 0x5C + UInt8(range.rawValue)], saturation) }
     var description: String { "Calibrate \(range) saturation to \(saturation)" }
 }
 
 struct PTZRequestGetCalibrationSaturation: PTZGetRequest {
     typealias Reply = PTZReplyCalibrationSaturation
     let range: PTZCalibrationRange
-    var bytes: Bytes { buildBytes([0x03, 0x5C + UInt8(range.rawValue)]) }
+    var message: PTZMessage { .init([0x03, 0x5C + UInt8(range.rawValue)]) }
     var description: String { "Get \(range) calibration saturation" }
 }
 

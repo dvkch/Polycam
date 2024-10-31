@@ -9,6 +9,7 @@ import Foundation
 
 #warning("TODO: try to generalize into PTZAction and PTZState protocols, with helpers to handle 1, 2 or 3 elements")
 
+/*
 protocol PTZState<Value>: CustomStringConvertible {
     associatedtype Value
     
@@ -25,3 +26,30 @@ struct PTZStateRequest: PTZRequest {
     var description: String
     var waitingTimeIfExecuted: TimeInterval
 }
+
+*/
+
+protocol PTZStatee<Value>: CustomStringConvertible {
+    associatedtype Value: CustomStringConvertible
+    var name: String { get }
+    var value: Value { get set }
+    
+    init(value: Value)
+    init?(message: PTZMessage)
+    var setRequest: Bytes { get }
+    static var getRequest: Bytes { get }
+}
+
+extension PTZStatee {
+    var description: String { "\(name)(\(value))"  }
+}
+
+
+
+
+
+
+
+
+
+

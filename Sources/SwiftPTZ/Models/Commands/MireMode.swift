@@ -9,13 +9,13 @@ import Foundation
 
 struct PTZRequestSetMireMode: PTZRequest {
     let enabled: PTZBool
-    var bytes: Bytes { buildBytes([0x41, 0x10], enabled) }
+    var message: PTZMessage { .init([0x41, 0x10], enabled) }
     var description: String { "Set mire mode \(enabled)" }
 }
 
 struct PTZRequestGetMireMode: PTZGetRequest {
     typealias Reply = PTZReplyMireMode
-    var bytes: Bytes { buildBytes([0x01, 0x10]) }
+    var message: PTZMessage { .init([0x01, 0x10]) }
     var description: String { "Get mire mode" }
 }
 
