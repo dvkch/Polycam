@@ -1,5 +1,5 @@
 //
-//  SerialName.swift
+//  Serial+Name.swift
 //
 //
 //  Created by syan on 11/06/2024.
@@ -7,16 +7,18 @@
 
 import Foundation
 
-struct SerialName: RawRepresentable {
-    let rawValue: String
-    
-    init(rawValue: String) {
-        self.rawValue = rawValue
+extension Serial {
+    struct Name: RawRepresentable {
+        let rawValue: String
+        
+        init(rawValue: String) {
+            self.rawValue = rawValue
+        }
     }
 }
 
-extension SerialName {
-    static var firstAvailable: SerialName? {
+extension Serial.Name {
+    static var firstAvailable: Serial.Name? {
         let devices = allAvailables
         let names = devices.map(\.rawValue).joined(separator: ", ")
         print("Found \(devices.count) devices:", names)
@@ -28,8 +30,8 @@ extension SerialName {
         return nil
     }
     
-    static var allAvailables: [SerialName] {
+    static var allAvailables: [Serial.Name] {
         let devices = try! FileManager.default.contentsOfDirectory(at: URL(string: "file:///dev")!, includingPropertiesForKeys: nil)
-        return devices.filter { $0.lastPathComponent.hasPrefix("cu.usbserial-") }.map { SerialName(rawValue: $0.standardizedFileURL.path) }
+        return devices.filter { $0.lastPathComponent.hasPrefix("cu.usbserial-") }.map { Serial.Name(rawValue: $0.standardizedFileURL.path) }
     }
 }

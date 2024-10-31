@@ -16,7 +16,7 @@ protocol CamerableCommand: ParsableCommand {
 
 extension CamerableCommand {
     mutating func run() throws(CameraError) {
-        guard let serialDevice = self.serialDevice ?? SerialName.firstAvailable?.rawValue else {
+        guard let serialDevice = self.serialDevice ?? Serial.Name.firstAvailable?.rawValue else {
             fatalError("No available serial device")
         }
         
