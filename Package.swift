@@ -4,13 +4,13 @@
 import PackageDescription
 
 let package = Package(
-    name: "SwiftPTZ",
+    name: "PTZ",
     platforms: [.macOS(.v13)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .executable(
-            name: "SwiftPTZ",
-            targets: ["SwiftPTZ"]),
+            name: "ptz",
+            targets: ["PTZCLI"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.2"),
@@ -19,16 +19,25 @@ let package = Package(
     ],
     targets: [
         .executableTarget(
-            name: "SwiftPTZ",
+            name: "PTZCLI",
             dependencies: [
+                .target(name: "PTZCamera"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                .product(name: "SwiftSerial", package: "swiftserial"),
                 .product(name: "SwiftCurses", package: "SwiftCurses"),
             ]
         ),
+        .target(name: "PTZCommon", dependencies: []),
+        .target(name: "PTZCamera", dependencies: [
+            .target(name: "PTZMessaging"),
+            .target(name: "PTZCommon"),
+        ]),
+        .target(name: "PTZMessaging", dependencies: [
+            .product(name: "SwiftSerial", package: "swiftserial"),
+            .target(name: "PTZCommon"),
+        ]),
         .testTarget(
-            name: "SwiftPTZTests",
-            dependencies: ["SwiftPTZ"],
+            name: "PTZCameraTests",
+            dependencies: ["PTZCamera"],
             resources: [
                 .copy("Fixtures")
             ]
