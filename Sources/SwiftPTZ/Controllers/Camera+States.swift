@@ -10,7 +10,7 @@ import Foundation
 // MARK: Actions
 extension Camera {
     func powerOn() {
-        let sequence: [any PTZState] = [
+        let sequence: [any PTZReadable & PTZWriteable] = [
             PTZDevModeState(.on),
             PTZMireState(.off),
             PTZColorsState(.on),

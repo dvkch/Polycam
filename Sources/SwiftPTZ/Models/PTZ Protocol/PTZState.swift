@@ -7,18 +7,24 @@
 
 import Foundation
 
-#warning("TODO: try to generalize into PTZAction and PTZState protocols, with helpers to handle 1, 2 or 3 elements")
-
 protocol PTZState<Variant, Value>: CustomStringConvertible {
     associatedtype Value: Equatable
     associatedtype Variant
+    static var name: String { get }
     var variant: Variant { get }
     var value: Value { get set }
+}
+
+struct PTZNone: Equatable {}
+
+protocol PTZWriteable<Variant, Value>: PTZState {
+    func set() -> PTZRequest
     init(_ value: Value, for variant: Variant)
+}
+
+protocol PTZReadable<Variant, Value>: PTZState {
     init?(message: PTZMessage)
-    func set() -> any PTZRequest
-    static var name: String { get }
-    static func get(for variant: Variant) -> any PTZRequest
+    static func get(for variant: Variant) -> PTZRequest
 }
 
 extension PTZState where Variant: CustomStringConvertible, Value: CustomStringConvertible {
@@ -27,31 +33,40 @@ extension PTZState where Variant: CustomStringConvertible, Value: CustomStringCo
     }
 }
 
-protocol PTZInvariantState<Value>: PTZState where Variant == Void {
+extension PTZState where Variant == PTZNone, Value: CustomStringConvertible {
+    var description: String {
+        "\(Self.name)(\(value))"
+    }
+}
+
+extension PTZState where Variant == PTZNone, Value == PTZNone {
+    var description: String {
+        "\(Self.name)"
+    }
+}
+
+protocol PTZInvariantState<Value>: PTZState, PTZReadable, PTZWriteable where Variant == PTZNone {
     static var register: (UInt8, UInt8) { get }
+    static var setRegister: (UInt8, UInt8) { get }
     static func get() -> PTZRequest
     init(_ value: Value)
 }
 
 extension PTZInvariantState {
-    var variant: Variant { () }
+    static var setRegister: (UInt8, UInt8) { (register.0 + 0x40, register.1) }
+
+    var variant: Variant { .init() }
     
     init(_ value: Value, for variant: Variant) {
         self.init(value)
     }
 
-    static func get(for variant: Variant) -> any PTZRequest {
+    static func get(for variant: Variant) -> PTZRequest {
         return get()
     }
 
-    static func get() -> any PTZRequest {
-        return PTZStateRequest(name: name, message: .init([register.0, register.1]))
-    }
-}
-
-extension PTZInvariantState where Value: CustomStringConvertible {
-    var description: String {
-        "\(Self.name)(\(value))"
+    static func get() -> PTZRequest {
+        return .init(name: name, message: .init(register))
     }
 }
 
@@ -60,44 +75,25 @@ protocol PTZSingleValueState<Value>: PTZInvariantState where Value: PTZValue {
     init(_ value: Value)
     
     var waitingTimeIfExecuted: TimeInterval { get }
-    var modeConditionRescueRequests: [any PTZRequest] { get }
+    var modeConditionRescueRequests: [PTZRequest] { get }
 }
 
 extension PTZSingleValueState {
     init?(message: PTZMessage) {
-        guard message.isValidReply([Self.register.0 + 0x40, Self.register.1]) else { return nil }
+        guard message.isValidReply(Self.setRegister) else { return nil }
         let value: Value = message.parseArgument(position: .single)
         self.init(value)
     }
 
     func set() -> PTZRequest {
-        return PTZStateRequest(
+        return PTZRequest(
             name: "Set \(Self.name) to \(value)",
-            message: .init([Self.register.0 + 0x40, Self.register.1], value),
+            message: .init(Self.setRegister, value),
             waitingTimeIfExecuted: waitingTimeIfExecuted,
             modeConditionRescueRequests: modeConditionRescueRequests
         )
     }
     
     var waitingTimeIfExecuted: TimeInterval { 0 }
-    var modeConditionRescueRequests: [any PTZRequest] { [] }
-}
-
-#warning("Rename into PTZRequest")
-struct PTZStateRequest: PTZRequest {
-    let name: String
-    let message: PTZMessage
-    let waitingTimeIfExecuted: TimeInterval
-    let modeConditionRescueRequests: [any PTZRequest]
-    
-    init(name: String, message: PTZMessage, waitingTimeIfExecuted: TimeInterval = 0, modeConditionRescueRequests: [any PTZRequest] = []) {
-        self.name = name
-        self.message = message
-        self.waitingTimeIfExecuted = waitingTimeIfExecuted
-        self.modeConditionRescueRequests = modeConditionRescueRequests
-    }
-
-    var description: String {
-        name
-    }
+    var modeConditionRescueRequests: [PTZRequest] { [] }
 }

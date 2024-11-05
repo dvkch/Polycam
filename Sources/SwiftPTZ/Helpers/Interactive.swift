@@ -148,13 +148,13 @@ extension Interactive {
         }
         
         func refresh(for camera: Camera) {
-            let reply = camera.send(PTZUnknownRequest(commandBytes: [category, register], arg: nil))
+            let reply = camera.send(.unknown((category, register), arg: nil))
             let value = PTZMessage.messages(from: reply.bytes).last!.parseArgument(type: PTZUInt.self, position: .single).ptzValue
             currentValue = values.closest(to: value) ?? value
         }
         
         func set(for camera: Camera, to value: UInt16) {
-            let req = PTZUnknownRequest(commandBytes: [category + 0x40, register], arg: value)
+            let req = PTZRequest.unknown((category + 0x40, register), arg: value)
             let reply = camera.send(req)
             currentValue = values.closest(to: value) ?? value
             setError = if case .executed = reply { nil } else { "\(req.message.bytes.hexString) => \(reply.description)" }

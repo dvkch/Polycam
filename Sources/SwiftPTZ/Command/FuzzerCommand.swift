@@ -21,13 +21,14 @@ struct FuzzerCommand: CamerableCommand {
     mutating func run(camera: Camera) throws(CameraError) {
         camera.logLevel = .error
 
-        Thread.sleep(forTimeInterval: 2)
+        camera.send(PTZResetAction(.settingsAndMotors).set())
+        Thread.sleep(forTimeInterval: 10)
         
         let d = Date()
-        let count = try fuzz(camera: camera, initialState: { () throws(CameraError) -> () in
-            try camera.set(PTZDevModeState(.on))
-            camera.send(PTZRequestSetPosition(pan: .mid, tilt: .mid, zoom: .min))
-            try camera.set(PTZAutoFocusState(.off))
+        let count = try fuzz(camera: camera, initialState: {
+            try? camera.set(PTZDevModeState(.on))
+            try? camera.set(PTZAutoFocusState(.off))
+            try? camera.set(PTZPositionState(.init(pan: .mid, tilt: .mid, zoom: .min)))
         })
         speak("Done")
 
@@ -83,7 +84,7 @@ struct FuzzerCommand: CamerableCommand {
         return categories
     }
     
-    private mutating func fuzz(camera: Camera, initialState: () throws(CameraError) -> ()) throws(CameraError) -> Int {
+    private mutating func fuzz(camera: Camera, initialState: () -> ()) throws(CameraError) -> Int {
         let forbiddenCommands: [(Bytes, String)] = [
             ([0x41, 0x00], "Power mode"),   // Affects the next commands
             ([0x41, 0x10], "Mire mode"),    // Affects the next commands
@@ -101,7 +102,7 @@ struct FuzzerCommand: CamerableCommand {
             guard !category.registers.isEmpty else { continue }
 
             var resultTable = [[String]]()
-            try initialState()
+            initialState()
 
             for register in category.registers {
                 if let forbidden = forbiddenCommands.first(where: { $0.0 == [category.category, register] }) {
@@ -117,10 +118,10 @@ struct FuzzerCommand: CamerableCommand {
                 var restoreBlock: () -> () = {}
                 if category.restore {
                     requestsSent += 1
-                    let replyBytes = camera.send(PTZUnknownRequest(commandBytes: [category.category - 0x40, register], arg: nil)).bytes
+                    let replyBytes = camera.send(.unknown((category.category - 0x40, register), arg: nil)).bytes
                     let restoreBytes = Array(replyBytes.dropFirst(2))
                     if restoreBytes.count > 2, restoreBytes[0] == category.category, restoreBytes[1] == register {
-                        restoreBlock = { camera.send(PTZUnknownRequest(commandBytes: restoreBytes, arg: nil)) }
+                        restoreBlock = { camera.send(.raw(restoreBytes)) }
                     }
                 }
                 defer { restoreBlock() }
@@ -128,7 +129,7 @@ struct FuzzerCommand: CamerableCommand {
                 // run the command without any argument first
                 do {
                     requestsSent += 1
-                    let req = PTZUnknownRequest(commandBytes: [category.category, register], arg: nil)
+                    let req = PTZRequest.unknown((category.category, register), arg: nil)
                     let reply = camera.send(req)
                     
                     let result = FuzzerResult(category: category.category, register: register, reply: reply, sentArg: false, firstArg: 0, lastArg: 0)
@@ -152,7 +153,7 @@ struct FuzzerCommand: CamerableCommand {
                     }
 
                     requestsSent += 1
-                    let req = PTZUnknownRequest(commandBytes: [category.category, register], arg: arg)
+                    let req = PTZRequest.unknown((category.category, register), arg: arg)
                     let reply = camera.send(req)
                     if reply == .notExecuted(error: .commandNotDefined) { break }
 
@@ -263,7 +264,6 @@ private struct FuzzerResult {
 
         // most common cases
         case .executed:     return 5
-        case .specific:     return 6
         case .state:        return 6
         case .unknown:      return 6
         }
@@ -278,8 +278,7 @@ extension FuzzerResult {
         case .fail:                 return false
         case .timeout:              return false
         case .executed:             return true
-        case .notExecuted(let e):   return e == .commandNotDefined
-        case .specific:             return true
+        case .notExecuted(let e):   return e != .commandNotDefined
         case .state:                return true
         case .unknown:              return true
         }
@@ -288,16 +287,16 @@ extension FuzzerResult {
     var outputDetails: (requestName: String, replyName: String, reqKnown: Bool) {
         var requestName: String
         var replyName: String
-        var isRequestKnown = reply == .executed || reply.specific != nil
+        var isRequestKnown = reply == .executed || reply.state != nil
         
         // Pretty printing of the request string, could be "8x 06 77" as well as "8x 43 00 (00 -> 02 00+)"
         if let argRange {
-            let bytes1 = Array(PTZUnknownRequest(commandBytes: [category, register], arg: argRange.first!).message.bytes.dropFirst())
-            let bytes2 = Array(PTZUnknownRequest(commandBytes: [category, register], arg: argRange.last!).message.bytes.dropFirst())
+            let bytes1 = Array(PTZRequest.unknown((category, register), arg: argRange.first!).message.bytes.dropFirst())
+            let bytes2 = Array(PTZRequest.unknown((category, register), arg: argRange.last!).message.bytes.dropFirst())
             requestName = "8x " + bytes1.hexString(condensedWith: bytes2, stoppedEarly: stoppedEarly)
         }
         else {
-            requestName = "8x " + Array(PTZUnknownRequest(commandBytes: [category, register], arg: nil).message.bytes.dropFirst()).hexString
+            requestName = "8x " + Array(PTZRequest.unknown((category, register), arg: nil).message.bytes.dropFirst()).hexString
             requestName += stoppedEarly ? "+" : ""
         }
         
@@ -305,25 +304,38 @@ extension FuzzerResult {
         // setter request for the same value), we can try to add more information to our output
         replyName = reply.description
         if reply == .executed || reply.isNotExecuted {
-            if let equivalentRequest = PTZMessage.replies(from: PTZUnknownRequest(commandBytes: [category, register], arg: argRange?.first).message.bytes).first?.specific {
+            #warning("make that shit work again")
+            if let state = PTZMessage.replies(from: PTZRequest.unknown((category, register), arg: argRange?.first).message.bytes).first?.state {
                 isRequestKnown = true
-                replyName += ": \(equivalentRequest)"
+                replyName += ": \(state)"
             }
-            else if category == 0x45, let direction = PTZDirection(rawValue: register) {
+            else if category == 0x45, let direction = PTZPanDirection(rawValue: register) {
                 isRequestKnown = true
-                replyName += ": Move \(direction)"
+                replyName += ": Pan \(direction)"
+            }
+            else if category == 0x45, let direction = PTZTiltDirection(rawValue: register) {
+                isRequestKnown = true
+                replyName += ": Tilt \(direction)"
+            }
+            else if category == 0x45, let direction = PTZFocusDirection(rawValue: register) {
+                isRequestKnown = true
+                replyName += ": Focus \(direction)"
+            }
+            else if category == 0x45, let direction = PTZZoomDirection(rawValue: register) {
+                isRequestKnown = true
+                replyName += ": Zoom \(direction)"
             }
             else if category == 0x45, register == 0x13 {
                 isRequestKnown = true
-                replyName += ": \(PTZRequestStartFocus())"
+                replyName += ": \(PTZFocusAction())"
             }
             else if category == 0x45, register == 0x17 {
                 isRequestKnown = true
-                replyName += ": \(PTZRequestStartManualWhiteBalanceCalibration())"
+                replyName += ": \(PTZWhiteBalanceCalibrationAction())"
             }
             else if category == 0x45, register == 0x32 {
                 isRequestKnown = true
-                replyName += ": \(PTZRequestReset(reset: .settings))"
+                replyName += ": \(PTZResetAction(.settings))"
             }
             else {
                 isRequestKnown = false

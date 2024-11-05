@@ -12,6 +12,13 @@ enum PTZResetKind: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
     case settingsAndMotors = 0x01
     static var `default`: PTZResetKind { .settings }
     
+    var expectedRunTime: TimeInterval {
+        switch self {
+        case .settings:          return 5
+        case .settingsAndMotors: return 10
+        }
+    }
+    
     var description: String {
         switch self {
         case .settings:           return "settings"
@@ -20,14 +27,21 @@ enum PTZResetKind: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
     }
 }
 
-struct PTZRequestReset: PTZRequest {
-    let reset: PTZResetKind
-    var message: PTZMessage { .init([0x45, 0x32], reset) }
-    var description: String { "Resetting \(reset)" }
-    var waitingTimeIfExecuted: TimeInterval {
-        switch reset {
-        case .settings:          return 5
-        case .settingsAndMotors: return 10
-        }
+struct PTZResetAction: PTZWriteable {
+    static var name: String { "Reset" }
+    let variant: PTZNone
+    var value: PTZResetKind
+    
+    init(_ value: PTZResetKind, for variant: PTZNone = .init()) {
+        self.variant = variant
+        self.value = value
+    }
+
+    func set() -> PTZRequest {
+        return .init(
+            name: "Start \(description)",
+            message: .init((0x45, 0x32), value),
+            waitingTimeIfExecuted: value.expectedRunTime
+        )
     }
 }

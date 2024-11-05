@@ -10,7 +10,7 @@ import Foundation
 struct PTZMessage {
     let bytes: Bytes
 
-    private init(bytes: Bytes) {
+    init(bytes: Bytes) {
         self.bytes = bytes
     }
 }
@@ -74,12 +74,12 @@ extension PTZMessage {
         }
     }
     
-    func isValidReply(_ command: Bytes) -> Bool {
+    func isValidReply(_ command: (Byte, Byte)) -> Bool {
         guard isValidLength && receivedLength >= 2 else { return false }
         switch messageFormat {
-        case .regular:  return Array(bytes[1..<3]) == command
-        case .long:     return Array(bytes[2..<4]) == command
-        case .hello:    return Array(bytes[3..<5]) == command.reversed()
+        case .regular:  return Array(bytes[1..<3]) == [command.0, command.1]
+        case .long:     return Array(bytes[2..<4]) == [command.0, command.1]
+        case .hello:    return Array(bytes[3..<5]) == [command.1, command.0]
         }
     }
 }
@@ -118,14 +118,14 @@ extension PTZMessage {
 }
 
 extension PTZMessage {
-    init(_ command: Bytes, _ singleArg: any PTZValue) {
+    init(_ command: (Byte, Byte), _ singleArg: any PTZValue) {
         self.init(command, PTZArgument(singleArg, .single))
     }
 
-    init(_ command: Bytes, _ args: (PTZArgument)...) {
+    init(_ command: (Byte, Byte), _ args: (PTZArgument)...) {
         var bytes = Bytes()
         bytes.append(0x00)
-        bytes.append(contentsOf: command)
+        bytes.append(contentsOf: [command.0, command.1])
         
         if args.count == 1, let arg = args.first, case .single = arg.position {
             let hi = UInt8(arg.value.ptzValue >> 7)

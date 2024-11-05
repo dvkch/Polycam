@@ -44,8 +44,17 @@ struct PTZWhiteBalanceState: PTZSingleValueState {
     }
 }
 
-struct PTZRequestStartManualWhiteBalanceCalibration: PTZRequest {
-    var message: PTZMessage { .init([0x45, 0x17]) }
-    var waitingTimeIfExecuted: TimeInterval { 2 }
-    var description: String { "Start manual white balance calibration" }
+struct PTZWhiteBalanceCalibrationAction: PTZWriteable {
+    static var name: String { "WhiteBalanceCalibration" }
+    let variant: PTZNone
+    var value: PTZNone
+    
+    init(_ value: PTZNone = .init(), for variant: PTZNone = .init()) {
+        self.variant = variant
+        self.value = value
+    }
+
+    func set() -> PTZRequest {
+        return .init(name: "Start \(description)", message: .init((0x45, 0x17)), waitingTimeIfExecuted: 2)
+    }
 }

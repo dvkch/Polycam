@@ -24,13 +24,9 @@ struct PTZWhiteBalanceTempState: PTZSingleValueState {
         self.value = value
     }
     
-    func set() -> any PTZRequest {
-        return PTZStateRequest(
-            name: "Set \(description)",
-            message: .init([Self.register.0 + 0x40, Self.register.1], value),
-            modeConditionRescueRequests: [PTZWhiteBalanceState(.manual).set()]
-        )
 #warning("set up all mode conditions rescues for all requests")
+    var modeConditionRescueRequests: [PTZRequest] {
+        [PTZWhiteBalanceState(.manual).set()]
     }
 }
 

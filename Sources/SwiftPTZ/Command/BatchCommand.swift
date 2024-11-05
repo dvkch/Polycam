@@ -15,7 +15,6 @@ struct BatchCommand: CamerableCommand {
     var serialDevice: String?
     
     func run(camera: Camera) throws(CameraError) {
-        let position = PTZRequestSetPosition(pan: .init(rawValue: 0), tilt: .init(rawValue: 0), zoom: .init(rawValue: 0))
-        camera.send(position)
+        try camera.set(PTZPositionState(.init(pan: .mid, tilt: .mid, zoom: .min)))
     }
 }

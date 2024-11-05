@@ -19,5 +19,5 @@ struct PTZAutoExposureState: PTZSingleValueState {
     }
     
     var waitingTimeIfExecuted: TimeInterval { 1 }
-    var modeConditionRescueRequests: [any PTZRequest] { [PTZBacklightCompensationState(.on).set()] }
+    var modeConditionRescueRequests: [PTZRequest] { [PTZBacklightCompensationState(.on).set()] }
 }

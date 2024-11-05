@@ -32,26 +32,36 @@ enum PTZDrunkTestPhase: UInt16, CaseIterable, PTZValue {
     static var `default`: PTZDrunkTestPhase { .running }
 }
 
-struct PTZRequestStartDrunkTest: PTZRequest {
-    var message: PTZMessage { .init([0x45, 0x14, 0x01]) }
-    var description: String { "Start drunk test" }
+struct PTZDrunkTestAction: PTZWriteable {
+    static var name: String { "DrunkTest" }
+    let variant: PTZNone
+    var value: PTZDrunkTestPhase
+    
+    init(_ value: PTZDrunkTestPhase, for variant: PTZNone = .init()) {
+        self.variant = variant
+        self.value = value
+    }
+
+#warning("does sending something other than 0x01 stops the testing maybe ?? if so, consolidate into a single State")
+    func set() -> PTZRequest {
+        return .init(
+            name: "Start \(description)",
+            message: .init((0x45, 0x14), PTZDrunkTestPhase.running)
+        )
+    }
 }
 
-struct PTZRequestGetDrunkTestPhase: PTZGetRequest {
-    typealias Reply = PTZReplyDrunkTestPhase
-    var message: PTZMessage { .init([0x01, 0x42]) }
-    var description: String { "Get drunk test phase" }
-}
-
-struct PTZReplyDrunkTestPhase: PTZSpecificReply {
-    let phase: PTZDrunkTestPhase
+struct PTZDrunkTestPhaseState: PTZReadable {
+    static var name: String { "DrunkTestPhase" }
+    let variant: PTZNone = .init()
+    var value: PTZDrunkTestPhase
     
     init?(message: PTZMessage) {
-        guard message.isValidReply([0x41, 0x42]) else { return nil }
-        self.phase = message.parseArgument(position: .single)
+        guard message.isValidReply((0x41, 0x42)) else { return nil }
+        self.value = message.parseArgument(position: .single)
     }
     
-    var description: String {
-        return "DrunkTestPhase(\(phase))"
+    static func get(for variant: PTZNone = .init()) -> PTZRequest {
+        return .init(name: name, message: .init((0x01, 0x42)))
     }
 }

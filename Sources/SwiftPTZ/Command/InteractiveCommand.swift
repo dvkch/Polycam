@@ -20,6 +20,32 @@ struct InteractiveCommand: CamerableCommand {
         camera.logLevel = .error
         try camera.set(PTZDevModeState(.on))
         
+        var moveActions: [Interactive.Action<String>] = []
+        PTZPanDirection.allCases.forEach { dir in
+            moveActions.append(Interactive.Action(name: dir.description, state: "") { _ in
+                camera.send(PTZMovePanAction(.default, for: dir).set())
+                return ""
+            })
+        }
+        PTZTiltDirection.allCases.forEach { dir in
+            moveActions.append(Interactive.Action(name: dir.description, state: "") { _ in
+                camera.send(PTZMoveTiltAction(.default, for: dir).set())
+                return ""
+            })
+        }
+        PTZZoomDirection.allCases.forEach { dir in
+            moveActions.append(Interactive.Action(name: dir.description, state: "") { _ in
+                camera.send(PTZMoveZoomAction(.default, for: dir).set())
+                return ""
+            })
+        }
+        PTZFocusDirection.allCases.forEach { dir in
+            moveActions.append(Interactive.Action(name: dir.description, state: "") { _ in
+                camera.send(PTZMoveFocusAction(.default, for: dir).set())
+                return ""
+            })
+        }
+
         #warning("find a way to use properly defined states instead")
         let content: [any Interactive.Element] = [
             Interactive.Line("Let's have some fun!"),
@@ -35,12 +61,7 @@ struct InteractiveCommand: CamerableCommand {
                     Interactive.State("Auto", cat: 0x02, r: 0x09, values: [0, 1], default: 1),
                     Interactive.State("Manual", cat: 0x03, r: 0x03, value: PTZFocus.self),
                 ]),
-                Interactive.Group("Move", PTZDirection.allCases.map { dir in
-                    Interactive.Action(name: dir.description, state: "") { _ in
-                        camera.send(PTZRequestSetMove(direction: dir, panTiltSpeed: .speed3, zoomSpeed: .speed2, focusSpeed: .speed3))
-                        return ""
-                    }
-                })
+                Interactive.Group("Move", moveActions)
             ]),
             Interactive.Group("--- Exposure ---", [
                 Interactive.State("Shutter speed", cat: 0x02, r: 0x14, value: PTZShutterSpeed.self),

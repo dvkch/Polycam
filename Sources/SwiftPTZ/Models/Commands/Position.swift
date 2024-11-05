@@ -7,43 +7,39 @@
 
 import Foundation
 
-struct PTZRequestSetPosition: PTZRequest {
-    let pan: PTZPan
-    let tilt: PTZTilt
-    let zoom: PTZZoom
+struct PTZPosition: Equatable, CustomStringConvertible {
+    var pan: PTZPan
+    var tilt: PTZTilt
+    var zoom: PTZZoom
     
-    var message: PTZMessage {
-        return .init(
-            [0x41, 0x51],
-            PTZArgument(pan,  .custom(hiIndex:  5, loIndex:  6, loRetainerIndex:  3, loRetainerMask: 0x04)),
-            PTZArgument(tilt, .custom(hiIndex:  8, loIndex:  9, loRetainerIndex:  3, loRetainerMask: 0x20)),
-            PTZArgument(zoom, .custom(hiIndex: 12, loIndex: 13, loRetainerIndex: 11, loRetainerMask: 0x02)),
-            PTZArgument(PTZUInt(rawValue: 0x03), .raw8(10))
+    var description: String { "\(pan), \(tilt), \(zoom)" }
+}
+
+struct PTZPositionState: PTZInvariantState {
+    static var name: String = "Position"
+    static var register: (UInt8, UInt8) = (0x01, 0x50)
+    var value: PTZPosition
+    
+    init(_ value: PTZPosition) {
+        self.value = value
+    }
+    
+    init?(message: PTZMessage) {
+        guard message.isValidReply(Self.setRegister) else { return nil }
+        self.value = .init(
+            pan:  message.parseArgument(position: .custom(hiIndex: 4, loIndex: 5, loRetainerIndex: 3, loRetainerMask: 0x02)),
+            tilt: message.parseArgument(position: .custom(hiIndex: 6, loIndex: 7, loRetainerIndex: 3, loRetainerMask: 0x08)),
+            zoom: message.parseArgument(position: .custom(hiIndex: 8, loIndex: 9, loRetainerIndex: 3, loRetainerMask: 0x20))
         )
     }
     
-    var description: String { "Move to \(pan), \(tilt), \(zoom)" }
-}
-
-struct PTZRequestGetPosition: PTZGetRequest {
-    typealias Reply = PTZReplyPosition
-    var message: PTZMessage { .init([0x01, 0x50]) }
-    var description: String { "Get position" }
-}
-
-struct PTZReplyPosition: PTZSpecificReply {
-    let pan: PTZPan
-    let tilt: PTZTilt
-    let zoom: PTZZoom
-    
-    init?(message: PTZMessage) {
-        guard message.isValidReply([0x41, 0x50]) else { return nil }
-        self.pan  = message.parseArgument(position: .custom(hiIndex: 4, loIndex: 5, loRetainerIndex: 3, loRetainerMask: 0x02))
-        self.tilt = message.parseArgument(position: .custom(hiIndex: 6, loIndex: 7, loRetainerIndex: 3, loRetainerMask: 0x08))
-        self.zoom = message.parseArgument(position: .custom(hiIndex: 8, loIndex: 9, loRetainerIndex: 3, loRetainerMask: 0x20))
-    }
-    
-    var description: String {
-        return "Position(\(pan), \(tilt), \(zoom))"
+    func set() -> PTZRequest {
+        return .init(name: "Set \(description)", message: .init(
+            Self.setRegister,
+            PTZArgument(value.pan,  .custom(hiIndex:  5, loIndex:  6, loRetainerIndex:  3, loRetainerMask: 0x04)),
+            PTZArgument(value.tilt, .custom(hiIndex:  8, loIndex:  9, loRetainerIndex:  3, loRetainerMask: 0x20)),
+            PTZArgument(value.zoom, .custom(hiIndex: 12, loIndex: 13, loRetainerIndex: 11, loRetainerMask: 0x02)),
+            PTZArgument(PTZUInt(rawValue: 0x03), .raw8(10))
+        ))
     }
 }

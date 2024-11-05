@@ -13,8 +13,8 @@ enum PTZClock: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     
     var description: String {
         switch self {
-        case .clock1: return "Clock 1"
-        case .clock2: return "Clock 2"
+        case .clock1: return "t1"
+        case .clock2: return "t2"
         }
     }
     
@@ -22,7 +22,7 @@ enum PTZClock: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
 }
 
 #warning("Simplify the encoding/decoding")
-struct PTZClockState: PTZState {
+struct PTZClockState: PTZReadable, PTZWriteable {
     static let name = "Clock"
 
     var variant: PTZClock
@@ -34,7 +34,7 @@ struct PTZClockState: PTZState {
     }
 
     init?(message: PTZMessage) {
-        guard let clock = PTZClock.allCases.first(where: { message.isValidReply([0x41, UInt8($0.rawValue)]) }) else { return nil }
+        guard let clock = PTZClock.allCases.first(where: { message.isValidReply((0x41, UInt8($0.rawValue))) }) else { return nil }
 
         let timePart0: PTZUInt = message.parseArgument(position: .custom(hiIndex: 13, loIndex: 7, loRetainerIndex: 3, loRetainerMask: 0x08))
         let timePart1: PTZUInt = message.parseArgument(position: .custom(hiIndex: 13, loIndex: 6, loRetainerIndex: 3, loRetainerMask: 0x04))
@@ -56,16 +56,16 @@ struct PTZClockState: PTZState {
         let timePart2 = UInt16((value >> 16) & 0xFF)
         let timePart3 = UInt16((value >> 24) & 0xFF)
         let message = PTZMessage(
-            [0x41, UInt8(variant.rawValue)],
+            (0x41, UInt8(variant.rawValue)),
             .init(PTZUInt(rawValue: timePart0), .custom(hiIndex: 13, loIndex: 7, loRetainerIndex: 3, loRetainerMask: 0x08)),
             .init(PTZUInt(rawValue: timePart1), .custom(hiIndex: 13, loIndex: 6, loRetainerIndex: 3, loRetainerMask: 0x04)),
             .init(PTZUInt(rawValue: timePart2), .custom(hiIndex: 13, loIndex: 5, loRetainerIndex: 3, loRetainerMask: 0x02)),
             .init(PTZUInt(rawValue: timePart3), .custom(hiIndex: 13, loIndex: 4, loRetainerIndex: 3, loRetainerMask: 0x01))
         )
-        return PTZStateRequest(name: "Set \(description)", message: message)
+        return .init(name: "Set \(description)", message: message)
     }
     
     static func get(for variant: Variant) -> PTZRequest {
-        return PTZStateRequest(name: name, message: .init([0x01, UInt8(variant.rawValue)]))
+        return .init(name: name, message: .init((0x01, UInt8(variant.rawValue))))
     }
 }

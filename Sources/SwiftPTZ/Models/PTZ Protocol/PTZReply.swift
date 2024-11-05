@@ -14,8 +14,7 @@ enum PTZReply: CustomStringConvertible {
     case timeout
     case executed
     case notExecuted(error: CommandError)
-    case specific(bytes: Bytes, content: any PTZSpecificReply)
-    case state(bytes: Bytes, state: any PTZState)
+    case state(bytes: Bytes, state: any PTZReadable)
     case unknown(bytes: Bytes)
 
     enum CommandError: UInt16, RawRepresentable, CaseIterable, CustomStringConvertible, PTZValue {
@@ -59,10 +58,7 @@ enum PTZReply: CustomStringConvertible {
         else if message.bytes.starts(with: [0x93, 0x40, 0x01]) {
             self = .notExecuted(error: message.parseArgument(position: .raw8(3)))
         }
-        else if let reply = Self.availableSpecificReplies.compactMap({ $0.init(message: message) }).first {
-            self = .specific(bytes: message.bytes, content: reply)
-        }
-        else if let state = Self.availableStates.compactMap({ $0.init(message: message) }).first {
+        else if let state = Self.readableStates.compactMap({ $0.init(message: message) }).first {
             self = .state(bytes: message.bytes, state: state)
         }
         else {
@@ -78,7 +74,6 @@ enum PTZReply: CustomStringConvertible {
         case .timeout:              return [0xFF] // not real, defined for ease of use
         case .executed:             return [0x92, 0x40, 0x00]
         case .notExecuted(let e):   return [0x93, 0x40, 0x01, UInt8(e.rawValue)]
-        case .specific(let b, _):   return b
         case .state(let b, _):      return b
         case .unknown(let b):       return b
         }
@@ -91,8 +86,8 @@ enum PTZReply: CustomStringConvertible {
         return false
     }
     
-    var specific: (any PTZSpecificReply)? {
-        if case .specific(_, let s) = self {
+    var state: (any PTZState)? {
+        if case .state(_, let s) = self {
             return s
         }
         return nil
@@ -106,9 +101,8 @@ enum PTZReply: CustomStringConvertible {
         case .timeout:              return "TIMEOUT"
         case .executed:             return "Executed"
         case .notExecuted(let e):   return "Not executed: \(e)"
-        case .specific(_, let r):   return r.description
         case .state(_, let s):      return s.description
-        case .unknown(let b):       return "Unknown(\(b.hexString)"
+        case .unknown(let b):       return "Unknown(\(b.hexString))"
         }
     }
 }
@@ -119,22 +113,8 @@ extension PTZReply: Equatable {
     }
 }
 
-#warning("remove this ASAP")
-protocol PTZSpecificReply: CustomStringConvertible {
-    init?(message: PTZMessage)
-}
-
 extension PTZReply {
-    static var availableSpecificReplies: [any PTZSpecificReply.Type] {
-        return [
-            PTZReplyDrunkTestPhase.self,
-            PTZReplyMotorStats.self,
-            PTZReplyPosition.self,
-            PTZReplyPreset.self,
-        ]
-    }
-    
-    static var availableStates: [any PTZState.Type] {
+    static var readableStates: [any PTZReadable.Type] {
         return [
             PTZAutoExposureState.self,
             PTZAutoFocusState.self,
@@ -145,6 +125,7 @@ extension PTZReply {
             PTZColorsState.self,
             PTZContrastState.self,
             PTZDevModeState.self,
+            PTZDrunkTestPhaseState.self,
             PTZFocusState.self,
             PTZGainModeState.self, PTZEffectiveGainState.self, PTZRedGainState.self, PTZBlueGainState.self,
             PTZHelloState.self,
@@ -153,9 +134,12 @@ extension PTZReply {
             PTZLedIntensityState.self,
             PTZLedState.self,
             PTZMireState.self,
+            PTZMotorStatsState.self,
             PTZNoiseReductionState.self,
             PTZPanState.self,
+            PTZPositionState.self,
             PTZPowerState.self,
+            PTZPresetState.self,
             PTZSaturationState.self,
             PTZSensorSmoothingState.self,
             PTZSharpnessState.self,

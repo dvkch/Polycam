@@ -26,7 +26,7 @@ struct PTZIrisLevelState: PTZSingleValueState {
         self.value = value
     }
     
-    var modeConditionRescueRequests: [any PTZRequest] { [
+    var modeConditionRescueRequests: [PTZRequest] { [
         PTZAutoExposureState(.off).set(),
         PTZGainModeState(.gain0dB).set(),
         PTZBacklightCompensationState(.off).set()

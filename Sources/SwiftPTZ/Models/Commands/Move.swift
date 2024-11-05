@@ -59,78 +59,130 @@ enum PTZFocusSpeed: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
     }
 }
 
-enum PTZDirection: Byte, CaseIterable, CustomStringConvertible {
-    case right     = 0x00
-    case left      = 0x01
-    case panStop   = 0x02
-    case up        = 0x03
-    case down      = 0x04
-    case tiltStop  = 0x05
-    case focusFar  = 0x09
-    case focusNear = 0x0A
-    case focusStop = 0x0B
-    case zoomIn    = 0x0C
-    case zoomOut   = 0x0D
-    case zoomStop  = 0x0E
+enum PTZPanDirection: Byte, CaseIterable, CustomStringConvertible {
+    case right  = 0x00
+    case left   = 0x01
+    case stop   = 0x02
 
     var description: String {
         switch self {
-        case .right:    return "pan right"
-        case .left:     return "pan left"
-        case .panStop:  return "pan stop"
-        case .up:       return "tilt up"
-        case .down:     return "tilt down"
-        case .tiltStop: return "tilt stop"
-        case .zoomIn:   return "zoom+"
-        case .zoomOut:  return "zoom-"
-        case .zoomStop: return "zoom stop"
-        case .focusFar: return "focus far"
-        case .focusNear:return "focus near"
-        case .focusStop:return "focus stop"
+        case .right:    return "right"
+        case .left:     return "left"
+        case .stop:     return "stop"
         }
     }
 }
 
-struct PTZRequestSetMove: PTZRequest {
-    let direction: PTZDirection
-    let panTiltSpeed: PTZPanTiltSpeed
-    let zoomSpeed: PTZZoomSpeed
-    let focusSpeed: PTZFocusSpeed
-    
-    init(direction: PTZDirection, panTiltSpeed: PTZPanTiltSpeed = .default, zoomSpeed: PTZZoomSpeed = .default, focusSpeed: PTZFocusSpeed = .default) {
-        self.direction = direction
-        self.panTiltSpeed = panTiltSpeed
-        self.zoomSpeed = zoomSpeed
-        self.focusSpeed = focusSpeed
-    }
+enum PTZTiltDirection: Byte, CaseIterable, CustomStringConvertible {
+    case up     = 0x03
+    case down   = 0x04
+    case stop   = 0x05
 
-    var message: PTZMessage {
-        if direction == .panStop || direction == .tiltStop || direction == .zoomStop || direction == .focusStop {
-            .init([0x45, direction.rawValue])
-        }
-        else if direction == .focusFar || direction == .focusNear {
-            .init([0x45, direction.rawValue], .init(focusSpeed, .single))
-        }
-        else if direction == .zoomIn || direction == .zoomOut {
-            .init([0x45, direction.rawValue], .init(zoomSpeed, .single))
-        }
-        else {
-            .init([0x45, direction.rawValue], .init(panTiltSpeed, .single))
+    var description: String {
+        switch self {
+        case .up:   return "up"
+        case .down: return "down"
+        case .stop: return "stop"
         }
     }
-    
+}
+
+enum PTZFocusDirection: Byte, CaseIterable, CustomStringConvertible {
+    case far    = 0x09
+    case near   = 0x0A
+    case stop   = 0x0B
+
     var description: String {
-        if direction == .panStop || direction == .tiltStop || direction == .zoomStop || direction == .focusStop {
-            return "Set move \(direction.description)"
+        switch self {
+        case .far:  return "far"
+        case .near: return "near"
+        case .stop: return "stop"
         }
-        else if direction == .focusFar || direction == .focusNear {
-            return "Set move \(direction.description), \(focusSpeed) speed"
+    }
+}
+
+enum PTZZoomDirection: Byte, CaseIterable, CustomStringConvertible {
+    case `in`   = 0x0C
+    case `out`  = 0x0D
+    case stop   = 0x0E
+
+    var description: String {
+        switch self {
+        case .in:   return "in"
+        case .out:  return "out"
+        case .stop: return "stop"
         }
-        else if direction == .zoomIn || direction == .zoomOut {
-            return "Set move \(direction.description), \(zoomSpeed) speed"
+    }
+}
+
+struct PTZMovePanAction: PTZWriteable {
+    static var name: String { "Pan" }
+    var variant: PTZPanDirection
+    var value: PTZPanTiltSpeed
+    
+    init(_ value: PTZPanTiltSpeed, for variant: PTZPanDirection) {
+        self.variant = variant
+        self.value = value
+    }
+    
+    func set() -> PTZRequest {
+        switch variant {
+        case .left, .right: return .init(name: description, message: .init((0x45, variant.rawValue), value))
+        case .stop:         return .init(name: description, message: .init((0x45, variant.rawValue)))
         }
-        else {
-            return "Set move \(direction.description), \(panTiltSpeed) speed"
+    }
+}
+
+struct PTZMoveTiltAction: PTZWriteable {
+    static var name: String { "Tilt" }
+    var variant: PTZTiltDirection
+    var value: PTZPanTiltSpeed
+    
+    init(_ value: PTZPanTiltSpeed, for variant: PTZTiltDirection) {
+        self.variant = variant
+        self.value = value
+    }
+    
+    func set() -> PTZRequest {
+        switch variant {
+        case .up, .down:    return .init(name: description, message: .init((0x45, variant.rawValue), value))
+        case .stop:         return .init(name: description, message: .init((0x45, variant.rawValue)))
+        }
+    }
+}
+
+struct PTZMoveFocusAction: PTZWriteable {
+    static var name: String { "Focus" }
+    var variant: PTZFocusDirection
+    var value: PTZFocusSpeed
+    
+    init(_ value: PTZFocusSpeed, for variant: PTZFocusDirection) {
+        self.variant = variant
+        self.value = value
+    }
+    
+    func set() -> PTZRequest {
+        switch variant {
+        case .far, .near:   return .init(name: description, message: .init((0x45, variant.rawValue), value))
+        case .stop:         return .init(name: description, message: .init((0x45, variant.rawValue)))
+        }
+    }
+}
+
+struct PTZMoveZoomAction: PTZWriteable {
+    static var name: String { "Zoom" }
+    var variant: PTZZoomDirection
+    var value: PTZZoomSpeed
+    
+    init(_ value: PTZZoomSpeed, for variant: PTZZoomDirection) {
+        self.variant = variant
+        self.value = value
+    }
+    
+    func set() -> PTZRequest {
+        switch variant {
+        case .in, .out:     return .init(name: description, message: .init((0x45, variant.rawValue), value))
+        case .stop:         return .init(name: description, message: .init((0x45, variant.rawValue)))
         }
     }
 }

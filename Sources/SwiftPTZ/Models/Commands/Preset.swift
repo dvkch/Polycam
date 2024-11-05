@@ -32,47 +32,40 @@ enum PTZPreset: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     static var `default`: PTZPreset { .one }
 }
 
-struct PTZRequestSetPreset: PTZRequest {
-    let preset: PTZPreset
-    let pan: PTZPan
-    let tilt: PTZTilt
-    let zoom: PTZZoom
+struct PTZPresetState: PTZReadable, PTZWriteable {
+    static var name: String = "Preset"
     
-    var message: PTZMessage {
-        return .init(
-            [0x41, 0x60 + UInt8(preset.rawValue)],
-            PTZArgument(pan,  .custom(hiIndex:  5, loIndex:  6, loRetainerIndex:  3, loRetainerMask: 0x04)),
-            PTZArgument(tilt, .custom(hiIndex:  8, loIndex:  9, loRetainerIndex:  3, loRetainerMask: 0x20)),
-            PTZArgument(zoom, .custom(hiIndex: 12, loIndex: 13, loRetainerIndex: 11, loRetainerMask: 0x02)),
-            PTZArgument(PTZUInt(rawValue: 0x03), .raw8(10))
+    var variant: PTZPreset
+    var value: PTZPosition
+    
+    init(_ value: PTZPosition, for variant: PTZPreset) {
+        self.value = value
+        self.variant = variant
+    }
+    
+    init?(message: PTZMessage) {
+        guard let preset = PTZPreset.allCases.first(where: { message.isValidReply((0x41, 0x60 + UInt8($0.rawValue))) }) else { return nil }
+        self.variant = preset
+        self.value = .init(
+            pan:  message.parseArgument(position: .custom(hiIndex: 4, loIndex: 5, loRetainerIndex: 3, loRetainerMask: 0x02)),
+            tilt: message.parseArgument(position: .custom(hiIndex: 6, loIndex: 7, loRetainerIndex: 3, loRetainerMask: 0x08)),
+            zoom: message.parseArgument(position: .custom(hiIndex: 8, loIndex: 9, loRetainerIndex: 3, loRetainerMask: 0x20))
         )
     }
     
-    var description: String { "Set preset \(preset) to \(pan), \(tilt), \(zoom)" }
-}
-
-struct PTZRequestGetPreset: PTZGetRequest {
-    typealias Reply = PTZReplyPreset
-    let preset: PTZPreset
-    var message: PTZMessage { .init([0x01, 0x60 + UInt8(preset.rawValue)]) }
-    var description: String { "Get preset \(preset)" }
-}
-
-struct PTZReplyPreset: PTZSpecificReply {
-    let preset: PTZPreset
-    let pan: PTZPan
-    let tilt: PTZTilt
-    let zoom: PTZZoom
-    
-    init?(message: PTZMessage) {
-        guard let preset = PTZPreset.allCases.first(where: { message.isValidReply([0x41, 0x60 + UInt8($0.rawValue)]) }) else { return nil }
-        self.preset = preset
-        self.pan  = message.parseArgument(position: .custom(hiIndex: 4, loIndex: 5, loRetainerIndex: 3, loRetainerMask: 0x02))
-        self.tilt = message.parseArgument(position: .custom(hiIndex: 6, loIndex: 7, loRetainerIndex: 3, loRetainerMask: 0x08))
-        self.zoom = message.parseArgument(position: .custom(hiIndex: 8, loIndex: 9, loRetainerIndex: 3, loRetainerMask: 0x20))
+    func set() -> PTZRequest {
+        return .init(name: "Set \(description)", message: .init(
+            (0x41, 0x60 + UInt8(variant.rawValue)),
+            PTZArgument(value.pan,  .custom(hiIndex:  5, loIndex:  6, loRetainerIndex:  3, loRetainerMask: 0x04)),
+            PTZArgument(value.tilt, .custom(hiIndex:  8, loIndex:  9, loRetainerIndex:  3, loRetainerMask: 0x20)),
+            PTZArgument(value.zoom, .custom(hiIndex: 12, loIndex: 13, loRetainerIndex: 11, loRetainerMask: 0x02)),
+            PTZArgument(PTZUInt(rawValue: 0x03), .raw8(10))
+        ))
     }
     
-    var description: String {
-        return "Preset(\(preset): \(pan), \(tilt), \(zoom))"
+    static func get(for variant: PTZPreset) -> PTZRequest {
+        return .init(name: name, message: .init((0x01, 0x60 + UInt8(variant.rawValue))))
     }
+    
+    var description: String { "Preset(\(variant), \(value.pan), \(value.tilt), \(value.zoom))"  }
 }

@@ -7,32 +7,34 @@
 
 import Foundation
 
-struct PTZLedIntensity: PTZScaledValue {
+struct PTZLedColorIntensity: PTZScaledValue {
     var rawValue: Int
     static var minValue: Int { 0 }
     static var maxValue: Int { 15 }
     static var ptzOffset: Int { 0 }
     static var ptzScale: Double { 1 }
-    static var `default`: PTZLedIntensity { .init(rawValue: 8) }
+    static var `default`: PTZLedColorIntensity { .init(rawValue: 8) }
+}
+
+struct PTZLedIntensity: Equatable, CustomStringConvertible {
+    var r: PTZLedColorIntensity
+    var g: PTZLedColorIntensity
+    var b: PTZLedColorIntensity
+    var description: String { "R=\(r), G=\(g), B=\(b)" }
 }
 
 struct PTZLedIntensityState: PTZInvariantState {
     static let name: String = "LedIntensity"
     static var register: (UInt8, UInt8) = (0x01, 0x25)
 
-    struct Value: Equatable {
-        var r: PTZLedIntensity
-        var g: PTZLedIntensity
-        var b: PTZLedIntensity
-    }
-    var value: Value
+    var value: PTZLedIntensity
     
-    init(_ value: Value) {
+    init(_ value: PTZLedIntensity) {
         self.value = value
     }
     
     init?(message: PTZMessage) {
-        guard message.isValidReply([0x41, 0x25]) else { return nil }
+        guard message.isValidReply(Self.setRegister) else { return nil }
         self.value = .init(
             r: message.parseArgument(position: .raw8(3)),
             g: message.parseArgument(position: .raw8(5)),
@@ -41,13 +43,9 @@ struct PTZLedIntensityState: PTZInvariantState {
     }
     
     func set() -> PTZRequest {
-        return PTZStateRequest(
+        return .init(
             name: "Set \(description)",
-            message: .init([0x41, 0x25], .init(value.r, .raw8(3)), .init(value.b, .raw8(4)), .init(value.g, .raw8(5)))
+            message: .init(Self.setRegister, .init(value.r, .raw8(3)), .init(value.b, .raw8(4)), .init(value.g, .raw8(5)))
         )
-    }
-    
-    var description: String {
-        return "\(Self.name)(R=\(value.r), G=\(value.g), B=\(value.b))"
     }
 }

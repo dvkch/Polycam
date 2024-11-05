@@ -17,3 +17,5 @@ struct SwiftPTZ: ParsableCommand {
         defaultSubcommand: InteractiveCommand.self
     )
 }
+
+#warning("split in multiple modules, one for serial communication and JCCP protocol basics, one for the camera, and one for CLI")

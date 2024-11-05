@@ -35,7 +35,7 @@ struct TesterCommand: CamerableCommand {
         while Date().timeIntervalSince(startDate) < 3600 {
             let t = Date()
 
-            let current = camera.send(PTZUnknownRequest(commandBytes: [0x01, 0x44], arg: nil)).bytes
+            let current = camera.send(.unknown((0x01, 0x44), arg: nil)).bytes
             defer { previousBytes = current }
 
             if current == previousBytes { continue }

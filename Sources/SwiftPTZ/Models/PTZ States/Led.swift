@@ -86,17 +86,17 @@ struct PTZLedState: PTZInvariantState {
     }
     
     init?(message: PTZMessage) {
-        guard message.isValidReply([Self.register.0 + 0x40, Self.register.1]) else { return nil }
+        guard message.isValidReply(Self.setRegister) else { return nil }
         self.value = .init(
             color: message.parseArgument(position: .raw8(3)),
             mode: message.parseArgument(position: .raw8(4))
         )
     }
     
-    func set() -> any PTZRequest {
-        return PTZStateRequest(
+    func set() -> PTZRequest {
+        return .init(
             name: "Set \(description)",
-            message: .init([Self.register.0 + 0x40, Self.register.1], .init(value.color, .raw8(3)), .init(value.mode, .raw8(4)))
+            message: .init(Self.setRegister, .init(value.color, .raw8(3)), .init(value.mode, .raw8(4)))
         )
     }
     

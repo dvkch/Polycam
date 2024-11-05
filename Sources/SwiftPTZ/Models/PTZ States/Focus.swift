@@ -26,16 +26,23 @@ struct PTZFocusState: PTZSingleValueState {
         self.value = value
     }
     
-    func set() -> any PTZRequest {
-        return PTZStateRequest(
-            name: "Set \(description)",
-            message: .init([Self.register.0 + 0x40, Self.register.1], value),
-            modeConditionRescueRequests: [PTZAutoFocusState(.off).set()]
-        )
+    var modeConditionRescueRequests: [PTZRequest] {
+        [PTZAutoFocusState(.off).set()]
     }
 }
 
-struct PTZRequestStartFocus: PTZRequest {
-    var message: PTZMessage { .init([0x45, 0x13]) }
-    var description: String { "Start focus" } // takes about 5s to settle down
+struct PTZFocusAction: PTZWriteable {
+    static var name: String { "Focus" }
+    let variant: PTZNone
+    var value: PTZNone
+    
+    init(_ value: PTZNone = .init(), for variant: PTZNone = .init()) {
+        self.variant = variant
+        self.value = value
+    }
+
+    func set() -> PTZRequest {
+        // takes about 5s to settle down
+        return .init(name: "Start \(description)", message: .init((0x45, 0x13)))
+    }
 }
