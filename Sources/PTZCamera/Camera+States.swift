@@ -18,7 +18,7 @@ extension Camera {
         PTZConfig.register(PTZCalibrationSaturationState.self)
         PTZConfig.register(PTZCalibrationMatrixState.self)
         PTZConfig.register(PTZClockState.self)
-        PTZConfig.register(PTZColorsState.self)
+        PTZConfig.register(PTZGreyscaleState.self)
         PTZConfig.register(PTZContrastState.self)
         PTZConfig.register(PTZDevModeState.self)
         PTZConfig.register(PTZDrunkTestAction.self)
