@@ -1,5 +1,5 @@
 //
-//  MotorStats.swift
+//  Statistics.swift
 //  SwiftPTZ
 //
 //  Created by syan on 23/10/2024.
@@ -9,7 +9,7 @@ import Foundation
 import PTZMessaging
 
 // Those stats seem to count the amount of time each motor changed direction
-public enum PTZMotorsStats: UInt16, CaseIterable, PTZValue {
+public enum PTZStatisticsGroup: UInt16, CaseIterable, PTZValue {
     case unknownAndNone = 0x59 // left might be camera power cycles?
     case focusAndZoom   = 0x5A
     case noneAndIris    = 0x5B
@@ -28,18 +28,18 @@ public enum PTZMotorsStats: UInt16, CaseIterable, PTZValue {
     }
 }
 
-public struct PTZStats: Equatable {
+public struct PTZStatisticsValues: Equatable {
     let left: UInt32
     let right: UInt32
 }
 
-internal struct PTZMotorStatsState: PTZState, PTZReadable {
+internal struct PTZStatisticsState: PTZState, PTZReadable {
     static var name: String { "MotorStats" }
-    let variant: PTZMotorsStats
-    var value: PTZStats
+    let variant: PTZStatisticsGroup
+    var value: PTZStatisticsValues
     
     init?(message: PTZMessage) {
-        guard let stats = PTZMotorsStats.allCases.first(where: { message.isValidReply((0x41, UInt8($0.rawValue))) }) else { return nil }
+        guard let stats = PTZStatisticsGroup.allCases.first(where: { message.isValidReply((0x41, UInt8($0.rawValue))) }) else { return nil }
         self.variant = stats
         
         let leftPart0: PTZUInt = message.parseArgument(position: .custom(hiIndex: 13, loIndex: 7, loRetainerIndex: 3, loRetainerMask: 0x08))
@@ -66,7 +66,7 @@ internal struct PTZMotorStatsState: PTZState, PTZReadable {
         self.value = .init(left: valueLeft, right: valueRight)
     }
     
-    static func get(for variant: PTZMotorsStats) -> PTZRequest {
+    static func get(for variant: PTZStatisticsGroup) -> PTZRequest {
         .init(name: "\(name)(\(variant))", message: .init((0x01, UInt8(variant.rawValue))))
     }
     

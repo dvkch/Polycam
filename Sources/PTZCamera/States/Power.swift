@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZPowerMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
+public enum PTZPower: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     case on         = 0x00
     case sleeping   = 0x02
     case standby    = 0x10
@@ -28,9 +28,9 @@ internal struct PTZPowerState: PTZParseableState, PTZReadable, PTZWriteable {
     static var name: String = "Power"
     static var register: (UInt8, UInt8) = (0x01, 0x00)
     
-    var value: PTZPowerMode
+    var value: PTZPower
     
-    init(_ value: PTZPowerMode, for variant: PTZNone) {
+    init(_ value: PTZPower, for variant: PTZNone) {
         self.value = value
     }
     

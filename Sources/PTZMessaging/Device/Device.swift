@@ -174,4 +174,37 @@ extension Device {
         }
         try set(state, rescueModeCondition: rescueModeCondition)
     }
+    
+    public func get<T: PTZReadableCombo>(_ state: T.Type) throws(DeviceError) -> T.Value {
+        var messages = [PTZMessage]()
+        for reply in state.get().map({ send($0) }) {
+            switch reply {
+            case .ack:                  throw .missingReply
+            case .reset:                throw .reset
+            case .fail:                 throw .fail
+            case .timeout:              throw .timeout
+            case .executed:             throw .missingReply
+            case .notExecuted(let e):   throw .notExecuted(error: e)
+            case .state(let b, _):      messages.append(.init(bytes: b))
+            case .unknown(let b):       messages.append(.init(bytes: b))
+            }
+        }
+        guard let state = T.init(messages: messages) else { throw .missingReply }
+        return state.value
+    }
+    
+    public func set<T: PTZWriteableCombo>(_ state: T) throws(DeviceError) {
+        for reply in state.set().map({ send($0) }) {
+            switch reply {
+            case .ack:                  continue
+            case .reset:                throw .reset
+            case .fail:                 throw .fail
+            case .timeout:              throw .timeout
+            case .executed:             continue
+            case .notExecuted(let e):   throw .notExecuted(error: e)
+            case .state:                continue
+            case .unknown:              continue
+            }
+        }
+    }
 }

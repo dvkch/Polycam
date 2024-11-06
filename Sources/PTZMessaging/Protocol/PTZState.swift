@@ -90,3 +90,15 @@ public extension PTZParseableState where Self: PTZWriteable {
         return .init(Self.setRegister, value)
     }
 }
+
+// MARK: Combo
+public protocol PTZReadableCombo<Value>: PTZState where Variant == PTZNone {
+    init?(messages: [PTZMessage])
+    static func get() -> [PTZRequest]
+}
+
+public protocol PTZWriteableCombo<Value>: PTZState where Variant == PTZNone {
+    init(_ value: Value)
+    func set() -> [PTZRequest]
+}
+

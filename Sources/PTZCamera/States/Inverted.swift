@@ -1,5 +1,5 @@
 //
-//  InvertedMode.swift
+//  Inverted.swift
 //
 //
 //  Created by syan on 05/07/2024.

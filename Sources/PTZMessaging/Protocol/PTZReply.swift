@@ -57,7 +57,7 @@ public enum PTZReply: CustomStringConvertible {
         else if message.bytes.starts(with: [0x93, 0x40, 0x01]) {
             self = .notExecuted(error: message.parseArgument(position: .raw8(3)))
         }
-        else if let state = PTZMessaging.knownReadableStates.compactMap({ $0.init(message: message) }).first {
+        else if let state = PTZConfig.knownStates.compactMap({ ($0 as? any PTZReadable.Type) }).compactMap({ $0.init(message: message) }).first {
             self = .state(bytes: message.bytes, state: state)
         }
         else {

@@ -34,9 +34,9 @@ public enum PTZDrunkTestPhase: UInt16, CaseIterable, PTZValue {
 internal struct PTZDrunkTestAction: PTZState, PTZWriteable {
     static var name: String { "DrunkTest" }
     let variant: PTZNone
-    var value: PTZDrunkTestPhase
+    var value: PTZNone
     
-    init(_ value: PTZDrunkTestPhase, for variant: PTZNone = .init()) {
+    init(_ value: PTZNone = .init(), for variant: PTZNone = .init()) {
         self.variant = variant
         self.value = value
     }

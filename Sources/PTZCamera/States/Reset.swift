@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZResetKind: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
+public enum PTZReset: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
     case settings          = 0x00
     case settingsAndMotors = 0x01
     
@@ -30,9 +30,9 @@ public enum PTZResetKind: UInt16, CaseIterable, CustomStringConvertible, PTZValu
 internal struct PTZResetAction: PTZState, PTZWriteable {
     static var name: String { "Reset" }
     let variant: PTZNone
-    var value: PTZResetKind
+    var value: PTZReset
     
-    init(_ value: PTZResetKind, for variant: PTZNone = .init()) {
+    init(_ value: PTZReset, for variant: PTZNone = .init()) {
         self.variant = variant
         self.value = value
     }

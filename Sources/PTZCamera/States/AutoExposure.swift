@@ -9,6 +9,7 @@ import Foundation
 import PTZMessaging
 
 #warning("Add comments to all the states, explaning how they were found and how they work")
+#warning("Put each state in its own file")
 internal struct PTZAutoExposureState: PTZParseableState, PTZReadable, PTZWriteable {
     static var name: String = "AutoExposure"
     static var register: (UInt8, UInt8) = (0x02, 0x11)

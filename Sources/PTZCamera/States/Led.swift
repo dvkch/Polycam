@@ -72,7 +72,7 @@ public enum PTZLedMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue 
     public static var `default`: PTZLedMode { .on }
 }
 
-public struct PTZLedSettings: Equatable, CustomStringConvertible {
+public struct PTZLed: Equatable, CustomStringConvertible {
     public let color: PTZLedColor
     public let mode: PTZLedMode
     public var description: String { "\(color), \(mode)" }
@@ -82,9 +82,9 @@ internal struct PTZLedState: PTZInvariantState, PTZReadable, PTZWriteable {
     static var name: String = "Led"
     static var register: (UInt8, UInt8) = (0x01, 0x21)
     
-    var value: PTZLedSettings
+    var value: PTZLed
     
-    init(_ value: PTZLedSettings, for variant: PTZNone) {
+    init(_ value: PTZLed, for variant: PTZNone) {
         self.value = value
     }
     

@@ -8,8 +8,33 @@
 import Foundation
 import PTZMessaging
 
-#warning("make use of this")
-public typealias PTZCalibrationMatrix = [PTZCalibrationRange: (PTZCalibrationHue, PTZCalibrationLuminance, PTZCalibrationSaturation)]
+public struct PTZCalibrationMatrix: Equatable, CustomStringConvertible {
+    internal var hue:         [PTZCalibrationRange: PTZCalibrationHue] = [:]
+    internal var luminance:   [PTZCalibrationRange: PTZCalibrationLuminance] = [:]
+    internal var saturation:  [PTZCalibrationRange: PTZCalibrationSaturation] = [:]
+    
+    subscript(hue range: PTZCalibrationRange) -> PTZCalibrationHue {
+        get { hue[range, default: .default] }
+        set { hue[range] = newValue }
+    }
+    
+    subscript(luminance range: PTZCalibrationRange) -> PTZCalibrationLuminance {
+        get { luminance[range, default: .default] }
+        set { luminance[range] = newValue }
+    }
+    
+    subscript(saturation range: PTZCalibrationRange) -> PTZCalibrationSaturation {
+        get { saturation[range, default: .default] }
+        set { saturation[range] = newValue }
+    }
+    
+    public var description: String {
+        let hue = PTZCalibrationRange.allCases.map { self[hue: $0].description }.joined(separator: ", ")
+        let luminance = PTZCalibrationRange.allCases.map { self[hue: $0].description }.joined(separator: ", ")
+        let saturation = PTZCalibrationRange.allCases.map { self[hue: $0].description }.joined(separator: ", ")
+        return "Hue(\(hue)), Luminance(\(luminance)), Saturation(\(saturation))"
+    }
+}
 
 public struct PTZCalibrationHue: PTZScaledValue {
     public var rawValue: Int
@@ -138,5 +163,48 @@ internal struct PTZCalibrationSaturationState: PTZReadable, PTZWriteable {
     
     static func get(for variant: PTZCalibrationRange) -> PTZRequest {
         return .init(name: name, message: .init((0x03, 0x5C + UInt8(variant.rawValue))))
+    }
+}
+
+internal struct PTZCalibrationMatrixState: PTZReadableCombo, PTZWriteableCombo {
+    static var name: String = "CalibrationMatrix"
+    
+    let variant = PTZNone()
+    var value: PTZCalibrationMatrix
+    
+    init(_ value: PTZCalibrationMatrix) {
+        self.value = value
+    }
+
+    init?(messages: [PTZMessage]) {
+        self.value = .init()
+        for message in messages {
+            if let hue = PTZCalibrationHueState(message: message) {
+                self.value[hue: hue.variant] = hue.value
+            }
+            if let luminance = PTZCalibrationLuminanceState(message: message) {
+                self.value[luminance: luminance.variant] = luminance.value
+            }
+            if let saturation = PTZCalibrationSaturationState(message: message) {
+                self.value[saturation: saturation.variant] = saturation.value
+            }
+        }
+        guard value.hue.count == 6, value.luminance.count == 6, value.saturation.count == 6 else { return nil }
+    }
+
+    func set() -> [PTZRequest] {
+        return PTZCalibrationRange.allCases.map({[
+            PTZCalibrationHueState(value[hue: $0], for: $0).set(),
+            PTZCalibrationLuminanceState(value[luminance: $0], for: $0).set(),
+            PTZCalibrationSaturationState(value[saturation: $0], for: $0).set(),
+        ]}).reduce([], +)
+    }
+    
+    static func get() -> [PTZRequest] {
+        return PTZCalibrationRange.allCases.map({[
+            PTZCalibrationHueState.get(for: $0),
+            PTZCalibrationLuminanceState.get(for: $0),
+            PTZCalibrationSaturationState.get(for: $0),
+        ]}).reduce([], +)
     }
 }
