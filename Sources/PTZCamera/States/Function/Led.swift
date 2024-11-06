@@ -78,17 +78,17 @@ public struct PTZLed: Equatable, CustomStringConvertible, Codable {
     public var description: String { "\(color), \(mode)" }
 }
 
-internal struct PTZLedState: PTZInvariantState, PTZReadable, PTZWriteable {
-    static var name: String = "Led"
-    static var register: (UInt8, UInt8) = (0x01, 0x21)
+public struct PTZLedState: PTZInvariantState, PTZReadable, PTZWriteable {
+    public static var name: String = "Led"
+    public static var register: (UInt8, UInt8) = (0x01, 0x21)
     
-    var value: PTZLed
+    public var value: PTZLed
     
-    init(_ value: PTZLed, for variant: PTZNone) {
+    public init(_ value: PTZLed, for variant: PTZNone) {
         self.value = value
     }
     
-    init?(message: PTZMessage) {
+    public init?(message: PTZMessage) {
         guard message.isValidReply(Self.setRegister) else { return nil }
         self.value = .init(
             color: message.parseArgument(position: .raw8(3)),
@@ -96,7 +96,7 @@ internal struct PTZLedState: PTZInvariantState, PTZReadable, PTZWriteable {
         )
     }
     
-    func setMessage() -> PTZMessage {
+    public func setMessage() -> PTZMessage {
         .init(Self.setRegister, .init(value.color, .raw8(3)), .init(value.mode, .raw8(4)))
     }
 }

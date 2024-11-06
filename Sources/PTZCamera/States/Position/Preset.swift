@@ -33,18 +33,18 @@ public enum PTZPreset: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     }
 }
 
-internal struct PTZPresetState: PTZState, PTZReadable, PTZWriteable {
-    static var name: String = "Preset"
+public struct PTZPresetState: PTZState, PTZReadable, PTZWriteable {
+    public static var name: String = "Preset"
     
-    var variant: PTZPreset
-    var value: PTZPosition
+    public var variant: PTZPreset
+    public var value: PTZPosition
     
-    init(_ value: PTZPosition, for variant: PTZPreset) {
+    public init(_ value: PTZPosition, for variant: PTZPreset) {
         self.value = value
         self.variant = variant
     }
     
-    init?(message: PTZMessage) {
+    public init?(message: PTZMessage) {
         guard let preset = PTZPreset.allCases.first(where: { message.isValidReply((0x41, 0x60 + UInt8($0.rawValue))) }) else { return nil }
         self.variant = preset
         self.value = .init(
@@ -54,7 +54,7 @@ internal struct PTZPresetState: PTZState, PTZReadable, PTZWriteable {
         )
     }
     
-    func setMessage() -> PTZMessage {
+    public func setMessage() -> PTZMessage {
         return .init(
             (0x41, 0x60 + UInt8(variant.rawValue)),
             PTZArgument(value.pan,  .custom(hiIndex:  5, loIndex:  6, loRetainerIndex:  3, loRetainerMask: 0x04)),
@@ -64,7 +64,7 @@ internal struct PTZPresetState: PTZState, PTZReadable, PTZWriteable {
         )
     }
     
-    static func get(for variant: PTZPreset) -> PTZRequest {
+    public static func get(for variant: PTZPreset) -> PTZRequest {
         return .init(name: name, message: .init((0x01, 0x60 + UInt8(variant.rawValue))))
     }
 }

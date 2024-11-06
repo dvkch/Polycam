@@ -42,13 +42,13 @@ public enum PTZShutterSpeed: UInt16, CustomStringConvertible, CaseIterable, PTZV
     static var `default`: PTZShutterSpeed { .auto }
 }
 
-internal struct PTZShutterSpeedState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "ShutterSpeed"
-    static var register: (UInt8, UInt8) = (0x02, 0x14)
+public struct PTZShutterSpeedState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "ShutterSpeed"
+    public static var register: (UInt8, UInt8) = (0x02, 0x14)
     
-    var value: PTZShutterSpeed
+    public var value: PTZShutterSpeed
     
-    init(_ value: PTZShutterSpeed, for variant: PTZNone) {
+    public init(_ value: PTZShutterSpeed, for variant: PTZNone) {
         self.value = value
     }
 }

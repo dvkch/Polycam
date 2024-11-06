@@ -70,18 +70,18 @@ extension Device {
 
 // MARK: Interpret replies, allows retries
 extension Device {
-    internal enum RetryConditions {
+    public enum RetryConditions {
         case untilAck
         case onError(PTZReply.CommandError)
         case rescueModeCondition(maxTries: Int)
         
-        static func modeCondition(_ rescue: Bool) -> [RetryConditions] {
+        internal static func modeCondition(_ rescue: Bool) -> [RetryConditions] {
             return rescue ? [.rescueModeCondition(maxTries: 3)] : []
         }
     }
 
     @discardableResult
-    internal func send(_ request: PTZRequest, retries: [RetryConditions] = []) -> PTZReply {
+    public func send(_ request: PTZRequest, retries: [RetryConditions] = []) -> PTZReply {
         var bytes: Bytes
         
         while true {

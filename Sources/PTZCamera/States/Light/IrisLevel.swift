@@ -17,18 +17,18 @@ public struct PTZIrisLevel: PTZScaledValue {
     public static var ptzScale: Double = 1
 }
 
-internal struct PTZIrisLevelState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "IrisLevel"
-    static var register: (UInt8, UInt8) = (0x03, 0x00)
+public struct PTZIrisLevelState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "IrisLevel"
+    public static var register: (UInt8, UInt8) = (0x03, 0x00)
     
-    var value: PTZIrisLevel
+    public var value: PTZIrisLevel
     
-    init(_ value: PTZIrisLevel, for variant: PTZNone) {
+    public init(_ value: PTZIrisLevel, for variant: PTZNone) {
         self.value = value
     }
     
 #warning("look for all setRequest()")
-    func set() -> PTZRequest {
+    public func set() -> PTZRequest {
         return .init(name: "Set \(description)", message: setMessage(), modeConditionRescueRequests: [
             PTZAutoExposureState(.off).set(),
             PTZGainModeState(.gain0dB).set(),

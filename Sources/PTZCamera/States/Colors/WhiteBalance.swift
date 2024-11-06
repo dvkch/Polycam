@@ -34,32 +34,13 @@ public enum PTZWhiteBalance: UInt16, CustomStringConvertible, CaseIterable, PTZV
     static var `default`: PTZWhiteBalance { .auto }
 }
 
-internal struct PTZWhiteBalanceState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "WhiteBalance"
-    static var register: (UInt8, UInt8) = (0x02, 0x12)
+public struct PTZWhiteBalanceState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "WhiteBalance"
+    public static var register: (UInt8, UInt8) = (0x02, 0x12)
 
-    var value: PTZWhiteBalance
+    public var value: PTZWhiteBalance
     
-    init(_ value: PTZWhiteBalance, for variant: PTZNone) {
+    public init(_ value: PTZWhiteBalance, for variant: PTZNone) {
         self.value = value
-    }
-}
-
-internal struct PTZWhiteBalanceCalibrationAction: PTZState, PTZWriteable {
-    static var name: String { "WhiteBalanceCalibration" }
-    let variant: PTZNone
-    var value: PTZNone
-    
-    init(_ value: PTZNone = .init(), for variant: PTZNone = .init()) {
-        self.variant = variant
-        self.value = value
-    }
-
-    func setMessage() -> PTZMessage {
-        return .init((0x45, 0x17))
-    }
-
-    func set() -> PTZRequest {
-        return .init(name: "Start \(description)", message: setMessage(), waitingTimeIfExecuted: 2)
     }
 }

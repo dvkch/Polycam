@@ -16,16 +16,16 @@ public struct PTZPosition: Equatable, CustomStringConvertible, Codable {
     public var description: String { "\(pan), \(tilt), \(zoom)" }
 }
 
-internal struct PTZPositionState: PTZInvariantState, PTZReadable, PTZWriteable {
-    static var name: String = "Position"
-    static var register: (UInt8, UInt8) = (0x01, 0x50)
-    var value: PTZPosition
+public struct PTZPositionState: PTZInvariantState, PTZReadable, PTZWriteable {
+    public static var name: String = "Position"
+    public static var register: (UInt8, UInt8) = (0x01, 0x50)
+    public var value: PTZPosition
     
-    init(_ value: PTZPosition, for variant: PTZNone) {
+    public init(_ value: PTZPosition, for variant: PTZNone) {
         self.value = value
     }
     
-    init?(message: PTZMessage) {
+    public init?(message: PTZMessage) {
         guard message.isValidReply(Self.setRegister) else { return nil }
         self.value = .init(
             pan:  message.parseArgument(position: .custom(hiIndex: 4, loIndex: 5, loRetainerIndex: 3, loRetainerMask: 0x02)),
@@ -34,7 +34,7 @@ internal struct PTZPositionState: PTZInvariantState, PTZReadable, PTZWriteable {
         )
     }
     
-    func setMessage() -> PTZMessage {
+    public func setMessage() -> PTZMessage {
         return .init(
             Self.setRegister,
             PTZArgument(value.pan,  .custom(hiIndex:  5, loIndex:  6, loRetainerIndex:  3, loRetainerMask: 0x04)),

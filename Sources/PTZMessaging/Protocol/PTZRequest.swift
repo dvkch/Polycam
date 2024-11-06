@@ -8,10 +8,10 @@
 import Foundation
 
 public struct PTZRequest {
-    let name: String
-    let message: PTZMessage
-    let waitingTimeIfExecuted: TimeInterval
-    let modeConditionRescueRequests: [PTZRequest]
+    public let name: String
+    public let message: PTZMessage
+    public let waitingTimeIfExecuted: TimeInterval
+    public let modeConditionRescueRequests: [PTZRequest]
     
     public init(name: String, message: PTZMessage, waitingTimeIfExecuted: TimeInterval = 0, modeConditionRescueRequests: [PTZRequest] = []) {
         self.name = name

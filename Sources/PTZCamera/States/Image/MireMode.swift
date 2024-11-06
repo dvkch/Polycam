@@ -8,13 +8,13 @@
 import Foundation
 import PTZMessaging
 
-internal struct PTZMireState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "Mire"
-    static var register: (UInt8, UInt8) = (0x01, 0x10)
+public struct PTZMireState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "Mire"
+    public static var register: (UInt8, UInt8) = (0x01, 0x10)
 
-    var value: PTZBool
+    public var value: PTZBool
     
-    init(_ value: PTZBool, for variant: PTZNone) {
+    public init(_ value: PTZBool, for variant: PTZNone) {
         self.value = value
     }
 }

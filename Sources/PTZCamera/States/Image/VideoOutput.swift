@@ -27,19 +27,19 @@ public enum PTZVideoOutput: UInt16, CustomStringConvertible, CaseIterable, PTZVa
     public static var `default`: PTZVideoOutput { .resolution1080p60 }
 }
 
-internal struct PTZVideoOutputState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "VideoOutput"
-    static var register: (UInt8, UInt8) = (0x01, 0x13)
+public struct PTZVideoOutputState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "VideoOutput"
+    public static var register: (UInt8, UInt8) = (0x01, 0x13)
     
-    var value: PTZVideoOutput
+    public var value: PTZVideoOutput
     
-    init(_ value: PTZVideoOutput, for variant: PTZNone) {
+    public init(_ value: PTZVideoOutput, for variant: PTZNone) {
         self.value = value
     }
     
     #warning("look for all waitingTimeIfExecuted & rescue shits")
     
-    func set() -> PTZRequest {
+    public func set() -> PTZRequest {
         return .init(name: "Set \(self)", message: setMessage(), waitingTimeIfExecuted: 6)
     }
 }

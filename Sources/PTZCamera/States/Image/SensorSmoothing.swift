@@ -8,13 +8,13 @@
 import Foundation
 import PTZMessaging
 
-internal struct PTZSensorSmoothingState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "SensorSmoothing"
-    static var register: (UInt8, UInt8) = (0x01, 0x3B)
+public struct PTZSensorSmoothingState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "SensorSmoothing"
+    public static var register: (UInt8, UInt8) = (0x01, 0x3B)
 
-    var value: PTZBool
+    public var value: PTZBool
     
-    init(_ value: PTZBool, for variant: PTZNone) {
+    public init(_ value: PTZBool, for variant: PTZNone) {
         self.value = value
     }
 }

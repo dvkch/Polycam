@@ -19,7 +19,7 @@ extension BaseCommand {
     mutating func run() throws(CameraError) {
         Camera.registerKnownStates()
         
-        let camera = try Camera(serial: .givenOrFirst(serialDevice), logLevel: .info, powerOffAfterUse: false)
+        let camera = try Camera(serial: .givenOrFirst(serialDevice), logLevel: .info)
             
         do {
             try run(camera: camera)

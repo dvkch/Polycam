@@ -8,17 +8,17 @@
 import Foundation
 import PTZMessaging
 
-internal struct PTZAutoFocusState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "AutoFocus"
-    static var register: (UInt8, UInt8) = (0x02, 0x09)
+public struct PTZAutoFocusState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "AutoFocus"
+    public static var register: (UInt8, UInt8) = (0x02, 0x09)
 
-    var value: PTZBool
+    public var value: PTZBool
     
-    init(_ value: PTZBool, for variant: PTZNone) {
+    public init(_ value: PTZBool, for variant: PTZNone) {
         self.value = value
     }
     
-    func set() -> PTZRequest {
+    public func set() -> PTZRequest {
         // needs a bit of time before allowing manual focus, or might reply "mode condition"
         return .init(name: "Set \(description)", message: setMessage(), waitingTimeIfExecuted: 1)
     }

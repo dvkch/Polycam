@@ -8,23 +8,23 @@
 import Foundation
 import PTZMessaging
 
-internal struct PTZGreyscaleState: PTZInvariantState, PTZReadable, PTZWriteable {
-    static var name: String = "Greyscale"
-    static var register: (UInt8, UInt8) = (0x01, 0x3A)
+public struct PTZGreyscaleState: PTZInvariantState, PTZReadable, PTZWriteable {
+    public static var name: String = "Greyscale"
+    public static var register: (UInt8, UInt8) = (0x01, 0x3A)
 
-    var value: PTZBool
+    public var value: PTZBool
     
-    init(_ value: PTZBool, for variant: PTZNone) {
+    public init(_ value: PTZBool, for variant: PTZNone) {
         self.value = value
     }
     
-    init?(message: PTZMessage) {
+    public init?(message: PTZMessage) {
         guard message.isValidReply(Self.setRegister) else { return nil }
         let value: Value = message.parseArgument(position: .single)
         self.init(.init(rawValue: !value.rawValue))
     }
 
-    func setMessage() -> PTZMessage {
+    public func setMessage() -> PTZMessage {
         return .init(Self.setRegister, PTZBool(rawValue: !value.rawValue))
     }
 }

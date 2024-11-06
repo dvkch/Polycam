@@ -8,13 +8,13 @@
 import Foundation
 import PTZMessaging
 
-internal struct PTZInvertedState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "Inverted"
-    static var register: (UInt8, UInt8) = (0x01, 0x3E)
+public struct PTZInvertedState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "Inverted"
+    public static var register: (UInt8, UInt8) = (0x01, 0x3E)
 
-    var value: PTZBool
+    public var value: PTZBool
     
-    init(_ value: PTZBool, for variant: PTZNone) {
+    public init(_ value: PTZBool, for variant: PTZNone) {
         self.value = value
     }
 }

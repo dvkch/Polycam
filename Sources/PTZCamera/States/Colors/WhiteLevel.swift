@@ -22,13 +22,13 @@ public enum PTZWhiteLevel: UInt16, CustomStringConvertible, CaseIterable, PTZVal
     public static var `default`: PTZWhiteLevel { .reduced }
 }
 
-internal struct PTZWhiteLevelState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "WhiteLevel"
-    static var register: (UInt8, UInt8) = (0x03, 0x3F)
+public struct PTZWhiteLevelState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "WhiteLevel"
+    public static var register: (UInt8, UInt8) = (0x03, 0x3F)
 
-    var value: PTZWhiteLevel
+    public var value: PTZWhiteLevel
     
-    init(_ value: PTZWhiteLevel, for variant: PTZNone) {
+    public init(_ value: PTZWhiteLevel, for variant: PTZNone) {
         self.value = value
     }
 }

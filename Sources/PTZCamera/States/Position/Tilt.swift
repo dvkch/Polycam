@@ -27,13 +27,13 @@ internal struct PTZTiltOriginalAPI: PTZScaledValue {
     static var `default`: PTZTiltOriginalAPI { .init(rawValue: 0) }
 }
 
-internal struct PTZTiltState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "Tilt"
-    static var register: (UInt8, UInt8) = (0x03, 0x05)
+public struct PTZTiltState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "Tilt"
+    public static var register: (UInt8, UInt8) = (0x03, 0x05)
     
-    var value: PTZTilt
+    public var value: PTZTilt
     
-    init(_ value: PTZTilt, for variant: PTZNone) {
+    public init(_ value: PTZTilt, for variant: PTZNone) {
         self.value = value
     }
 }

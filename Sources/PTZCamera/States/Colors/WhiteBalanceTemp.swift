@@ -18,17 +18,17 @@ public struct PTZWhiteBalanceTemp: PTZScaledValue {
     public static var `default`: PTZWhiteBalanceTemp { .init(rawValue: 128) }
 }
 
-internal struct PTZWhiteBalanceTempState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "WhiteBalanceTemp"
-    static var register: (UInt8, UInt8) = (0x03, 0x41)
+public struct PTZWhiteBalanceTempState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "WhiteBalanceTemp"
+    public static var register: (UInt8, UInt8) = (0x03, 0x41)
 
-    var value: PTZWhiteBalanceTemp
+    public var value: PTZWhiteBalanceTemp
     
-    init(_ value: PTZWhiteBalanceTemp, for variant: PTZNone) {
+    public init(_ value: PTZWhiteBalanceTemp, for variant: PTZNone) {
         self.value = value
     }
     
-    func set() -> PTZRequest {
+    public func set() -> PTZRequest {
         return .init(name: "Set \(description)", message: setMessage(), modeConditionRescueRequests: [PTZWhiteBalanceState(.manual).set()])
     }
     

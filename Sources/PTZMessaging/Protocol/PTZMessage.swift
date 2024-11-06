@@ -9,7 +9,7 @@ import Foundation
 import PTZCommon
 
 public struct PTZMessage {
-    let bytes: Bytes
+    public let bytes: Bytes
 
     internal init(bytes: Bytes) {
         self.bytes = bytes
@@ -27,13 +27,13 @@ extension PTZMessage {
         return true
     }
     
-    static func messages(from bytes: Bytes) -> [PTZMessage] {
+    public static func messages(from bytes: Bytes) -> [PTZMessage] {
         return bytes
             .split(startFilter: { $0 >= 0x80 })
             .map { self.init(bytes: $0) }
     }
     
-    static func replies(from bytes: Bytes) -> [PTZReply] {
+    public static func replies(from bytes: Bytes) -> [PTZReply] {
         return PTZMessage.messages(from: bytes).map { PTZReply(message: $0) }
     }
 }

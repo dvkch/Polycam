@@ -28,13 +28,13 @@ internal struct PTZPanOriginalAPI: PTZScaledValue {
 }
 
 
-internal struct PTZPanState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "Pan"
-    static var register: (UInt8, UInt8) = (0x03, 0x04)
+public struct PTZPanState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "Pan"
+    public static var register: (UInt8, UInt8) = (0x03, 0x04)
     
-    var value: PTZPan
+    public var value: PTZPan
     
-    init(_ value: PTZPan, for variant: PTZNone) {
+    public init(_ value: PTZPan, for variant: PTZNone) {
         self.value = value
     }
 }

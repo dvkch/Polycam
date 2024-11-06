@@ -7,6 +7,8 @@
 
 import Foundation
 import SwiftCurses
+import PTZCamera
+import PTZMessaging
 
 struct Interactive {
     static func traverse(_ elements: [any Interactive.Element], closure: (any Element, Int, IndexPath) throws -> ()) rethrows {
@@ -127,12 +129,12 @@ extension Interactive {
         private var currentValue: UInt16 = 0
         private var setError: String? = nil
 
-        convenience init<T: PTZScaledValue>(_ name: String, cat category: UInt8, r register: UInt8, value: T.Type) {
-            self.init(name, cat: category, r: register, values: T.min.ptzValue...T.max.ptzValue, default: T.default.ptzValue)
+        convenience init<T: PTZScaledValue>(_ name: String, cat category: UInt8, r register: UInt8, value: T.Type, default: T) {
+            self.init(name, cat: category, r: register, values: T.min.ptzValue...T.max.ptzValue, default: `default`.ptzValue)
         }
 
-        convenience init<T: PTZValue & CaseIterable>(_ name: String, cat category: UInt8, r register: UInt8, value: T.Type) {
-            self.init(name, cat: category, r: register, values: T.allCases.map(\.ptzValue), default: T.default.ptzValue)
+        convenience init<T: PTZValue & CaseIterable>(_ name: String, cat category: UInt8, r register: UInt8, value: T.Type, default: T) {
+            self.init(name, cat: category, r: register, values: T.allCases.map(\.ptzValue), default: `default`.ptzValue)
         }
 
         init(_ name: String, cat category: UInt8, r register: UInt8, values: any Collection<UInt16>, default: UInt16) {
@@ -157,7 +159,7 @@ extension Interactive {
             let req = PTZRequest.unknown((category + 0x40, register), arg: value)
             let reply = camera.send(req)
             currentValue = values.closest(to: value) ?? value
-            setError = if case .executed = reply { nil } else { "\(req.message.bytes.hexString) => \(reply.description)" }
+            setError = (reply == .executed) ? nil : "\(req.message.bytes.hexString) => \(reply.description)"
         }
         
         // InteractiveElement

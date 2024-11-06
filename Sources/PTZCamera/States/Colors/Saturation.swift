@@ -18,13 +18,13 @@ public struct PTZSaturation: PTZScaledValue {
     public static var `default`: PTZSaturation { .init(rawValue: 6) }
 }
 
-internal struct PTZSaturationState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "Saturation"
-    static var register: (UInt8, UInt8) = (0x03, 0x3E)
+public struct PTZSaturationState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "Saturation"
+    public static var register: (UInt8, UInt8) = (0x03, 0x3E)
     
-    var value: PTZSaturation
+    public var value: PTZSaturation
     
-    init(_ value: PTZSaturation, for variant: PTZNone) {
+    public init(_ value: PTZSaturation, for variant: PTZNone) {
         self.value = value
     }
 }

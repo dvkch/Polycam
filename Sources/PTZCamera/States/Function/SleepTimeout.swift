@@ -23,13 +23,13 @@ public struct PTZSleepTimeout: PTZScaledValue {
     }
 }
 
-internal struct PTZSleepTimeoutState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "SleepTimeout"
-    static var register: (UInt8, UInt8) = (0x01, 0x01)
+public struct PTZSleepTimeoutState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "SleepTimeout"
+    public static var register: (UInt8, UInt8) = (0x01, 0x01)
 
-    var value: PTZSleepTimeout
+    public var value: PTZSleepTimeout
     
-    init(_ value: PTZSleepTimeout, for variant: PTZNone) {
+    public init(_ value: PTZSleepTimeout, for variant: PTZNone) {
         self.value = value
     }
 }

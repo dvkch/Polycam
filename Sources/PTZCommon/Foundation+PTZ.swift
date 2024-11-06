@@ -56,3 +56,22 @@ func during(seconds: TimeInterval, action: () -> ()) {
         action()
     }
 }
+
+extension UInt32 {
+    public init(b3: UInt8, b2: UInt8, b1: UInt8, b0: UInt8) {
+        self.init(
+            (UInt32(b0) <<  0) +
+            (UInt32(b1) <<  8) +
+            (UInt32(b2) << 16) +
+            (UInt32(b3) << 24)
+        )
+    }
+    
+    public var parts: (b3: UInt8, b2: UInt8, b1: UInt8, b0: UInt8) {
+        let b0 = UInt8( self        & 0xFF)
+        let b1 = UInt8((self >>  8) & 0xFF)
+        let b2 = UInt8((self >> 16) & 0xFF)
+        let b3 = UInt8((self >> 24) & 0xFF)
+        return (b3, b2, b1, b0)
+    }
+}

@@ -1,5 +1,5 @@
 //
-//  DrunkTest.swift
+//  WhiteBalanceCalibration.swift
 //  PTZ
 //
 //  Created by syan on 06/11/2024.
@@ -8,8 +8,8 @@
 import Foundation
 import PTZMessaging
 
-public struct PTZDrunkTestAction: PTZState, PTZWriteable {
-    public static var name: String { "DrunkTest" }
+public struct PTZWhiteBalanceCalibrationAction: PTZState, PTZWriteable {
+    public static var name: String { "WhiteBalanceCalibration" }
     public let variant: PTZNone
     public var value: PTZNone
     
@@ -18,9 +18,11 @@ public struct PTZDrunkTestAction: PTZState, PTZWriteable {
         self.value = value
     }
 
-#warning("does sending something other than 0x01 stops the testing maybe ?? if so, consolidate into a single State")
     public func setMessage() -> PTZMessage {
-        return .init((0x45, 0x14), PTZDrunkTestPhase.running)
+        return .init((0x45, 0x17))
+    }
+
+    public func set() -> PTZRequest {
+        return .init(name: "Start \(description)", message: setMessage(), waitingTimeIfExecuted: 2)
     }
 }
-

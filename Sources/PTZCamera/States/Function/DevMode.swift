@@ -8,13 +8,13 @@
 import Foundation
 import PTZMessaging
 
-internal struct PTZDevModeState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "DevMode"
-    static var register: (UInt8, UInt8) = (0x01, 0x0B)
+public struct PTZDevModeState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "DevMode"
+    public static var register: (UInt8, UInt8) = (0x01, 0x0B)
 
-    var value: PTZBool
+    public var value: PTZBool
     
-    init(_ value: PTZBool, for variant: PTZNone) {
+    public init(_ value: PTZBool, for variant: PTZNone) {
         self.value = value
     }
 }

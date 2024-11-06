@@ -25,17 +25,17 @@ public struct PTZLedIntensity: Equatable, CustomStringConvertible, Codable {
     public var description: String { "R=\(r), G=\(g), B=\(b)" }
 }
 
-internal struct PTZLedIntensityState: PTZInvariantState, PTZReadable, PTZWriteable {
-    static let name: String = "LedIntensity"
-    static var register: (UInt8, UInt8) = (0x01, 0x25)
+public struct PTZLedIntensityState: PTZInvariantState, PTZReadable, PTZWriteable {
+    public static let name: String = "LedIntensity"
+    public static var register: (UInt8, UInt8) = (0x01, 0x25)
 
-    var value: PTZLedIntensity
+    public var value: PTZLedIntensity
     
-    init(_ value: PTZLedIntensity, for variant: PTZNone) {
+    public init(_ value: PTZLedIntensity, for variant: PTZNone) {
         self.value = value
     }
     
-    init?(message: PTZMessage) {
+    public init?(message: PTZMessage) {
         guard message.isValidReply(Self.setRegister) else { return nil }
         self.value = .init(
             r: message.parseArgument(position: .raw8(3)),
@@ -44,7 +44,7 @@ internal struct PTZLedIntensityState: PTZInvariantState, PTZReadable, PTZWriteab
         )
     }
 
-    func setMessage() -> PTZMessage {
+    public func setMessage() -> PTZMessage {
         return .init(Self.setRegister, .init(value.r, .raw8(3)), .init(value.b, .raw8(4)), .init(value.g, .raw8(5)))
     }
 }

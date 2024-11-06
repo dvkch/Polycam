@@ -18,13 +18,13 @@ public struct PTZBrightness: PTZScaledValue {
     public static var `default`: PTZBrightness { .init(rawValue: 11) }
 }
 
-internal struct PTZBrightnessState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "Brightness"
-    static var register: (UInt8, UInt8) = (0x01, 0x33)
+public struct PTZBrightnessState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "Brightness"
+    public static var register: (UInt8, UInt8) = (0x01, 0x33)
 
-    var value: PTZBrightness
+    public var value: PTZBrightness
     
-    init(_ value: PTZBrightness, for variant: PTZNone) {
+    public init(_ value: PTZBrightness, for variant: PTZNone) {
         self.value = value
     }
 }

@@ -27,21 +27,21 @@ public enum PTZReset: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
     }
 }
 
-internal struct PTZResetAction: PTZState, PTZWriteable {
-    static var name: String { "Reset" }
-    let variant: PTZNone
-    var value: PTZReset
+public struct PTZResetAction: PTZState, PTZWriteable {
+    public static var name: String { "Reset" }
+    public let variant: PTZNone
+    public var value: PTZReset
     
-    init(_ value: PTZReset, for variant: PTZNone = .init()) {
+    public init(_ value: PTZReset, for variant: PTZNone = .init()) {
         self.variant = variant
         self.value = value
     }
 
-    func setMessage() -> PTZMessage {
+    public func setMessage() -> PTZMessage {
         return .init((0x45, 0x32), value)
     }
 
-    func set() -> PTZRequest {
+    public func set() -> PTZRequest {
         return .init(name: "Start \(description)", message: setMessage(), waitingTimeIfExecuted: value.expectedRunTime)
     }
 }

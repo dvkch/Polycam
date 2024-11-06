@@ -8,13 +8,13 @@
 import Foundation
 import PTZMessaging
 
-internal struct PTZNoiseReductionState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "NoiseReduction"
-    static var register: (UInt8, UInt8) = (0x01, 0x3C)
+public struct PTZNoiseReductionState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "NoiseReduction"
+    public static var register: (UInt8, UInt8) = (0x01, 0x3C)
 
-    var value: PTZBool
+    public var value: PTZBool
     
-    init(_ value: PTZBool, for variant: PTZNone) {
+    public init(_ value: PTZBool, for variant: PTZNone) {
         self.value = value
     }
 }

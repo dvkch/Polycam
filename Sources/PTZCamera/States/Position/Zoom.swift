@@ -31,13 +31,13 @@ internal struct PTZZoomOriginalAPI: PTZScaledValue {
     // 64 => 1529
 }
 
-internal struct PTZZoomState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "Zoom"
-    static var register: (UInt8, UInt8) = (0x03, 0x02)
+public struct PTZZoomState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "Zoom"
+    public static var register: (UInt8, UInt8) = (0x03, 0x02)
     
-    var value: PTZZoom
+    public var value: PTZZoom
     
-    init(_ value: PTZZoom, for variant: PTZNone) {
+    public init(_ value: PTZZoom, for variant: PTZNone) {
         self.value = value
     }
 }

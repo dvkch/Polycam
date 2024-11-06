@@ -10,13 +10,13 @@ import PTZMessaging
 
 #warning("Add comments to all the states, explaning how they were found and how they work")
 #warning("Put each state in its own file")
-internal struct PTZAutoExposureState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "AutoExposure"
-    static var register: (UInt8, UInt8) = (0x02, 0x11)
+public struct PTZAutoExposureState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "AutoExposure"
+    public static var register: (UInt8, UInt8) = (0x02, 0x11)
 
-    var value: PTZBool
+    public var value: PTZBool
     
-    init(_ value: PTZBool, for variant: PTZNone) {
+    public init(_ value: PTZBool, for variant: PTZNone) {
         self.value = value
     }
     

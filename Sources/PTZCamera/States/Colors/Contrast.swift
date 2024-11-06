@@ -18,13 +18,13 @@ public struct PTZContrast: PTZScaledValue {
     public static var `default`: PTZContrast { .init(rawValue: 10) }
 }
 
-internal struct PTZContrastState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "Contrast"
-    static var register: (UInt8, UInt8) = (0x01, 0x32)
+public struct PTZContrastState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "Contrast"
+    public static var register: (UInt8, UInt8) = (0x01, 0x32)
 
-    var value: PTZContrast
+    public var value: PTZContrast
     
-    init(_ value: PTZContrast, for variant: PTZNone) {
+    public init(_ value: PTZContrast, for variant: PTZNone) {
         self.value = value
     }
 }

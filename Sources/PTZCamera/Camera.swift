@@ -14,26 +14,15 @@ public typealias CameraError = DeviceError
 public class Camera: Device {
     
     // MARK: Init
-    public init(serial: SerialName, logLevel: LogLevel, powerOffAfterUse: Bool) throws(CameraError) {
-        self.powerOffAfterUse = powerOffAfterUse
+    public override init(serial: SerialName, logLevel: LogLevel) throws(CameraError) {
         try super.init(serial: serial, logLevel: logLevel)
-
         self.powerOn()
     }
-    
-    deinit {
-        if powerOffAfterUse {
-            powerOff()
-        }
-    }
-    
-    // MARK: Properties
-    private let powerOffAfterUse: Bool
 }
 
 // MARK: Actions
 public extension Camera {
-    internal func powerOn() {
+    func powerOn() {
         log(.info, "Starting boot sequence...")
 
         power = .on
@@ -51,8 +40,8 @@ public extension Camera {
         autoFocus = true
         whiteBalance = .default
         gainMode = .default
-        redGain = .default
-        blueGain = .default
+        gainRed = .default
+        gainBlue = .default
         brightness = .default
         saturation = .default
         backlightCompensation = false
@@ -60,7 +49,7 @@ public extension Camera {
         log(.info, "Finished boot sequence")
     }
         
-    internal func powerOff() {
+    func powerOff() {
         try? set(PTZLedState(.init(color: .off, mode: .off)))
         try? set(PTZPowerState(.standby))
 
@@ -235,18 +224,18 @@ public extension Camera {
         set { try! set(PTZGainModeState(newValue), debounce: true, rescueModeCondition: true) }
     }
     
-    var redGain: PTZColorGain {
-        get { try! get(PTZRedGainState.self, rescueModeCondition: true) }
-        set { try! set(PTZRedGainState(newValue), debounce: true, rescueModeCondition: true) }
+    var gainRed: PTZColorGain {
+        get { try! get(PTZGainRedState.self, rescueModeCondition: true) }
+        set { try! set(PTZGainRedState(newValue), debounce: true, rescueModeCondition: true) }
     }
     
-    var blueGain: PTZColorGain {
-        get { try! get(PTZBlueGainState.self, rescueModeCondition: true) }
-        set { try! set(PTZBlueGainState(newValue), debounce: true, rescueModeCondition: true) }
+    var gainBlue: PTZColorGain {
+        get { try! get(PTZGainBlueState.self, rescueModeCondition: true) }
+        set { try! set(PTZGainBlueState(newValue), debounce: true, rescueModeCondition: true) }
     }
     
-    var effectiveGain: PTZEffectiveGain {
-        try! get(PTZEffectiveGainState.self, rescueModeCondition: true)
+    var effectiveGain: PTZGainEffective {
+        try! get(PTZGainEffectiveState.self, rescueModeCondition: true)
     }
     
     var irisLevel: PTZIrisLevel {
@@ -281,11 +270,11 @@ public extension Camera {
         try! set(PTZFocusAction(), rescueModeCondition: true)
     }
 
-    func movePan(_ direction: PTZPanDirection, speed: PTZPanTiltSpeed) {
+    func movePan(_ direction: PTZPanDirection, speed: PTZPanSpeed) {
         try! set(PTZMovePanAction(speed, for: direction), rescueModeCondition: true)
     }
     
-    func moveTilt(_ direction: PTZTiltDirection, speed: PTZPanTiltSpeed) {
+    func moveTilt(_ direction: PTZTiltDirection, speed: PTZTiltSpeed) {
         try! set(PTZMoveTiltAction(speed, for: direction), rescueModeCondition: true)
     }
     

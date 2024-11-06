@@ -7,6 +7,8 @@
 
 import Foundation
 import ArgumentParser
+import PTZCamera
+import PTZMessaging
 
 // Usually takes about 5min to run on an Eagle Eye IV
 struct FuzzerCommand: BaseCommand {

@@ -7,7 +7,8 @@
 
 import Foundation
 import ArgumentParser
-import AppKit
+import PTZCamera
+import PTZMessaging
 
 struct TesterCommand: BaseCommand {
     static var configuration: CommandConfiguration = .init(commandName: "tester")

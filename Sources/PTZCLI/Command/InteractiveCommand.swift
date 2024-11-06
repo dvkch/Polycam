@@ -7,7 +7,7 @@
 
 import Foundation
 import ArgumentParser
-import AppKit
+import PTZCamera
 import SwiftCurses
 
 struct InteractiveCommand: BaseCommand {
@@ -54,35 +54,35 @@ struct InteractiveCommand: BaseCommand {
                 Interactive.State("Dev mode", cat: 0x01, r: 0x0B, values: 0...1, default: 0),
             ]),
             Interactive.Group("--- Position ---", [
-                Interactive.State("Pan",   cat: 0x03, r: 0x04, value: PTZPan.self),
-                Interactive.State("Tilt",  cat: 0x03, r: 0x05, value: PTZTilt.self),
-                Interactive.State("Zoom",  cat: 0x03, r: 0x02, value: PTZZoom.self),
+                Interactive.State("Pan",   cat: 0x03, r: 0x04, value: PTZPan.self, default: .default),
+                Interactive.State("Tilt",  cat: 0x03, r: 0x05, value: PTZTilt.self, default: .default),
+                Interactive.State("Zoom",  cat: 0x03, r: 0x02, value: PTZZoom.self, default: .default),
                 Interactive.Group("Focus", [
                     Interactive.State("Auto", cat: 0x02, r: 0x09, values: [0, 1], default: 1),
-                    Interactive.State("Manual", cat: 0x03, r: 0x03, value: PTZFocus.self),
+                    Interactive.State("Manual", cat: 0x03, r: 0x03, value: PTZFocus.self, default: .mid),
                 ]),
                 Interactive.Group("Move", moveActions)
             ]),
             Interactive.Group("--- Exposure ---", [
-                Interactive.State("Shutter speed", cat: 0x02, r: 0x14, value: PTZShutterSpeed.self),
+                Interactive.State("Shutter speed", cat: 0x02, r: 0x14, value: PTZShutterSpeed.self, default: .auto),
                 Interactive.State("Auto exposure", cat: 0x02, r: 0x11, values: [0, 1], default: 1),
-                Interactive.State("Gain",  cat: 0x01, r: 0x31, value: PTZGainMode.self),
+                Interactive.State("Gain",  cat: 0x01, r: 0x31, value: PTZGainMode.self, default: .auto),
                 Interactive.State("Backlight compensation", cat: 0x02, r: 0x15, values: [0, 1], default: 1),
-                Interactive.State("Iris level", cat: 0x03, r: 0x00, value: PTZIrisLevel.self),
+                Interactive.State("Iris level", cat: 0x03, r: 0x00, value: PTZIrisLevel.self, default: .mid),
                 Interactive.State("Vignette correction", cat: 0x01, r: 0x3D, values: [0, 1], default: 1),
                 Interactive.State("Noise reduction", cat: 0x01, r: 0x3C, values: [0, 1], default: 1),
             ]),
             Interactive.Group("--- Colors ---", [
-                Interactive.State("Brightness", cat: 0x01, r: 0x33, value: PTZBrightness.self),
-                Interactive.State("Contrast",   cat: 0x01, r: 0x32, value: PTZContrast.self),
-                Interactive.State("Saturation", cat: 0x03, r: 0x3e, value: PTZSaturation.self),
+                Interactive.State("Brightness", cat: 0x01, r: 0x33, value: PTZBrightness.self, default: .default),
+                Interactive.State("Contrast",   cat: 0x01, r: 0x32, value: PTZContrast.self, default: .default),
+                Interactive.State("Saturation", cat: 0x03, r: 0x3e, value: PTZSaturation.self, default: .default),
                 Interactive.Group("WhiteBalance", [
-                    Interactive.State("Mode", cat: 0x02, r: 0x12, value: PTZWhiteBalance.self),
-                    Interactive.State("Temp", cat: 0x03, r: 0x41, value: PTZWhiteBalanceTemp.self),
-                    Interactive.State("Tint", cat: 0x03, r: 0x40, value: PTZWhiteBalanceTint.self),
+                    Interactive.State("Mode", cat: 0x02, r: 0x12, value: PTZWhiteBalance.self, default: .auto),
+                    Interactive.State("Temp", cat: 0x03, r: 0x41, value: PTZWhiteBalanceTemp.self, default: .default),
+                    Interactive.State("Tint", cat: 0x03, r: 0x40, value: PTZWhiteBalanceTint.self, default: .default),
                 ]),
-                Interactive.State("GainR", cat: 0x03, r: 0x42, value: PTZColorGain.self),
-                Interactive.State("GainB", cat: 0x03, r: 0x43, value: PTZColorGain.self),
+                Interactive.State("GainR", cat: 0x03, r: 0x42, value: PTZColorGain.self, default: .default),
+                Interactive.State("GainB", cat: 0x03, r: 0x43, value: PTZColorGain.self, default: .default),
             ]),
         ]
 

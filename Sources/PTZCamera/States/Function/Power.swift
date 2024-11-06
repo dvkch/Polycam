@@ -24,17 +24,17 @@ public enum PTZPower: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     }
 }
 
-internal struct PTZPowerState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "Power"
-    static var register: (UInt8, UInt8) = (0x01, 0x00)
+public struct PTZPowerState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "Power"
+    public static var register: (UInt8, UInt8) = (0x01, 0x00)
     
-    var value: PTZPower
+    public var value: PTZPower
     
-    init(_ value: PTZPower, for variant: PTZNone) {
+    public init(_ value: PTZPower, for variant: PTZNone) {
         self.value = value
     }
     
-    func set() -> PTZRequest {
+    public func set() -> PTZRequest {
         return .init(name: "Set \(description)", message: setMessage(), waitingTimeIfExecuted: (value == .on ? 5 : 1))
     }
 }

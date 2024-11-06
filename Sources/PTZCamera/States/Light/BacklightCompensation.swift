@@ -8,13 +8,13 @@
 import Foundation
 import PTZMessaging
 
-internal struct PTZBacklightCompensationState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "BacklightCompensation"
-    static var register: (UInt8, UInt8) = (0x02, 0x15)
+public struct PTZBacklightCompensationState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "BacklightCompensation"
+    public static var register: (UInt8, UInt8) = (0x02, 0x15)
 
-    var value: PTZBool
+    public var value: PTZBool
     
-    init(_ value: PTZBool, for variant: PTZNone) {
+    public init(_ value: PTZBool, for variant: PTZNone) {
         self.value = value
     }
 }

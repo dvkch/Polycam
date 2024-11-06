@@ -17,17 +17,17 @@ public struct PTZFocus: PTZScaledValue {
     public static var ptzScale: Double = 1
 }
 
-internal struct PTZFocusState: PTZParseableState, PTZReadable, PTZWriteable {
-    static var name: String = "Focus"
-    static var register: (UInt8, UInt8) = (0x03, 0x03)
+public struct PTZFocusState: PTZParseableState, PTZReadable, PTZWriteable {
+    public static var name: String = "Focus"
+    public static var register: (UInt8, UInt8) = (0x03, 0x03)
 
-    var value: PTZFocus
+    public var value: PTZFocus
     
-    init(_ value: PTZFocus, for variant: PTZNone) {
+    public init(_ value: PTZFocus, for variant: PTZNone) {
         self.value = value
     }
     
-    func set() -> PTZRequest {
+    public func set() -> PTZRequest {
         return .init(
             name: "Set \(description)", message: setMessage(),
             modeConditionRescueRequests: [PTZAutoFocusState(.off).set()]
@@ -35,17 +35,17 @@ internal struct PTZFocusState: PTZParseableState, PTZReadable, PTZWriteable {
     }
 }
 
-internal struct PTZFocusAction: PTZState, PTZWriteable {
-    static var name: String { "Start Focus" }
-    let variant: PTZNone
-    var value: PTZNone
+public struct PTZFocusAction: PTZState, PTZWriteable {
+    public static var name: String { "Start Focus" }
+    public let variant: PTZNone
+    public var value: PTZNone
     
-    init(_ value: PTZNone = .init(), for variant: PTZNone = .init()) {
+    public init(_ value: PTZNone = .init(), for variant: PTZNone = .init()) {
         self.variant = variant
         self.value = value
     }
 
-    func setMessage() -> PTZMessage {
+    public func setMessage() -> PTZMessage {
         // takes about 5s to settle down
         return .init((0x45, 0x13))
     }

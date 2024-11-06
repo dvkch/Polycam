@@ -23,13 +23,13 @@ public struct PTZHello: Equatable, CustomStringConvertible, Codable {
     public var description: String { "MPTZ 11 sysVer=\(sysVer) camVer=\(camVer) backVer=\(backVer) bootVer=\(bootVer) splVer=\(splVer) pkgVer=\(pkgVer)" }
 }
 
-internal struct PTZHelloState: PTZInvariantState, PTZReadable {
-    static var name: String = "Hello"
-    static var register: (UInt8, UInt8) = (0x06, 0x77)
+public struct PTZHelloState: PTZInvariantState, PTZReadable {
+    public static var name: String = "Hello"
+    public static var register: (UInt8, UInt8) = (0x06, 0x77)
     
-    var value: PTZHello
+    public var value: PTZHello
     
-    init?(message: PTZMessage) {
+    public init?(message: PTZMessage) {
         // idk why sometimes it is 0x05, sometimes 0x06... i would have also expected to be waiting for 46 77, which
         // we do always have, but 46 is also the length of the whole reply... since we don't have any other devices
         // or commands with similar replies to test theories, let's wait for 8F 30 xx 77 06 or 8F 30 xx 77 05
