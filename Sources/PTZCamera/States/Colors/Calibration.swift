@@ -8,22 +8,24 @@
 import Foundation
 import PTZMessaging
 
-public struct PTZCalibrationMatrix: Equatable, CustomStringConvertible {
+public struct PTZCalibrationMatrix: Equatable, CustomStringConvertible, Codable {
     internal var hue:         [PTZCalibrationRange: PTZCalibrationHue] = [:]
     internal var luminance:   [PTZCalibrationRange: PTZCalibrationLuminance] = [:]
     internal var saturation:  [PTZCalibrationRange: PTZCalibrationSaturation] = [:]
     
-    subscript(hue range: PTZCalibrationRange) -> PTZCalibrationHue {
+    public init() {}
+    
+    public subscript(hue range: PTZCalibrationRange) -> PTZCalibrationHue {
         get { hue[range, default: .default] }
         set { hue[range] = newValue }
     }
     
-    subscript(luminance range: PTZCalibrationRange) -> PTZCalibrationLuminance {
+    public subscript(luminance range: PTZCalibrationRange) -> PTZCalibrationLuminance {
         get { luminance[range, default: .default] }
         set { luminance[range] = newValue }
     }
     
-    subscript(saturation range: PTZCalibrationRange) -> PTZCalibrationSaturation {
+    public subscript(saturation range: PTZCalibrationRange) -> PTZCalibrationSaturation {
         get { saturation[range, default: .default] }
         set { saturation[range] = newValue }
     }
@@ -33,6 +35,32 @@ public struct PTZCalibrationMatrix: Equatable, CustomStringConvertible {
         let luminance = PTZCalibrationRange.allCases.map { self[hue: $0].description }.joined(separator: ", ")
         let saturation = PTZCalibrationRange.allCases.map { self[hue: $0].description }.joined(separator: ", ")
         return "Hue(\(hue)), Luminance(\(luminance)), Saturation(\(saturation))"
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case hue = "hue"
+        case luminance = "luminance"
+        case saturation = "saturation"
+    }
+    
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let hue = try container.decode([PTZCalibrationHue].self, forKey: .hue)
+        let luminance = try container.decode([PTZCalibrationLuminance].self, forKey: .luminance)
+        let saturation = try container.decode([PTZCalibrationSaturation].self, forKey: .saturation)
+        
+        for (i, range) in PTZCalibrationRange.allCases.enumerated() {
+            self[hue: range] = hue.element(at: i) ?? .default
+            self[luminance: range] = luminance.element(at: i) ?? .default
+            self[saturation: range] = saturation.element(at: i) ?? .default
+        }
+    }
+    
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(PTZCalibrationRange.allCases.map({ self[hue: $0] }), forKey: .hue)
+        try container.encode(PTZCalibrationRange.allCases.map({ self[luminance: $0] }), forKey: .luminance)
+        try container.encode(PTZCalibrationRange.allCases.map({ self[saturation: $0] }), forKey: .saturation)
     }
 }
 

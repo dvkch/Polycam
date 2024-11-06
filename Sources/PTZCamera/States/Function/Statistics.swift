@@ -28,7 +28,7 @@ public enum PTZStatisticsGroup: UInt16, CaseIterable, PTZValue {
     }
 }
 
-public struct PTZStatisticsValues: Equatable {
+public struct PTZStatisticsValues: Equatable, Codable {
     let left: UInt32
     let right: UInt32
 }

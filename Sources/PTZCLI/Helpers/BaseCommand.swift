@@ -17,7 +17,7 @@ protocol BaseCommand: ParsableCommand {
 
 extension BaseCommand {
     mutating func run() throws(CameraError) {
-        Camera.configureKnownStates()
+        Camera.registerKnownStates()
         
         let camera = try Camera(serial: .givenOrFirst(serialDevice), logLevel: .info, powerOffAfterUse: false)
             

@@ -18,7 +18,7 @@ public struct PTZLedColorIntensity: PTZScaledValue {
     public static var `default`: PTZLedColorIntensity { .init(rawValue: 8) }
 }
 
-public struct PTZLedIntensity: Equatable, CustomStringConvertible {
+public struct PTZLedIntensity: Equatable, CustomStringConvertible, Codable {
     var r: PTZLedColorIntensity
     var g: PTZLedColorIntensity
     var b: PTZLedColorIntensity

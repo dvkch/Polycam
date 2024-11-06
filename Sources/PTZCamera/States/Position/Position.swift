@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public struct PTZPosition: Equatable, CustomStringConvertible {
+public struct PTZPosition: Equatable, CustomStringConvertible, Codable {
     public var pan: PTZPan
     public var tilt: PTZTilt
     public var zoom: PTZZoom

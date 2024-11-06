@@ -9,8 +9,8 @@ import Foundation
 
 // MARK: State
 public protocol PTZState<Variant, Value>: CustomStringConvertible {
-    associatedtype Value: Equatable
-    associatedtype Variant
+    associatedtype Value: Codable & Equatable
+    associatedtype Variant: Codable
     static var name: String { get }
     var variant: Variant { get }
     var value: Value { get set }

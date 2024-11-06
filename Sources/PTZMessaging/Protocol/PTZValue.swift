@@ -8,7 +8,7 @@
 import Foundation
 import CoreMedia
 
-public protocol PTZValue: RawRepresentable, CustomStringConvertible, Equatable where RawValue: Equatable {
+public protocol PTZValue: RawRepresentable, CustomStringConvertible, Equatable, Codable where RawValue: Equatable {
     init(ptzValue: UInt16)
     var ptzValue: UInt16 { get }
 
@@ -71,15 +71,24 @@ public struct PTZUInt: PTZValue {
     public var description: String {
         return String(rawValue)
     }
+    
+    public init(from decoder: any Decoder) throws {
+        self.rawValue = try decoder.singleValueContainer().decode(UInt16.self)
+    }
+    
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
 }
 
 public struct PTZBool: PTZValue {
     public let rawValue: Bool
-
+    
     public init(rawValue: Bool) {
         self.rawValue = rawValue
     }
-
+    
     public init(ptzValue: UInt16) {
         self.rawValue = ptzValue > 0
     }
@@ -96,15 +105,44 @@ public struct PTZBool: PTZValue {
     public var description: String {
         return rawValue ? "on" : "off"
     }
+    
+    public init(from decoder: any Decoder) throws {
+        if let intValue = try? decoder.singleValueContainer().decode(Int.self) {
+            self.rawValue = intValue != 0
+        }
+        else {
+            self.rawValue = try decoder.singleValueContainer().decode(Bool.self)
+        }
+    }
+    
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
 }
 
-extension RawRepresentable where Self: CaseIterable, RawValue == UInt16 {
+extension PTZValue where Self: CaseIterable, Self: RawRepresentable, RawValue == UInt16 {
     public init(ptzValue: UInt16) {
         self = Self.allCases.first(where: { $0.ptzValue == ptzValue })!
     }
     
     public var ptzValue: UInt16 {
         return UInt16(rawValue)
+    }
+    
+    public init(from decoder: any Decoder) throws {
+        if let stringValue = try? decoder.singleValueContainer().decode(String.self), let item = Self.allCases.first(where: { $0.description == stringValue }) {
+            self = item
+        }
+        else {
+            let rawValue = try decoder.singleValueContainer().decode(UInt16.self)
+            self = Self.init(rawValue: rawValue)!
+        }
+    }
+    
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
     }
 }
 
@@ -161,6 +199,16 @@ extension PTZScaledValue {
     
     public var description: String {
         return String(rawValue)
+    }
+    
+    public init(from decoder: any Decoder) throws {
+        let rawValue = try decoder.singleValueContainer().decode(Int.self)
+        self.init(rawValue: rawValue)!
+    }
+    
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
     }
 }
 

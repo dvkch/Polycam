@@ -60,7 +60,7 @@ public enum PTZFocusSpeed: UInt16, CaseIterable, CustomStringConvertible, PTZVal
     }
 }
 
-public enum PTZPanDirection: Byte, CaseIterable, CustomStringConvertible {
+public enum PTZPanDirection: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
     case right  = 0x00
     case left   = 0x01
     case stop   = 0x02
@@ -74,7 +74,7 @@ public enum PTZPanDirection: Byte, CaseIterable, CustomStringConvertible {
     }
 }
 
-public enum PTZTiltDirection: Byte, CaseIterable, CustomStringConvertible {
+public enum PTZTiltDirection: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
     case up     = 0x03
     case down   = 0x04
     case stop   = 0x05
@@ -88,7 +88,7 @@ public enum PTZTiltDirection: Byte, CaseIterable, CustomStringConvertible {
     }
 }
 
-public enum PTZFocusDirection: Byte, CaseIterable, CustomStringConvertible {
+public enum PTZFocusDirection: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
     case far    = 0x09
     case near   = 0x0A
     case stop   = 0x0B
@@ -102,7 +102,7 @@ public enum PTZFocusDirection: Byte, CaseIterable, CustomStringConvertible {
     }
 }
 
-public enum PTZZoomDirection: Byte, CaseIterable, CustomStringConvertible {
+public enum PTZZoomDirection: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
     case `in`   = 0x0C
     case `out`  = 0x0D
     case stop   = 0x0E
@@ -128,8 +128,8 @@ internal struct PTZMovePanAction: PTZState, PTZWriteable {
     
     func setMessage() -> PTZMessage {
         switch variant {
-        case .left, .right: return .init((0x45, variant.rawValue), value)
-        case .stop:         return .init((0x45, variant.rawValue))
+        case .left, .right: return .init((0x45, UInt8(variant.rawValue)), value)
+        case .stop:         return .init((0x45, UInt8(variant.rawValue)))
         }
     }
 }
@@ -146,8 +146,8 @@ internal struct PTZMoveTiltAction: PTZState, PTZWriteable {
     
     func setMessage() -> PTZMessage {
         switch variant {
-        case .up, .down:    return .init((0x45, variant.rawValue), value)
-        case .stop:         return .init((0x45, variant.rawValue))
+        case .up, .down:    return .init((0x45, UInt8(variant.rawValue)), value)
+        case .stop:         return .init((0x45, UInt8(variant.rawValue)))
         }
     }
 }
@@ -164,8 +164,8 @@ internal struct PTZMoveFocusAction: PTZState, PTZWriteable {
     
     func setMessage() -> PTZMessage {
         switch variant {
-        case .far, .near:   return .init((0x45, variant.rawValue), value)
-        case .stop:         return .init((0x45, variant.rawValue))
+        case .far, .near:   return .init((0x45, UInt8(variant.rawValue)), value)
+        case .stop:         return .init((0x45, UInt8(variant.rawValue)))
         }
     }
 }
@@ -182,8 +182,8 @@ internal struct PTZMoveZoomAction: PTZState, PTZWriteable {
     
     func setMessage() -> PTZMessage {
         switch variant {
-        case .in, .out:     return .init((0x45, variant.rawValue), value)
-        case .stop:         return .init((0x45, variant.rawValue))
+        case .in, .out:     return .init((0x45, UInt8(variant.rawValue)), value)
+        case .stop:         return .init((0x45, UInt8(variant.rawValue)))
         }
     }
 }
