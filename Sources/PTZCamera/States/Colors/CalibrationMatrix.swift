@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public struct PTZCalibrationMatrix: Equatable, CustomStringConvertible, CLIDecodable, Encodable {
+public struct PTZCalibrationMatrix: Equatable, CustomStringConvertible, CLIDecodable, JSONEncodable {
     internal var hue:         [PTZCalibrationRange: PTZCalibrationHue] = [:]
     internal var luminance:   [PTZCalibrationRange: PTZCalibrationLuminance] = [:]
     internal var saturation:  [PTZCalibrationRange: PTZCalibrationSaturation] = [:]
@@ -31,16 +31,10 @@ public struct PTZCalibrationMatrix: Equatable, CustomStringConvertible, CLIDecod
     }
     
     public var description: String {
-        let hue = PTZCalibrationRange.allCases.map { self[hue: $0].description }.joined(separator: ", ")
-        let luminance = PTZCalibrationRange.allCases.map { self[hue: $0].description }.joined(separator: ", ")
-        let saturation = PTZCalibrationRange.allCases.map { self[hue: $0].description }.joined(separator: ", ")
+        let hue         = PTZCalibrationRange.allCases.map { self[hue: $0].description }.joined(separator: ", ")
+        let luminance   = PTZCalibrationRange.allCases.map { self[luminance: $0].description }.joined(separator: ", ")
+        let saturation  = PTZCalibrationRange.allCases.map { self[saturation: $0].description }.joined(separator: ", ")
         return "Hue(\(hue)), Luminance(\(luminance)), Saturation(\(saturation))"
-    }
-    
-    private enum CodingKeys: String, CodingKey {
-        case hue = "hue"
-        case luminance = "luminance"
-        case saturation = "saturation"
     }
     
     public init?(from cliString: String) {
@@ -59,11 +53,11 @@ public struct PTZCalibrationMatrix: Equatable, CustomStringConvertible, CLIDecod
         }
     }
     
-    public func encode(to encoder: any Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(PTZCalibrationRange.allCases.map({ self[hue: $0] }), forKey: .hue)
-        try container.encode(PTZCalibrationRange.allCases.map({ self[luminance: $0] }), forKey: .luminance)
-        try container.encode(PTZCalibrationRange.allCases.map({ self[saturation: $0] }), forKey: .saturation)
+    public var toJSON: JSONValue {
+        let hues        = PTZCalibrationRange.allCases.map({ self[hue: $0].toJSON })
+        let luminances  = PTZCalibrationRange.allCases.map({ self[luminance: $0].toJSON })
+        let saturations = PTZCalibrationRange.allCases.map({ self[saturation: $0].toJSON })
+        return ["hues": hues, "luminances": luminances, "saturations": saturations]
     }
 }
 

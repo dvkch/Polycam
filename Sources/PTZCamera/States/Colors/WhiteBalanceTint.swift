@@ -1,6 +1,6 @@
 //
 //  WhiteBalanceTint.swift
-//  SwiftPTZ
+//  PTZ
 //
 //  Created by syan on 22/09/2024.
 //

@@ -11,14 +11,7 @@ import PTZMessaging
 
 public typealias CameraError = DeviceError
 
-public class Camera: Device {
-    
-    // MARK: Init
-    public override init(serial: SerialName, logLevel: LogLevel) throws(CameraError) {
-        try super.init(serial: serial, logLevel: logLevel)
-        self.powerOn()
-    }
-}
+public class Camera: Device {}
 
 // MARK: Actions
 public extension Camera {

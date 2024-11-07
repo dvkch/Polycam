@@ -18,7 +18,7 @@ public struct PTZLedColorIntensity: PTZScaledValue {
     public static var `default`: PTZLedColorIntensity { .init(rawValue: 8) }
 }
 
-public struct PTZLedIntensity: Equatable, CustomStringConvertible, CLIDecodable, Encodable {
+public struct PTZLedIntensity: Equatable, CustomStringConvertible, CLIDecodable, JSONEncodable {
     public var r: PTZLedColorIntensity
     public var g: PTZLedColorIntensity
     public var b: PTZLedColorIntensity
@@ -40,6 +40,10 @@ public struct PTZLedIntensity: Equatable, CustomStringConvertible, CLIDecodable,
         self.r = r
         self.g = g
         self.b = b
+    }
+    
+    public var toJSON: JSONValue {
+        return ["r": r.toJSON, "g": g.toJSON, "b": b.toJSON]
     }
 }
 

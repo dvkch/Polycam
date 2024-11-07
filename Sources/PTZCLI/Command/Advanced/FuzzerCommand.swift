@@ -14,19 +14,17 @@ import PTZMessaging
 struct FuzzerCommand: ParsableCommand {
     static var configuration: CommandConfiguration = .init(commandName: "fuzzer")
     
-    @Option(name: .customLong("serial-device"), help: "PTZ serial device name")
-    var serialDevice: String?
-    
+    @Option(name: .customLong("device"), help: "PTZ serial device name")
+    var serial: String?
+
     @Option(name: .customLong("complete"), help: "Makes sure all possible requests are evaluated, can be very slow")
     var complete: Bool = false
     
     mutating func run() throws(CameraError) {
         Camera.registerKnownStates()
 
-        let camera = try Camera(serial: .givenOrFirst(serialDevice), logLevel: .info)
+        let camera = try Camera(serial: .givenOrFirst(serial), logLevel: .error)
         camera.powerOn()
-        camera.logLevel = .error
-
         camera.send(PTZResetAction(.settingsAndMotors).set())
         Thread.sleep(forTimeInterval: 10)
         

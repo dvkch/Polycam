@@ -12,15 +12,25 @@ public protocol Loggable {
     var logTag: String { get }
 }
 
-public enum LogLevel: Int, Comparable {
-    case debug = 0
-    case info
-    case warning
-    case error
-    case fatal
+public enum LogLevel: String, Comparable {
+    case debug   = "debug"
+    case info    = "info"
+    case warning = "warning"
+    case error   = "error"
+    case fatal   = "fatal"
+    
+    public var level: Int {
+        switch self {
+        case .debug:   0
+        case .info:    1
+        case .warning: 2
+        case .error:   3
+        case .fatal:   4
+        }
+    }
     
     public static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
-        return lhs.rawValue < rhs.rawValue
+        return lhs.level < rhs.level
     }
 }
 

@@ -1,6 +1,6 @@
 //
 //  WideDynamicRange.swift
-//  SwiftPTZ
+//  PTZ
 //
 //  Created by syan on 24/10/2024.
 //

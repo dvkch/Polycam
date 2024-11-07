@@ -9,11 +9,12 @@ import Foundation
 import ArgumentParser
 import PTZCamera
 import PTZMessaging
+import PTZCommon
 
 struct WriteCommand: ParsableCommand {
     static var configuration: CommandConfiguration = .init(
         commandName: "write",
-        usage: "write brightness=10 pan=500 contrast=3 moveTilt(up)=50 --serial-device=/dev/serial0",
+        usage: "write brightness=10 pan=500 contrast=3 moveTilt(up)=50 --device=/dev/serial0",
         discussion: "Available commands: " + supportedCommands.joined(separator: ", ")
     )
     
@@ -21,9 +22,12 @@ struct WriteCommand: ParsableCommand {
         ["boot"] + (PTZConfig.knownWriteableStates.map({ $0.name.camelCased }) + PTZConfig.knownWriteableComboStates.map({ $0.name.camelCased })).sorted()
     }
     
-    @Option(name: .customLong("serial-device"), help: "PTZ serial device name")
-    var serialDevice: String?
+    @Option(name: .customLong("device"), help: "PTZ serial device name")
+    var serial: String?
     
+    @Option(name: .customLong("log"), help: "Log level")
+    var logLevel: LogLevel = .error
+
     @Argument(help: "Operations")
     var operations: [String] = []
 
@@ -32,7 +36,7 @@ struct WriteCommand: ParsableCommand {
 
         var actions: [(String, (Camera) throws -> ())] = []
 
-        let regex = #/(?<state>[a-zA-Z]+)(?:\((?<variant>[a-zA-Z]+)\))?(?:=(?<value>.*))?/#
+        let regex = #/(?<state>[a-zA-Z0-9]+)(?:\((?<variant>[a-zA-Z0-9]+)\))?(?:=(?<value>.*))?/#
         for operationString in operations {
             guard let operation = try? regex.wholeMatch(in: operationString)?.output else {
                 throw ValidationError("Unrecognized syntax: \(operationString)")
@@ -62,9 +66,10 @@ struct WriteCommand: ParsableCommand {
             throw ValidationError("Unknown state \"\(operation.state)\"")
         }
 
-        let camera = try Result(catching: { try Camera(serial: .givenOrFirst(serialDevice), logLevel: .info) }).mapError { ValidationError($0.localizedDescription) }.get()
+        let camera = try Result(catching: {
+            try Camera(serial: .givenOrFirst(serial), logLevel: logLevel)
+        }).mapError { ValidationError($0.localizedDescription) }.get()
         camera.powerOnIfNeeded()
-        camera.logLevel = .error
         
         for (name, action) in actions {
             do {

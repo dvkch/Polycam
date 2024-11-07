@@ -1,6 +1,6 @@
 //
 //  SleepTimeout.swift
-//  SwiftPTZ
+//  PTZ
 //
 //  Created by syan on 29/10/2024.
 //

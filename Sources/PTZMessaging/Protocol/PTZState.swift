@@ -11,25 +11,31 @@ public protocol CLIDecodable {
     init?(from cliString: String)
 }
 
+public protocol JSONEncodable {
+    var toJSON: JSONValue { get }
+}
+
 // MARK: State
 public protocol PTZState<Variant, Value>: CustomStringConvertible {
-    associatedtype Value: Equatable
-    associatedtype Variant: CLIDecodable
+    associatedtype Value: Equatable & CustomStringConvertible
+    associatedtype Variant: CLIDecodable & CustomStringConvertible
     static var name: String { get }
     var variant: Variant { get }
     var value: Value { get set }
 }
 
-public extension PTZState where Variant: CustomStringConvertible, Value: CustomStringConvertible {
-    var description: String { "\(Self.name)(\(variant): \(value))" }
-}
-
-public extension PTZState where Variant == PTZNone, Value: CustomStringConvertible {
-    var description: String { "\(Self.name)(\(value))" }
-}
-
-public extension PTZState where Variant == PTZNone, Value == PTZNone {
-    var description: String { Self.name }
+public extension PTZState {
+    var description: String {
+        if variant is PTZNone && value is PTZNone {
+            Self.name
+        }
+        else if variant is PTZNone {
+            "\(Self.name)(\(value))"
+        }
+        else {
+            "\(Self.name)(\(variant): \(value))"
+        }
+    }
 }
 
 // MARK: InvariantState
@@ -44,7 +50,7 @@ public extension PTZInvariantState {
 }
 
 // MARK: Readable
-public protocol PTZReadable<Variant, Value>: PTZState where Value: Encodable {
+public protocol PTZReadable<Variant, Value>: PTZState where Value: JSONEncodable {
     init?(message: PTZMessage)
     static func get(for variant: Variant) -> PTZRequest
 }
@@ -106,7 +112,7 @@ public extension PTZParseableState where Self: PTZWriteable {
 }
 
 // MARK: Combo
-public protocol PTZReadableCombo<Value>: PTZState where Variant == PTZNone, Value: Encodable {
+public protocol PTZReadableCombo<Value>: PTZState where Variant == PTZNone, Value: JSONEncodable {
     init?(messages: [PTZMessage])
     static func get() -> [PTZRequest]
 }

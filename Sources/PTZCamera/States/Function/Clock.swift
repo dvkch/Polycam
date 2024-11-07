@@ -20,10 +20,14 @@ public enum PTZClock: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     }
 }
 
-extension UInt32: CLIDecodable {
+extension UInt32: CLIDecodable, JSONEncodable {
     public init?(from cliString: String) {
         guard let value = UInt32(cliString) else { return nil }
         self = value
+    }
+    
+    public var toJSON: JSONValue {
+        return self
     }
 }
 

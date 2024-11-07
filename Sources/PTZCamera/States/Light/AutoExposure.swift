@@ -1,6 +1,6 @@
 //
 //  AutoExposure.swift
-//  SwiftPTZ
+//  PTZ
 //
 //  Created by syan on 31/10/2024.
 //

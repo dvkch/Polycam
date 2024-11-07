@@ -1,6 +1,6 @@
 //
 //  DevMode.swift
-//  SwiftPTZ
+//  PTZ
 //
 //  Created by syan on 20/10/2024.
 //

@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public struct PTZPosition: Equatable, CustomStringConvertible, CLIDecodable, Encodable {
+public struct PTZPosition: Equatable, CustomStringConvertible, CLIDecodable, JSONEncodable {
     public var pan: PTZPan
     public var tilt: PTZTilt
     public var zoom: PTZZoom
@@ -30,6 +30,9 @@ public struct PTZPosition: Equatable, CustomStringConvertible, CLIDecodable, Enc
     }
     
     public var description: String { "\(pan), \(tilt), \(zoom)" }
+    public var toJSON: JSONValue {
+        return ["pan": pan.toJSON, "tilt": tilt.toJSON, "zoom": zoom.toJSON]
+    }
 }
 
 public struct PTZPositionState: PTZInvariantState, PTZReadable, PTZWriteable {

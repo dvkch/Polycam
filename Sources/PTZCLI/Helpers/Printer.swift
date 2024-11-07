@@ -1,6 +1,6 @@
 //
 //  Printer.swift
-//  SwiftPTZ
+//  PTZ
 //
 //  Created by syan on 30/10/2024.
 //

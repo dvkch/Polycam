@@ -1,6 +1,6 @@
 //
 //  Interactive.swift
-//  SwiftPTZ
+//  PTZ
 //
 //  Created by syan on 25/10/2024.
 //

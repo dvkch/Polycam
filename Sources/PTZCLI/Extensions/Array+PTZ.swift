@@ -1,6 +1,6 @@
 //
 //  Array+PTZ.swift
-//  SwiftPTZ
+//  PTZ
 //
 //  Created by syan on 05/11/2024.
 //

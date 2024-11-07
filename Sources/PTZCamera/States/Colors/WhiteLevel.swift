@@ -1,6 +1,6 @@
 //
 //  WhiteLevel.swift
-//  SwiftPTZ
+//  PTZ
 //
 //  Created by syan on 01/10/2024.
 //

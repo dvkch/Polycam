@@ -8,7 +8,7 @@
 import Foundation
 import CoreMedia
 
-public protocol PTZValue: RawRepresentable, CustomStringConvertible, Equatable, CLIDecodable, Encodable where RawValue: Equatable {
+public protocol PTZValue: RawRepresentable, CustomStringConvertible, Equatable, CLIDecodable, JSONEncodable where RawValue: Equatable {
     init(ptzValue: UInt16)
     var ptzValue: UInt16 { get }
 
@@ -53,11 +53,11 @@ extension PTZValue {
 
 public struct PTZUInt: PTZValue {
     public let rawValue: UInt16
-
+    
     public init(rawValue: UInt16) {
         self.rawValue = rawValue
     }
-
+    
     public init(ptzValue: UInt16) {
         self.rawValue = ptzValue
     }
@@ -77,9 +77,8 @@ public struct PTZUInt: PTZValue {
         self.rawValue = value
     }
     
-    public func encode(to encoder: any Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
+    public var toJSON: JSONValue {
+        return rawValue
     }
 }
 
@@ -119,9 +118,8 @@ public struct PTZBool: PTZValue {
         }
     }
     
-    public func encode(to encoder: any Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
+    public var toJSON: JSONValue {
+        return rawValue
     }
 }
 
@@ -146,9 +144,8 @@ extension PTZValue where Self: CaseIterable, Self: RawRepresentable, RawValue ==
         }
     }
     
-    public func encode(to encoder: any Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
+    public var toJSON: JSONValue {
+        return rawValue
     }
 }
 
@@ -212,9 +209,8 @@ extension PTZScaledValue {
         self.init(rawValue: rawValue)
     }
     
-    public func encode(to encoder: any Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
+    public var toJSON: JSONValue {
+        return rawValue
     }
 }
 

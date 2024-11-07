@@ -12,7 +12,7 @@ import PTZMessaging
 // 8f 30 46 77 06 01000057 01010052 01000021 01000006 2950 01010048
 // From logs: MPTZ_11, sysver = "01000057", camver = "01010052", lensver = "", promver = "", backver = "01000021", bootver = "01000006", splver = "2950", pkgver = "01010048"
 
-public struct PTZHello: Equatable, CustomStringConvertible, Encodable {
+public struct PTZHello: Equatable, CustomStringConvertible, JSONEncodable {
     public let sysVer: String
     public let camVer: String
     public let backVer: String
@@ -21,6 +21,7 @@ public struct PTZHello: Equatable, CustomStringConvertible, Encodable {
     public let pkgVer: String
     
     public var description: String { "MPTZ 11 sysVer=\(sysVer) camVer=\(camVer) backVer=\(backVer) bootVer=\(bootVer) splVer=\(splVer) pkgVer=\(pkgVer)" }
+    public var toJSON: JSONValue { return ["sysVer": sysVer, "camVer": camVer, "backVer": backVer, "bootVer": bootVer, "splVer": splVer, "pkgVer": pkgVer] }
 }
 
 public struct PTZHelloState: PTZInvariantState, PTZReadable {

@@ -1,6 +1,6 @@
 //
 //  Statistics.swift
-//  SwiftPTZ
+//  PTZ
 //
 //  Created by syan on 23/10/2024.
 //
@@ -28,9 +28,16 @@ public enum PTZStatisticsGroup: UInt16, CaseIterable, PTZValue {
     }
 }
 
-public struct PTZStatisticsValues: Equatable, Codable {
+public struct PTZStatisticsValues: Equatable, JSONEncodable, CustomStringConvertible {
     let left: UInt32
     let right: UInt32
+    
+    public var description: String {
+        "\(left)/\(right)"
+    }
+    public var toJSON: JSONValue {
+        return [left, right]
+    }
 }
 
 public struct PTZStatisticsState: PTZState, PTZReadable {

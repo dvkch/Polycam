@@ -1,6 +1,6 @@
 //
 //  InteractiveCommand.swift
-//  SwiftPTZ
+//  PTZ
 //
 //  Created by syan on 22/10/2024.
 //
@@ -13,15 +13,14 @@ import SwiftCurses
 struct InteractiveCommand: ParsableCommand {
     static var configuration: CommandConfiguration = .init(commandName: "interactive")
     
-    @Option(name: .customLong("serial-device"), help: "PTZ serial device name")
-    var serialDevice: String?
-    
+    @Option(name: .customLong("device"), help: "PTZ serial device name")
+    var serial: String?
+
     mutating func run() throws(CameraError) {
         Camera.registerKnownStates()
 
-        let camera = try Camera(serial: .givenOrFirst(serialDevice), logLevel: .info)
+        let camera = try Camera(serial: .givenOrFirst(serial), logLevel: .error)
         camera.powerOn()
-        camera.logLevel = .error
         
         var moveActions: [Interactive.Action<String>] = []
         PTZPanDirection.allCases.forEach { dir in

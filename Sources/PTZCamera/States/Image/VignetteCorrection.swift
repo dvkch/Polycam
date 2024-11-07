@@ -1,6 +1,6 @@
 //
 //  VignetteCorrection.swift
-//  SwiftPTZ
+//  PTZ
 //
 //  Created by syan on 21/10/2024.
 //

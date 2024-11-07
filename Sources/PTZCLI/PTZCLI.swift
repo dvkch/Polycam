@@ -1,6 +1,6 @@
 //
 //  main.swift
-//  SwiftPTZ
+//  PTZ
 //
 //  Created by syan on 21/05/2023.
 //

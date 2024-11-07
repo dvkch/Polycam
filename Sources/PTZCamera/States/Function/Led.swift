@@ -72,7 +72,7 @@ public enum PTZLedMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue 
     public static var `default`: PTZLedMode { .on }
 }
 
-public struct PTZLed: Equatable, CustomStringConvertible, CLIDecodable, Encodable {
+public struct PTZLed: Equatable, CustomStringConvertible, CLIDecodable, JSONEncodable {
     public let color: PTZLedColor
     public let mode: PTZLedMode
     public var description: String { "\(color), \(mode)" }
@@ -89,6 +89,10 @@ public struct PTZLed: Equatable, CustomStringConvertible, CLIDecodable, Encodabl
         guard let color = PTZLedColor(from: String(parts[0])), let mode = PTZLedMode(from: String(parts[1])) else { return nil }
         self.color = color
         self.mode = mode
+    }
+    
+    public var toJSON: JSONValue {
+        return ["color": color.toJSON, "mode": mode.toJSON]
     }
 }
 
