@@ -38,6 +38,10 @@ extension Interactive {
         func input(char: WideChar, camera: Camera) -> Bool
     }
     
+    protocol RefreshableElement: Element {
+        func refresh()
+    }
+    
     struct Line: Interactive.Element {
         let id = UUID().uuidString
         let name: String
@@ -119,52 +123,71 @@ extension Interactive {
         }
     }
     
-    class State: Interactive.Element {
+    class State<T: PTZReadable & PTZWriteable>: Interactive.RefreshableElement {
         let id = UUID().uuidString
-        let name: String
-        let category: UInt8
-        let register: UInt8
-        private(set) var values: Array<UInt16>
-        let `default`: UInt16
-        private var currentValue: UInt16 = 0
-        private var setError: String? = nil
+        private let camera: Camera
+        private let variant: T.Variant
+        private var values: Array<T.Value>
+        private let defaultValue: T.Value
+        private var currentValue: T.Value
+        private var lastError: String?
 
-        convenience init<T: PTZScaledValue>(_ name: String, cat category: UInt8, r register: UInt8, value: T.Type, default: T) {
-            self.init(name, cat: category, r: register, values: T.min.ptzValue...T.max.ptzValue, default: `default`.ptzValue)
+        convenience init(_ state: T.Type, for camera: Camera, values: any Collection<T.Value>, default: T.Value) where T.Variant == PTZNone {
+            self.init(state, for: camera, variant: .init(), values: values, default: `default`)
         }
 
-        convenience init<T: PTZValue & CaseIterable>(_ name: String, cat category: UInt8, r register: UInt8, value: T.Type, default: T) {
-            self.init(name, cat: category, r: register, values: T.allCases.map(\.ptzValue), default: `default`.ptzValue)
+        convenience init(_ state: T.Type, for camera: Camera, default: T.Value) where T.Variant == PTZNone, T.Value: PTZValue {
+            self.init(state, for: camera, variant: .init(), values: T.Value.testValues, default: `default`)
         }
 
-        init(_ name: String, cat category: UInt8, r register: UInt8, values: any Collection<UInt16>, default: UInt16) {
-            self.name = name
-            self.category = category
-            self.register = register
+        init(_ state: T.Type, for camera: Camera, variant: T.Variant, values: any Collection<T.Value>, default: T.Value) {
+            self.camera = camera
+            self.variant = variant
             self.values = values.map { $0 }
-            self.default = `default`
+            self.currentValue = try! camera.get(T.self , for: variant)
+            self.defaultValue = `default`
             
             if values.count > 30 {
                 self.values = stride(from: 0, to: self.values.count - 1, by: max(1, self.values.count / 30)).map { self.values[$0] }
             }
         }
         
-        func refresh(for camera: Camera) {
-            let reply = camera.send(.unknown((category, register), arg: nil))
-            let value = PTZMessage.messages(from: reply.bytes).last!.parseArgument(type: PTZUInt.self, position: .single).ptzValue
-            currentValue = values.closest(to: value) ?? value
+        #warning("doesn't seem to work")
+        private func setCurrentValue(_ value: T.Value) where T.Value: RawRepresentable, T.Value.RawValue == UInt16 {
+            let rawValue = values.map(\.rawValue).closest(to: value.rawValue) ?? value.rawValue
+            currentValue = .init(rawValue: rawValue)!
         }
-        
-        func set(for camera: Camera, to value: UInt16) {
-            let req = PTZRequest.unknown((category + 0x40, register), arg: value)
-            let reply = camera.send(req)
-            currentValue = values.closest(to: value) ?? value
-            setError = (reply == .executed) ? nil : "\(req.message.bytes.hexString) => \(reply.description)"
+
+        private func setCurrentValue(_ value: T.Value) {
+            currentValue = value
         }
-        
+
+        private func set(to value: T.Value) {
+            do {
+                try camera.set(T.init(value, for: variant))
+                setCurrentValue(value)
+                self.lastError = nil
+            }
+            catch {
+                self.lastError = error.localizedDescription
+            }
+        }
+
+        // RefreshableElement
+        func refresh() {
+            do {
+                let value = try camera.get(T.self, for: variant)
+                setCurrentValue(value)
+                self.lastError = nil
+            }
+            catch {
+                self.lastError = error.localizedDescription
+            }
+        }
+
         // InteractiveElement
         var output: String {
-            var string = "\(name) (\(currentValue))"
+            var string = "\(T.name) (\(currentValue))"
             if string.count < 30 {
                 string = string.padding(toLength: 30, withPad: " ", startingAt: 0)
             }
@@ -173,8 +196,8 @@ extension Interactive {
                 string += (currentValue == v) ? "O" : "·"
             }
             string += ">"
-            if let setError {
-                string += " \(setError)"
+            if let lastError {
+                string += " \(lastError)"
             }
             return string
         }
@@ -184,14 +207,14 @@ extension Interactive {
             switch (char) {
             case .code(260): // left
                 let value = values.elementBefore(currentValue, or: values.first!)
-                set(for: camera, to: value)
+                set(to: value)
                 
             case .code(261): // right
                 let value = values.elementAfter(currentValue, or: values.last!)
-                set(for: camera, to: value)
+                set(to: value)
 
             case .char(" "): // space
-                set(for: camera, to: `default`)
+                set(to: defaultValue)
                 
             default:
                 return false

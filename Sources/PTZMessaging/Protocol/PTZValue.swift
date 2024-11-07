@@ -97,7 +97,7 @@ public struct PTZBool: PTZValue {
         return rawValue ? 0x01 : 0x00
     }
     
-    public static var testValues: [PTZBool] { [.init(rawValue: true), .init(rawValue: false)] }
+    public static var testValues: [PTZBool] { [.init(rawValue: false), .init(rawValue: true)] }
     
     public static var on: PTZBool { .init(rawValue: true) }
     public static var off: PTZBool { .init(rawValue: false) }

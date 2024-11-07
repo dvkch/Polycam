@@ -9,6 +9,7 @@ import Foundation
 import ArgumentParser
 import PTZCamera
 import SwiftCurses
+import PTZMessaging
 
 struct InteractiveCommand: ParsableCommand {
     static var configuration: CommandConfiguration = .init(commandName: "interactive")
@@ -48,49 +49,49 @@ struct InteractiveCommand: ParsableCommand {
             })
         }
 
-        #warning("find a way to use properly defined states instead")
         let content: [any Interactive.Element] = [
             Interactive.Line("Let's have some fun!"),
             Interactive.Line(""),
             Interactive.Group("--- Testing ---", [
-                Interactive.State("Dev mode", cat: 0x01, r: 0x0B, values: 0...1, default: 0),
+                Interactive.State(PTZDevModeState.self, for: camera, default: .on),
             ]),
             Interactive.Group("--- Position ---", [
-                Interactive.State("Pan",   cat: 0x03, r: 0x04, value: PTZPan.self, default: .default),
-                Interactive.State("Tilt",  cat: 0x03, r: 0x05, value: PTZTilt.self, default: .default),
-                Interactive.State("Zoom",  cat: 0x03, r: 0x02, value: PTZZoom.self, default: .default),
+                Interactive.State(PTZPanState.self, for: camera, default: .default),
+                Interactive.State(PTZTiltState.self, for: camera, default: .default),
+                Interactive.State(PTZZoomState.self, for: camera, default: .default),
                 Interactive.Group("Focus", [
-                    Interactive.State("Auto", cat: 0x02, r: 0x09, values: [0, 1], default: 1),
-                    Interactive.State("Manual", cat: 0x03, r: 0x03, value: PTZFocus.self, default: .mid),
+                    Interactive.State(PTZAutoFocusState.self, for: camera, default: .on),
+                    Interactive.State(PTZFocusState.self, for: camera, default: .mid),
                 ]),
                 Interactive.Group("Move", moveActions)
             ]),
             Interactive.Group("--- Exposure ---", [
-                Interactive.State("Shutter speed", cat: 0x02, r: 0x14, value: PTZShutterSpeed.self, default: .auto),
-                Interactive.State("Auto exposure", cat: 0x02, r: 0x11, values: [0, 1], default: 1),
-                Interactive.State("Gain",  cat: 0x01, r: 0x31, value: PTZGainMode.self, default: .auto),
-                Interactive.State("Backlight compensation", cat: 0x02, r: 0x15, values: [0, 1], default: 1),
-                Interactive.State("Iris level", cat: 0x03, r: 0x00, value: PTZIrisLevel.self, default: .mid),
-                Interactive.State("Vignette correction", cat: 0x01, r: 0x3D, values: [0, 1], default: 1),
-                Interactive.State("Noise reduction", cat: 0x01, r: 0x3C, values: [0, 1], default: 1),
+                Interactive.State(PTZShutterSpeedState.self, for: camera, default: .default),
+                Interactive.State(PTZAutoExposureState.self, for: camera, default: .on),
+                Interactive.State(PTZGainModeState.self, for: camera, default: .default),
+                Interactive.State(PTZBacklightCompensationState.self, for: camera, default: .off),
+                Interactive.State(PTZWideDynamicRangeState.self, for: camera, default: .off),
+                Interactive.State(PTZIrisLevelState.self, for: camera, default: .mid),
+                Interactive.State(PTZVignetteCorrectionState.self, for: camera, default: .on),
+                Interactive.State(PTZNoiseReductionState.self, for: camera, default: .on),
             ]),
             Interactive.Group("--- Colors ---", [
-                Interactive.State("Brightness", cat: 0x01, r: 0x33, value: PTZBrightness.self, default: .default),
-                Interactive.State("Contrast",   cat: 0x01, r: 0x32, value: PTZContrast.self, default: .default),
-                Interactive.State("Saturation", cat: 0x03, r: 0x3e, value: PTZSaturation.self, default: .default),
+                Interactive.State(PTZBrightnessState.self, for: camera, default: .default),
+                Interactive.State(PTZContrastState.self, for: camera, default: .default),
+                Interactive.State(PTZSaturationState.self, for: camera, default: .default),
                 Interactive.Group("WhiteBalance", [
-                    Interactive.State("Mode", cat: 0x02, r: 0x12, value: PTZWhiteBalance.self, default: .auto),
-                    Interactive.State("Temp", cat: 0x03, r: 0x41, value: PTZWhiteBalanceTemp.self, default: .default),
-                    Interactive.State("Tint", cat: 0x03, r: 0x40, value: PTZWhiteBalanceTint.self, default: .default),
+                    Interactive.State(PTZWhiteBalanceState.self, for: camera, default: .default),
+                    Interactive.State(PTZWhiteBalanceTempState.self, for: camera, default: .default),
+                    Interactive.State(PTZWhiteBalanceTintState.self, for: camera, default: .default),
                 ]),
-                Interactive.State("GainR", cat: 0x03, r: 0x42, value: PTZColorGain.self, default: .default),
-                Interactive.State("GainB", cat: 0x03, r: 0x43, value: PTZColorGain.self, default: .default),
+                Interactive.State(PTZGainRedState.self, for: camera, default: .default),
+                Interactive.State(PTZGainBlueState.self, for: camera, default: .default),
             ]),
         ]
 
         Interactive.traverse(content) { (element, _, _) in
-            if let state = element as? Interactive.State {
-                state.refresh(for: camera)
+            if let state = element as? any Interactive.RefreshableElement {
+                state.refresh()
             }
         }
         
@@ -142,8 +143,8 @@ struct InteractiveCommand: ParsableCommand {
                 selectedElementID = selectableElements.map(\.1.id).elementAfter(selectedElementID, or: selectableElements.last?.1.id ?? "")
             case .char("r"):
                 Interactive.traverse(content) { (element, _, _) in
-                    if let state = element as? Interactive.State {
-                        state.refresh(for: camera)
+                    if let state = element as? any Interactive.RefreshableElement {
+                        state.refresh()
                     }
                 }
 
