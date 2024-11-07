@@ -84,11 +84,10 @@ struct ReadCommand: ParsableCommand {
             throw ValidationError("Unknown state \"\(state.name)\"")
         }
         
-        print(result)
         let jsonData = try JSONSerialization.data(withJSONObject: result, options: [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes])
         let jsonString = String(data: jsonData, encoding: .utf8)!
-        #warning("let's maybe make sure nothing else was printed before that?")
         print(jsonString)
+
         throw ExitCode.success
     }
 }

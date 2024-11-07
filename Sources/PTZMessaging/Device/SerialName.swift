@@ -31,8 +31,15 @@ extension SerialName {
     }
     
     public static var allAvailables: [SerialName] {
-        #warning("make it work on linux")
         let devices = try! FileManager.default.contentsOfDirectory(at: URL(string: "file:///dev")!, includingPropertiesForKeys: nil)
-        return devices.filter { $0.lastPathComponent.hasPrefix("cu.usbserial-") }.map { SerialName(rawValue: $0.standardizedFileURL.path) }
+        #if os(Linux)
+        let prefix: String = "ttyUSB"
+        #else
+        let prefix: String = "cu.usbserial-"
+        #endif
+        
+        return devices
+            .filter { $0.lastPathComponent.hasPrefix(prefix) }
+            .map { SerialName(rawValue: $0.standardizedFileURL.path) }
     }
 }

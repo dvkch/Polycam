@@ -8,7 +8,6 @@
 import Foundation
 import ArgumentParser
 
-#warning("Confirm fuzzer still works")
 #warning("set up all mode conditions rescues for all requests")
 #warning("Add comments to all the states, explaning how they were found and how they work")
 #warning("Cleanup extensions")

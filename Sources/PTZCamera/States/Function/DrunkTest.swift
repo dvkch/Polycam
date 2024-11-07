@@ -18,7 +18,6 @@ public struct PTZDrunkTestAction: PTZState, PTZWriteable {
         self.value = value
     }
 
-#warning("does sending something other than 0x01 stops the testing maybe ?? if so, consolidate into a single State")
     public func setMessage() -> PTZMessage {
         return .init((0x45, 0x14), PTZDrunkTestPhase.running)
     }
