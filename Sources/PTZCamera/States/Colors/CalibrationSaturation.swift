@@ -18,6 +18,8 @@ public struct PTZCalibrationSaturation: PTZScaledValue {
     public static var `default`: PTZCalibrationSaturation { .init(rawValue: 0x80) }
 }
 
+/// Controls the saturation for 6 distinct color ranges
+/// Discovered by fuzzing
 public struct PTZCalibrationSaturationState: PTZReadable, PTZWriteable {
     public static var name: String = "CalibrationSaturation"
     

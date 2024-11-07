@@ -17,6 +17,8 @@ public struct PTZIrisLevel: PTZScaledValue {
     public static var ptzScale: Double = 1
 }
 
+/// Controls the aperture. This is only possible when auto exposure is `off`, gain mode is not `auto` and backlight compensation is `off`
+/// Discovered in the original program, extended by fuzzing
 public struct PTZIrisLevelState: PTZParseableState, PTZReadable, PTZWriteable {
     public static var name: String = "IrisLevel"
     public static var register: (UInt8, UInt8) = (0x03, 0x00)

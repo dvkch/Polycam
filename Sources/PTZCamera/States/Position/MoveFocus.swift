@@ -39,6 +39,8 @@ public enum PTZFocusSpeed: UInt16, CaseIterable, CustomStringConvertible, PTZVal
     }
 }
 
+/// Starts focusing in the given direction at the requested speed. This is only possible when `PTZAutoFocusState` is `off`.
+/// Discovered by fuzzing
 public struct PTZMoveFocusAction: PTZState, PTZWriteable {
     public static var name: String { "MoveFocus" }
     public var variant: PTZFocusDirection

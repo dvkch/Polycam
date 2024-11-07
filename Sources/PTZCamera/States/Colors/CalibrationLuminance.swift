@@ -18,6 +18,8 @@ public struct PTZCalibrationLuminance: PTZScaledValue {
     public static var `default`: PTZCalibrationLuminance { .init(rawValue: 0x80) }
 }
 
+/// Controls the luminance for 6 distinct color ranges
+/// Discovered by fuzzing
 public struct PTZCalibrationLuminanceState: PTZReadable, PTZWriteable {
     public static var name: String = "CalibrationLuminance"
     

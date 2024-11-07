@@ -42,6 +42,8 @@ public enum PTZTiltSpeed: UInt16, CaseIterable, CustomStringConvertible, PTZValu
     }
 }
 
+/// Starts tilting in the given direction at the requested speed.
+/// Discovered in the original program's logs, extended by fuzzing
 public struct PTZMoveTiltAction: PTZState, PTZWriteable {
     public static var name: String { "MoveTilt" }
     public var variant: PTZTiltDirection

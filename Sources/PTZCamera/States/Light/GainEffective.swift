@@ -18,6 +18,8 @@ public struct PTZGainEffective: PTZScaledValue {
     public var description: String { "\(rawValue)dB" }
 }
 
+/// Measures the current ISO level when `PTZGainModeState` is set to `auto`.
+/// Discovered by fuzzing
 public struct PTZGainEffectiveState: PTZParseableState, PTZReadable {
     public static var name: String = "GainEffective"
     public static var register: (UInt8, UInt8) = (0x03, 0x26)

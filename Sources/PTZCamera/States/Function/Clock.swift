@@ -31,6 +31,8 @@ extension UInt32: CLIDecodable, JSONEncodable {
     }
 }
 
+/// Controls the two device's clocks. Those are 32bits, precise to the second and auto increasing
+/// Discovered by fuzzing
 public struct PTZClockState: PTZReadable, PTZWriteable {
     public static let name = "Clock"
 

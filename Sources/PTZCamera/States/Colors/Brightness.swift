@@ -18,6 +18,8 @@ public struct PTZBrightness: PTZScaledValue {
     public static var `default`: PTZBrightness { .init(rawValue: 11) }
 }
 
+/// Controls the image's brightness
+/// Discovered in the original appplication's logs
 public struct PTZBrightnessState: PTZParseableState, PTZReadable, PTZWriteable {
     public static var name: String = "Brightness"
     public static var register: (UInt8, UInt8) = (0x01, 0x33)

@@ -8,6 +8,8 @@
 import Foundation
 import PTZMessaging
 
+/// Controls backlight compensation
+/// Discovered in the original application's logs
 public struct PTZBacklightCompensationState: PTZParseableState, PTZReadable, PTZWriteable {
     public static var name: String = "BacklightCompensation"
     public static var register: (UInt8, UInt8) = (0x02, 0x15)

@@ -18,6 +18,8 @@ public struct PTZSaturation: PTZScaledValue {
     public static var `default`: PTZSaturation { .init(rawValue: 6) }
 }
 
+/// Controls the image's saturation
+/// Discovered in the original appplication's logs
 public struct PTZSaturationState: PTZParseableState, PTZReadable, PTZWriteable {
     public static var name: String = "Saturation"
     public static var register: (UInt8, UInt8) = (0x03, 0x3E)

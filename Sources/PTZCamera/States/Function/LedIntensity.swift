@@ -47,6 +47,8 @@ public struct PTZLedIntensity: Equatable, CustomStringConvertible, CLIDecodable,
     }
 }
 
+/// Controls the front led's subdiodes intensity
+/// Discovered in the original application's log as Volume, extended through fuzzing
 public struct PTZLedIntensityState: PTZInvariantState, PTZReadable, PTZWriteable {
     public static let name: String = "LedIntensity"
     public static var register: (UInt8, UInt8) = (0x01, 0x25)

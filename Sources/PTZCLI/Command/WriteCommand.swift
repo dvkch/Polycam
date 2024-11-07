@@ -14,12 +14,12 @@ import PTZCommon
 struct WriteCommand: ParsableCommand {
     static var configuration: CommandConfiguration = .init(
         commandName: "write",
-        usage: "write brightness=10 pan=500 contrast=3 moveTilt(up)=50 --device=/dev/serial0",
+        usage: "write boot brightness=10 contrast=3  pan=500 moveTilt(up)=50 pause=2.5 moveTilt(stop)=0 --device=/dev/serial0",
         discussion: "Available commands: " + supportedCommands.joined(separator: ", ")
     )
     
     static var supportedCommands: [String] {
-        ["boot"] + (PTZConfig.knownWriteableStates.map({ $0.name.camelCased }) + PTZConfig.knownWriteableComboStates.map({ $0.name.camelCased })).sorted()
+        ["boot", "pause=secs"] + (PTZConfig.knownWriteableStates.map({ $0.name.camelCased }) + PTZConfig.knownWriteableComboStates.map({ $0.name.camelCased })).sorted()
     }
     
     @Option(name: .customLong("device"), help: "PTZ serial device name")
@@ -44,6 +44,14 @@ struct WriteCommand: ParsableCommand {
 
             if operation.0 == "boot" {
                 actions.append(("boot", { $0.powerOn() }))
+                continue
+            }
+            
+            if operation.state == "pause" {
+                guard let seconds = TimeInterval(operation.value.map(String.init) ?? "") else {
+                    throw ValidationError("Invalid parameters for state \"\(operation.state)\"")
+                }
+                actions.append(("pause(\(seconds))", { _ in Thread.sleep(forTimeInterval: seconds) }))
                 continue
             }
             

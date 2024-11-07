@@ -72,6 +72,8 @@ public enum PTZLedMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue 
     public static var `default`: PTZLedMode { .on }
 }
 
+/// Controls the front led's color and on/off/blink state
+/// Discovered in the original application's log, extended through fuzzing
 public struct PTZLed: Equatable, CustomStringConvertible, CLIDecodable, JSONEncodable {
     public let color: PTZLedColor
     public let mode: PTZLedMode

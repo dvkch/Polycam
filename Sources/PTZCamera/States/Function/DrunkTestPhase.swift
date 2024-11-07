@@ -8,15 +8,6 @@
 import Foundation
 import PTZMessaging
 
-// Nota:
-// - only available in experimental mode, otherwise those requests will return "FAIL"
-// - the test looks like it could be hard on the hardware, I have no clue about its
-//   original purpose, but phase 1 seems demending
-// - phase 1 runs for about 130 seconds, during which most other commands
-//   will either fail or do nothing. there seems to be no way of stopping it, except
-//   for unplugging and replugging the device.
-// - phase 2 can be stopped by sending a SetPosition or Move request. Obtaining the phase will
-//   still return 2, but the autonomous camera movements will quickly stop
 public enum PTZDrunkTestPhase: UInt16, CaseIterable, PTZValue {
     case neverLaunched = 0
     case running = 1
@@ -31,6 +22,8 @@ public enum PTZDrunkTestPhase: UInt16, CaseIterable, PTZValue {
     }
 }
 
+/// Determine the status of the self test, see `PTZDrunkTestAction`
+/// Discovered by fuzzing
 public struct PTZDrunkTestPhaseState: PTZParseableState, PTZReadable {
     public static var name: String { "DrunkTestPhase" }
     public static var register: (UInt8, UInt8) = (0x01, 0x42)

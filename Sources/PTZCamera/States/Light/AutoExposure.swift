@@ -8,6 +8,8 @@
 import Foundation
 import PTZMessaging
 
+/// Controls the auto exposure
+/// Discovered in the original application's logs
 public struct PTZAutoExposureState: PTZParseableState, PTZReadable, PTZWriteable {
     public static var name: String = "AutoExposure"
     public static var register: (UInt8, UInt8) = (0x02, 0x11)

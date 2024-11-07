@@ -32,6 +32,10 @@ public enum PTZPreset: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     }
 }
 
+/// Stores up to 8 presets positions.
+/// Discovered by fuzzing
+///
+/// There doesn't seem to be a way to directly save the current position to a preset, or set the current position from a preset, in a single request.
 public struct PTZPresetState: PTZState, PTZReadable, PTZWriteable {
     public static var name: String = "Preset"
     

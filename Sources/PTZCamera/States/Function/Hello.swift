@@ -24,6 +24,8 @@ public struct PTZHello: Equatable, CustomStringConvertible, JSONEncodable {
     public var toJSON: JSONValue { return ["sysVer": sysVer, "camVer": camVer, "backVer": backVer, "bootVer": bootVer, "splVer": splVer, "pkgVer": pkgVer] }
 }
 
+/// Get a hello response to determine the camera type and its components versions
+/// Discovered in the original application's log
 public struct PTZHelloState: PTZInvariantState, PTZReadable {
     public static var name: String = "Hello"
     public static var register: (UInt8, UInt8) = (0x06, 0x77)

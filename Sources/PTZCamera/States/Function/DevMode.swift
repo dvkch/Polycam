@@ -8,6 +8,8 @@
 import Foundation
 import PTZMessaging
 
+/// Controls the usage of more advanced features, such as `PTZGreyscaleState`, `PTZDrunkTestAction`, `PTZStatisticsState` and `PTZFocusAction`
+/// Discovered by fuzzing
 public struct PTZDevModeState: PTZParseableState, PTZReadable, PTZWriteable {
     public static var name: String = "DevMode"
     public static var register: (UInt8, UInt8) = (0x01, 0x0B)

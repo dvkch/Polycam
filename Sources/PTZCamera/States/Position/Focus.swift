@@ -17,6 +17,8 @@ public struct PTZFocus: PTZScaledValue {
     public static var ptzScale: Double = 1
 }
 
+/// Controls the focus position. This is only possible when `PTZAutoFocusState` is `off`
+/// Discovered by fuzzing
 public struct PTZFocusState: PTZParseableState, PTZReadable, PTZWriteable {
     public static var name: String = "Focus"
     public static var register: (UInt8, UInt8) = (0x03, 0x03)
@@ -32,21 +34,5 @@ public struct PTZFocusState: PTZParseableState, PTZReadable, PTZWriteable {
             name: "Set \(description)", message: setMessage(),
             modeConditionRescueRequests: [PTZAutoFocusState(.off).set()]
         )
-    }
-}
-
-public struct PTZFocusAction: PTZState, PTZWriteable {
-    public static var name: String { "Start Focus" }
-    public let variant: PTZNone
-    public var value: PTZNone
-    
-    public init(_ value: PTZNone = .init(), for variant: PTZNone = .init()) {
-        self.variant = variant
-        self.value = value
-    }
-
-    public func setMessage() -> PTZMessage {
-        // takes about 5s to settle down
-        return .init((0x45, 0x13))
     }
 }

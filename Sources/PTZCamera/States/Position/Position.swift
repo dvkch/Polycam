@@ -35,6 +35,8 @@ public struct PTZPosition: Equatable, CustomStringConvertible, CLIDecodable, JSO
     }
 }
 
+/// Sets and reads the current position, pan tilt and zoom in one go.
+/// Discovered in the original program's logs
 public struct PTZPositionState: PTZInvariantState, PTZReadable, PTZWriteable {
     public static var name: String = "Position"
     public static var register: (UInt8, UInt8) = (0x01, 0x50)

@@ -24,6 +24,8 @@ public enum PTZPower: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     }
 }
 
+/// Controls the device's powered on status
+/// Discovered in the original application's log
 public struct PTZPowerState: PTZParseableState, PTZReadable, PTZWriteable {
     public static var name: String = "Power"
     public static var register: (UInt8, UInt8) = (0x01, 0x00)

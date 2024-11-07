@@ -42,6 +42,8 @@ public enum PTZPanSpeed: UInt16, CaseIterable, CustomStringConvertible, PTZValue
     }
 }
 
+/// Starts panning in the given direction at the requested speed.
+/// Discovered in the original program's logs, extended by fuzzing
 public struct PTZMovePanAction: PTZState, PTZWriteable {
     public static var name: String { "MovePan" }
     public var variant: PTZPanDirection

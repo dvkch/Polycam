@@ -9,15 +9,15 @@ import Foundation
 import PTZMessaging
 
 public enum PTZShutterSpeed: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
-    // was called zero in ADB logs
+    /// was called zero in ADB logs
     case auto    = 0x00
-    // setting to either 0x01 or 0x02 reads back as 0x02. the decompiled source code shows that they are suppoed to be 1/50 and 1/60 respectively. a blinkind LED
-    // test showed that they are both 1/50.
+    /// setting to either `0x01` or `0x02` reads back as `0x02`. the decompiled source code shows that they are
+    /// suppoed to be `1/50` and `1/60` respectively. a blinkind LED test showed that they are both `1/50`.
     case fps50   = 0x01
     case fps60   = 0x02
-    // the values from 0x03 and above have been measured via an LED test as multiples of 1/50, and the actual values were eye-balled using
-    // a DSLR configured in manual mode to have the light levels as 1/50. when taking a picture each time by halving the expo. time, it seemed
-    // to match the next value for shutter speed here.
+    /// the values from 0x03 and above have been measured via an LED test as multiples of 1/50, and the actual values
+    /// were eye-balled using a DSLR configured in manual mode to have the light levels as 1/50. when taking a picture
+    /// each time by halving the expo. time, it seemed to match the next value for shutter speed here.
     case fps100  = 0x03
     case fps200  = 0x04
     case fps400  = 0x05
@@ -42,6 +42,8 @@ public enum PTZShutterSpeed: UInt16, CustomStringConvertible, CaseIterable, PTZV
     public static var `default`: PTZShutterSpeed { .auto }
 }
 
+/// Controls the shutter speed
+/// Discovered in the original program's logs, extended by fuzzing
 public struct PTZShutterSpeedState: PTZParseableState, PTZReadable, PTZWriteable {
     public static var name: String = "ShutterSpeed"
     public static var register: (UInt8, UInt8) = (0x02, 0x14)

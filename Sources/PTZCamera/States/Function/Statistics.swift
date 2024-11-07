@@ -8,9 +8,9 @@
 import Foundation
 import PTZMessaging
 
-// Those stats seem to count the amount of time each motor changed direction
 public enum PTZStatisticsGroup: UInt16, CaseIterable, PTZValue {
-    case unknownAndNone = 0x59 // left might be camera power cycles?
+    #warning("// left might be camera power cycles?")
+    case unknownAndNone = 0x59
     case focusAndZoom   = 0x5A
     case noneAndIris    = 0x5B
     case panAndTilt     = 0x5C
@@ -40,6 +40,10 @@ public struct PTZStatisticsValues: Equatable, JSONEncodable, CustomStringConvert
     }
 }
 
+/// Obtain some usage statistics
+/// Discovered by fuzzing
+///
+/// Those seem to reflect the number of time a motor switch direction
 public struct PTZStatisticsState: PTZState, PTZReadable {
     public static var name: String { "MotorStats" }
     public let variant: PTZStatisticsGroup

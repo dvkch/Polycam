@@ -27,6 +27,8 @@ public enum PTZReset: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
     }
 }
 
+/// Resets the device registers to a default state, including video output and position
+/// Discovered by fuzzing
 public struct PTZResetAction: PTZState, PTZWriteable {
     public static var name: String { "Reset" }
     public let variant: PTZNone

@@ -18,6 +18,8 @@ public struct PTZColorGain: PTZScaledValue {
     public static var `default`: PTZColorGain { .init(rawValue: 35) } // original system uses 37 for red, 33 for blue
 }
 
+/// Controls the red channel gain, depends on the configured whitebalance
+/// Discovered in the original application's logs
 public struct PTZGainRedState: PTZParseableState, PTZReadable, PTZWriteable {
     public static var name: String = "GainRed"
     public static var register: (UInt8, UInt8) = (0x03, 0x42)

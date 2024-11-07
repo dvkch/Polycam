@@ -8,6 +8,8 @@
 import Foundation
 import PTZMessaging
 
+/// Controls the white balance
+/// Discovered in the original application
 public struct PTZWhiteBalanceCalibrationAction: PTZState, PTZWriteable {
     public static var name: String { "WhiteBalanceCalibration" }
     public let variant: PTZNone

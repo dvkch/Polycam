@@ -18,6 +18,8 @@ public struct PTZWhiteBalanceTemp: PTZScaledValue {
     public static var `default`: PTZWhiteBalanceTemp { .init(rawValue: 128) }
 }
 
+/// Controls the white balance temperature, from blue to yellow
+/// Discovered by fuzzing
 public struct PTZWhiteBalanceTempState: PTZParseableState, PTZReadable, PTZWriteable {
     public static var name: String = "WhiteBalanceTemp"
     public static var register: (UInt8, UInt8) = (0x03, 0x41)

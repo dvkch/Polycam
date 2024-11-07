@@ -8,6 +8,10 @@
 import Foundation
 import PTZMessaging
 
+/// Switch to a greyscale image
+/// Discovered by fuzzing
+///
+/// Only available in dev mode
 public struct PTZGreyscaleState: PTZInvariantState, PTZReadable, PTZWriteable {
     public static var name: String = "Greyscale"
     public static var register: (UInt8, UInt8) = (0x01, 0x3A)

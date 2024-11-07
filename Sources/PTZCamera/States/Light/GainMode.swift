@@ -30,6 +30,8 @@ public enum PTZGainMode: UInt16, CaseIterable, CustomStringConvertible, PTZValue
     }
 }
 
+/// Controls the ISO
+/// Discovered in the original application's logs, extended through fuzzing
 public struct PTZGainModeState: PTZParseableState, PTZReadable, PTZWriteable {
     public static var name: String = "GainMode"
     public static var register: (UInt8, UInt8) = (0x01, 0x31)

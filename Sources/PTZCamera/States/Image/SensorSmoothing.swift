@@ -8,6 +8,8 @@
 import Foundation
 import PTZMessaging
 
+/// Controls the camera's integrated sensor subpixel "smoothing". Without it the image seems a bit crisper but some dead pixels appear
+/// Discovered by fuzzing
 public struct PTZSensorSmoothingState: PTZParseableState, PTZReadable, PTZWriteable {
     public static var name: String = "SensorSmoothing"
     public static var register: (UInt8, UInt8) = (0x01, 0x3B)

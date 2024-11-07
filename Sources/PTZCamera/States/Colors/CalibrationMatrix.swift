@@ -8,6 +8,8 @@
 import Foundation
 import PTZMessaging
 
+/// Controls the hue, luminance and saturation for 6 distinct color ranges
+/// Discovered by fuzzing
 public struct PTZCalibrationMatrix: Equatable, CustomStringConvertible, CLIDecodable, JSONEncodable {
     internal var hue:         [PTZCalibrationRange: PTZCalibrationHue] = [:]
     internal var luminance:   [PTZCalibrationRange: PTZCalibrationLuminance] = [:]

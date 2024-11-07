@@ -22,6 +22,8 @@ public enum PTZWhiteLevel: UInt16, CustomStringConvertible, CaseIterable, PTZVal
     public static var `default`: PTZWhiteLevel { .reduced }
 }
 
+/// Controls the image's white clipping. 90% is less straining on the eyes
+/// Discovered by fuzzing
 public struct PTZWhiteLevelState: PTZParseableState, PTZReadable, PTZWriteable {
     public static var name: String = "WhiteLevel"
     public static var register: (UInt8, UInt8) = (0x03, 0x3F)
