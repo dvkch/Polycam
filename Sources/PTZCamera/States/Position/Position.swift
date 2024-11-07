@@ -38,6 +38,7 @@ public struct PTZPosition: Equatable, CustomStringConvertible, CLIDecodable, JSO
 public struct PTZPositionState: PTZInvariantState, PTZReadable, PTZWriteable {
     public static var name: String = "Position"
     public static var register: (UInt8, UInt8) = (0x01, 0x50)
+    public static var setRegister: (UInt8, UInt8) = (0x41, 0x51)
     public var value: PTZPosition
     
     public init(_ value: PTZPosition, for variant: PTZNone) {
