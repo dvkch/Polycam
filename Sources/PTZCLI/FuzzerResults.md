@@ -37,7 +37,7 @@ Getters
 | 8x 01 32 |   √    | Contrast(10)
 | 8x 01 33 |   √    | Brightness(11)
 | 8x 01 34 |   √    | WideDynamicRange(on)
-| 8x 01 3A |   √    | Colors(on)
+| 8x 01 3A |   √    | Greyscale(off)
 | 8x 01 3B |   √    | SensorSmoothing(on)
 | 8x 01 3C |   √    | NoiseReduction(on)
 | 8x 01 3D |   √    | VignetteCorrection(on)
@@ -48,19 +48,19 @@ Getters
 | 8x 01 44 |   2    | Unknown(8F 0F 41 44 3A 00 1B 04 1B 1B 1B 24 04 00 0A 1B) > Changes very often, see ScratchPad-01-44 for an example output
 | 8x 01 50 |   √    | Position(1000, 300, 64)
 | 8x 01 59 |   √    | MotorStats(Unknown=3036676096, None=0)
-| 8x 01 5A |   √    | MotorStats(Focus=3871099, Zoom=6735)
-| 8x 01 5B |   √    | MotorStats(None=0, Iris=26097)
-| 8x 01 5C |   √    | MotorStats(Pan=90053, Tilt=67089)
-| 8x 01 5D |   √    | Clock(t1: 4616506)
-| 8x 01 5E |   √    | Clock(t2: 3989689)
-| 8x 01 60 |   √    | Preset(one, 0, 0, 0)
-| 8x 01 61 |   √    | Preset(two, 0, 0, 0)
-| 8x 01 62 |   √    | Preset(three, 0, 0, 0)
-| 8x 01 63 |   √    | Preset(four, 770, 30466, 0)
-| 8x 01 64 |   √    | Preset(five, 766, 7, 0)
-| 8x 01 65 |   √    | Preset(six, 2690, 2306, 0)
-| 8x 01 66 |   √    | Preset(seven, 597, 318, 0)
-| 8x 01 67 |   √    | Preset(eight, 11265, 7681, 0)
+| 8x 01 5A |   √    | MotorStats(Focus=3877472, Zoom=6736)
+| 8x 01 5B |   √    | MotorStats(None=0, Iris=26118)
+| 8x 01 5C |   √    | MotorStats(Pan=90072, Tilt=67102)
+| 8x 01 5D |   √    | Clock(t1: 4789814)
+| 8x 01 5E |   √    | Clock(t2: 4144652)
+| 8x 01 60 |   √    | Preset(one: 0, 0, 0)
+| 8x 01 61 |   √    | Preset(two: 0, 0, 0)
+| 8x 01 62 |   √    | Preset(three: 0, 0, 0)
+| 8x 01 63 |   √    | Preset(four: 771, 30720, 0)
+| 8x 01 64 |   √    | Preset(five: 254, 6, 0)
+| 8x 01 65 |   √    | Preset(six: 130, 2, 0)
+| 8x 01 66 |   √    | Preset(seven: 596, 444, 0)
+| 8x 01 67 |   √    | Preset(eight: 12289, 7169, 0)
 | 8x 01 71 |   2    | Unknown(83 41 71 00) // Couldn't make it reply anything else than 00
 | 8x 01 72 |   1    | Unknown(83 41 72 00)
 
@@ -83,19 +83,19 @@ Getters
 
 | Request  | Status | Reply & notes                      |
 |----------|--------|------------------------------------|
-| 8x 03 00 |   √    | IrisLevel(215)
+| 8x 03 00 |   √    | IrisLevel(219)
 | 8x 03 02 |   √    | Zoom(64)
-| 8x 03 03 |   √    | Focus(453)
+| 8x 03 03 |   √    | Focus(478)
 | 8x 03 04 |   √    | Pan(1000)
-| 8x 03 05 |   √    | Tilt(300)
-| 8x 03 26 |   √    | EffectiveGain(0dB)
+| 8x 03 05 |   √    | Tilt(250)
+| 8x 03 26 |   √    | GainEffective(10dB)
 | 8x 03 3D |   √    | Sharpness(6)
 | 8x 03 3E |   √    | Saturation(6)
 | 8x 03 3F |   √    | WhiteLevel(90%)
 | 8x 03 40 |   √    | WhiteBalanceTint(128)
 | 8x 03 41 |   √    | WhiteBalanceTemp(128)
-| 8x 03 42 |   √    | RedGain(33)
-| 8x 03 43 |   √    | BlueGain(33)
+| 8x 03 42 |   √    | GainRed(33)
+| 8x 03 43 |   √    | GainBlue(33)
 | 8x 03 50 |   √    | CalibrationHue(red: 128)
 | 8x 03 51 |   √    | CalibrationHue(orange: 128)
 | 8x 03 52 |   √    | CalibrationHue(green: 128)
@@ -143,7 +143,7 @@ Setters
 | 8x 41 32 (76 -> 01 0A) |   √    | Executed: Contrast(0)
 | 8x 41 33 (76 -> 01 0A) |   √    | Executed: Brightness(1)
 | 8x 41 34 (00 -> 01)    |   √    | Executed: WideDynamicRange(off)
-| 8x 41 3A (00 -> 01)    |   √    | Executed: Colors(off)
+| 8x 41 3A (00 -> 01)    |   √    | Executed: Greyscale(on)
 | 8x 41 3B (00 -> 01)    |   √    | Executed: SensorSmoothing(off)
 | 8x 41 3C (00 -> 01)    |   √    | Executed: NoiseReduction(off)
 | 8x 41 3D (00 -> 01)    |   √    | Executed: VignetteCorrection(off)
@@ -183,8 +183,8 @@ Setters
 | 8x 43 3F 64             |   √    | Executed: WhiteLevel(100%)
 | 8x 43 40 (60 -> 71+)    |   √    | Not executed: Mode condition: WhiteBalanceTint(96)
 | 8x 43 41 (60 -> 71+)    |   √    | Not executed: Mode condition: WhiteBalanceTemp(96)
-| 8x 43 42 (60 -> 71+)    |   √    | Not executed: Mode condition: RedGain(1)
-| 8x 43 43 (60 -> 71+)    |   √    | Not executed: Mode condition: BlueGain(1)
+| 8x 43 42 (60 -> 71+)    |   √    | Not executed: Mode condition: GainRed(1)
+| 8x 43 43 (60 -> 71+)    |   √    | Not executed: Mode condition: GainBlue(1)
 | 8x 43 50 (7B -> 01 05)  |   √    | Executed: CalibrationHue(red: 123)
 | 8x 43 51 (7B -> 01 05)  |   √    | Executed: CalibrationHue(orange: 123)
 | 8x 43 52 (7B -> 01 05)  |   √    | Executed: CalibrationHue(green: 123)
@@ -222,7 +222,7 @@ Actions
 | 8x 45 0C (00 -> 03) |   √    | Executed: Zoom in
 | 8x 45 0D (00 -> 03) |   √    | Executed: Zoom out
 | 8x 45 0E            |   √    | Executed: Zoom stop
-| 8x 45 13            |   √    | Executed: Focus
+| 8x 45 13            |   √    | Executed: Start Focus
 | 8x 45 14            |   √    | Skipped: DrunkTest
 | 8x 45 17            |   √    | Not executed: Mode condition: WhiteBalanceCalibration
 | 8x 45 32            |   √    | Skipped: Reset
