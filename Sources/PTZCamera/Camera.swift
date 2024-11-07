@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import PTZCommon
 import PTZMessaging
 
 public typealias CameraError = DeviceError

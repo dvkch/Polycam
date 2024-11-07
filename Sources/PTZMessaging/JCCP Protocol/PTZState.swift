@@ -7,14 +7,6 @@
 
 import Foundation
 
-public protocol CLIDecodable {
-    init?(from cliString: String)
-}
-
-public protocol JSONEncodable {
-    var toJSON: JSONValue { get }
-}
-
 // MARK: State
 public protocol PTZState<Variant, Value>: CustomStringConvertible {
     associatedtype Value: Equatable & CustomStringConvertible

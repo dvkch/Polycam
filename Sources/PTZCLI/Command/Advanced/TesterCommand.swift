@@ -9,7 +9,6 @@ import Foundation
 import ArgumentParser
 import PTZCamera
 import PTZMessaging
-import PTZCommon
 
 struct TesterCommand: ParsableCommand {
     static var configuration: CommandConfiguration = .init(commandName: "tester")

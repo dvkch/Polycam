@@ -10,7 +10,7 @@ import SwiftCurses
 import PTZCamera
 import PTZMessaging
 
-struct Interactive {
+internal struct Interactive {
     static func traverse(_ elements: [any Interactive.Element], closure: (any Element, Int, IndexPath) throws -> ()) rethrows {
         try traverse(elements, indexOffset: 0, parentPath: IndexPath(), closure: closure)
     }
@@ -28,8 +28,8 @@ struct Interactive {
         }
     }
 }
-    
-extension Interactive {
+
+internal extension Interactive {
     protocol Element: Identifiable {
         var id: String { get }
         var output: String { get }

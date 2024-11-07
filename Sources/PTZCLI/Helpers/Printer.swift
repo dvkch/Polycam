@@ -5,7 +5,7 @@
 //  Created by syan on 30/10/2024.
 //
 
-struct Printer {
+internal struct Printer {
     static func printHeader(_ header: String) {
         print("")
         print("")

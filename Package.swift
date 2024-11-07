@@ -24,14 +24,11 @@ let package = Package(
                 .product(name: "SwiftCurses", package: "SwiftCurses"),
             ]
         ),
-        .target(name: "PTZCommon", dependencies: []),
         .target(name: "PTZCamera", dependencies: [
             .target(name: "PTZMessaging"),
-            .target(name: "PTZCommon"),
         ]),
         .target(name: "PTZMessaging", dependencies: [
             .product(name: "SwiftSerial", package: "swiftserial"),
-            .target(name: "PTZCommon"),
         ]),
         .testTarget(
             name: "PTZCameraTests",

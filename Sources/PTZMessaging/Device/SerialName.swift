@@ -25,12 +25,12 @@ public struct SerialName: RawRepresentable {
     }
 }
 
-extension SerialName {
-    public static var firstAvailable: SerialName? {
+public extension SerialName {
+    static var firstAvailable: SerialName? {
         return allAvailables.first
     }
     
-    public static var allAvailables: [SerialName] {
+    static var allAvailables: [SerialName] {
         let devices = try! FileManager.default.contentsOfDirectory(at: URL(string: "file:///dev")!, includingPropertiesForKeys: nil)
         #if os(Linux)
         let prefix: String = "ttyUSB"

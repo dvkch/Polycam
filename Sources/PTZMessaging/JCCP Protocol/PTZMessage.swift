@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import PTZCommon
 
 public struct PTZMessage {
     public let bytes: Bytes
@@ -16,8 +15,8 @@ public struct PTZMessage {
     }
 }
 
-extension PTZMessage {
-    public static func receptionComplete(from bytes: Bytes) -> Bool {
+public extension PTZMessage {
+    static func receptionComplete(from bytes: Bytes) -> Bool {
         let messages = PTZMessage.messages(from: bytes)
         guard messages.allSatisfy(\.isValidLength) else { return false }
   
@@ -27,25 +26,25 @@ extension PTZMessage {
         return true
     }
     
-    public static func messages(from bytes: Bytes) -> [PTZMessage] {
+    static func messages(from bytes: Bytes) -> [PTZMessage] {
         return bytes
             .split(startFilter: { $0 >= 0x80 })
             .map { self.init(bytes: $0) }
     }
     
-    public static func replies(from bytes: Bytes) -> [PTZReply] {
+    static func replies(from bytes: Bytes) -> [PTZReply] {
         return PTZMessage.messages(from: bytes).map { PTZReply(message: $0) }
     }
 }
 
-extension PTZMessage {
-    internal enum Format {
+private extension PTZMessage {
+    enum Format {
         case regular
         case long
         case hello
     }
     
-    internal var messageFormat: Format {
+    var messageFormat: Format {
         if bytes.count >= 2 && bytes[0] == 0x8F && bytes[1] == 0x30 {
             return .hello
         }
@@ -54,12 +53,12 @@ extension PTZMessage {
         }
         return .regular
     }
-
-    internal var isValidLength: Bool {
+    
+    var isValidLength: Bool {
         return receivedLength == givenLength
     }
     
-    private var givenLength: Int {
+    var givenLength: Int {
         switch messageFormat {
         case .regular:  return Int(bytes[0] & 0x0F)
         case .long:     return Int(bytes[1])
@@ -67,15 +66,17 @@ extension PTZMessage {
         }
     }
     
-    private var receivedLength: Int {
+    var receivedLength: Int {
         switch messageFormat {
         case .regular:  return bytes.count - 1
         case .long:     return bytes.count - 1
         case .hello:    return bytes.count - 3
         }
     }
-    
-    public func isValidReply(_ command: (Byte, Byte)) -> Bool {
+}
+
+public extension PTZMessage {
+    func isValidReply(_ command: (Byte, Byte)) -> Bool {
         guard isValidLength && receivedLength >= 2 else { return false }
         switch messageFormat {
         case .regular:  return Array(bytes[1..<3]) == [command.0, command.1]
@@ -85,8 +86,8 @@ extension PTZMessage {
     }
 }
 
-extension PTZMessage {
-    public func parseArgument<V: PTZValue>(type: V.Type = V.self, position: PTZArgument.Position) -> V {
+public extension PTZMessage {
+    func parseArgument<V: PTZValue>(type: V.Type = V.self, position: PTZArgument.Position) -> V {
         switch position {
         case .single:
             if bytes.count == 4 {
@@ -108,7 +109,7 @@ extension PTZMessage {
         }
     }
     
-    public func decodePackedData() -> [Int] {
+    func decodePackedData() -> [Int] {
         guard messageFormat == .hello else {
             fatalError("No packed data in this reply")
         }
@@ -118,12 +119,12 @@ extension PTZMessage {
     }
 }
 
-extension PTZMessage {
-    public init(_ command: (Byte, Byte), _ singleArg: any PTZValue) {
+public extension PTZMessage {
+    init(_ command: (Byte, Byte), _ singleArg: any PTZValue) {
         self.init(command, PTZArgument(singleArg, .single))
     }
 
-    public init(_ command: (Byte, Byte), _ args: (PTZArgument)...) {
+    init(_ command: (Byte, Byte), _ args: (PTZArgument)...) {
         var bytes = Bytes()
         bytes.append(0x00)
         bytes.append(contentsOf: [command.0, command.1])

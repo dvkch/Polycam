@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import PTZCommon
 
 open class Device: Loggable {
     

@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftSerial
-import PTZCommon
 
 internal class Serial: Loggable {
     
