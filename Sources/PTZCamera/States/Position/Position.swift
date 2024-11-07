@@ -8,10 +8,26 @@
 import Foundation
 import PTZMessaging
 
-public struct PTZPosition: Equatable, CustomStringConvertible, Codable {
+public struct PTZPosition: Equatable, CustomStringConvertible, CLIDecodable, Encodable {
     public var pan: PTZPan
     public var tilt: PTZTilt
     public var zoom: PTZZoom
+    
+    public init(pan: PTZPan, tilt: PTZTilt, zoom: PTZZoom) {
+        self.pan = pan
+        self.tilt = tilt
+        self.zoom = zoom
+    }
+    
+    public init?(from cliString: String) {
+        let parts = cliString.split(separator: ",")
+        guard parts.count == 3 else { return nil }
+        
+        guard let pan = PTZPan(from: String(parts[0])), let tilt = PTZTilt(from: String(parts[1])), let zoom = PTZZoom(from: String(parts[2])) else { return nil }
+        self.pan = pan
+        self.tilt = tilt
+        self.zoom = zoom
+    }
     
     public var description: String { "\(pan), \(tilt), \(zoom)" }
 }

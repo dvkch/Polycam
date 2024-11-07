@@ -153,6 +153,13 @@ extension Device {
     public func get<T: PTZReadable>(_ state: T.Type, rescueModeCondition: Bool = false) throws(DeviceError) -> T.Value where T.Variant == PTZNone {
         return try get(state, for: .init(), rescueModeCondition: rescueModeCondition)
     }
+    
+    public func get<T: PTZReadable>(_ state: T.Type, forCli cliStringVariant: String, rescueModeCondition: Bool = false) throws(DeviceError) -> T.Value? {
+        guard let variant = state.Variant.init(from: cliStringVariant) else {
+            return nil
+        }
+        return try get(state, for: variant, rescueModeCondition: false)
+    }
 
     public func set<T: PTZWriteable>(_ state: T, rescueModeCondition: Bool = false) throws(DeviceError) {
         let reply = send(state.set(), retries: RetryConditions.modeCondition(rescueModeCondition))

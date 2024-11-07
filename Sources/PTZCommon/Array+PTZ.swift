@@ -34,16 +34,6 @@ extension Array {
     }
 }
 
-extension String {
-    public func leftPad(count: Int, padding: Element) -> Self {
-        var copy = self
-        while copy.count < count {
-            copy.insert(padding, at: startIndex)
-        }
-        return copy
-    }
-}
-
 extension Array {
     public func split(startFilter: (Element) -> Bool) -> [Self] {
         let startIndicies = enumerated().filter { startFilter($0.element) }.map(\.offset)

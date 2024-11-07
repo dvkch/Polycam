@@ -20,6 +20,13 @@ public enum PTZClock: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     }
 }
 
+extension UInt32: CLIDecodable {
+    public init?(from cliString: String) {
+        guard let value = UInt32(cliString) else { return nil }
+        self = value
+    }
+}
+
 public struct PTZClockState: PTZReadable, PTZWriteable {
     public static let name = "Clock"
 
@@ -53,7 +60,7 @@ public struct PTZClockState: PTZReadable, PTZWriteable {
         )
     }
     
-    public static func get(for variant: Variant) -> PTZRequest {
+    public static func get(for variant: PTZClock) -> PTZRequest {
         return .init(name: name, message: .init((0x01, UInt8(variant.rawValue))))
     }
 }

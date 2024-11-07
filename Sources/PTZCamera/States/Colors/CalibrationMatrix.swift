@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public struct PTZCalibrationMatrix: Equatable, CustomStringConvertible, Codable {
+public struct PTZCalibrationMatrix: Equatable, CustomStringConvertible, CLIDecodable, Encodable {
     internal var hue:         [PTZCalibrationRange: PTZCalibrationHue] = [:]
     internal var luminance:   [PTZCalibrationRange: PTZCalibrationLuminance] = [:]
     internal var saturation:  [PTZCalibrationRange: PTZCalibrationSaturation] = [:]
@@ -43,16 +43,19 @@ public struct PTZCalibrationMatrix: Equatable, CustomStringConvertible, Codable 
         case saturation = "saturation"
     }
     
-    public init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let hue = try container.decode([PTZCalibrationHue].self, forKey: .hue)
-        let luminance = try container.decode([PTZCalibrationLuminance].self, forKey: .luminance)
-        let saturation = try container.decode([PTZCalibrationSaturation].self, forKey: .saturation)
+    public init?(from cliString: String) {
+        let kinds = cliString.split(separator: "|")
+        guard kinds.count == 3 else { return nil }
+        
+        let hues        = kinds[0].split(separator: ",").compactMap({ PTZCalibrationHue(from: String($0)) })
+        let luminances  = kinds[1].split(separator: ",").compactMap({ PTZCalibrationLuminance(from: String($0)) })
+        let saturations = kinds[2].split(separator: ",").compactMap({ PTZCalibrationSaturation(from: String($0)) })
+        guard hues.count == 6, luminances.count == 6, saturations.count == 6 else { return nil }
         
         for (i, range) in PTZCalibrationRange.allCases.enumerated() {
-            self[hue: range] = hue.element(at: i) ?? .default
-            self[luminance: range] = luminance.element(at: i) ?? .default
-            self[saturation: range] = saturation.element(at: i) ?? .default
+            self[hue: range]        = hues[i]
+            self[luminance: range]  = luminances[i]
+            self[saturation: range] = saturations[i]
         }
     }
     

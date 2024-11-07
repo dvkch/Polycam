@@ -40,7 +40,7 @@ public enum PTZFocusSpeed: UInt16, CaseIterable, CustomStringConvertible, PTZVal
 }
 
 public struct PTZMoveFocusAction: PTZState, PTZWriteable {
-    public static var name: String { "Focus" }
+    public static var name: String { "MoveFocus" }
     public var variant: PTZFocusDirection
     public var value: PTZFocusSpeed
     

@@ -10,14 +10,19 @@ import ArgumentParser
 import PTZCamera
 import PTZMessaging
 
-struct TesterCommand: BaseCommand {
+struct TesterCommand: ParsableCommand {
     static var configuration: CommandConfiguration = .init(commandName: "tester")
     
     @Option(name: .customLong("serial-device"), help: "PTZ serial device name")
     var serialDevice: String?
     
-    func run(camera: Camera) throws(CameraError) {
+    mutating func run() throws(CameraError) {
+        Camera.registerKnownStates()
+
+        let camera = try Camera(serial: .givenOrFirst(serialDevice), logLevel: .info)
+        camera.powerOn()
         camera.logLevel = .error
+
         try! testRandomThingy(camera: camera)
     }
     

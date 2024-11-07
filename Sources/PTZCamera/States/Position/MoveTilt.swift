@@ -43,7 +43,7 @@ public enum PTZTiltSpeed: UInt16, CaseIterable, CustomStringConvertible, PTZValu
 }
 
 public struct PTZMoveTiltAction: PTZState, PTZWriteable {
-    public static var name: String { "Tilt" }
+    public static var name: String { "MoveTilt" }
     public var variant: PTZTiltDirection
     public var value: PTZTiltSpeed
     

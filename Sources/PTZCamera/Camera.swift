@@ -22,6 +22,13 @@ public class Camera: Device {
 
 // MARK: Actions
 public extension Camera {
+    func powerOnIfNeeded() {
+        if power == .on {
+            return
+        }
+        powerOnIfNeeded()
+    }
+
     func powerOn() {
         log(.info, "Starting boot sequence...")
 

@@ -14,14 +14,14 @@ public struct SerialName: RawRepresentable {
         self.rawValue = rawValue
     }
     
-    public static func givenOrFirst(_ rawValue: String?) -> Self {
+    public static func givenOrFirst(_ rawValue: String?) throws(DeviceError) -> Self {
         if let rawValue {
             return .init(rawValue: rawValue)
         }
         if let firstAvailable {
             return firstAvailable
         }
-        fatalError("No available serial device")
+        throw DeviceError.noSerialDevice
     }
 }
 
@@ -31,6 +31,7 @@ extension SerialName {
     }
     
     public static var allAvailables: [SerialName] {
+        #warning("make it work on linux")
         let devices = try! FileManager.default.contentsOfDirectory(at: URL(string: "file:///dev")!, includingPropertiesForKeys: nil)
         return devices.filter { $0.lastPathComponent.hasPrefix("cu.usbserial-") }.map { SerialName(rawValue: $0.standardizedFileURL.path) }
     }

@@ -11,7 +11,7 @@ import PTZCamera
 import PTZMessaging
 
 // Usually takes about 5min to run on an Eagle Eye IV
-struct FuzzerCommand: BaseCommand {
+struct FuzzerCommand: ParsableCommand {
     static var configuration: CommandConfiguration = .init(commandName: "fuzzer")
     
     @Option(name: .customLong("serial-device"), help: "PTZ serial device name")
@@ -20,7 +20,11 @@ struct FuzzerCommand: BaseCommand {
     @Option(name: .customLong("complete"), help: "Makes sure all possible requests are evaluated, can be very slow")
     var complete: Bool = false
     
-    mutating func run(camera: Camera) throws(CameraError) {
+    mutating func run() throws(CameraError) {
+        Camera.registerKnownStates()
+
+        let camera = try Camera(serial: .givenOrFirst(serialDevice), logLevel: .info)
+        camera.powerOn()
         camera.logLevel = .error
 
         camera.send(PTZResetAction(.settingsAndMotors).set())
@@ -168,7 +172,7 @@ struct FuzzerCommand: BaseCommand {
                     replies[replies.count - 1].lastArg = arg
                     
                     // getting an error (intermittent or final)
-                    if !complete, with(replies.last!.reply, { $0 == .timeout || $0 == .fail || $0.isNotExecuted }) {
+                    if !complete, (replies.last!.reply == .timeout || replies.last!.reply == .fail || replies.last!.reply.isNotExecuted) {
                         // not receiving any answer for some time now, let's stop
                         if (replies.last!.reply == .timeout), replies.last!.argSpan > 0x04 {
                             replies[replies.count - 1].stoppedEarly = true
@@ -311,19 +315,19 @@ extension FuzzerResult {
                 isRequestKnown = true
                 replyName += ": \(state)"
             }
-            else if category == 0x45, let direction = PTZPanDirection(rawValue: register) {
+            else if category == 0x45, let direction = PTZPanDirection(rawValue: UInt16(register)) {
                 isRequestKnown = true
                 replyName += ": Pan \(direction)"
             }
-            else if category == 0x45, let direction = PTZTiltDirection(rawValue: register) {
+            else if category == 0x45, let direction = PTZTiltDirection(rawValue: UInt16(register)) {
                 isRequestKnown = true
                 replyName += ": Tilt \(direction)"
             }
-            else if category == 0x45, let direction = PTZFocusDirection(rawValue: register) {
+            else if category == 0x45, let direction = PTZFocusDirection(rawValue: UInt16(register)) {
                 isRequestKnown = true
                 replyName += ": Focus \(direction)"
             }
-            else if category == 0x45, let direction = PTZZoomDirection(rawValue: register) {
+            else if category == 0x45, let direction = PTZZoomDirection(rawValue: UInt16(register)) {
                 isRequestKnown = true
                 replyName += ": Zoom \(direction)"
             }

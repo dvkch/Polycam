@@ -11,9 +11,15 @@ import ArgumentParser
 @main
 struct PTZCLI: ParsableCommand {
     static var configuration = CommandConfiguration(
+        commandName: "ptz",
         abstract: "PTZ",
         version: "1.0",
-        subcommands: [FuzzerCommand.self, TesterCommand.self, BenchmarkCommand.self, InteractiveCommand.self],
-        defaultSubcommand: InteractiveCommand.self
+        subcommands: [
+            AdvancedCommand.self,
+            BenchmarkCommand.self,
+            InteractiveCommand.self,
+            ReadCommand.self,
+            WriteCommand.self
+        ]
     )
 }

@@ -7,10 +7,14 @@
 
 import Foundation
 
+public protocol CLIDecodable {
+    init?(from cliString: String)
+}
+
 // MARK: State
 public protocol PTZState<Variant, Value>: CustomStringConvertible {
-    associatedtype Value: Codable & Equatable
-    associatedtype Variant: Codable
+    associatedtype Value: Equatable
+    associatedtype Variant: CLIDecodable
     static var name: String { get }
     var variant: Variant { get }
     var value: Value { get set }
@@ -40,7 +44,7 @@ public extension PTZInvariantState {
 }
 
 // MARK: Readable
-public protocol PTZReadable<Variant, Value>: PTZState {
+public protocol PTZReadable<Variant, Value>: PTZState where Value: Encodable {
     init?(message: PTZMessage)
     static func get(for variant: Variant) -> PTZRequest
 }
@@ -56,10 +60,20 @@ public extension PTZReadable where Self: PTZInvariantState {
 }
 
 // MARK: Writeable
-public protocol PTZWriteable<Variant, Value>: PTZState {
+public protocol PTZWriteable<Variant, Value>: PTZState where Value: CLIDecodable {
     init(_ value: Value, for variant: Variant)
     func set() -> PTZRequest
     func setMessage() -> PTZMessage
+}
+
+public extension PTZWriteable {
+    init?(valueString: String, variantString: String) {
+        let variant = Variant.init(from: variantString)
+        let value   = Value.init(from: valueString)
+
+        guard let variant, let value else { return nil }
+        self.init(value, for: variant)
+    }
 }
 
 public extension PTZWriteable {
@@ -92,13 +106,19 @@ public extension PTZParseableState where Self: PTZWriteable {
 }
 
 // MARK: Combo
-public protocol PTZReadableCombo<Value>: PTZState where Variant == PTZNone {
+public protocol PTZReadableCombo<Value>: PTZState where Variant == PTZNone, Value: Encodable {
     init?(messages: [PTZMessage])
     static func get() -> [PTZRequest]
 }
 
-public protocol PTZWriteableCombo<Value>: PTZState where Variant == PTZNone {
+public protocol PTZWriteableCombo<Value>: PTZState where Variant == PTZNone, Value: CLIDecodable {
     init(_ value: Value)
     func set() -> [PTZRequest]
 }
 
+public extension PTZWriteableCombo {
+    init?(valueString: String) {
+        guard let value = Value.init(from: valueString) else { return nil }
+        self.init(value)
+    }
+}

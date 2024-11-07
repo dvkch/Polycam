@@ -38,7 +38,7 @@ public enum PTZZoomSpeed: UInt16, CaseIterable, CustomStringConvertible, PTZValu
 }
 
 public struct PTZMoveZoomAction: PTZState, PTZWriteable {
-    public static var name: String { "Zoom" }
+    public static var name: String { "MoveZoom" }
     public var variant: PTZZoomDirection
     public var value: PTZZoomSpeed
     

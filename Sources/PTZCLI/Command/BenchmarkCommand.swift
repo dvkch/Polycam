@@ -9,7 +9,7 @@ import Foundation
 import ArgumentParser
 import PTZCamera
 
-struct BenchmarkCommand: BaseCommand {
+struct BenchmarkCommand: ParsableCommand {
     static var configuration: CommandConfiguration = .init(commandName: "benchmark")
     
     @Option(name: .customLong("serial-device"), help: "PTZ serial device name")
@@ -18,7 +18,11 @@ struct BenchmarkCommand: BaseCommand {
     @Option(name: .customLong("duration"), help: "Benchmark duration in seconds")
     var duration: Int = 60
     
-    func run(camera: Camera) throws(CameraError) {
+    mutating func run() throws(CameraError) {
+        Camera.registerKnownStates()
+
+        let camera = try Camera(serial: .givenOrFirst(serialDevice), logLevel: .info)
+        camera.powerOn()
         camera.logLevel = .error
         
         // we had some issues were working around timings would fuck up the reading of the hello reply, let's make sure it is still working properly

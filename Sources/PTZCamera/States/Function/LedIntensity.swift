@@ -18,11 +18,29 @@ public struct PTZLedColorIntensity: PTZScaledValue {
     public static var `default`: PTZLedColorIntensity { .init(rawValue: 8) }
 }
 
-public struct PTZLedIntensity: Equatable, CustomStringConvertible, Codable {
-    var r: PTZLedColorIntensity
-    var g: PTZLedColorIntensity
-    var b: PTZLedColorIntensity
+public struct PTZLedIntensity: Equatable, CustomStringConvertible, CLIDecodable, Encodable {
+    public var r: PTZLedColorIntensity
+    public var g: PTZLedColorIntensity
+    public var b: PTZLedColorIntensity
     public var description: String { "R=\(r), G=\(g), B=\(b)" }
+    
+    public init(r: PTZLedColorIntensity, g: PTZLedColorIntensity, b: PTZLedColorIntensity) {
+        self.r = r
+        self.g = g
+        self.b = b
+    }
+
+    public init?(from cliString: String) {
+        let parts = cliString.split(separator: ",")
+        guard parts.count == 3 else { return nil }
+        
+        guard let r = PTZLedColorIntensity(from: String(parts[0])) else { return nil }
+        guard let g = PTZLedColorIntensity(from: String(parts[1])) else { return nil }
+        guard let b = PTZLedColorIntensity(from: String(parts[2])) else { return nil }
+        self.r = r
+        self.g = g
+        self.b = b
+    }
 }
 
 public struct PTZLedIntensityState: PTZInvariantState, PTZReadable, PTZWriteable {

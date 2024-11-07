@@ -10,15 +10,18 @@ import ArgumentParser
 import PTZCamera
 import SwiftCurses
 
-struct InteractiveCommand: BaseCommand {
+struct InteractiveCommand: ParsableCommand {
     static var configuration: CommandConfiguration = .init(commandName: "interactive")
     
     @Option(name: .customLong("serial-device"), help: "PTZ serial device name")
     var serialDevice: String?
     
-    func run(camera: Camera) throws(CameraError) {
+    mutating func run() throws(CameraError) {
+        Camera.registerKnownStates()
+
+        let camera = try Camera(serial: .givenOrFirst(serialDevice), logLevel: .info)
+        camera.powerOn()
         camera.logLevel = .error
-        try camera.set(PTZDevModeState(.on))
         
         var moveActions: [Interactive.Action<String>] = []
         PTZPanDirection.allCases.forEach { dir in

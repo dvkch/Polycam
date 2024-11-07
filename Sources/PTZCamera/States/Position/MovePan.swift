@@ -43,7 +43,7 @@ public enum PTZPanSpeed: UInt16, CaseIterable, CustomStringConvertible, PTZValue
 }
 
 public struct PTZMovePanAction: PTZState, PTZWriteable {
-    public static var name: String { "Pan" }
+    public static var name: String { "MovePan" }
     public var variant: PTZPanDirection
     public var value: PTZPanSpeed
     
