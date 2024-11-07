@@ -8,7 +8,6 @@
 import Foundation
 import PTZMessaging
 
-#warning("look for all non public default properties")
 public enum PTZVideoOutput: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     case unknown00         = 0x00
     case unknown0A         = 0x0a
@@ -36,8 +35,6 @@ public struct PTZVideoOutputState: PTZParseableState, PTZReadable, PTZWriteable 
     public init(_ value: PTZVideoOutput, for variant: PTZNone) {
         self.value = value
     }
-    
-    #warning("look for all waitingTimeIfExecuted & rescue shits")
     
     public func set() -> PTZRequest {
         return .init(name: "Set \(self)", message: setMessage(), waitingTimeIfExecuted: 6)

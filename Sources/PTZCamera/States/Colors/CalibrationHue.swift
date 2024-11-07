@@ -50,7 +50,6 @@ public struct PTZCalibrationHueState: PTZReadable, PTZWriteable {
         self.variant = variant
     }
     
-    #warning("use a specific struct type for Registers, allowing them to handle variants (using a case iterable enum and an offset)")
     public init?(message: PTZMessage) {
         guard let range = PTZCalibrationRange.allCases.first(where: { message.isValidReply((0x43, 0x50 + UInt8($0.rawValue))) }) else { return nil }
         self.variant = range

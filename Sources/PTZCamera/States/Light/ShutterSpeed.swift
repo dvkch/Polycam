@@ -39,7 +39,7 @@ public enum PTZShutterSpeed: UInt16, CustomStringConvertible, CaseIterable, PTZV
         }
     }
     
-    static var `default`: PTZShutterSpeed { .auto }
+    public static var `default`: PTZShutterSpeed { .auto }
 }
 
 public struct PTZShutterSpeedState: PTZParseableState, PTZReadable, PTZWriteable {

@@ -26,8 +26,11 @@ public struct PTZConfig {
 
     public static func register(_ state: any PTZState.Type) {
         for knownState in knownStates {
-            if knownState == state {
-                return
+            if knownState.name == state.name {
+                if knownState == state {
+                    return
+                }
+                print("Warning: registering a new state (\(state)) with the same name as an existing one (\(knownState)).")
             }
         }
         knownStates.append(state)

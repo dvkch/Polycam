@@ -8,7 +8,6 @@
 import Foundation
 import PTZMessaging
 
-#warning("make simplified command to use those (save current position to preset, set current position to preset)")
 public enum PTZPreset: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
     case one    = 0x00
     case two    = 0x01

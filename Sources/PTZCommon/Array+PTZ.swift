@@ -7,7 +7,6 @@
 
 import Foundation
 
-#warning("cleanup")
 extension RandomAccessCollection where Self.Index == Int {
     public func element(at index: Int) -> Element? {
         if index < count {

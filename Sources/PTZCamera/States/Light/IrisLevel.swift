@@ -27,7 +27,6 @@ public struct PTZIrisLevelState: PTZParseableState, PTZReadable, PTZWriteable {
         self.value = value
     }
     
-#warning("look for all setRequest()")
     public func set() -> PTZRequest {
         return .init(name: "Set \(description)", message: setMessage(), modeConditionRescueRequests: [
             PTZAutoExposureState(.off).set(),

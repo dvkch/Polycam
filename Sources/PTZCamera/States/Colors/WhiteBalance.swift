@@ -31,7 +31,7 @@ public enum PTZWhiteBalance: UInt16, CustomStringConvertible, CaseIterable, PTZV
         }
     }
     
-    static var `default`: PTZWhiteBalance { .auto }
+    public static var `default`: PTZWhiteBalance { .auto }
 }
 
 public struct PTZWhiteBalanceState: PTZParseableState, PTZReadable, PTZWriteable {

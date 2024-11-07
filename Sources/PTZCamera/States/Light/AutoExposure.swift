@@ -8,8 +8,6 @@
 import Foundation
 import PTZMessaging
 
-#warning("Add comments to all the states, explaning how they were found and how they work")
-#warning("Put each state in its own file")
 public struct PTZAutoExposureState: PTZParseableState, PTZReadable, PTZWriteable {
     public static var name: String = "AutoExposure"
     public static var register: (UInt8, UInt8) = (0x02, 0x11)
@@ -20,7 +18,7 @@ public struct PTZAutoExposureState: PTZParseableState, PTZReadable, PTZWriteable
         self.value = value
     }
     
-    func setRequest() -> PTZRequest {
+    public func set() -> PTZRequest {
         return .init(
             name: "Set \(description)",
             message: setMessage(),

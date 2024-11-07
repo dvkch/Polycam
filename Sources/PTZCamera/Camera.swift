@@ -68,9 +68,6 @@ public extension Camera {
     }
 }
 
-// MARK: States
-#warning("Define a macro that would register those + create those extensions")
-#warning("group states by kind in folders, registration and camera extension")
 // MARK: Colors
 public extension Camera {
     var brightness: PTZBrightness {

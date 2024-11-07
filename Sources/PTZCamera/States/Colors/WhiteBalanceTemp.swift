@@ -31,7 +31,5 @@ public struct PTZWhiteBalanceTempState: PTZParseableState, PTZReadable, PTZWrite
     public func set() -> PTZRequest {
         return .init(name: "Set \(description)", message: setMessage(), modeConditionRescueRequests: [PTZWhiteBalanceState(.manual).set()])
     }
-    
-#warning("set up all mode conditions rescues for all requests")
 }
 

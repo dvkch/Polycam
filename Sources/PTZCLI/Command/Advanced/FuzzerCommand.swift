@@ -310,7 +310,6 @@ extension FuzzerResult {
         // setter request for the same value), we can try to add more information to our output
         replyName = reply.description
         if reply == .executed || reply.isNotExecuted {
-            #warning("make that shit work again")
             if let state = PTZMessage.replies(from: PTZRequest.unknown((category, register), arg: argRange?.first).message.bytes).first?.state {
                 isRequestKnown = true
                 replyName += ": \(state)"
