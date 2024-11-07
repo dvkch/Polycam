@@ -18,13 +18,15 @@ public protocol JSONEncodable {
 // MARK: State
 public protocol PTZState<Variant, Value>: CustomStringConvertible {
     associatedtype Value: Equatable & CustomStringConvertible
-    associatedtype Variant: CLIDecodable & CustomStringConvertible
+    associatedtype Variant: CLIDecodable & CaseIterable & CustomStringConvertible
     static var name: String { get }
     var variant: Variant { get }
     var value: Value { get set }
 }
 
 public extension PTZState {
+    static var variants: [Variant] { Variant.allCases.map({ $0 }) }
+    
     var description: String {
         if variant is PTZNone && value is PTZNone {
             Self.name

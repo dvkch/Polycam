@@ -5,7 +5,7 @@
 //  Created by syan on 05/11/2024.
 //
 
-public struct PTZNone: Equatable, CLIDecodable, JSONEncodable, CustomStringConvertible {
+public struct PTZNone: Equatable, CLIDecodable, JSONEncodable, CaseIterable, CustomStringConvertible {
     public init() {}
     
     public init?(from cliString: String) {
@@ -16,7 +16,11 @@ public struct PTZNone: Equatable, CLIDecodable, JSONEncodable, CustomStringConve
         return ""
     }
     
+    public static var allCases: [PTZNone] {
+        return [.init()]
+    }
+
     public var description: String {
-        "()"
+        ""
     }
 }

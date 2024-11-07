@@ -31,7 +31,7 @@ public struct PTZDrunkTestPhaseState: PTZParseableState, PTZReadable {
     public var value: PTZDrunkTestPhase
     
     public init?(message: PTZMessage) {
-        guard message.isValidReply(Self.register) else { return nil }
+        guard message.isValidReply(Self.setRegister) else { return nil }
         self.value = message.parseArgument(position: .single)
     }
 }

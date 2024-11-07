@@ -22,4 +22,8 @@ struct PTZCLI: ParsableCommand {
             WriteCommand.self
         ]
     )
+    
+    public static func main() {
+        self.main(nil)
+    }
 }

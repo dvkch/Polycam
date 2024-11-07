@@ -19,7 +19,7 @@ struct ReadCommand: ParsableCommand {
     )
     
     static var supportedCommands: [String] {
-        (PTZConfig.knownReadableStates.map({ $0.name.camelCased }) + PTZConfig.knownReadableCombosStates.map({ $0.name.camelCased })).sorted()
+        ["all"] + (PTZConfig.knownReadableStates.map({ $0.name.camelCased }) + PTZConfig.knownReadableCombosStates.map({ $0.name.camelCased })).sorted()
     }
 
     @Option(name: .customLong("device"), help: "PTZ serial device name")
@@ -41,9 +41,8 @@ struct ReadCommand: ParsableCommand {
         }).mapError { ValidationError($0.localizedDescription) }.get()
 
         camera.powerOnIfNeeded()
-        #warning("handle '*'")
         
-        var result = [String: Any]()
+        var result = [String: JSONValue]()
         result["device"] = serial.rawValue
 
         let regex = #/(?<name>[a-zA-Z0-9]+)(?:\((?<variant>[a-zA-Z0-9]+)\))?/#
@@ -51,34 +50,26 @@ struct ReadCommand: ParsableCommand {
             guard let state = try? regex.wholeMatch(in: stateString)?.output else {
                 throw ValidationError("Unrecognized syntax: \(stateString)")
             }
-
-            if let stateType = PTZConfig.knownReadableCombosStates.first(where: { $0.name.camelCased == state.name }) {
-                do {
-                    let value = try camera.get(stateType)
-                    result[stateType.name.camelCased] = [
-                        "value": value.toJSON,
-                        "name": value.description
-                    ]
+            
+            if state.name == "all" {
+                for state in PTZConfig.knownReadableCombosStates {
+                    try readState(state, camera: camera, result: &result)
                 }
-                catch {
-                    throw ValidationError(error.localizedDescription)
+                for state in PTZConfig.knownReadableStates {
+                    for variant in state.variants {
+                        try readState(state, for: variant.description, camera: camera, result: &result)
+                    }
                 }
                 continue
             }
 
+            if let stateType = PTZConfig.knownReadableCombosStates.first(where: { $0.name.camelCased == state.name }) {
+                try readState(stateType, camera: camera, result: &result)
+                continue
+            }
+
             if let stateType = PTZConfig.knownReadableStates.first(where: { $0.name.camelCased == state.name }) {
-                do {
-                    guard let value = try camera.get(stateType, forCli: state.variant.map(String.init) ?? "") else {
-                        throw ValidationError("Invalid parameters for state \"\(state.name)\"")
-                    }
-                    result[stateType.name.camelCased] = [
-                        "value": value.toJSON,
-                        "name": value.description
-                    ]
-                }
-                catch {
-                    throw ValidationError(error.localizedDescription)
-                }
+                try readState(stateType, for: state.variant.map(String.init) ?? "", camera: camera, result: &result)
                 continue
             }
 
@@ -90,5 +81,37 @@ struct ReadCommand: ParsableCommand {
         print(jsonString)
 
         throw ExitCode.success
+    }
+    
+    private func readState<T: PTZReadableCombo>(_ stateType: T.Type, camera: Camera, result: inout [String: JSONValue]) throws {
+        do {
+            let value = try camera.get(stateType)
+            result[stateType.name.camelCased] = [
+                "value": value.toJSON,
+                "name": value.description
+            ]
+        }
+        catch {
+            throw ValidationError(error.localizedDescription)
+        }
+    }
+    
+    private func readState<T: PTZReadable>(_ stateType: T.Type, for variant: String, camera: Camera, result: inout [String: JSONValue]) throws {
+        do {
+            guard let value = try camera.get(stateType, forCli: variant) else {
+                throw ValidationError("Invalid parameters for state \"\(stateType.name)\"")
+            }
+            var name = stateType.name.camelCased
+            if variant != "" {
+                name += "(\(variant))"
+            }
+            result[name] = [
+                "value": value.toJSON,
+                "name": value.description
+            ]
+        }
+        catch {
+            throw ValidationError(error.localizedDescription)
+        }
     }
 }
