@@ -11,8 +11,8 @@ import PTZMessaging
 public struct PTZPan: PTZScaledValue {
     public var ptzValue: UInt16
     public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
-    public static let minValue: Int = -100
-    public static let maxValue: Int = 100
+    public static let minValue: Int = -1000
+    public static let maxValue: Int = 1000
     public static let ptzMin: UInt16 = 0
     public static let ptzMax: UInt16 = 0x07_D0
     public static let unit: String = ""

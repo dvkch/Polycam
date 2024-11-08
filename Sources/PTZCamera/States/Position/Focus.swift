@@ -12,7 +12,7 @@ public struct PTZFocus: PTZScaledValue {
     public var ptzValue: UInt16
     public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
     public static let minValue: Int = 0
-    public static let maxValue: Int = 100
+    public static let maxValue: Int = 500
     public static let ptzMin: UInt16 = 0xF0
     public static let ptzMax: UInt16 = 0x300
     public static let unit: String = ""

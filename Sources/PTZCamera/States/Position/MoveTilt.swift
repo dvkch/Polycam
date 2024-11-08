@@ -25,12 +25,12 @@ public enum PTZTiltDirection: UInt8, PTZVariant {
 public struct PTZTiltSpeed: PTZScaledValue {
     public var ptzValue: UInt16
     public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
-    public static var minValue: Int = 0
-    public static var maxValue: Int = 100
-    public static var ptzMin: UInt16 = 0x10
-    public static var ptzMax: UInt16 = 0x1F
-    public static var unit: String = "%"
-    public static var `default`: Self = .mid
+    public static let minValue: Int = 0
+    public static let maxValue: Int = 100
+    public static let ptzMin: UInt16 = 0x10
+    public static let ptzMax: UInt16 = 0x1F
+    public static let unit: String = "%"
+    public static let `default`: Self = .mid
 }
 
 /// Starts tilting in the given direction at the requested speed.

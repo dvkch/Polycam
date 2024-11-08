@@ -11,12 +11,12 @@ import PTZMessaging
 public struct PTZSleepTimeout: PTZScaledValue {
     public var ptzValue: UInt16
     public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
-    public static var minValue: Int = 0
-    public static var maxValue: Int = 1440 // 0x30 * 30min
-    public static var ptzMin: UInt16 = 0x00
-    public static var ptzMax: UInt16 = 0x30
-    public static var unit: String { "min" }
-    public static var `default`: Self = .min
+    public static let minValue: Int = 0
+    public static let maxValue: Int = 1440 // 0x30 * 30min
+    public static let ptzMin: UInt16 = 0x00
+    public static let ptzMax: UInt16 = 0x30
+    public static let unit: String = "min"
+    public static let `default`: Self = .min
     
     public var description: String {
         guard rawValue > 0 else { return "off" }

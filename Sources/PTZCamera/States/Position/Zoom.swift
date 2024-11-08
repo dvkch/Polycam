@@ -11,12 +11,12 @@ import PTZMessaging
 public struct PTZZoom: PTZScaledValue {
     public var ptzValue: UInt16
     public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
-    public static var minValue: Int = 0
-    public static var maxValue: Int = 100
-    public static var ptzMin: UInt16 = 0x40
-    public static var ptzMax: UInt16 = 0x08_B5
-    public static var unit: String = ""
-    public static var `default`: Self = .min
+    public static let minValue: Int = 0
+    public static let maxValue: Int = 1000
+    public static let ptzMin: UInt16 = 0x40
+    public static let ptzMax: UInt16 = 0x08_B5
+    public static let unit: String = ""
+    public static let `default`: Self = .min
 }
 
 internal struct PTZZoomOriginalAPI: PTZScaledValue {
@@ -28,10 +28,11 @@ internal struct PTZZoomOriginalAPI: PTZScaledValue {
     static let ptzMax: UInt16 = 0x08_B5
     static let unit: String = ""
     static let `default`: Self = .min
-    // FROM: (8D 41 51 24 00 03 68 00 00 7A 03) 00 00 40
-    // TO:   (8D 41 51 24 00 03 68 00 00 7A 03) 02 05 79
-    // 00 40 -> 05 F9
-    // 64 => 1529
+    
+    init(rawValue: Int) {
+        let ptzValue = UInt16(1146 + Int(Double(rawValue) * 0.021739))
+        self.init(ptzValue: ptzValue)
+    }
 }
 
 /// Controls the zoom position.

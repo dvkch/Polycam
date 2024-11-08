@@ -11,8 +11,8 @@ import PTZMessaging
 public struct PTZTilt: PTZScaledValue {
     public var ptzValue: UInt16
     public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
-    public static let minValue: Int = -100
-    public static let maxValue: Int = 100
+    public static let minValue: Int = -1000
+    public static let maxValue: Int = 1000
     public static let ptzMin: UInt16 = 0x00
     public static let ptzMax: UInt16 = 0x01_F4
     public static let unit: String = ""
