@@ -50,7 +50,7 @@ public struct PTZStatisticsState: PTZReadable {
     public var value: PTZStatisticsValues
     
     public init?(message: PTZMessage) {
-        guard let stats = PTZStatisticsGroup.allCases.first(where: { message.isValidReply((0x41, UInt8($0.rawValue))) }) else { return nil }
+        guard let stats = message.decodeVariant(Self.register) else { return nil }
         
         let left0 = message.parseArgument(type: PTZUInt.self, position: .custom(hiIndex: 13, loIndex: 7, loRetainerIndex: 3, loRetainerMask: 0x08)).rawValue
         let left1 = message.parseArgument(type: PTZUInt.self, position: .custom(hiIndex: 13, loIndex: 6, loRetainerIndex: 3, loRetainerMask: 0x04)).rawValue

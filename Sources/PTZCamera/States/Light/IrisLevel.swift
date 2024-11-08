@@ -32,8 +32,8 @@ public struct PTZIrisLevelState: PTZParseableState, PTZReadable, PTZWritable {
     
     public func set() -> PTZRequest {
         return .init(name: "Set \(description)", message: setMessage(), modeConditionRescueRequests: [
-            PTZAutoExposureState(.off).set(),
             PTZGainModeState(.gain0dB).set(),
+            PTZAutoExposureState(.off).set(),
             PTZBacklightCompensationState(.off).set()
         ])
     }

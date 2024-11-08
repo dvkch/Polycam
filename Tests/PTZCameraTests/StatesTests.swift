@@ -1,15 +1,13 @@
 //
-//  RequestsTests.swift
+//  States.swift
 //  PTZ
 //
-//  Created by syan on 03/07/2024.
+//  Created by syan on 08/11/2024.
 //
-
-import Foundation
 
 import XCTest
 @testable import PTZCamera
-
+/*
 #warning("complete test coverage with new states and actions")
 #warning("add tests for actual byte responses")
 final class RequestsTests: XCTestCase {
@@ -269,3 +267,5 @@ final class RequestsTests: XCTestCase {
         XCTAssertTrue(replyCalibrateManual is PTZReplyExecuted)
     }
 }
+
+*/

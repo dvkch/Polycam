@@ -33,7 +33,7 @@ let package = Package(
             .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
         ]),
         .testTarget(name: "PTZCameraTests", dependencies: ["PTZCamera"], resources: [
-            .copy("Fixtures")
+            .copy("Fixtures/Data")
         ])
     ]
 )

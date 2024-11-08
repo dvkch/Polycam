@@ -19,6 +19,10 @@ public struct PTZPosition: Equatable, CustomStringConvertible, CLIDecodable, JSO
         self.zoom = zoom
     }
     
+    public static func random() -> Self {
+        .init(pan: .random, tilt: .random, zoom: .random)
+    }
+    
     public init?(from cliString: String) {
         let parts = cliString.split(separator: ",")
         guard parts.count == 3 else { return nil }

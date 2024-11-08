@@ -1,9 +1,16 @@
 import XCTest
 @testable import PTZCamera
 
+import PTZMessaging
+
 final class FixtureTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        Camera.registerKnownStates()
+    }
+
     func obtainFixture(category: String, name: String) -> URL {
-        guard let url = Bundle.module.url(forResource: name, withExtension: "json", subdirectory: "Fixtures/\(category)") else {
+        guard let url = Bundle.module.url(forResource: name, withExtension: "json", subdirectory: "Data/\(category)") else {
             fatalError("Missing resource file: \(category)/\(name)")
         }
         return url.absoluteURL
@@ -28,34 +35,30 @@ final class FixtureTests: XCTestCase {
         var failedFixtures: [Int] = []
 
         for (i, fixture) in fixtures.enumerated() {
-            let originalBytes = fixture.query.bytes
-            let request = PTZRequestSetPosition(
-                pan:  .init(rawValue: fixture.pan),
-                tilt: .init(rawValue: fixture.tilt),
-                zoom: .init(rawValue: fixture.zoom)
-            )
-            XCTAssertTrue(request.validLength)
-
-
+            let originalBytes = Bytes(string: fixture.query)!
+            /// comparing to the -50 000 to +50 000 scale on the original program
+            let request = PTZPositionState(.init(
+                pan:  .init(ptzValue: PTZPanOriginalAPI(rawValue:  fixture.pan).ptzValue),
+                tilt: .init(ptzValue: PTZTiltOriginalAPI(rawValue: fixture.tilt).ptzValue),
+                zoom: .init(ptzValue: PTZZoomOriginalAPI(rawValue: fixture.zoom).ptzValue)
+            )).setMessage()
+ 
             let computedBytes = request.bytes
-            // zoom bytes are not a perfect match, go figure... not sure what the proper formulae is supposed to be, but
-            // that's honestly close enough
+
+            /// zoom bytes are not a perfect match, go figure... not sure what the proper formulae is supposed to be, but that's honestly close enough
             switch originalBytes.compare(computedBytes, allowingVarianceOfOneAtIndex: 13) {
             case .equal:
                 successFixtures.append(i)
             case .closeEnough:
                 imperfectFixtures.append(i)
             case .different:
-                //print("--------------", i, "--------------")
-                //print(originalBytes)
-                //print(computedBytes)
                 failedFixtures.append(i)
             }
         }
         
-        print("Success:", successFixtures.count)
-        print("Close enough:", imperfectFixtures.count)
-        print("Failed:", failedFixtures.count)
+        XCTAssertEqual(successFixtures.count, 297)
+        XCTAssertEqual(imperfectFixtures.count, 5)
+        XCTAssertEqual(failedFixtures.count, 2)
     }
     
     func testGetPositionFixtures() {
@@ -70,11 +73,11 @@ final class FixtureTests: XCTestCase {
         var failedFixtures: [Int] = []
 
         for (i, fixture) in fixtures.enumerated() {
-            let responses = PTZMessage.replies(from: fixture.response.bytes)
-            if responses.count == 1, let response = responses.first as? PTZReplyPosition {
-                let diffPan  = abs(response.pan.rawValue  - fixture.pan)
-                let diffTilt = abs(response.tilt.rawValue - fixture.tilt)
-                let diffZoom = abs(response.zoom.rawValue - fixture.zoom)
+            let responses = PTZMessage.replies(from: Bytes(string: fixture.response)!)
+            if responses.count == 1, case .state(_, let response) = responses[0], let response = response as? PTZPositionState {
+                let diffPan  = abs(Int(response.value.pan.ptzValue)  - Int(PTZPanOriginalAPI(rawValue: fixture.pan).ptzValue))
+                let diffTilt = abs(Int(response.value.tilt.ptzValue) - Int(PTZTiltOriginalAPI(rawValue: fixture.tilt).ptzValue))
+                let diffZoom = abs(Int(response.value.zoom.ptzValue) - Int(PTZZoomOriginalAPI(rawValue: fixture.zoom).ptzValue))
                 if diffPan == 0, diffTilt == 0, diffZoom == 0 {
                     successFixtures.append(i)
                 }
@@ -90,8 +93,8 @@ final class FixtureTests: XCTestCase {
             }
         }
         
-        print("Success:", successFixtures.count)
-        print("Close enough:", imperfectFixtures.count)
-        print("Failed:", failedFixtures.count)
+        XCTAssertEqual(successFixtures.count, 196)
+        XCTAssertEqual(imperfectFixtures.count, 98)
+        XCTAssertEqual(failedFixtures.count, 0)
     }
 }
