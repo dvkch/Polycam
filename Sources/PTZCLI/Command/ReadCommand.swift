@@ -44,7 +44,7 @@ struct ReadCommand: ParsableCommand {
         var result = [String: JSONValue]()
         result["device"] = serial.rawValue
 
-        let regex = #/(?<name>[a-zA-Z0-9]+)(?:\((?<variant>[a-zA-Z0-9]+)\))?/#
+        let regex = #/(?<name>[a-zA-Z0-9]+)(?:\((?<variant>[a-zA-Z0-9/]+)\))?/#
         for stateString in states {
             guard let state = try? regex.wholeMatch(in: stateString)?.output else {
                 throw ValidationError("Unrecognized syntax: \(stateString)")

@@ -38,7 +38,7 @@ struct WriteCommand: ParsableCommand {
 
         var actions: [(String, (Camera) throws -> ())] = []
 
-        let regex = #/(?<state>[a-zA-Z0-9]+)(?:\((?<variant>[a-zA-Z0-9]+)\))?(?:=(?<value>.*))?/#
+        let regex = #/(?<state>[a-zA-Z0-9]+)(?:\((?<variant>[a-zA-Z0-9/]+)\))?(?:=(?<value>.*))?/#
         for operationString in operations {
             guard let operation = try? regex.wholeMatch(in: operationString)?.output else {
                 throw ValidationError("Unrecognized syntax: \(operationString)")

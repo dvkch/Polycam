@@ -45,7 +45,7 @@ public struct PTZStatisticsValues: Equatable, JSONEncodable, CustomStringConvert
 ///
 /// Those seem to reflect the number of time a motor switch direction
 public struct PTZStatisticsState: PTZState, PTZReadable {
-    public static var name: String { "MotorStats" }
+    public static var name: String { "Statistics" }
     public let variant: PTZStatisticsGroup
     public var value: PTZStatisticsValues
     
