@@ -10,6 +10,7 @@ import ArgumentParser
 import PTZCamera
 import PTZMessaging
 
+#warning("subcommand to list all available commands, variants and values cases or min/max")
 struct WriteCommand: ParsableCommand {
     static var configuration: CommandConfiguration = .init(
         commandName: "write",

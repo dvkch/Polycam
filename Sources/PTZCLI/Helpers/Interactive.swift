@@ -214,32 +214,34 @@ internal extension Interactive {
         private let defaultValue: T.Value
         private var currentValue: T.Value
 
-        convenience init(_ state: T.Type, for camera: Camera, values: any Collection<T.Value>, default: T.Value) where T.Variant == PTZNone {
-            self.init(state, for: camera, variant: .init(), values: values, default: `default`)
+        convenience init(_ state: T.Type, on camera: Camera, default: T.Value) where T.Value: PTZScaledValue, T.Variant == PTZNone {
+            self.init(state, for: .init(), on: camera, default: `default`)
         }
 
-        convenience init(_ state: T.Type, for camera: Camera, default: T.Value) where T.Variant == PTZNone, T.Value: PTZValue {
-            self.init(state, for: camera, variant: .init(), values: T.Value.allCases, default: `default`)
+        convenience init(_ state: T.Type, on camera: Camera, default: T.Value) where T.Value: PTZValue, T.Variant == PTZNone {
+            self.init(state, for: .init(), on: camera, values: T.Value.allCases, default: `default`)
         }
 
-        convenience init(_ state: T.Type, for camera: Camera, default: T.Value) where T.Variant == PTZNone, T.Value: PTZScaledValue {
+        convenience init(_ state: T.Type, for variant: T.Variant, on camera: Camera, default: T.Value) where T.Value: PTZScaledValue {
             var values: [T.Value] = T.Value.allCases
+
             if values.count > 25 {
                 let step = max(1, (T.Value.maxValue - T.Value.minValue) / 25)
                 values = stride(from: T.Value.minValue, to: T.Value.maxValue, by: step)
                     .map { T.Value(rawValue: $0) }
                     .uniqueOrdered(by: \.rawValue)
             }
-            self.init(state, for: camera, variant: .init(), values: values, default: `default`)
+
+            self.init(state, for: variant, on: camera, values: values, default: `default`)
         }
 
-        init(_ state: T.Type, for camera: Camera, variant: T.Variant, values: any Collection<T.Value>, default: T.Value) {
+        init(_ state: T.Type, for variant: T.Variant, on camera: Camera, values: any Collection<T.Value>, default: T.Value) {
             self.camera = camera
             self.variant = variant
             self.values = Array(values)
             self.currentValue = values.first!
             self.defaultValue = `default`
-            
+
             refresh()
         }
         
@@ -256,7 +258,12 @@ internal extension Interactive {
 
         // InteractiveElement
         var output: String {
-            var string = "\(T.name) (\(currentValue))"
+            var string = ""
+            string += T.name
+            if !(variant is PTZNone) {
+                string += "(\(variant))"
+            }
+            string += " (\(currentValue))"
             if string.count < 30 {
                 string = string.padding(toLength: 30, withPad: " ", startingAt: 0)
             }

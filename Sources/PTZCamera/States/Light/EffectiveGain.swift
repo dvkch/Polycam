@@ -1,5 +1,5 @@
 //
-//  GainEffective.swift
+//  EffectiveGain.swift
 //  PTZ
 //
 //  Created by syan on 06/11/2024.
@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public struct PTZGainEffective: PTZScaledValue {
+public struct PTZEffectiveGain: PTZScaledValue {
     public var ptzValue: UInt16
     public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
     public static let minValue: Int = 0
@@ -20,11 +20,11 @@ public struct PTZGainEffective: PTZScaledValue {
 
 /// Measures the current ISO level when `PTZGainModeState` is set to `auto`.
 /// Discovered by fuzzing
-public struct PTZGainEffectiveState: PTZParseableState, PTZReadable {
-    public static var name: String = "GainEffective"
-    public static var register: PTZRegister<PTZNone> = .init(0x03, 0x26)
+public struct PTZEffectiveGainState: PTZParseableState, PTZReadable {
+    public static let name: String = "EffectiveGain"
+    public static let register: PTZRegister<PTZNone> = .init(0x03, 0x26)
     
-    public var value: PTZGainEffective
+    public var value: PTZEffectiveGain
     
     public init?(message: PTZMessage) {
         guard message.isValidReply(Self.register.set()) else { return nil }
