@@ -26,6 +26,9 @@ struct WriteCommand: ParsableCommand {
     
     @Option(name: .customLong("log"), help: "Log level")
     var logLevel: LogLevel = .error
+    
+    @Option(name: .customLong("continue"), help: "Continue on failure")
+    var continueOnFailure: Bool = true
 
     @Argument(help: "Operations")
     var operations: [String] = []
@@ -72,19 +75,28 @@ struct WriteCommand: ParsableCommand {
 
             throw ValidationError("Unknown state \"\(operation.state)\"")
         }
-
+        
         let camera = try Result(catching: {
             try Camera(serial: .givenOrFirst(serial), logLevel: logLevel)
         }).mapError { ValidationError($0.localizedDescription) }.get()
+
         try camera.powerOnIfNeeded()
-        
+
         for (name, action) in actions {
             do {
+                print("-> \(name)", terminator: "")
+
+                let d = Date()
                 try action(camera)
+                let t = Int(Date().timeIntervalSince(d) * 1000)
+                print(", \(t)ms")
             }
             catch {
-                print("Error running \(name): \(error)")
-                throw ExitCode.failure
+                print(", failed \(error)")
+                
+                if !continueOnFailure {
+                    throw ExitCode.failure
+                }
             }
         }
         throw ExitCode.success
