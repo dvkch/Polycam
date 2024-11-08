@@ -33,11 +33,13 @@ extension PTZScaledValue {
 
 private extension PTZScaledValue {
     static func convert(fromPTZ ptz: UInt16) -> Int {
-        let percentage: Double = Double(ptz - Self.ptzMin) / Double(Self.ptzMax - Self.ptzMin)
+        let clampedPtz = Swift.min(Self.ptzMax, Swift.max(Self.ptzMin, ptz))
+        let percentage: Double = Double(clampedPtz - Self.ptzMin) / Double(Self.ptzMax - Self.ptzMin)
         return Self.minValue + Int(round(percentage * Double(Self.maxValue - Self.minValue)))
     }
     static func convert(fromValue value: Int) -> UInt16 {
-        let percentage: Double = Double(value - Self.minValue) / Double(Self.maxValue - Self.minValue)
+        let clampValue = Swift.min(Self.maxValue, Swift.max(Self.minValue, value))
+        let percentage: Double = Double(clampValue - Self.minValue) / Double(Self.maxValue - Self.minValue)
         return Self.ptzMin + UInt16(round(percentage * Double(Self.ptzMax - Self.ptzMin)))
     }
 }
