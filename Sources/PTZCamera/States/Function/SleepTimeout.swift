@@ -29,8 +29,8 @@ public struct PTZSleepTimeout: PTZScaledValue {
 ///
 /// Unfortunately there doesn't seem to be a way to determine how long is remaining in the timeout. Setting one of the clocks could be a workaround
 public struct PTZSleepTimeoutState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "SleepTimeout"
-    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x01)
+    public static let name: String = "SleepTimeout"
+    public static let register: PTZRegister<PTZNone> = .init(0x01, 0x01)
 
     public var value: PTZSleepTimeout
     

@@ -99,8 +99,8 @@ public struct PTZLed: Equatable, CustomStringConvertible, CLIDecodable, JSONEnco
 }
 
 public struct PTZLedState: PTZReadable, PTZWritable {
-    public static var name: String = "Led"
-    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x21)
+    public static let name: String = "Led"
+    public static let register: PTZRegister<PTZNone> = .init(0x01, 0x21)
     
     public var value: PTZLed
     

@@ -36,8 +36,8 @@ public struct PTZZoomSpeed: PTZScaledValue {
 /// Starts zooming in the given direction at the requested speed.
 /// Discovered in the original program's logs, extended by fuzzing
 public struct PTZMoveZoomAction: PTZParseableState, PTZWritable {
-    public static var name: String { "MoveZoom" }
-    public static var register: PTZRegister<PTZZoomDirection> { .init(0x05, 0x00) }
+    public static let name: String = "MoveZoom"
+    public static let register: PTZRegister<PTZZoomDirection> = .init(0x05, 0x00)
     public var variant: PTZZoomDirection
     public var value: PTZZoomSpeed
     

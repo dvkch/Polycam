@@ -33,8 +33,8 @@ internal struct PTZPanOriginalAPI: PTZScaledValue {
 /// Controls the pan position.
 /// Discovered by fuzzing
 public struct PTZPanState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "Pan"
-    public static var register: PTZRegister<PTZNone> = .init(0x03, 0x04)
+    public static let name: String = "Pan"
+    public static let register: PTZRegister<PTZNone> = .init(0x03, 0x04)
     
     public var value: PTZPan
     

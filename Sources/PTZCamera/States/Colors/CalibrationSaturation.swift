@@ -22,8 +22,8 @@ public struct PTZCalibrationSaturation: PTZScaledValue {
 /// Controls the saturation for 6 distinct color ranges
 /// Discovered by fuzzing
 public struct PTZCalibrationSaturationState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "CalibrationSaturation"
-    public static var register: PTZRegister<PTZCalibrationRange> = .init(0x03, 0x5C)
+    public static let name: String = "CalibrationSaturation"
+    public static let register: PTZRegister<PTZCalibrationRange> = .init(0x03, 0x5C)
     public var variant: PTZCalibrationRange
     public var value: PTZCalibrationSaturation
     

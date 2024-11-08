@@ -11,8 +11,8 @@ import PTZMessaging
 /// Controls the white balance
 /// Discovered in the original application
 public struct PTZWhiteBalanceCalibrationAction: PTZAddressable, PTZWritable {
-    public static var name: String { "WhiteBalanceCalibration" }
-    public static var register: PTZRegister<PTZNone> = .init(0x05, 0x17)
+    public static let name: String = "WhiteBalanceCalibration"
+    public static let register: PTZRegister<PTZNone> = .init(0x05, 0x17)
     public let variant: PTZNone
     public var value: PTZNone
     

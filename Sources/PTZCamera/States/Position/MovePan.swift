@@ -36,8 +36,8 @@ public struct PTZPanSpeed: PTZScaledValue {
 /// Starts panning in the given direction at the requested speed.
 /// Discovered in the original program's logs, extended by fuzzing
 public struct PTZMovePanAction: PTZParseableState, PTZWritable {
-    public static var name: String { "MovePan" }
-    public static var register: PTZRegister<PTZPanDirection> { .init(0x05, 0x00) }
+    public static let name: String = "MovePan"
+    public static let register: PTZRegister<PTZPanDirection> = .init(0x05, 0x00)
     public var variant: PTZPanDirection
     public var value: PTZPanSpeed
     

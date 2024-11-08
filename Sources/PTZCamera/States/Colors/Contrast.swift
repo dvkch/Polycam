@@ -22,8 +22,8 @@ public struct PTZContrast: PTZScaledValue {
 /// Controls the image's contrast
 /// Discovered by fuzzing
 public struct PTZContrastState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "Contrast"
-    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x32)
+    public static let name: String = "Contrast"
+    public static let register: PTZRegister<PTZNone> = .init(0x01, 0x32)
 
     public var value: PTZContrast
     

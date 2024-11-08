@@ -13,8 +13,8 @@ import PTZMessaging
 /// program's logs
 /// Discovered by fuzzing
 public struct PTZWideDynamicRangeState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "WideDynamicRange"
-    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x34)
+    public static let name: String = "WideDynamicRange"
+    public static let register: PTZRegister<PTZNone> = .init(0x01, 0x34)
 
     public var value: PTZBool
     

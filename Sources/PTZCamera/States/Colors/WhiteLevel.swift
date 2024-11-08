@@ -19,14 +19,14 @@ public enum PTZWhiteLevel: UInt16, PTZEnumValue {
         }
     }
     
-    public static var `default`: Self = .reduced
+    public static let `default`: Self = .reduced
 }
 
 /// Controls the image's white clipping. 90% is less straining on the eyes
 /// Discovered by fuzzing
 public struct PTZWhiteLevelState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "WhiteLevel"
-    public static var register: PTZRegister<PTZNone> = .init(0x03, 0x3F)
+    public static let name: String = "WhiteLevel"
+    public static let register: PTZRegister<PTZNone> = .init(0x03, 0x3F)
 
     public var value: PTZWhiteLevel
     

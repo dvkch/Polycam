@@ -11,8 +11,8 @@ import PTZMessaging
 /// Controls the usage of more advanced features, such as `PTZGreyscaleState`, `PTZDrunkTestAction`, `PTZStatisticsState` and `PTZFocusAction`
 /// Discovered by fuzzing
 public struct PTZDevModeState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "DevMode"
-    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x0B)
+    public static let name: String = "DevMode"
+    public static let register: PTZRegister<PTZNone> = .init(0x01, 0x0B)
 
     public var value: PTZBool
     

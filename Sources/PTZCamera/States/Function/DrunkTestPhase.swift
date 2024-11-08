@@ -25,8 +25,8 @@ public enum PTZDrunkTestPhase: UInt16, PTZEnumValue {
 /// Determine the status of the self test, see `PTZDrunkTestAction`
 /// Discovered by fuzzing
 public struct PTZDrunkTestPhaseState: PTZParseableState, PTZReadable {
-    public static var name: String { "DrunkTestPhase" }
-    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x42)
+    public static let name: String = "DrunkTestPhase"
+    public static let register: PTZRegister<PTZNone> = .init(0x01, 0x42)
     public let variant: PTZNone = .init()
     public var value: PTZDrunkTestPhase
     

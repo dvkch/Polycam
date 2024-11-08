@@ -11,8 +11,8 @@ import PTZMessaging
 /// Controls the camera's integrated noise reduction. Without it the image becomes very noisy and jittery in low light
 /// Discovered by fuzzing
 public struct PTZNoiseReductionState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "NoiseReduction"
-    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x3C)
+    public static let name: String = "NoiseReduction"
+    public static let register: PTZRegister<PTZNone> = .init(0x01, 0x3C)
 
     public var value: PTZBool
     

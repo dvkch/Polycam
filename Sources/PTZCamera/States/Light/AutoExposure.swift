@@ -11,8 +11,8 @@ import PTZMessaging
 /// Controls the auto exposure
 /// Discovered in the original application's logs
 public struct PTZAutoExposureState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "AutoExposure"
-    public static var register: PTZRegister<PTZNone> = .init(0x02, 0x11)
+    public static let name: String = "AutoExposure"
+    public static let register: PTZRegister<PTZNone> = .init(0x02, 0x11)
 
     public var value: PTZBool
     

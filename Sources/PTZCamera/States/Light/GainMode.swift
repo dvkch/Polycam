@@ -32,8 +32,8 @@ public enum PTZGainMode: UInt16, PTZEnumValue {
 /// Controls the ISO
 /// Discovered in the original application's logs, extended through fuzzing
 public struct PTZGainModeState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "GainMode"
-    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x31)
+    public static let name: String = "GainMode"
+    public static let register: PTZRegister<PTZNone> = .init(0x01, 0x31)
     
     public var value: PTZGainMode
     

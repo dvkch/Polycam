@@ -64,7 +64,7 @@ public struct PTZCalibrationMatrix: Equatable, CustomStringConvertible, CLIDecod
 }
 
 public struct PTZCalibrationMatrixState: PTZReadableCombo, PTZWriteableCombo {
-    public static var name: String = "CalibrationMatrix"
+    public static let name: String = "CalibrationMatrix"
     
     public let variant = PTZNone()
     public var value: PTZCalibrationMatrix

@@ -11,8 +11,8 @@ import PTZMessaging
 /// Controls backlight compensation
 /// Discovered in the original application's logs
 public struct PTZBacklightCompensationState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "BacklightCompensation"
-    public static var register: PTZRegister<PTZNone> = .init(0x02, 0x15)
+    public static let name: String = "BacklightCompensation"
+    public static let register: PTZRegister<PTZNone> = .init(0x02, 0x15)
 
     public var value: PTZBool
     

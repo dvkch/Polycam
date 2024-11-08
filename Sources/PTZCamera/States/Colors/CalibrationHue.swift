@@ -42,8 +42,8 @@ public struct PTZCalibrationHue: PTZScaledValue {
 /// Controls the hue for 6 distinct color ranges
 /// Discovered by fuzzing
 public struct PTZCalibrationHueState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "CalibrationHue"
-    public static var register: PTZRegister<PTZCalibrationRange> = .init(0x03, 0x50)
+    public static let name: String = "CalibrationHue"
+    public static let register: PTZRegister<PTZCalibrationRange> = .init(0x03, 0x50)
     public var variant: PTZCalibrationRange
     public var value: PTZCalibrationHue
     

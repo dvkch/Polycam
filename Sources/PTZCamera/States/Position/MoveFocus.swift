@@ -36,8 +36,8 @@ public struct PTZFocusSpeed: PTZScaledValue {
 /// Starts focusing in the given direction at the requested speed. This is only possible when `PTZAutoFocusState` is `off`.
 /// Discovered by fuzzing
 public struct PTZMoveFocusAction: PTZParseableState, PTZWritable {
-    public static var name: String { "MoveFocus" }
-    public static var register: PTZRegister<PTZFocusDirection> { .init(0x05, 0x00) }
+    public static let name: String = "MoveFocus"
+    public static let register: PTZRegister<PTZFocusDirection> = .init(0x05, 0x00)
     public var variant: PTZFocusDirection
     public var value: PTZFocusSpeed
     

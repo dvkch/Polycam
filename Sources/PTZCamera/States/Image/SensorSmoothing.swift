@@ -11,8 +11,8 @@ import PTZMessaging
 /// Controls the camera's integrated sensor subpixel "smoothing". Without it the image seems a bit crisper but some dead pixels appear
 /// Discovered by fuzzing
 public struct PTZSensorSmoothingState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "SensorSmoothing"
-    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x3B)
+    public static let name: String = "SensorSmoothing"
+    public static let register: PTZRegister<PTZNone> = .init(0x01, 0x3B)
 
     public var value: PTZBool
     

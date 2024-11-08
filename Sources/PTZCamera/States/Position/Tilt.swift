@@ -33,8 +33,8 @@ internal struct PTZTiltOriginalAPI: PTZScaledValue {
 /// Controls the tilt position.
 /// Discovered by fuzzing
 public struct PTZTiltState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "Tilt"
-    public static var register: PTZRegister<PTZNone> = .init(0x03, 0x05)
+    public static let name: String = "Tilt"
+    public static let register: PTZRegister<PTZNone> = .init(0x03, 0x05)
     
     public var value: PTZTilt
     

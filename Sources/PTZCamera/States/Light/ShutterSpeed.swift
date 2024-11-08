@@ -39,14 +39,14 @@ public enum PTZShutterSpeed: UInt16, PTZEnumValue {
         }
     }
     
-    public static var `default`: Self = .auto
+    public static let `default`: Self = .auto
 }
 
 /// Controls the shutter speed
 /// Discovered in the original program's logs, extended by fuzzing
 public struct PTZShutterSpeedState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "ShutterSpeed"
-    public static var register: PTZRegister<PTZNone> = .init(0x02, 0x14)
+    public static let name: String = "ShutterSpeed"
+    public static let register: PTZRegister<PTZNone> = .init(0x02, 0x14)
     
     public var value: PTZShutterSpeed
     

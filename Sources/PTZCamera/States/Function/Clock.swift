@@ -35,7 +35,7 @@ extension UInt32: CLIDecodable, JSONEncodable {
 /// Discovered by fuzzing
 public struct PTZClockState: PTZReadable, PTZWritable {
     public static let name = "Clock"
-    public static var register: PTZRegister<PTZClock> = .init(0x01, 0x5D)
+    public static let register: PTZRegister<PTZClock> = .init(0x01, 0x5D)
 
     public var variant: PTZClock
     public var value: UInt32

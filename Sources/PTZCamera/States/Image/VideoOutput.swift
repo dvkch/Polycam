@@ -29,8 +29,8 @@ public enum PTZVideoOutput: UInt16, PTZEnumValue {
 /// Switch video mode
 /// Discovered in the original application's logs
 public struct PTZVideoOutputState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "VideoOutput"
-    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x13)
+    public static let name: String = "VideoOutput"
+    public static let register: PTZRegister<PTZNone> = .init(0x01, 0x13)
     
     public var value: PTZVideoOutput
     

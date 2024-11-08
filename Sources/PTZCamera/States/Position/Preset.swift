@@ -37,8 +37,8 @@ public enum PTZPreset: UInt8, PTZVariant {
 ///
 /// There doesn't seem to be a way to directly save the current position to a preset, or set the current position from a preset, in a single request.
 public struct PTZPresetState: PTZReadable, PTZWritable {
-    public static var name: String = "Preset"
-    public static var register: PTZRegister<PTZPreset> = .init(0x01, 0x60)
+    public static let name: String = "Preset"
+    public static let register: PTZRegister<PTZPreset> = .init(0x01, 0x60)
     public var variant: PTZPreset
     public var value: PTZPosition
     

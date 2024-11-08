@@ -36,8 +36,8 @@ public struct PTZTiltSpeed: PTZScaledValue {
 /// Starts tilting in the given direction at the requested speed.
 /// Discovered in the original program's logs, extended by fuzzing
 public struct PTZMoveTiltAction: PTZParseableState, PTZWritable {
-    public static var name: String { "MoveTilt" }
-    public static var register: PTZRegister<PTZTiltDirection> { .init(0x05, 0x00) }
+    public static let name: String = "MoveTilt"
+    public static let register: PTZRegister<PTZTiltDirection> = .init(0x05, 0x00)
     public var variant: PTZTiltDirection
     public var value: PTZTiltSpeed
     

@@ -21,8 +21,8 @@ import PTZMessaging
 /// - phase 2 can be stopped by sending a SetPosition or Move request. Obtaining the phase will
 ///   still return 2, but the autonomous camera movements will quickly stop
 public struct PTZDrunkTestAction: PTZWritable {
-    public static var name: String { "DrunkTest" }
-    public static var register: PTZRegister<PTZNone> = .init(0x05, 0x14)
+    public static let name: String = "DrunkTest"
+    public static let register: PTZRegister<PTZNone> = .init(0x05, 0x14)
     public let variant: PTZNone
     public var value: PTZNone
     

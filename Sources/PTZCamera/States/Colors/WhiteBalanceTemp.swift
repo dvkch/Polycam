@@ -22,8 +22,8 @@ public struct PTZWhiteBalanceTemp: PTZScaledValue {
 /// Controls the white balance temperature, from blue to yellow
 /// Discovered by fuzzing
 public struct PTZWhiteBalanceTempState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "WhiteBalanceTemp"
-    public static var register: PTZRegister<PTZNone> = .init(0x03, 0x41)
+    public static let name: String = "WhiteBalanceTemp"
+    public static let register: PTZRegister<PTZNone> = .init(0x03, 0x41)
 
     public var value: PTZWhiteBalanceTemp
     

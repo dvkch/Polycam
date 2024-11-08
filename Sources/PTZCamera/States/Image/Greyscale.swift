@@ -13,8 +13,8 @@ import PTZMessaging
 ///
 /// Only available in dev mode
 public struct PTZGreyscaleState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "Greyscale"
-    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x3A)
+    public static let name: String = "Greyscale"
+    public static let register: PTZRegister<PTZNone> = .init(0x01, 0x3A)
 
     public var value: PTZBool
     

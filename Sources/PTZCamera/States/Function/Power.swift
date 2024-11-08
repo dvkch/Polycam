@@ -27,8 +27,8 @@ public enum PTZPower: UInt16, PTZEnumValue {
 /// Controls the device's powered on status
 /// Discovered in the original application's log
 public struct PTZPowerState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "Power"
-    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x00)
+    public static let name: String = "Power"
+    public static let register: PTZRegister<PTZNone> = .init(0x01, 0x00)
     
     public var value: PTZPower
     

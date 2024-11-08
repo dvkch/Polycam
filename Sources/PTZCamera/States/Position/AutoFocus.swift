@@ -11,8 +11,8 @@ import PTZMessaging
 /// Controls the ability to focus manually or automatically.
 /// Discovered by fuzzing
 public struct PTZAutoFocusState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "AutoFocus"
-    public static var register: PTZRegister<PTZNone> = .init(0x02, 0x09)
+    public static let name: String = "AutoFocus"
+    public static let register: PTZRegister<PTZNone> = .init(0x02, 0x09)
 
     public var value: PTZBool
     

@@ -22,8 +22,8 @@ public struct PTZSaturation: PTZScaledValue {
 /// Controls the image's saturation
 /// Discovered in the original appplication's logs
 public struct PTZSaturationState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "Saturation"
-    public static var register: PTZRegister<PTZNone> = .init(0x03, 0x3E)
+    public static let name: String = "Saturation"
+    public static let register: PTZRegister<PTZNone> = .init(0x03, 0x3E)
     
     public var value: PTZSaturation
     

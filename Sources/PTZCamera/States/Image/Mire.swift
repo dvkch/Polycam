@@ -1,5 +1,5 @@
 //
-//  MireMode.swift
+//  Mire.swift
 //  PTZ
 //
 //  Created by syan on 06/08/2024.
@@ -11,8 +11,8 @@ import PTZMessaging
 /// Disables proper video output and just shows a mire
 /// Discovered by fuzzing
 public struct PTZMireState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "Mire"
-    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x10)
+    public static let name: String = "Mire"
+    public static let register: PTZRegister<PTZNone> = .init(0x01, 0x10)
 
     public var value: PTZBool
     

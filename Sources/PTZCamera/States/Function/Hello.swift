@@ -27,8 +27,8 @@ public struct PTZHello: Equatable, CustomStringConvertible, JSONEncodable {
 /// Get a hello response to determine the camera type and its components versions
 /// Discovered in the original application's log
 public struct PTZHelloState: PTZReadable {
-    public static var name: String = "Hello"
-    public static var register: PTZRegister<PTZNone> = .init(0x06, 0x77)
+    public static let name: String = "Hello"
+    public static let register: PTZRegister<PTZNone> = .init(0x06, 0x77)
     
     public var value: PTZHello
     

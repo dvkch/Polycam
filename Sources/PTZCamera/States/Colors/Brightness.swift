@@ -22,8 +22,8 @@ public struct PTZBrightness: PTZScaledValue {
 /// Controls the image's brightness
 /// Discovered in the original appplication's logs
 public struct PTZBrightnessState: PTZParseableState, PTZReadable, PTZWritable {
-    public static var name: String = "Brightness"
-    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x33)
+    public static let name: String = "Brightness"
+    public static let register: PTZRegister<PTZNone> = .init(0x01, 0x33)
 
     public var value: PTZBrightness
     

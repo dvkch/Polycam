@@ -52,7 +52,7 @@ public struct PTZLedIntensity: Equatable, CustomStringConvertible, CLIDecodable,
 /// Discovered in the original application's log as Volume, extended through fuzzing
 public struct PTZLedIntensityState: PTZReadable, PTZWritable {
     public static let name: String = "LedIntensity"
-    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x25)
+    public static let register: PTZRegister<PTZNone> = .init(0x01, 0x25)
 
     public var value: PTZLedIntensity
     
