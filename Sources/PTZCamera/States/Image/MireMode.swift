@@ -1,6 +1,6 @@
 //
 //  MireMode.swift
-//
+//  PTZ
 //
 //  Created by syan on 06/08/2024.
 //

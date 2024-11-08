@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZWhiteLevel: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
+public enum PTZWhiteLevel: UInt16, PTZEnumValue {
     case reduced = 0x5A
     case full = 0x64
 
@@ -19,7 +19,7 @@ public enum PTZWhiteLevel: UInt16, CustomStringConvertible, CaseIterable, PTZVal
         }
     }
     
-    public static var `default`: PTZWhiteLevel { .reduced }
+    public static var `default`: Self = .reduced
 }
 
 /// Controls the image's white clipping. 90% is less straining on the eyes

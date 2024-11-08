@@ -1,6 +1,6 @@
 //
 //  Brightness.swift
-//
+//  PTZ
 //
 //  Created by syan on 05/07/2024.
 //
@@ -9,13 +9,14 @@ import Foundation
 import PTZMessaging
 
 public struct PTZBrightness: PTZScaledValue {
-    public var rawValue: Int
-    public init(rawValue: Int) { self.rawValue = rawValue }
-    public static var minValue: Int = 1
-    public static var maxValue: Int = 20
-    public static var ptzOffset: Int = 117
-    public static var ptzScale: Double = 1
-    public static var `default`: PTZBrightness { .init(rawValue: 11) }
+    public var ptzValue: UInt16
+    public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
+    public static let minValue: Int = 0
+    public static let maxValue: Int = 100
+    public static let ptzMin: UInt16 = 0x76
+    public static let ptzMax: UInt16 = 0x8A
+    public static let unit: String = "%"
+    public static let `default`: Self = .mid
 }
 
 /// Controls the image's brightness

@@ -1,6 +1,6 @@
 //
 //  VideoOutput.swift
-//
+//  PTZ
 //
 //  Created by syan on 05/07/2024.
 //
@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZVideoOutput: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
+public enum PTZVideoOutput: UInt16, PTZEnumValue {
     case unknown00         = 0x00
     case unknown0A         = 0x0a
     case resolution720p60  = 0x10

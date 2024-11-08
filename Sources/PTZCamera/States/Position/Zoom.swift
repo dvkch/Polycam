@@ -1,6 +1,6 @@
 //
 //  Zoom.swift
-//
+//  PTZ
 //
 //  Created by syan on 13/09/2024.
 //
@@ -9,22 +9,25 @@ import Foundation
 import PTZMessaging
 
 public struct PTZZoom: PTZScaledValue {
-    public var rawValue: Int
-    public init(rawValue: Int) { self.rawValue = rawValue }
-    public static var minValue: Int = 64
-    public static var maxValue: Int = 2229 // max bytes are 11 35
-    public static var ptzOffset: Int = 0
-    public static var ptzScale: Double = 1
-    public static var `default`: PTZZoom { .min }
+    public var ptzValue: UInt16
+    public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
+    public static var minValue: Int = 0
+    public static var maxValue: Int = 100
+    public static var ptzMin: UInt16 = 0x40
+    public static var ptzMax: UInt16 = 0x08_B5
+    public static var unit: String = ""
+    public static var `default`: Self = .min
 }
 
 internal struct PTZZoomOriginalAPI: PTZScaledValue {
-    var rawValue: Int
-    static var minValue: Int = -49_772
-    static var maxValue: Int = 17_663
-    static var ptzOffset: Int = 1146
-    static var ptzScale: Double = 0.021739 // <- this one is perfect match to read values, but 0.0217246 is closer to our Set fixtures
-    static var `default`: PTZZoomOriginalAPI { .init(rawValue: 0) }
+    public var ptzValue: UInt16
+    public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
+    static let minValue: Int = -49_772
+    static let maxValue: Int = 17_663
+    static let ptzMin: UInt16 = 0x40
+    static let ptzMax: UInt16 = 0x08_B5
+    static let unit: String = ""
+    static let `default`: Self = .min
     // FROM: (8D 41 51 24 00 03 68 00 00 7A 03) 00 00 40
     // TO:   (8D 41 51 24 00 03 68 00 00 7A 03) 02 05 79
     // 00 40 -> 05 F9

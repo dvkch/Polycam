@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZPanDirection: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
+public enum PTZPanDirection: UInt16, PTZEnumValue {
     case right  = 0x00
     case left   = 0x01
     case stop   = 0x02
@@ -22,24 +22,15 @@ public enum PTZPanDirection: UInt16, CaseIterable, CustomStringConvertible, PTZV
     }
 }
 
-#warning("can go from 10 to 1F")
-public enum PTZPanSpeed: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
-    case speed1 = 0x11
-    case speed2 = 0x13
-    case speed3 = 0x15
-    case speed4 = 0x17
-    case speed5 = 0x19
-    public static var `default`: PTZPanSpeed { .speed4 }
-    
-    public var description: String {
-        switch self {
-        case .speed1: return "20%"
-        case .speed2: return "40%"
-        case .speed3: return "60%"
-        case .speed4: return "80%"
-        case .speed5: return "100%"
-        }
-    }
+public struct PTZPanSpeed: PTZScaledValue {
+    public var ptzValue: UInt16
+    public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
+    public static let minValue: Int = 0
+    public static let maxValue: Int = 100
+    public static let ptzMin: UInt16 = 0x10
+    public static let ptzMax: UInt16 = 0x1F
+    public static let unit: String = "%"
+    public static let `default`: Self = .mid
 }
 
 /// Starts panning in the given direction at the requested speed.

@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZShutterSpeed: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
+public enum PTZShutterSpeed: UInt16, PTZEnumValue {
     /// was called zero in ADB logs
     case auto    = 0x00
     /// setting to either `0x01` or `0x02` reads back as `0x02`. the decompiled source code shows that they are
@@ -39,7 +39,7 @@ public enum PTZShutterSpeed: UInt16, CustomStringConvertible, CaseIterable, PTZV
         }
     }
     
-    public static var `default`: PTZShutterSpeed { .auto }
+    public static var `default`: Self = .auto
 }
 
 /// Controls the shutter speed

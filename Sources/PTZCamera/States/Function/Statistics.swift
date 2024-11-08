@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZStatisticsGroup: UInt16, CaseIterable, PTZValue {
+public enum PTZStatisticsGroup: UInt16, PTZEnumValue {
     #warning("// left might be camera power cycles?")
     case unknownAndNone = 0x59
     case focusAndZoom   = 0x5A

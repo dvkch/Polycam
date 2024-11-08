@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZDrunkTestPhase: UInt16, CaseIterable, PTZValue {
+public enum PTZDrunkTestPhase: UInt16, PTZEnumValue {
     case neverLaunched = 0
     case running = 1
     case finishingOrFinished = 2

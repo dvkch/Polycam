@@ -1,6 +1,6 @@
 //
 //  Clock.swift
-//
+//  PTZ
 //
 //  Created by syan on 11/09/2024.
 //
@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZClock: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
+public enum PTZClock: UInt16, PTZEnumValue {
     case clock1 = 0x5D
     case clock2 = 0x5E
     

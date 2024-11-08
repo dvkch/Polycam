@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZPreset: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
+public enum PTZPreset: UInt16, PTZEnumValue {
     case one    = 0x00
     case two    = 0x01
     case three  = 0x02

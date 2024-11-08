@@ -1,6 +1,6 @@
 //
 //  Pan.swift
-//
+//  PTZ
 //
 //  Created by syan on 13/09/2024.
 //
@@ -9,22 +9,25 @@ import Foundation
 import PTZMessaging
 
 public struct PTZPan: PTZScaledValue {
-    public var rawValue: Int
-    public init(rawValue: Int) { self.rawValue = rawValue }
-    public static var minValue: Int = 0
-    public static var maxValue: Int = 2000 // max bytes are 0F 50
-    public static var ptzOffset: Int = 0
-    public static var ptzScale: Double = 1
-    public static var `default`: PTZPan { .mid }
+    public var ptzValue: UInt16
+    public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
+    public static let minValue: Int = -100
+    public static let maxValue: Int = 100
+    public static let ptzMin: UInt16 = 0
+    public static let ptzMax: UInt16 = 0x07_D0
+    public static let unit: String = ""
+    public static let `default`: Self = .mid
 }
 
 internal struct PTZPanOriginalAPI: PTZScaledValue {
-    var rawValue: Int
+    public var ptzValue: UInt16
+    public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
     static var minValue: Int = -50_000
     static var maxValue: Int =  50_000
-    static var ptzOffset: Int = 1_000
-    static var ptzScale: Double = 0.02
-    static var `default`: PTZPanOriginalAPI { .init(rawValue: 0) }
+    static var ptzMin: UInt16 = 0
+    static var ptzMax: UInt16 = 0x07_D0
+    static var unit: String = ""
+    static var `default`: Self = .mid
 }
 
 /// Controls the pan position.

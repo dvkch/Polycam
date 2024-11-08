@@ -137,7 +137,7 @@ internal extension Interactive {
         }
 
         convenience init(_ state: T.Type, for camera: Camera, default: T.Value) where T.Variant == PTZNone, T.Value: PTZValue {
-            self.init(state, for: camera, variant: .init(), values: T.Value.testValues, default: `default`)
+            self.init(state, for: camera, variant: .init(), values: T.Value.allCases, default: `default`)
         }
 
         init(_ state: T.Type, for camera: Camera, variant: T.Variant, values: any Collection<T.Value>, default: T.Value) {

@@ -1,6 +1,6 @@
 //
 //  Power.swift
-//
+//  PTZ
 //
 //  Created by syan on 05/07/2024.
 //
@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZPower: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
+public enum PTZPower: UInt16, PTZEnumValue {
     case on         = 0x00
     case sleeping   = 0x02
     case standby    = 0x10

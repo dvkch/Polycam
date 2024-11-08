@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZWhiteBalance: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
+public enum PTZWhiteBalance: UInt16, PTZEnumValue {
     case auto      =  1
     case manual    =  4
     case temp2300K =  5
@@ -20,8 +20,8 @@ public enum PTZWhiteBalance: UInt16, CustomStringConvertible, CaseIterable, PTZV
     
     public var description: String {
         switch self {
-        case .auto: return "auto"
-        case .manual: return "manual"
+        case .auto:      return "auto"
+        case .manual:    return "manual"
         case .temp2300K: return "2300K"
         case .temp2856K: return "2856K"
         case .temp3450K: return "3450K"
@@ -31,7 +31,7 @@ public enum PTZWhiteBalance: UInt16, CustomStringConvertible, CaseIterable, PTZV
         }
     }
     
-    public static var `default`: PTZWhiteBalance { .auto }
+    public static let `default`: Self = .auto
 }
 
 /// Controls the white balance

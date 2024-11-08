@@ -9,13 +9,14 @@ import Foundation
 import PTZMessaging
 
 public struct PTZSaturation: PTZScaledValue {
-    public var rawValue: Int
-    public init(rawValue: Int) { self.rawValue = rawValue }
-    public static var minValue: Int = 1
-    public static var maxValue: Int = 11
-    public static var ptzOffset: Int = 122
-    public static var ptzScale: Double = 1
-    public static var `default`: PTZSaturation { .init(rawValue: 6) }
+    public var ptzValue: UInt16
+    public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
+    public static let minValue: Int = 0
+    public static let maxValue: Int = 100
+    public static let ptzMin: UInt16 = 0x7B
+    public static let ptzMax: UInt16 = 0x85
+    public static let unit: String = "%"
+    public static let `default`: Self = .mid
 }
 
 /// Controls the image's saturation

@@ -9,13 +9,13 @@ import Foundation
 import PTZMessaging
 
 public struct PTZGainEffective: PTZScaledValue {
-    public var rawValue: Int
-    public init(rawValue: Int) { self.rawValue = rawValue }
-    public static var minValue: Int = 0
-    public static var maxValue: Int = 70
-    public static var ptzOffset: Int = 0
-    public static var ptzScale: Double = 5
-    public var description: String { "\(rawValue)dB" }
+    public var ptzValue: UInt16
+    public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
+    public static let minValue: Int = 0
+    public static let maxValue: Int = 14
+    public static let ptzMin: UInt16 = 0x00
+    public static let ptzMax: UInt16 = 0x46
+    public static let unit: String = "dB"
 }
 
 /// Measures the current ISO level when `PTZGainModeState` is set to `auto`.

@@ -1,6 +1,6 @@
 //
 //  Focus.swift
-//
+//  PTZ
 //
 //  Created by syan on 13/09/2024.
 //
@@ -9,12 +9,13 @@ import Foundation
 import PTZMessaging
 
 public struct PTZFocus: PTZScaledValue {
-    public var rawValue: Int
-    public init(rawValue: Int) { self.rawValue = rawValue }
-    public static var minValue: Int = 240
-    public static var maxValue: Int = 768 // max bytes are 06 00
-    public static var ptzOffset: Int = 0
-    public static var ptzScale: Double = 1
+    public var ptzValue: UInt16
+    public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
+    public static let minValue: Int = 0
+    public static let maxValue: Int = 100
+    public static let ptzMin: UInt16 = 0xF0
+    public static let ptzMax: UInt16 = 0x300
+    public static let unit: String = ""
 }
 
 /// Controls the focus position. This is only possible when `PTZAutoFocusState` is `off`

@@ -1,6 +1,6 @@
 //
 //  GainMode.swift
-//
+//  PTZ
 //
 //  Created by syan on 05/07/2024.
 //
@@ -8,15 +8,14 @@
 import Foundation
 import PTZMessaging
 
-// Kind of an equivalent to ISO
-public enum PTZGainMode: UInt16, CaseIterable, CustomStringConvertible, PTZValue {
+public enum PTZGainMode: UInt16, PTZEnumValue {
     case gain0dB    = 0x00
     case gain3dB    = 0x01
     case gain6dB    = 0x02
     case gain9dB    = 0x03
     case gain12dB   = 0x04
     case auto       = 0x05
-    public static var `default`: PTZGainMode { .auto }
+    public static let `default`: Self = .auto
     
     public var description: String {
         switch self {

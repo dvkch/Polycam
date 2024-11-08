@@ -1,6 +1,6 @@
 //
 //  Led.swift
-//
+//  PTZ
 //
 //  Created by syan on 05/07/2024.
 //
@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZLedColor: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
+public enum PTZLedColor: UInt16, PTZEnumValue {
     case off    = 0x00
     case green  = 0x01
     case blue   = 0x02
@@ -34,7 +34,7 @@ public enum PTZLedColor: UInt16, CustomStringConvertible, CaseIterable, PTZValue
     public static var `default`: PTZLedColor { .blue }
 }
 
-public enum PTZLedMode: UInt16, CustomStringConvertible, CaseIterable, PTZValue {
+public enum PTZLedMode: UInt16, PTZEnumValue {
     case off = 0x00
     case on  = 0x10
     case onceQuarterSecond  = 0x20

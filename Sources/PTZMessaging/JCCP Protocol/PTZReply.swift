@@ -1,6 +1,6 @@
 //
 //  PTZReply.swift
-//
+//  PTZ
 //
 //  Created by syan on 30/12/2023.
 //
@@ -17,7 +17,7 @@ public enum PTZReply: CustomStringConvertible {
     case state(bytes: Bytes, state: any PTZReadable)
     case unknown(bytes: Bytes)
 
-    public enum CommandError: UInt16, RawRepresentable, CaseIterable, CustomStringConvertible, PTZValue {
+    public enum CommandError: UInt16, PTZEnumValue {
         case modeCondition      = 0x00
         case panMotorWarning    = 0x01
         case tiltMotorWarning   = 0x02
