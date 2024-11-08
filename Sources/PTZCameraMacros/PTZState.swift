@@ -31,11 +31,12 @@ internal extension FreestandingMacroExpansionSyntax {
 
 internal struct PTZState: DeclarationMacro {
     static func expansion(of node: some FreestandingMacroExpansionSyntax, in context: some MacroExpansionContext) throws -> [DeclSyntax] {
+        let kinds = ["RWD", "RW", "R", "W"]
         guard let kind = node.argument(at: 0, as: StringLiteralExprSyntax.self)?.segments.first?.description else {
-            throw PTZCameraMacrosError.message("Argument at index 0 should be the state kind ('RW', 'R', 'W')")
+            throw PTZCameraMacrosError.message("Argument at index 0 should be the state kind (\(kinds.joined(separator: ", ")))")
         }
-        guard ["RW", "R", "W"].contains(kind) else {
-            throw PTZCameraMacrosError.message("Unknown state kind '\(kind)', should be 'RW', 'R', or 'W'")
+        guard kinds.contains(kind) else {
+            throw PTZCameraMacrosError.message("Unknown state kind '\(kind)', should be one of \(kinds.joined(separator: ", "))")
         }
         
         let stateType   = try node.typeArgument(at: 1)
@@ -52,6 +53,8 @@ internal struct PTZState: DeclarationMacro {
 
         var getter: DeclSyntax = ""
         var setter: DeclSyntax = ""
+        let debounceDef = kind == "RWD" ? ", debounce: Bool = true" : ""
+        let debounceArg = kind == "RWD" ? ", debounce: debounce" : ""
 
         if variantType.description != "PTZNone" && valueType.description != "PTZNone" {
             if kind.contains("R") {
@@ -65,8 +68,8 @@ internal struct PTZState: DeclarationMacro {
             if kind.contains("W") {
                 setter =
                 """
-                func \(raw: setterName)(_ value: \(valueType), for variant: \(variantType)) throws(CameraError) {
-                    try set(\(stateType)(value, for: variant))
+                func \(raw: setterName)(_ value: \(valueType), for variant: \(variantType)\(raw: debounceDef)) throws(CameraError) {
+                    try set(\(stateType)(value, for: variant)\(raw: debounceArg))
                 }
                 """
             }
@@ -83,8 +86,8 @@ internal struct PTZState: DeclarationMacro {
             if kind.contains("W") {
                 setter =
                 """
-                func \(raw: setterName)(_ value: \(valueType)) throws(CameraError) {
-                    try set(\(stateType)(value))
+                func \(raw: setterName)(_ value: \(valueType)\(raw: debounceDef)) throws(CameraError) {
+                    try set(\(stateType)(value)\(raw: debounceArg))
                 }
                 """
             }
