@@ -9,8 +9,8 @@ import Foundation
 
 public extension Camera {
     func powerOnIfNeeded() throws(CameraError) {
-        guard try power() == .on else { return }
-        try powerOnIfNeeded()
+        guard try power() != .on else { return }
+        try powerOn()
     }
 
     func powerOn() throws(CameraError) {
@@ -21,7 +21,7 @@ public extension Camera {
             Thread.sleep(forTimeInterval: 0.05)
         }
         try setDevMode(.on)
-        try setMire(.on)
+        try setMire(.off)
         try setGreyscale(.off)
         try setLed(.init(color: .default, mode: .default))
         try setLedIntensity(.init(r: .default, g: .default, b: .default))
