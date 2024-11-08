@@ -123,6 +123,12 @@ public struct PTZBool: PTZValue {
     }
 }
 
+extension PTZBool: ExpressibleByBooleanLiteral {
+    public init(booleanLiteral value: BooleanLiteralType) {
+        self.init(rawValue: value)
+    }
+}
+
 extension PTZValue where Self: CaseIterable, Self: RawRepresentable, RawValue == UInt16 {
     public init(ptzValue: UInt16) {
         self = Self.allCases.first(where: { $0.ptzValue == ptzValue })!

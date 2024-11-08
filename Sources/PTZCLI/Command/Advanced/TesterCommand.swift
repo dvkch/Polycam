@@ -23,8 +23,7 @@ struct TesterCommand: ParsableCommand {
         Camera.registerKnownStates()
 
         let camera = try Camera(serial: .givenOrFirst(serial), logLevel: logLevel)
-        camera.powerOn()
-        camera.devMode = true
+        try camera.powerOn()
 
         try! testRandomThingy(camera: camera)
     }

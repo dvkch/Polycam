@@ -1,5 +1,5 @@
 import XCTest
-@testable import SwiftPTZ
+@testable import PTZCamera
 
 final class FixtureTests: XCTestCase {
     func obtainFixture(category: String, name: String) -> URL {

@@ -15,11 +15,10 @@ struct PTZCLI: ParsableCommand {
         abstract: "PTZ",
         version: "1.0",
         subcommands: [
-            AdvancedCommand.self,
-            BenchmarkCommand.self,
             InteractiveCommand.self,
             ReadCommand.self,
-            WriteCommand.self
+            WriteCommand.self,
+            AdvancedCommand.self,
         ]
     )
     

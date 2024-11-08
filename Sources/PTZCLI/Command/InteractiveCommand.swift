@@ -21,30 +21,30 @@ struct InteractiveCommand: ParsableCommand {
         Camera.registerKnownStates()
 
         let camera = try Camera(serial: .givenOrFirst(serial), logLevel: .error)
-        camera.powerOn()
+        try camera.powerOn()
         
         var moveActions: [Interactive.Action<String>] = []
         PTZPanDirection.allCases.forEach { dir in
             moveActions.append(Interactive.Action(name: dir.description, state: "") { _ in
-                camera.send(PTZMovePanAction(.default, for: dir).set())
+                try? camera.startMovePan(.default, for: dir)
                 return ""
             })
         }
         PTZTiltDirection.allCases.forEach { dir in
             moveActions.append(Interactive.Action(name: dir.description, state: "") { _ in
-                camera.send(PTZMoveTiltAction(.default, for: dir).set())
+                try? camera.startMoveTilt(.default, for: dir)
                 return ""
             })
         }
         PTZZoomDirection.allCases.forEach { dir in
             moveActions.append(Interactive.Action(name: dir.description, state: "") { _ in
-                camera.send(PTZMoveZoomAction(.default, for: dir).set())
+                try? camera.startMoveZoom(.default, for: dir)
                 return ""
             })
         }
         PTZFocusDirection.allCases.forEach { dir in
             moveActions.append(Interactive.Action(name: dir.description, state: "") { _ in
-                camera.send(PTZMoveFocusAction(.default, for: dir).set())
+                try? camera.startMoveFocus(.default, for: dir)
                 return ""
             })
         }

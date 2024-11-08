@@ -22,10 +22,10 @@ struct BenchmarkCommand: ParsableCommand {
         Camera.registerKnownStates()
 
         let camera = try Camera(serial: .givenOrFirst(serial), logLevel: .error)
-        camera.powerOn()
+        try camera.powerOn()
         
         // we had some issues were working around timings would fuck up the reading of the hello reply, let's make sure it is still working properly
-        _ = try camera.get(PTZHelloState.self)
+        _ = try camera.hello()
         
         // proper benchmarking
         let d = Date()

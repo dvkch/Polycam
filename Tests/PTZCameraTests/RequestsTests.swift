@@ -8,7 +8,7 @@
 import Foundation
 
 import XCTest
-@testable import SwiftPTZ
+@testable import PTZCamera
 
 #warning("complete test coverage with new states and actions")
 #warning("add tests for actual byte responses")

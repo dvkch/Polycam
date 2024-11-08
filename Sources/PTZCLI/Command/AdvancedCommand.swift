@@ -9,5 +9,7 @@ import Foundation
 import ArgumentParser
 
 struct AdvancedCommand: ParsableCommand {
-    static var configuration: CommandConfiguration = .init(commandName: "advanced", subcommands: [FuzzerCommand.self, TesterCommand.self])
+    static var configuration: CommandConfiguration = .init(commandName: "advanced", subcommands: [
+        BenchmarkCommand.self, FuzzerCommand.self, TesterCommand.self
+    ])
 }

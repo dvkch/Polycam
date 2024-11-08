@@ -39,7 +39,7 @@ struct ReadCommand: ParsableCommand {
             return (serial, camera)
         }).mapError { ValidationError($0.localizedDescription) }.get()
 
-        camera.powerOnIfNeeded()
+        try camera.powerOnIfNeeded()
         
         var result = [String: JSONValue]()
         result["device"] = serial.rawValue

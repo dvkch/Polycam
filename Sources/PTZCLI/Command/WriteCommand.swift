@@ -42,7 +42,7 @@ struct WriteCommand: ParsableCommand {
             }
 
             if operation.0 == "boot" {
-                actions.append(("boot", { $0.powerOn() }))
+                actions.append(("boot", { try $0.powerOn() }))
                 continue
             }
             
@@ -76,7 +76,7 @@ struct WriteCommand: ParsableCommand {
         let camera = try Result(catching: {
             try Camera(serial: .givenOrFirst(serial), logLevel: logLevel)
         }).mapError { ValidationError($0.localizedDescription) }.get()
-        camera.powerOnIfNeeded()
+        try camera.powerOnIfNeeded()
         
         for (name, action) in actions {
             do {

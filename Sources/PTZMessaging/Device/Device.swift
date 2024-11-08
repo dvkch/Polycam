@@ -73,6 +73,7 @@ extension Device {
         case untilAck
         case onError(PTZReply.CommandError)
         case rescueModeCondition(maxTries: Int)
+        case untilZeros
         
         internal static func modeCondition(_ rescue: Bool) -> [RetryConditions] {
             return rescue ? [.rescueModeCondition(maxTries: 3)] : []
@@ -114,6 +115,12 @@ extension Device {
                         }
                         shouldRetry = true
                     }
+                    
+                case .untilZeros:
+                    while serial.readAllBytes() != [0x00] {
+                        Thread.sleep(forTimeInterval: 0.02)
+                    }
+                    shouldRetry = false
                 }
             }
             

@@ -24,15 +24,15 @@ struct FuzzerCommand: ParsableCommand {
         Camera.registerKnownStates()
 
         let camera = try Camera(serial: .givenOrFirst(serial), logLevel: .error)
-        camera.powerOn()
-        camera.send(PTZResetAction(.settingsAndMotors).set())
+        try camera.powerOn()
+        try camera.startReset(.settingsAndMotors)
         Thread.sleep(forTimeInterval: 10)
         
         let d = Date()
         let count = try fuzz(camera: camera, initialState: {
-            try? camera.set(PTZDevModeState(.on))
-            try? camera.set(PTZAutoFocusState(.off))
-            try? camera.set(PTZPositionState(.init(pan: .mid, tilt: .mid, zoom: .min)))
+            try? camera.setDevMode(.on)
+            try? camera.setAutoFocus(.off)
+            try? camera.setPosition(.init(pan: .mid, tilt: .mid, zoom: .min))
         })
         speak("Done")
 
