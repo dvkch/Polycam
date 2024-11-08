@@ -12,7 +12,7 @@ public protocol Loggable {
     var logTag: String { get }
 }
 
-public enum LogLevel: String, Comparable {
+public enum LogLevel: String, Comparable, Sendable {
     case debug   = "debug"
     case info    = "info"
     case warning = "warning"

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct PTZRequest {
+public struct PTZRequest: Sendable {
     public let name: String
     public let message: PTZMessage
     public let waitingTimeIfExecuted: TimeInterval

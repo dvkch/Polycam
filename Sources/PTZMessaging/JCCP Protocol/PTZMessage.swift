@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct PTZMessage {
+public struct PTZMessage: Sendable {
     public let bytes: Bytes
 
     internal init(bytes: Bytes) {

@@ -14,21 +14,15 @@ public struct PTZNone: Equatable, CLIDecodable, JSONEncodable {
 }
 
 extension PTZNone: PTZVariant {
-    public var registerOffset: UInt8 {
-        return 0
-    }
+    public var registerOffset: UInt8 { 0 }
     
     public init?(from cliString: String) {
         guard cliString == "" else { return nil }
     }
     
-    public static var allCases: [PTZNone] {
-        return [.init()]
-    }
-    
-    public var description: String {
-        ""
-    }
+    public static var allCases: [PTZNone] { [.init()] }
+
+    public var description: String { "" }
 }
 
 extension PTZNone: RawRepresentable {

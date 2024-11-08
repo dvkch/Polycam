@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum PTZReply: CustomStringConvertible {
+public enum PTZReply: CustomStringConvertible, Sendable {
     case ack
     case reset
     case fail
@@ -17,7 +17,7 @@ public enum PTZReply: CustomStringConvertible {
     case state(bytes: Bytes, state: any PTZReadable)
     case unknown(bytes: Bytes)
 
-    public enum CommandError: UInt16, PTZEnumValue {
+    public enum CommandError: UInt16, PTZEnumValue, Sendable {
         case modeCondition      = 0x00
         case panMotorWarning    = 0x01
         case tiltMotorWarning   = 0x02

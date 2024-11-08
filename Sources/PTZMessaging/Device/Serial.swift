@@ -8,7 +8,7 @@
 import Foundation
 import SwiftSerial
 
-internal class Serial: Loggable {
+internal final class Serial: Loggable {
     
     // MARK: Init
     internal init(device: SerialName, tag: String, logLevel: LogLevel) throws(PortError) {
@@ -57,6 +57,11 @@ internal class Serial: Loggable {
         isOpen = true
         log(.info, "> opened!")
         
+        startReading()
+        log(.info, "> started reading bytes")
+    }
+    
+    private func startReading() {
         Task {
             for await data in (try port.asyncData()) {
                 lock.withLock {
@@ -64,7 +69,6 @@ internal class Serial: Loggable {
                 }
             }
         }
-        log(.info, "> started reading bytes")
     }
     
     // MARK: Outside world

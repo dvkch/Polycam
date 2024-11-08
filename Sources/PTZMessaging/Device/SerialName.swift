@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct SerialName: RawRepresentable {
+public struct SerialName: RawRepresentable, Sendable {
     public let rawValue: String
     
     public init(rawValue: String) {
