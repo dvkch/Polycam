@@ -51,5 +51,12 @@ public struct PTZMoveFocusAction: PTZState, PTZWriteable {
         case .stop:         return .init((0x45, UInt8(variant.rawValue)))
         }
     }
+    
+    public func set() -> PTZRequest {
+        return .init(
+            name: "Set \(description)", message: setMessage(),
+            modeConditionRescueRequests: [PTZAutoFocusState(.off).set()]
+        )
+    }
 }
 

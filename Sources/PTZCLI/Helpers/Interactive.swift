@@ -27,15 +27,26 @@ internal struct Interactive {
             }
         }
     }
+    
+    enum Color: Int32 {
+        case regular = 1
+        case error = 2
+        
+        static func register() {
+            try? ColorPair.define(1, fg: -1, bg: -1)
+            try? ColorPair.define(2, fg: SwiftCurses.Color.red, bg: -1)
+        }
+    }
 }
 
 internal extension Interactive {
     protocol Element: Identifiable {
         var id: String { get }
         var output: String { get }
+        var outputColor: Interactive.Color { get }
         var selectable: Bool { get }
         var children: [any Interactive.Element] { get }
-        func input(char: WideChar, camera: Camera) -> Bool
+        func input(char: WideChar, camera: Camera) throws -> Bool
     }
     
     protocol RefreshableElement: Element {
@@ -44,13 +55,14 @@ internal extension Interactive {
     
     struct Line: Interactive.Element {
         let id = UUID().uuidString
-        let name: String
-        init(_ name: String) {
-            self.name = name
+        let output: String
+        let outputColor: Interactive.Color
+        init(_ output: String, _ color: Interactive.Color = .regular) {
+            self.outputColor = color
+            self.output = output
         }
         
         // InteractiveElement
-        var output: String { name }
         var selectable: Bool { false }
         var children: [any Interactive.Element] { [] }
         func input(char: WideChar, camera: Camera) -> Bool { false }
@@ -58,10 +70,15 @@ internal extension Interactive {
     
     struct DynamicLine: Interactive.Element {
         let id = UUID().uuidString
-        let name: () -> String
-        
+        let outputClosure: () -> String
+        let outputColor: Interactive.Color
+        init(_ output: @escaping () -> String, _ color: Interactive.Color = .regular) {
+            self.outputColor = color
+            self.outputClosure = output
+        }
+
         // InteractiveElement
-        var output: String { name() }
+        var output: String { outputClosure() }
         var selectable: Bool { false }
         var children: [any Interactive.Element] { [] }
         func input(char: WideChar, camera: Camera) -> Bool { false }
@@ -70,19 +87,23 @@ internal extension Interactive {
     class Group: Interactive.Element {
         let id = UUID().uuidString
         let name: String
+        let collapsibleSpacing: Bool
         let items: [any Interactive.Element]
         
-        init(_ name: String, _ items: [any Interactive.Element]) {
+        init(_ name: String, collapsibleSpacing: Bool, _ items: [any Interactive.Element]) {
             self.name = name
+            self.collapsibleSpacing = collapsibleSpacing
             self.items = items
         }
 
         // InteractiveElement
         var output: String { name + (opened ? "" : " (+)") }
+        var outputColor: Interactive.Color { .regular }
         var selectable: Bool { true }
         private var opened = true
         var children: [any Interactive.Element] {
-            opened ? items + [Interactive.Line("")] : []
+            let separator = collapsibleSpacing ? [Line("")] : []
+            return opened ? (items + separator) : []
         }
         func input(char: WideChar, camera: Camera) -> Bool {
             switch (char) {
@@ -110,6 +131,7 @@ internal extension Interactive {
         
         // InteractiveElement
         var output: String { "\(name) (\(state))" }
+        var outputColor: Interactive.Color { .regular }
         var selectable: Bool { true }
         var children: [any Interactive.Element] { [] }
         func input(char: WideChar, camera: Camera) -> Bool {
@@ -129,7 +151,6 @@ internal extension Interactive {
         private let directions: [Direction: T.Variant]
         private var lastDirectionV: T.Variant
         private var lastDirection: Direction = .stop
-        private var lastError: String?
         private let speed: T.Value
         private enum Direction: CaseIterable {
             case oneWay, stop, otherWay
@@ -142,15 +163,10 @@ internal extension Interactive {
             self.speed = speed
         }
         
-        private func move(_ direction: Direction) {
-            do {
-                try camera.set(T(speed, for: directions[direction]!))
-                lastDirection = direction
-                lastDirectionV = directions[direction]!
-            }
-            catch {
-                lastError = error.localizedDescription
-            }
+        private func move(_ direction: Direction) throws {
+            try camera.set(T(speed, for: directions[direction]!))
+            lastDirection = direction
+            lastDirectionV = directions[direction]!
         }
 
         // InteractiveElement
@@ -167,20 +183,21 @@ internal extension Interactive {
             string += " <\(symbolOneWay)·\(symbolStop)·\(symbolOtherWay)>"
             return string
         }
+        var outputColor: Interactive.Color { .regular }
         var selectable: Bool { true }
         var children: [any Interactive.Element] { [] }
-        func input(char: WideChar, camera: Camera) -> Bool {
+        func input(char: WideChar, camera: Camera) throws -> Bool {
             switch (char) {
             case .code(260): // left
                 let dir = Direction.allCases.elementBefore(lastDirection, or: Direction.allCases.first!)
-                move(dir)
+                try move(dir)
                 
             case .code(261): // right
                 let dir = Direction.allCases.elementAfter(lastDirection, or: Direction.allCases.last!)
-                move(dir)
+                try move(dir)
 
             case .char(" "): // space
-                move(.stop)
+                try move(.stop)
                 
             default:
                 return false
@@ -196,7 +213,6 @@ internal extension Interactive {
         private var values: Array<T.Value>
         private let defaultValue: T.Value
         private var currentValue: T.Value
-        private var lastError: String?
 
         convenience init(_ state: T.Type, for camera: Camera, values: any Collection<T.Value>, default: T.Value) where T.Variant == PTZNone {
             self.init(state, for: camera, variant: .init(), values: values, default: `default`)
@@ -221,36 +237,21 @@ internal extension Interactive {
             self.camera = camera
             self.variant = variant
             self.values = Array(values)
-            self.currentValue = try! camera.get(T.self , for: variant)
+            self.currentValue = values.first!
             self.defaultValue = `default`
             
-            setCurrentValue(currentValue)
+            refresh()
         }
         
-        private func setCurrentValue(_ value: T.Value) {
-        }
-
-        private func set(to value: T.Value) {
-            do {
-                try camera.set(T.init(value, for: variant))
-                currentValue = values.closest(to: value) ?? value
-                lastError = nil
-            }
-            catch {
-                lastError = error.localizedDescription
-            }
+        private func set(to value: T.Value) throws {
+            try camera.set(T.init(value, for: variant))
+            currentValue = values.closest(to: value) ?? value
         }
 
         // RefreshableElement
         func refresh() {
-            do {
-                let value = try camera.get(T.self, for: variant)
-                currentValue = values.closest(to: value) ?? value
-                lastError = nil
-            }
-            catch {
-                lastError = error.localizedDescription
-            }
+            let value = try! camera.get(T.self, for: variant)
+            currentValue = values.closest(to: value) ?? value
         }
 
         // InteractiveElement
@@ -264,25 +265,23 @@ internal extension Interactive {
                 string += (currentValue == v) ? "O" : "·"
             }
             string += ">"
-            if let lastError {
-                string += " \(lastError)"
-            }
             return string
         }
+        var outputColor: Interactive.Color { .regular }
         var selectable: Bool { true }
         var children: [any Interactive.Element] { [] }
-        func input(char: WideChar, camera: Camera) -> Bool {
+        func input(char: WideChar, camera: Camera) throws -> Bool {
             switch (char) {
             case .code(260): // left
                 let value = values.elementBefore(currentValue, or: values.first!)
-                set(to: value)
+                try set(to: value)
                 
             case .code(261): // right
                 let value = values.elementAfter(currentValue, or: values.last!)
-                set(to: value)
+                try set(to: value)
 
             case .char(" "): // space
-                set(to: defaultValue)
+                try set(to: defaultValue)
                 
             default:
                 return false

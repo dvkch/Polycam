@@ -143,14 +143,15 @@ extension Device {
 // MARK: High level communication
 extension Device {
     public func get<T: PTZReadable>(_ state: T.Type, for variant: T.Variant, rescueModeCondition: Bool = false) throws(DeviceError) -> T.Value {
-        let reply = send(state.get(for: variant), retries: RetryConditions.modeCondition(rescueModeCondition))
+        let request = state.get(for: variant)
+        let reply = send(request, retries: RetryConditions.modeCondition(rescueModeCondition))
         switch reply {
         case .ack:                  throw .missingReply
         case .reset:                throw .reset
         case .fail:                 throw .fail
         case .timeout:              throw .timeout
         case .executed:             throw .missingReply
-        case .notExecuted(let e):   throw .notExecuted(error: e)
+        case .notExecuted(let e):   throw .notExecuted(error: e, request: request)
         case .state(_, let s):      return (s as! T).value
         case .unknown:              throw .wrongReply(reply)
         }
@@ -168,14 +169,15 @@ extension Device {
     }
 
     public func set<T: PTZWriteable>(_ state: T, rescueModeCondition: Bool = false) throws(DeviceError) {
-        let reply = send(state.set(), retries: RetryConditions.modeCondition(rescueModeCondition))
+        let request = state.set()
+        let reply = send(request, retries: RetryConditions.modeCondition(rescueModeCondition))
         switch reply {
         case .ack:                  return
         case .reset:                throw .reset
         case .fail:                 throw .fail
         case .timeout:              throw .timeout
         case .executed:             return
-        case .notExecuted(let e):   throw .notExecuted(error: e)
+        case .notExecuted(let e):   throw .notExecuted(error: e, request: request)
         case .state:                return
         case .unknown:              return
         }
@@ -190,14 +192,14 @@ extension Device {
     
     public func get<T: PTZReadableCombo>(_ state: T.Type) throws(DeviceError) -> T.Value {
         var messages = [PTZMessage]()
-        for reply in state.get().map({ send($0) }) {
+        for (request, reply) in state.get().map({ ($0, send($0)) }) {
             switch reply {
             case .ack:                  throw .missingReply
             case .reset:                throw .reset
             case .fail:                 throw .fail
             case .timeout:              throw .timeout
             case .executed:             throw .missingReply
-            case .notExecuted(let e):   throw .notExecuted(error: e)
+            case .notExecuted(let e):   throw .notExecuted(error: e, request: request)
             case .state(let b, _):      messages.append(.init(bytes: b))
             case .unknown(let b):       messages.append(.init(bytes: b))
             }
@@ -207,14 +209,14 @@ extension Device {
     }
     
     public func set<T: PTZWriteableCombo>(_ state: T) throws(DeviceError) {
-        for reply in state.set().map({ send($0) }) {
+        for (request, reply) in state.set().map({ ($0, send($0)) }) {
             switch reply {
             case .ack:                  continue
             case .reset:                throw .reset
             case .fail:                 throw .fail
             case .timeout:              throw .timeout
             case .executed:             continue
-            case .notExecuted(let e):   throw .notExecuted(error: e)
+            case .notExecuted(let e):   throw .notExecuted(error: e, request: request)
             case .state:                continue
             case .unknown:              continue
             }
