@@ -80,6 +80,16 @@ final class ColorsTests: XCTestCase {
         validateMessageBytes(PTZWhiteBalanceState(.auto), "83 42 12 01")
     }
     
+    func testWhiteBalanceCalibrationRequests() throws {
+        let camera = try Self.buildCamera()
+        validateModeCondition(
+            request: try camera.startWhiteBalanceCalibration(),
+            errorPrecondition: try camera.setWhiteBalance(.auto),
+            successPrecondition: try camera.setWhiteBalance(.manual)
+        )
+        validateMessageBytes(PTZWhiteBalanceCalibrationAction(), "82 45 17")
+    }
+    
     func testWhiteBalanceTempRequests() throws {
         let camera = try Self.buildCamera()
         validateModeCondition(

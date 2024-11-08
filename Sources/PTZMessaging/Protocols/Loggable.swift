@@ -39,9 +39,9 @@ extension Loggable {
     public func log(_ level: LogLevel, _ message: String) {
         guard level >= self.logLevel else { return }
 
-        var stdErr = LoggableStdErr()
         logLock.withLock {
-            print("\(logTag): \(message)", to: &stdErr)
+            let content = "\(logTag): \(message)"
+            try! FileHandle.standardError.write(contentsOf: Data((content + "\n").utf8))
         }
     }
     
@@ -51,11 +51,5 @@ extension Loggable {
 
         self.logLevel = level
         try closure(self)
-    }
-}
-
-private struct LoggableStdErr: TextOutputStream {
-    func write(_ string: String) {
-        try! FileHandle.standardError.write(contentsOf: Data(string.utf8))
     }
 }

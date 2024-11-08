@@ -9,7 +9,7 @@ import Foundation
 import ArgumentParser
 
 @main
-struct PTZCLI: ParsableCommand {
+struct PTZ: ParsableCommand {
     static var configuration = CommandConfiguration(
         commandName: "ptz",
         abstract: "PTZ",

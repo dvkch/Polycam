@@ -11,6 +11,8 @@ import PTZCamera
 import PTZMessaging
 
 #warning("subcommand to list all available commands, variants and values cases or min/max")
+#warning("have a better usage error message when wrong states given, current it goes back up to main command...")
+
 struct WriteCommand: ParsableCommand {
     static var configuration: CommandConfiguration = .init(
         commandName: "write",
@@ -54,7 +56,7 @@ struct WriteCommand: ParsableCommand {
                 guard let seconds = TimeInterval(operation.value.map(String.init) ?? "") else {
                     throw ValidationError("Invalid parameters for state \"\(operation.state)\"")
                 }
-                actions.append(("pause(\(seconds))", { _ in Thread.sleep(forTimeInterval: seconds) }))
+                actions.append(("pause=\(seconds)", { _ in Thread.sleep(forTimeInterval: seconds) }))
                 continue
             }
             

@@ -5,6 +5,8 @@
 //  Created by syan on 06/11/2024.
 //
 
+import Foundation
+
 public struct PTZConfig {
     public static private(set) var knownStates: [any PTZState.Type] = []
 

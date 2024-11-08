@@ -84,8 +84,9 @@ struct ReadCommand: ParsableCommand {
     
     private func readState<T: PTZReadableCombo>(_ stateType: T.Type, camera: Camera, result: inout [String: JSONValue]) throws {
         do {
+            let key = stateType.name.camelCased
             let value = try camera.get(stateType)
-            result[stateType.name.camelCased] = [
+            result[key] = [
                 "value": value.toJSON,
                 "name": value.description
             ]
@@ -100,14 +101,25 @@ struct ReadCommand: ParsableCommand {
             guard let value = try camera.get(stateType, forCli: variant) else {
                 throw ValidationError("Invalid parameters for state \"\(stateType.name)\"")
             }
-            var name = stateType.name.camelCased
-            if variant != "" {
-                name += "(\(variant))"
+            
+            let key = stateType.name.camelCased
+            if variant == "" {
+                result[key] = [
+                    "value": value.toJSON,
+                    "name": value.description
+                ]
             }
-            result[name] = [
-                "value": value.toJSON,
-                "name": value.description
-            ]
+            else {
+                if result[key] == nil {
+                    result[key] = [String: any JSONValue]()
+                }
+                var currentValue = result[key]! as! [String: any JSONValue]
+                currentValue[variant] = [
+                    "value": value.toJSON,
+                    "name": value.description
+                ]
+                result[key] = currentValue
+            }
         }
         catch {
             throw ValidationError(error.localizedDescription)

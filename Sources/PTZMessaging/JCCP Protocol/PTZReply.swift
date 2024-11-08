@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum PTZReply: CustomStringConvertible, Sendable {
+public enum PTZReply: CustomStringConvertible {
     case ack
     case reset
     case fail

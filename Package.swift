@@ -7,7 +7,7 @@ let package = Package(
     name: "PTZ",
     platforms: [.macOS(.v13)],
     products: [
-        .executable(name: "ptz", targets: ["PTZCLI"]),
+        .executable(name: "ptz", targets: ["PTZ"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.2"),
@@ -16,7 +16,7 @@ let package = Package(
         .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "510.0.3"),
     ],
     targets: [
-        .executableTarget(name: "PTZCLI", dependencies: [
+        .executableTarget(name: "PTZ", dependencies: [
                 .target(name: "PTZCamera"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "SwiftCurses", package: "SwiftCurses"),
@@ -34,6 +34,7 @@ let package = Package(
         ]),
         .testTarget(name: "PTZCameraTests", dependencies: ["PTZCamera"], resources: [
             .copy("Fixtures/Data")
-        ])
+        ]),
+        .testTarget(name: "PTZTests", dependencies: ["PTZ"])
     ]
 )
