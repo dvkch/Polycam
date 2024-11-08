@@ -10,9 +10,9 @@ import PTZMessaging
 
 /// Controls the auto exposure
 /// Discovered in the original application's logs
-public struct PTZAutoExposureState: PTZParseableState, PTZReadable, PTZWriteable {
+public struct PTZAutoExposureState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "AutoExposure"
-    public static var register: (UInt8, UInt8) = (0x02, 0x11)
+    public static var register: PTZRegister<PTZNone> = .init(0x02, 0x11)
 
     public var value: PTZBool
     
@@ -24,7 +24,7 @@ public struct PTZAutoExposureState: PTZParseableState, PTZReadable, PTZWriteable
         return .init(
             name: "Set \(description)",
             message: setMessage(),
-            waitingTimeIfExecuted: 1,
+            waitingTimeIfExecuted: 0.2,
             modeConditionRescueRequests: [PTZBacklightCompensationState(.on).set()]
         )
     }

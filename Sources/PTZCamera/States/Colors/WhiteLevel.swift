@@ -24,9 +24,9 @@ public enum PTZWhiteLevel: UInt16, PTZEnumValue {
 
 /// Controls the image's white clipping. 90% is less straining on the eyes
 /// Discovered by fuzzing
-public struct PTZWhiteLevelState: PTZParseableState, PTZReadable, PTZWriteable {
+public struct PTZWhiteLevelState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "WhiteLevel"
-    public static var register: (UInt8, UInt8) = (0x03, 0x3F)
+    public static var register: PTZRegister<PTZNone> = .init(0x03, 0x3F)
 
     public var value: PTZWhiteLevel
     

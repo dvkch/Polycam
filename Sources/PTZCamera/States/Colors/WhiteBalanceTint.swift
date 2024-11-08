@@ -21,9 +21,9 @@ public struct PTZWhiteBalanceTint: PTZScaledValue {
 
 /// Controls the white balance temperature, from pink to green
 /// Discovered by fuzzing
-public struct PTZWhiteBalanceTintState: PTZParseableState, PTZReadable, PTZWriteable {
+public struct PTZWhiteBalanceTintState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "WhiteBalanceTint"
-    public static var register: (UInt8, UInt8) = (0x03, 0x40)
+    public static var register: PTZRegister<PTZNone> = .init(0x03, 0x40)
 
     public var value: PTZWhiteBalanceTint
     

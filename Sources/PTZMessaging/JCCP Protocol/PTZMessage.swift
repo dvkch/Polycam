@@ -76,6 +76,10 @@ private extension PTZMessage {
 }
 
 public extension PTZMessage {
+    func decodeVariant<T: PTZVariant>(_ register: PTZRegister<T>) -> T? {
+        return T.allCases.first(where: { self.isValidReply(register.set($0)) })
+    }
+
     func isValidReply(_ command: (Byte, Byte)) -> Bool {
         guard isValidLength && receivedLength >= 2 else { return false }
         switch messageFormat {
@@ -120,8 +124,13 @@ public extension PTZMessage {
 }
 
 public extension PTZMessage {
-    init(_ command: (Byte, Byte), _ singleArg: any PTZValue) {
-        self.init(command, PTZArgument(singleArg, .single))
+    init(_ command: (Byte, Byte), _ singleArg: (any PTZValue)?) {
+        if let singleArg {
+            self.init(command, PTZArgument(singleArg, .single))
+        }
+        else {
+            self.init(command)
+        }
     }
 
     init(_ command: (Byte, Byte), _ args: (PTZArgument)...) {

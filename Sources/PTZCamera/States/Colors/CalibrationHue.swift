@@ -8,14 +8,13 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZCalibrationRange: UInt16, PTZEnumValue {
+public enum PTZCalibrationRange: UInt8, PTZVariant {
     case red = 0x00
     case orange = 0x01
     case green = 0x02
     case cyan = 0x03
     case blue = 0x04
     case purple = 0x05
-    public static var `default`: PTZCalibrationRange { .red }
     
     public var description: String {
         switch self {
@@ -42,28 +41,14 @@ public struct PTZCalibrationHue: PTZScaledValue {
 
 /// Controls the hue for 6 distinct color ranges
 /// Discovered by fuzzing
-public struct PTZCalibrationHueState: PTZReadable, PTZWriteable {
+public struct PTZCalibrationHueState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "CalibrationHue"
-    
+    public static var register: PTZRegister<PTZCalibrationRange> = .init(0x03, 0x50)
     public var variant: PTZCalibrationRange
     public var value: PTZCalibrationHue
     
     public init(_ value: Value, for variant: Variant) {
         self.value = value
         self.variant = variant
-    }
-    
-    public init?(message: PTZMessage) {
-        guard let range = PTZCalibrationRange.allCases.first(where: { message.isValidReply((0x43, 0x50 + UInt8($0.rawValue))) }) else { return nil }
-        self.variant = range
-        self.value = message.parseArgument(position: .single)
-    }
-    
-    public func setMessage() -> PTZMessage {
-        return .init((0x03, 0x50 + UInt8(variant.rawValue)))
-    }
-    
-    public static func get(for variant: PTZCalibrationRange) -> PTZRequest {
-        return .init(name: name, message: .init((0x03, 0x50 + UInt8(variant.rawValue))))
     }
 }

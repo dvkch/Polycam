@@ -20,9 +20,9 @@ public struct PTZFocus: PTZScaledValue {
 
 /// Controls the focus position. This is only possible when `PTZAutoFocusState` is `off`
 /// Discovered by fuzzing
-public struct PTZFocusState: PTZParseableState, PTZReadable, PTZWriteable {
+public struct PTZFocusState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "Focus"
-    public static var register: (UInt8, UInt8) = (0x03, 0x03)
+    public static var register: PTZRegister<PTZNone> = .init(0x03, 0x03)
 
     public var value: PTZFocus
     

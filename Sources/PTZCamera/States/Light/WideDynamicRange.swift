@@ -12,9 +12,9 @@ import PTZMessaging
 /// effective. This has been found through fuzzing, and there already was a setting for backlight compensation in the original
 /// program's logs
 /// Discovered by fuzzing
-public struct PTZWideDynamicRangeState: PTZParseableState, PTZReadable, PTZWriteable {
+public struct PTZWideDynamicRangeState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "WideDynamicRange"
-    public static var register: (UInt8, UInt8) = (0x01, 0x34)
+    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x34)
 
     public var value: PTZBool
     

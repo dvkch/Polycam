@@ -31,7 +31,7 @@ public enum PTZLedColor: UInt16, PTZEnumValue {
         }
     }
     
-    public static var `default`: PTZLedColor { .blue }
+    public static let `default`: Self = .blue
 }
 
 public enum PTZLedMode: UInt16, PTZEnumValue {
@@ -69,7 +69,7 @@ public enum PTZLedMode: UInt16, PTZEnumValue {
         }
     }
     
-    public static var `default`: PTZLedMode { .on }
+    public static let `default`: Self = .on
 }
 
 /// Controls the front led's color and on/off/blink state
@@ -98,9 +98,9 @@ public struct PTZLed: Equatable, CustomStringConvertible, CLIDecodable, JSONEnco
     }
 }
 
-public struct PTZLedState: PTZInvariantState, PTZReadable, PTZWriteable {
+public struct PTZLedState: PTZReadable, PTZWritable {
     public static var name: String = "Led"
-    public static var register: (UInt8, UInt8) = (0x01, 0x21)
+    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x21)
     
     public var value: PTZLed
     
@@ -109,7 +109,7 @@ public struct PTZLedState: PTZInvariantState, PTZReadable, PTZWriteable {
     }
     
     public init?(message: PTZMessage) {
-        guard message.isValidReply(Self.setRegister) else { return nil }
+        guard message.isValidReply(Self.register.set()) else { return nil }
         self.value = .init(
             color: message.parseArgument(position: .raw8(3)),
             mode: message.parseArgument(position: .raw8(4))
@@ -117,6 +117,6 @@ public struct PTZLedState: PTZInvariantState, PTZReadable, PTZWriteable {
     }
     
     public func setMessage() -> PTZMessage {
-        .init(Self.setRegister, .init(value.color, .raw8(3)), .init(value.mode, .raw8(4)))
+        .init(Self.register.set(), .init(value.color, .raw8(3)), .init(value.mode, .raw8(4)))
     }
 }

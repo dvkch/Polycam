@@ -312,19 +312,19 @@ extension FuzzerResult {
                 isRequestKnown = true
                 replyName += ": \(state)"
             }
-            else if category == 0x45, let direction = PTZPanDirection(rawValue: UInt16(register)) {
+            else if category == 0x45, let direction = PTZPanDirection(rawValue: register) {
                 isRequestKnown = true
                 replyName += ": Pan \(direction)"
             }
-            else if category == 0x45, let direction = PTZTiltDirection(rawValue: UInt16(register)) {
+            else if category == 0x45, let direction = PTZTiltDirection(rawValue: register) {
                 isRequestKnown = true
                 replyName += ": Tilt \(direction)"
             }
-            else if category == 0x45, let direction = PTZFocusDirection(rawValue: UInt16(register)) {
+            else if category == 0x45, let direction = PTZFocusDirection(rawValue: register) {
                 isRequestKnown = true
                 replyName += ": Focus \(direction)"
             }
-            else if category == 0x45, let direction = PTZZoomDirection(rawValue: UInt16(register)) {
+            else if category == 0x45, let direction = PTZZoomDirection(rawValue: register) {
                 isRequestKnown = true
                 replyName += ": Zoom \(direction)"
             }

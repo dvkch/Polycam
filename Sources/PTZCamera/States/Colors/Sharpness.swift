@@ -21,9 +21,9 @@ public struct PTZSharpness: PTZScaledValue {
 
 /// Controls the image's sharpness
 /// Discovered in the original application
-public struct PTZSharpnessState: PTZParseableState, PTZReadable, PTZWriteable {
+public struct PTZSharpnessState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "Sharpness"
-    public static var register: (UInt8, UInt8) = (0x03, 0x3D)
+    public static var register: PTZRegister<PTZNone> = .init(0x03, 0x3D)
     
     public var value: PTZSharpness
     

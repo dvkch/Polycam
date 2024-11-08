@@ -8,11 +8,11 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZStatisticsGroup: UInt16, PTZEnumValue {
-    case unknownAndNone = 0x59
-    case focusAndZoom   = 0x5A
-    case noneAndIris    = 0x5B
-    case panAndTilt     = 0x5C
+public enum PTZStatisticsGroup: UInt8, PTZVariant {
+    case unknownAndNone = 0
+    case focusAndZoom   = 1
+    case noneAndIris    = 2
+    case panAndTilt     = 3
 
     public var description: String {
         "\(names.0)/\(names.1)"
@@ -43,8 +43,9 @@ public struct PTZStatisticsValues: Equatable, JSONEncodable, CustomStringConvert
 /// Discovered by fuzzing
 ///
 /// Those seem to reflect the number of time a motor switch direction
-public struct PTZStatisticsState: PTZState, PTZReadable {
+public struct PTZStatisticsState: PTZReadable {
     public static var name: String { "Statistics" }
+    public static var register: PTZRegister<PTZStatisticsGroup> = .init(0x01, 0x59)
     public let variant: PTZStatisticsGroup
     public var value: PTZStatisticsValues
     
@@ -66,10 +67,6 @@ public struct PTZStatisticsState: PTZState, PTZReadable {
             left:  .init(b3: UInt8(left3),  b2: UInt8(left2),  b1: UInt8(left1),  b0: UInt8(left0)),
             right: .init(b3: UInt8(right3), b2: UInt8(right2), b1: UInt8(right1), b0: UInt8(right0))
         )
-    }
-    
-    public static func get(for variant: PTZStatisticsGroup) -> PTZRequest {
-        .init(name: "\(name)(\(variant))", message: .init((0x01, UInt8(variant.rawValue))))
     }
     
     public var description: String {

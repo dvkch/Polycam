@@ -9,19 +9,15 @@ import Foundation
 import PTZMessaging
 
 /// Starts a request for focus, while in manual focus mode. This is only possible when `PTZAutoFocusState` is `off` and in dev mode.
+/// Takes about 5 seconds to settle down
 /// Discovered by fuzzing
-public struct PTZFocusAction: PTZState, PTZWriteable {
+public struct PTZFocusAction: PTZWritable {
     public static var name: String { "Start Focus" }
-    public let variant: PTZNone
+    public static var register: PTZRegister<PTZNone> = .init(0x05, 0x13)
+
     public var value: PTZNone
     
     public init(_ value: PTZNone = .init(), for variant: PTZNone = .init()) {
-        self.variant = variant
         self.value = value
-    }
-
-    public func setMessage() -> PTZMessage {
-        // takes about 5s to settle down
-        return .init((0x45, 0x13))
     }
 }

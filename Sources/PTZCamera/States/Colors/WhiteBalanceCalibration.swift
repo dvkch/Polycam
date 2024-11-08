@@ -10,8 +10,9 @@ import PTZMessaging
 
 /// Controls the white balance
 /// Discovered in the original application
-public struct PTZWhiteBalanceCalibrationAction: PTZState, PTZWriteable {
+public struct PTZWhiteBalanceCalibrationAction: PTZAddressable, PTZWritable {
     public static var name: String { "WhiteBalanceCalibration" }
+    public static var register: PTZRegister<PTZNone> = .init(0x05, 0x17)
     public let variant: PTZNone
     public var value: PTZNone
     
@@ -21,7 +22,7 @@ public struct PTZWhiteBalanceCalibrationAction: PTZState, PTZWriteable {
     }
 
     public func setMessage() -> PTZMessage {
-        return .init((0x45, 0x17))
+        return .init(Self.register.set())
     }
 
     public func set() -> PTZRequest {

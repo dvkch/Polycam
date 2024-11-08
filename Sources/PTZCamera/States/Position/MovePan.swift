@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZPanDirection: UInt16, PTZEnumValue {
+public enum PTZPanDirection: UInt8, PTZVariant {
     case right  = 0x00
     case left   = 0x01
     case stop   = 0x02
@@ -35,8 +35,9 @@ public struct PTZPanSpeed: PTZScaledValue {
 
 /// Starts panning in the given direction at the requested speed.
 /// Discovered in the original program's logs, extended by fuzzing
-public struct PTZMovePanAction: PTZState, PTZWriteable {
+public struct PTZMovePanAction: PTZParseableState, PTZWritable {
     public static var name: String { "MovePan" }
+    public static var register: PTZRegister<PTZPanDirection> { .init(0x05, 0x00) }
     public var variant: PTZPanDirection
     public var value: PTZPanSpeed
     
@@ -46,9 +47,6 @@ public struct PTZMovePanAction: PTZState, PTZWriteable {
     }
     
     public func setMessage() -> PTZMessage {
-        switch variant {
-        case .left, .right: return .init((0x45, UInt8(variant.rawValue)), value)
-        case .stop:         return .init((0x45, UInt8(variant.rawValue)))
-        }
+        .init(Self.register.set(variant), (variant == .stop) ? nil : value)
     }
 }

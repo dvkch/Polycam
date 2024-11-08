@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZTiltDirection: UInt16, PTZEnumValue {
+public enum PTZTiltDirection: UInt8, PTZVariant {
     case up     = 0x03
     case down   = 0x04
     case stop   = 0x05
@@ -35,8 +35,9 @@ public struct PTZTiltSpeed: PTZScaledValue {
 
 /// Starts tilting in the given direction at the requested speed.
 /// Discovered in the original program's logs, extended by fuzzing
-public struct PTZMoveTiltAction: PTZState, PTZWriteable {
+public struct PTZMoveTiltAction: PTZParseableState, PTZWritable {
     public static var name: String { "MoveTilt" }
+    public static var register: PTZRegister<PTZTiltDirection> { .init(0x05, 0x00) }
     public var variant: PTZTiltDirection
     public var value: PTZTiltSpeed
     
@@ -46,10 +47,7 @@ public struct PTZMoveTiltAction: PTZState, PTZWriteable {
     }
     
     public func setMessage() -> PTZMessage {
-        switch variant {
-        case .up, .down:    return .init((0x45, UInt8(variant.rawValue)), value)
-        case .stop:         return .init((0x45, UInt8(variant.rawValue)))
-        }
+        .init(Self.register.set(variant), (variant == .stop) ? nil : value)
     }
 }
 

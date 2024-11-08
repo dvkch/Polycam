@@ -29,18 +29,14 @@ public enum PTZReset: UInt16, PTZEnumValue {
 
 /// Resets the device registers to a default state, including video output and position
 /// Discovered by fuzzing
-public struct PTZResetAction: PTZState, PTZWriteable {
+public struct PTZResetAction: PTZParseableState, PTZWritable {
     public static var name: String { "Reset" }
-    public let variant: PTZNone
+    public static var register: PTZRegister<PTZNone> = .init(0x45, 0x32)
+
     public var value: PTZReset
     
     public init(_ value: PTZReset, for variant: PTZNone = .init()) {
-        self.variant = variant
         self.value = value
-    }
-
-    public func setMessage() -> PTZMessage {
-        return .init((0x45, 0x32), value)
     }
 
     public func set() -> PTZRequest {

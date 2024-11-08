@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZPreset: UInt16, PTZEnumValue {
+public enum PTZPreset: UInt8, PTZVariant {
     case one    = 0x00
     case two    = 0x01
     case three  = 0x02
@@ -36,9 +36,9 @@ public enum PTZPreset: UInt16, PTZEnumValue {
 /// Discovered by fuzzing
 ///
 /// There doesn't seem to be a way to directly save the current position to a preset, or set the current position from a preset, in a single request.
-public struct PTZPresetState: PTZState, PTZReadable, PTZWriteable {
+public struct PTZPresetState: PTZReadable, PTZWritable {
     public static var name: String = "Preset"
-    
+    public static var register: PTZRegister<PTZPreset> = .init(0x01, 0x60)
     public var variant: PTZPreset
     public var value: PTZPosition
     
@@ -48,7 +48,7 @@ public struct PTZPresetState: PTZState, PTZReadable, PTZWriteable {
     }
     
     public init?(message: PTZMessage) {
-        guard let preset = PTZPreset.allCases.first(where: { message.isValidReply((0x41, 0x60 + UInt8($0.rawValue))) }) else { return nil }
+        guard let preset = message.decodeVariant(Self.register) else { return nil }
         self.variant = preset
         self.value = .init(
             pan:  message.parseArgument(position: .custom(hiIndex: 4, loIndex: 5, loRetainerIndex: 3, loRetainerMask: 0x02)),
@@ -59,15 +59,11 @@ public struct PTZPresetState: PTZState, PTZReadable, PTZWriteable {
     
     public func setMessage() -> PTZMessage {
         return .init(
-            (0x41, 0x60 + UInt8(variant.rawValue)),
+            Self.register.set(variant),
             PTZArgument(value.pan,  .custom(hiIndex:  5, loIndex:  6, loRetainerIndex:  3, loRetainerMask: 0x04)),
             PTZArgument(value.tilt, .custom(hiIndex:  8, loIndex:  9, loRetainerIndex:  3, loRetainerMask: 0x20)),
             PTZArgument(value.zoom, .custom(hiIndex: 12, loIndex: 13, loRetainerIndex: 11, loRetainerMask: 0x02)),
             PTZArgument(PTZUInt(rawValue: 0x03), .raw8(10))
         )
-    }
-    
-    public static func get(for variant: PTZPreset) -> PTZRequest {
-        return .init(name: name, message: .init((0x01, 0x60 + UInt8(variant.rawValue))))
     }
 }

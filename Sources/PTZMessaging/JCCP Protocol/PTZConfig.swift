@@ -30,8 +30,8 @@ public extension PTZConfig {
         knownStates.compactMap { $0 as? (any PTZReadableCombo.Type) }
     }
     
-    static var knownWriteableStates: [any PTZWriteable.Type] {
-        knownStates.compactMap { $0 as? (any PTZWriteable.Type) }
+    static var knownWriteableStates: [any PTZWritable.Type] {
+        knownStates.compactMap { $0 as? (any PTZWritable.Type) }
     }
     
     static var knownWriteableComboStates: [any PTZWriteableCombo.Type] {

@@ -22,12 +22,12 @@ public struct PTZGainEffective: PTZScaledValue {
 /// Discovered by fuzzing
 public struct PTZGainEffectiveState: PTZParseableState, PTZReadable {
     public static var name: String = "GainEffective"
-    public static var register: (UInt8, UInt8) = (0x03, 0x26)
+    public static var register: PTZRegister<PTZNone> = .init(0x03, 0x26)
     
     public var value: PTZGainEffective
     
     public init?(message: PTZMessage) {
-        guard message.isValidReply(Self.setRegister) else { return nil }
+        guard message.isValidReply(Self.register.set()) else { return nil }
         self.value = message.parseArgument(position: .single)
     }
 }

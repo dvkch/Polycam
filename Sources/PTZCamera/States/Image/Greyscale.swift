@@ -12,9 +12,9 @@ import PTZMessaging
 /// Discovered by fuzzing
 ///
 /// Only available in dev mode
-public struct PTZGreyscaleState: PTZInvariantState, PTZReadable, PTZWriteable {
+public struct PTZGreyscaleState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "Greyscale"
-    public static var register: (UInt8, UInt8) = (0x01, 0x3A)
+    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x3A)
 
     public var value: PTZBool
     
@@ -23,12 +23,12 @@ public struct PTZGreyscaleState: PTZInvariantState, PTZReadable, PTZWriteable {
     }
     
     public init?(message: PTZMessage) {
-        guard message.isValidReply(Self.setRegister) else { return nil }
+        guard message.isValidReply(Self.register.set()) else { return nil }
         let value: Value = message.parseArgument(position: .single)
         self.init(.init(rawValue: !value.rawValue))
     }
 
     public func setMessage() -> PTZMessage {
-        return .init(Self.setRegister, PTZBool(rawValue: !value.rawValue))
+        return .init(Self.register.set(), PTZBool(rawValue: !value.rawValue))
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZFocusDirection: UInt16, PTZEnumValue {
+public enum PTZFocusDirection: UInt8, PTZVariant {
     case far    = 0x09
     case near   = 0x0A
     case stop   = 0x0B
@@ -35,8 +35,9 @@ public struct PTZFocusSpeed: PTZScaledValue {
 
 /// Starts focusing in the given direction at the requested speed. This is only possible when `PTZAutoFocusState` is `off`.
 /// Discovered by fuzzing
-public struct PTZMoveFocusAction: PTZState, PTZWriteable {
+public struct PTZMoveFocusAction: PTZParseableState, PTZWritable {
     public static var name: String { "MoveFocus" }
+    public static var register: PTZRegister<PTZFocusDirection> { .init(0x05, 0x00) }
     public var variant: PTZFocusDirection
     public var value: PTZFocusSpeed
     
@@ -46,10 +47,7 @@ public struct PTZMoveFocusAction: PTZState, PTZWriteable {
     }
     
     public func setMessage() -> PTZMessage {
-        switch variant {
-        case .far, .near:   return .init((0x45, UInt8(variant.rawValue)), value)
-        case .stop:         return .init((0x45, UInt8(variant.rawValue)))
-        }
+        .init(Self.register.set(variant), (variant == .stop) ? nil : value)
     }
     
     public func set() -> PTZRequest {

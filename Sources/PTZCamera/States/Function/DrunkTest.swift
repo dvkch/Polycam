@@ -20,8 +20,9 @@ import PTZMessaging
 ///   for unplugging and replugging the device.
 /// - phase 2 can be stopped by sending a SetPosition or Move request. Obtaining the phase will
 ///   still return 2, but the autonomous camera movements will quickly stop
-public struct PTZDrunkTestAction: PTZState, PTZWriteable {
+public struct PTZDrunkTestAction: PTZWritable {
     public static var name: String { "DrunkTest" }
+    public static var register: PTZRegister<PTZNone> = .init(0x05, 0x14)
     public let variant: PTZNone
     public var value: PTZNone
     
@@ -31,7 +32,7 @@ public struct PTZDrunkTestAction: PTZState, PTZWriteable {
     }
 
     public func setMessage() -> PTZMessage {
-        return .init((0x45, 0x14), PTZDrunkTestPhase.running)
+        return .init(Self.register.set(), PTZDrunkTestPhase.running)
     }
 }
 

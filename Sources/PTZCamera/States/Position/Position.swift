@@ -37,10 +37,9 @@ public struct PTZPosition: Equatable, CustomStringConvertible, CLIDecodable, JSO
 
 /// Sets and reads the current position, pan tilt and zoom in one go.
 /// Discovered in the original program's logs
-public struct PTZPositionState: PTZInvariantState, PTZReadable, PTZWriteable {
+public struct PTZPositionState: PTZReadable, PTZWritable {
     public static var name: String = "Position"
-    public static var register: (UInt8, UInt8) = (0x01, 0x50)
-    public static var setPositionRegister: (UInt8, UInt8) = (0x41, 0x51)
+    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x50)
     public var value: PTZPosition
     
     public init(_ value: PTZPosition, for variant: PTZNone) {
@@ -48,7 +47,7 @@ public struct PTZPositionState: PTZInvariantState, PTZReadable, PTZWriteable {
     }
     
     public init?(message: PTZMessage) {
-        guard message.isValidReply(Self.setRegister) else { return nil }
+        guard message.isValidReply(Self.register.set()) else { return nil }
         self.value = .init(
             pan:  message.parseArgument(position: .custom(hiIndex: 4, loIndex: 5, loRetainerIndex: 3, loRetainerMask: 0x02)),
             tilt: message.parseArgument(position: .custom(hiIndex: 6, loIndex: 7, loRetainerIndex: 3, loRetainerMask: 0x08)),
@@ -58,7 +57,7 @@ public struct PTZPositionState: PTZInvariantState, PTZReadable, PTZWriteable {
     
     public func setMessage() -> PTZMessage {
         return .init(
-            Self.setPositionRegister,
+            Self.register.set(regOffset: 1),
             PTZArgument(value.pan,  .custom(hiIndex:  5, loIndex:  6, loRetainerIndex:  3, loRetainerMask: 0x04)),
             PTZArgument(value.tilt, .custom(hiIndex:  8, loIndex:  9, loRetainerIndex:  3, loRetainerMask: 0x20)),
             PTZArgument(value.zoom, .custom(hiIndex: 12, loIndex: 13, loRetainerIndex: 11, loRetainerMask: 0x02)),

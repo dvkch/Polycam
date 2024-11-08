@@ -37,9 +37,9 @@ public enum PTZWhiteBalance: UInt16, PTZEnumValue {
 /// Controls the white balance
 /// Discovered in the original appplication's logs
 /// In `manual` mode you can adjust the colors using `PTZWhiteBalanceTempState` and `PTZWhiteBalanceTintState`
-public struct PTZWhiteBalanceState: PTZParseableState, PTZReadable, PTZWriteable {
+public struct PTZWhiteBalanceState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "WhiteBalance"
-    public static var register: (UInt8, UInt8) = (0x02, 0x12)
+    public static var register: PTZRegister<PTZNone> = .init(0x02, 0x12)
 
     public var value: PTZWhiteBalance
     

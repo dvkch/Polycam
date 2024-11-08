@@ -21,9 +21,9 @@ public struct PTZColorGain: PTZScaledValue {
 
 /// Controls the red channel gain, depends on the configured whitebalance
 /// Discovered in the original application's logs
-public struct PTZGainRedState: PTZParseableState, PTZReadable, PTZWriteable {
+public struct PTZGainRedState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "GainRed"
-    public static var register: (UInt8, UInt8) = (0x03, 0x42)
+    public static var register: PTZRegister<PTZNone> = .init(0x03, 0x42)
     
     public var value: PTZColorGain
     

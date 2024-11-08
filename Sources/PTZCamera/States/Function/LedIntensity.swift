@@ -50,9 +50,9 @@ public struct PTZLedIntensity: Equatable, CustomStringConvertible, CLIDecodable,
 
 /// Controls the front led's subdiodes intensity
 /// Discovered in the original application's log as Volume, extended through fuzzing
-public struct PTZLedIntensityState: PTZInvariantState, PTZReadable, PTZWriteable {
+public struct PTZLedIntensityState: PTZReadable, PTZWritable {
     public static let name: String = "LedIntensity"
-    public static var register: (UInt8, UInt8) = (0x01, 0x25)
+    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x25)
 
     public var value: PTZLedIntensity
     
@@ -61,7 +61,7 @@ public struct PTZLedIntensityState: PTZInvariantState, PTZReadable, PTZWriteable
     }
     
     public init?(message: PTZMessage) {
-        guard message.isValidReply(Self.setRegister) else { return nil }
+        guard message.isValidReply(Self.register.set()) else { return nil }
         self.value = .init(
             r: message.parseArgument(position: .raw8(3)),
             g: message.parseArgument(position: .raw8(5)),
@@ -70,6 +70,6 @@ public struct PTZLedIntensityState: PTZInvariantState, PTZReadable, PTZWriteable
     }
 
     public func setMessage() -> PTZMessage {
-        return .init(Self.setRegister, .init(value.r, .raw8(3)), .init(value.b, .raw8(4)), .init(value.g, .raw8(5)))
+        return .init(Self.register.set(), .init(value.r, .raw8(3)), .init(value.b, .raw8(4)), .init(value.g, .raw8(5)))
     }
 }

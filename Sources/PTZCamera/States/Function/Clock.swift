@@ -8,9 +8,9 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZClock: UInt16, PTZEnumValue {
-    case clock1 = 0x5D
-    case clock2 = 0x5E
+public enum PTZClock: UInt8, PTZVariant {
+    case clock1 = 0
+    case clock2 = 1
     
     public var description: String {
         switch self {
@@ -33,8 +33,9 @@ extension UInt32: CLIDecodable, JSONEncodable {
 
 /// Controls the two device's clocks. Those are 32bits, precise to the second and auto increasing
 /// Discovered by fuzzing
-public struct PTZClockState: PTZReadable, PTZWriteable {
+public struct PTZClockState: PTZReadable, PTZWritable {
     public static let name = "Clock"
+    public static var register: PTZRegister<PTZClock> = .init(0x01, 0x5D)
 
     public var variant: PTZClock
     public var value: UInt32
@@ -45,7 +46,7 @@ public struct PTZClockState: PTZReadable, PTZWriteable {
     }
 
     public init?(message: PTZMessage) {
-        guard let clock = PTZClock.allCases.first(where: { message.isValidReply((0x41, UInt8($0.rawValue))) }) else { return nil }
+        guard let clock = message.decodeVariant(Self.register) else { return nil }
 
         let timePart0 = message.parseArgument(type: PTZUInt.self, position: .custom(hiIndex: 13, loIndex: 7, loRetainerIndex: 3, loRetainerMask: 0x08)).rawValue
         let timePart1 = message.parseArgument(type: PTZUInt.self, position: .custom(hiIndex: 13, loIndex: 6, loRetainerIndex: 3, loRetainerMask: 0x04)).rawValue
@@ -58,15 +59,11 @@ public struct PTZClockState: PTZReadable, PTZWriteable {
     
     public func setMessage() -> PTZMessage {
         return PTZMessage(
-            (0x41, UInt8(variant.rawValue)),
+            Self.register.set(variant),
             .init(PTZUInt(rawValue: UInt16(value.parts.b0)), .custom(hiIndex: 13, loIndex: 7, loRetainerIndex: 3, loRetainerMask: 0x08)),
             .init(PTZUInt(rawValue: UInt16(value.parts.b1)), .custom(hiIndex: 13, loIndex: 6, loRetainerIndex: 3, loRetainerMask: 0x04)),
             .init(PTZUInt(rawValue: UInt16(value.parts.b2)), .custom(hiIndex: 13, loIndex: 5, loRetainerIndex: 3, loRetainerMask: 0x02)),
             .init(PTZUInt(rawValue: UInt16(value.parts.b3)), .custom(hiIndex: 13, loIndex: 4, loRetainerIndex: 3, loRetainerMask: 0x01))
         )
-    }
-    
-    public static func get(for variant: PTZClock) -> PTZRequest {
-        return .init(name: name, message: .init((0x01, UInt8(variant.rawValue))))
     }
 }

@@ -10,9 +10,9 @@ import PTZMessaging
 
 /// Turn on/off the integrated vignette correction
 /// Discovered by fuzzing
-public struct PTZVignetteCorrectionState: PTZParseableState, PTZReadable, PTZWriteable {
+public struct PTZVignetteCorrectionState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "VignetteCorrection"
-    public static var register: (UInt8, UInt8) = (0x01, 0x3D)
+    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x3D)
 
     public var value: PTZBool
     

@@ -128,8 +128,11 @@ struct InteractiveCommand: ParsableCommand {
 
             let selectedElementResult = Result(catching: { try selectedElement?.1.input(char: char, camera: camera) ?? false })
             switch selectedElementResult {
-            case .success(true): continue
-            case .success(false): break
+            case .success(true):
+                Self.lastError = nil
+                continue
+            case .success(false):
+                break
             case .failure(let error):
                 if let e = error as? any RecoverableError, !e.recoveryOptions.isEmpty {
                     Self.lastError = error.localizedDescription + " - " + e.recoveryOptions.joined(separator: ", ")

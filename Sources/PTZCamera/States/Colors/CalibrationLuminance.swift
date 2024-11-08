@@ -21,28 +21,14 @@ public struct PTZCalibrationLuminance: PTZScaledValue {
 
 /// Controls the luminance for 6 distinct color ranges
 /// Discovered by fuzzing
-public struct PTZCalibrationLuminanceState: PTZReadable, PTZWriteable {
+public struct PTZCalibrationLuminanceState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "CalibrationLuminance"
-    
+    public static var register: PTZRegister<PTZCalibrationRange> = .init(0x03, 0x56)
     public var variant: PTZCalibrationRange
     public var value: PTZCalibrationLuminance
     
     public init(_ value: Value, for variant: Variant) {
         self.value = value
         self.variant = variant
-    }
-    
-    public init?(message: PTZMessage) {
-        guard let range = PTZCalibrationRange.allCases.first(where: { message.isValidReply((0x43, 0x56 + UInt8($0.rawValue))) }) else { return nil }
-        self.variant = range
-        self.value = message.parseArgument(position: .single)
-    }
-    
-    public func setMessage() -> PTZMessage {
-        return .init((0x03, 0x56 + UInt8(variant.rawValue)))
-    }
-    
-    public static func get(for variant: PTZCalibrationRange) -> PTZRequest {
-        return .init(name: name, message: .init((0x03, 0x56 + UInt8(variant.rawValue))))
     }
 }

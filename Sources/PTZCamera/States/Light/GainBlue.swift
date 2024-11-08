@@ -10,9 +10,9 @@ import PTZMessaging
 
 /// Controls the blue channel gain, depends on the configured whitebalance
 /// Discovered in the original application's logs
-public struct PTZGainBlueState: PTZParseableState, PTZReadable, PTZWriteable {
+public struct PTZGainBlueState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "GainBlue"
-    public static var register: (UInt8, UInt8) = (0x03, 0x43)
+    public static var register: PTZRegister<PTZNone> = .init(0x03, 0x43)
     
     public var value: PTZColorGain
     

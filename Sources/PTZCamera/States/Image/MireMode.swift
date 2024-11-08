@@ -10,9 +10,9 @@ import PTZMessaging
 
 /// Disables proper video output and just shows a mire
 /// Discovered by fuzzing
-public struct PTZMireState: PTZParseableState, PTZReadable, PTZWriteable {
+public struct PTZMireState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "Mire"
-    public static var register: (UInt8, UInt8) = (0x01, 0x10)
+    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x10)
 
     public var value: PTZBool
     

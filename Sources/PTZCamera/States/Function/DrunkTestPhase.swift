@@ -26,12 +26,12 @@ public enum PTZDrunkTestPhase: UInt16, PTZEnumValue {
 /// Discovered by fuzzing
 public struct PTZDrunkTestPhaseState: PTZParseableState, PTZReadable {
     public static var name: String { "DrunkTestPhase" }
-    public static var register: (UInt8, UInt8) = (0x01, 0x42)
+    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x42)
     public let variant: PTZNone = .init()
     public var value: PTZDrunkTestPhase
     
     public init?(message: PTZMessage) {
-        guard message.isValidReply(Self.setRegister) else { return nil }
+        guard message.isValidReply(Self.register.set()) else { return nil }
         self.value = message.parseArgument(position: .single)
     }
 }

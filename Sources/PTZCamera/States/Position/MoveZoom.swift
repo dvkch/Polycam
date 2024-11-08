@@ -8,7 +8,7 @@
 import Foundation
 import PTZMessaging
 
-public enum PTZZoomDirection: UInt16, PTZEnumValue {
+public enum PTZZoomDirection: UInt8, PTZVariant {
     case `in`   = 0x0C
     case `out`  = 0x0D
     case stop   = 0x0E
@@ -35,8 +35,9 @@ public struct PTZZoomSpeed: PTZScaledValue {
 
 /// Starts zooming in the given direction at the requested speed.
 /// Discovered in the original program's logs, extended by fuzzing
-public struct PTZMoveZoomAction: PTZState, PTZWriteable {
+public struct PTZMoveZoomAction: PTZParseableState, PTZWritable {
     public static var name: String { "MoveZoom" }
+    public static var register: PTZRegister<PTZZoomDirection> { .init(0x05, 0x00) }
     public var variant: PTZZoomDirection
     public var value: PTZZoomSpeed
     
@@ -46,9 +47,6 @@ public struct PTZMoveZoomAction: PTZState, PTZWriteable {
     }
     
     public func setMessage() -> PTZMessage {
-        switch variant {
-        case .in, .out:     return .init((0x45, UInt8(variant.rawValue)), value)
-        case .stop:         return .init((0x45, UInt8(variant.rawValue)))
-        }
+        .init(Self.register.set(variant), (variant == .stop) ? nil : value)
     }
 }

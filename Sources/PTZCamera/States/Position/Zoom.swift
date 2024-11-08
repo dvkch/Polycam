@@ -36,9 +36,9 @@ internal struct PTZZoomOriginalAPI: PTZScaledValue {
 
 /// Controls the zoom position.
 /// Discovered by fuzzing
-public struct PTZZoomState: PTZParseableState, PTZReadable, PTZWriteable {
+public struct PTZZoomState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "Zoom"
-    public static var register: (UInt8, UInt8) = (0x03, 0x02)
+    public static var register: PTZRegister<PTZNone> = .init(0x03, 0x02)
     
     public var value: PTZZoom
     

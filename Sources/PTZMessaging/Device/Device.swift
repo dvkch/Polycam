@@ -168,7 +168,7 @@ extension Device {
         return try get(state, for: variant, rescueModeCondition: false)
     }
 
-    public func set<T: PTZWriteable>(_ state: T, rescueModeCondition: Bool = false) throws(DeviceError) {
+    public func set<T: PTZWritable>(_ state: T, rescueModeCondition: Bool = false) throws(DeviceError) {
         let request = state.set()
         let reply = send(request, retries: RetryConditions.modeCondition(rescueModeCondition))
         switch reply {
@@ -183,7 +183,7 @@ extension Device {
         }
     }
 
-    public func set<T: PTZReadable & PTZWriteable>(_ state: T, debounce: Bool, rescueModeCondition: Bool = false) throws(DeviceError){
+    public func set<T: PTZReadable & PTZWritable>(_ state: T, debounce: Bool, rescueModeCondition: Bool = false) throws(DeviceError){
         if debounce, try get(T.self, for: state.variant) == state.value {
             return
         }

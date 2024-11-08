@@ -44,9 +44,9 @@ public enum PTZShutterSpeed: UInt16, PTZEnumValue {
 
 /// Controls the shutter speed
 /// Discovered in the original program's logs, extended by fuzzing
-public struct PTZShutterSpeedState: PTZParseableState, PTZReadable, PTZWriteable {
+public struct PTZShutterSpeedState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "ShutterSpeed"
-    public static var register: (UInt8, UInt8) = (0x02, 0x14)
+    public static var register: PTZRegister<PTZNone> = .init(0x02, 0x14)
     
     public var value: PTZShutterSpeed
     

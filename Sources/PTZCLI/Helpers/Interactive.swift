@@ -145,7 +145,7 @@ internal extension Interactive {
         }
     }
     
-    class Move<T: PTZWriteable>: Interactive.Element {
+    class Move<T: PTZWritable>: Interactive.Element {
         let id = UUID().uuidString
         private let camera: Camera
         private let directions: [Direction: T.Variant]
@@ -206,7 +206,7 @@ internal extension Interactive {
         }
     }
     
-    class State<T: PTZReadable & PTZWriteable>: Interactive.RefreshableElement where T.Value: PTZValue {
+    class State<T: PTZReadable & PTZWritable>: Interactive.RefreshableElement where T.Value: PTZValue {
         let id = UUID().uuidString
         private let camera: Camera
         private let variant: T.Variant

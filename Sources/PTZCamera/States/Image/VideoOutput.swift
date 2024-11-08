@@ -23,14 +23,14 @@ public enum PTZVideoOutput: UInt16, PTZEnumValue {
         }
     }
     
-    public static var `default`: PTZVideoOutput { .resolution1080p60 }
+    public static let `default`: Self = .resolution1080p60
 }
 
 /// Switch video mode
 /// Discovered in the original application's logs
-public struct PTZVideoOutputState: PTZParseableState, PTZReadable, PTZWriteable {
+public struct PTZVideoOutputState: PTZParseableState, PTZReadable, PTZWritable {
     public static var name: String = "VideoOutput"
-    public static var register: (UInt8, UInt8) = (0x01, 0x13)
+    public static var register: PTZRegister<PTZNone> = .init(0x01, 0x13)
     
     public var value: PTZVideoOutput
     
