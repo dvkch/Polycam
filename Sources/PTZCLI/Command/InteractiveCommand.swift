@@ -23,32 +23,6 @@ struct InteractiveCommand: ParsableCommand {
         let camera = try Camera(serial: .givenOrFirst(serial), logLevel: .error)
         try camera.powerOn()
         
-        var moveActions: [Interactive.Action<String>] = []
-        PTZPanDirection.allCases.forEach { dir in
-            moveActions.append(Interactive.Action(name: dir.description, state: "") { _ in
-                try? camera.startMovePan(.default, for: dir)
-                return ""
-            })
-        }
-        PTZTiltDirection.allCases.forEach { dir in
-            moveActions.append(Interactive.Action(name: dir.description, state: "") { _ in
-                try? camera.startMoveTilt(.default, for: dir)
-                return ""
-            })
-        }
-        PTZZoomDirection.allCases.forEach { dir in
-            moveActions.append(Interactive.Action(name: dir.description, state: "") { _ in
-                try? camera.startMoveZoom(.default, for: dir)
-                return ""
-            })
-        }
-        PTZFocusDirection.allCases.forEach { dir in
-            moveActions.append(Interactive.Action(name: dir.description, state: "") { _ in
-                try? camera.startMoveFocus(.default, for: dir)
-                return ""
-            })
-        }
-
         let content: [any Interactive.Element] = [
             Interactive.Line("Let's have some fun!"),
             Interactive.Line(""),
@@ -63,7 +37,12 @@ struct InteractiveCommand: ParsableCommand {
                     Interactive.State(PTZAutoFocusState.self, for: camera, default: .on),
                     Interactive.State(PTZFocusState.self, for: camera, default: .mid),
                 ]),
-                Interactive.Group("Move", moveActions)
+                Interactive.Group("Move", [
+                    Interactive.Move(PTZMovePanAction.self, camera: camera, oneWay: .left, otherWay: .right, stop: .stop, speed: .mid),
+                    Interactive.Move(PTZMoveTiltAction.self, camera: camera, oneWay: .down, otherWay: .up, stop: .stop, speed: .mid),
+                    Interactive.Move(PTZMoveZoomAction.self, camera: camera, oneWay: .out, otherWay: .in, stop: .stop, speed: .mid),
+                    Interactive.Move(PTZMoveFocusAction.self, camera: camera, oneWay: .far, otherWay: .near, stop: .stop, speed: .mid),
+                ])
             ]),
             Interactive.Group("--- Exposure ---", [
                 Interactive.State(PTZShutterSpeedState.self, for: camera, default: .default),

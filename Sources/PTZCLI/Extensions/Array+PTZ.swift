@@ -25,13 +25,31 @@ internal extension Bytes {
     }
 }
 
-internal extension Array where Element == UInt16 {
+internal extension Array where Element: PTZValue {
     func closest(to element: Element) -> Element? {
         guard !isEmpty else { return nil }
-        let distances = self.map { abs(Int32($0) - Int32(element)) }
+        let distances = self.map { abs(Int32($0.ptzValue) - Int32(element.ptzValue)) }
         let smallestDistance = distances.min()!
         let indexOfClosest = distances.firstIndex(of: smallestDistance)!
         return self[indexOfClosest]
+    }
+}
+
+internal extension Array {
+    func uniqueOrdered<T: Hashable>(by value: KeyPath<Element, T>) -> [Element] {
+        var uniqueElements = Set<T>()
+        var elements = [Element].init()
+        elements.reserveCapacity(count)
+
+        for el in self {
+            if uniqueElements.contains(el[keyPath: value]) {
+                continue
+            }
+            uniqueElements.insert(el[keyPath: value])
+            elements.append(el)
+        }
+        
+        return elements
     }
 }
 

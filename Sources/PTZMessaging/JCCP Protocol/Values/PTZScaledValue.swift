@@ -46,42 +46,34 @@ private extension PTZScaledValue {
 
 public extension PTZScaledValue {
     var isValid: Bool {
-        return rawValue >= type(of: self).minValue && rawValue <= type(of: self).maxValue
+        return ptzValue >= type(of: self).ptzMin && ptzValue <= type(of: self).ptzMax
     }
     
-    var clamped: RawValue {
-        return Swift.min(type(of: self).maxValue, Swift.max(type(of: self).minValue, rawValue))
-    }
-
     static var min: Self {
-        return Self.init(rawValue: minValue)!
+        return Self.init(ptzValue: ptzMin)
     }
     
     static var mid: Self {
-        return Self.init(rawValue: (maxValue - minValue) / 2 + minValue)!
+        return Self.init(ptzValue: (ptzMax - ptzMin) / 2 + ptzMin)
     }
     
     static var max: Self {
-        return Self.init(rawValue: maxValue)!
+        return Self.init(ptzValue: ptzMax)
     }
     
     static var random: Self {
-        return Self.init(rawValue: (minValue...maxValue).randomElement()!)!
+        return Self.init(ptzValue: (ptzMin...ptzMax).randomElement()!)
     }
 }
 
 extension PTZScaledValue {
-    public init(ptzValue: UInt16) {
-        self.init(rawValue: Self.convert(fromPTZ: ptzValue))!
-    }
-    
     public var ptzValue: UInt16 {
         return Self.convert(fromValue: rawValue)
     }
     
     public static var allCases: [Self] {
-        let allValues = Array(minValue...maxValue)
-        return allValues.lazy.map { Self.init(rawValue: $0)! }
+        let allValues = Array(ptzMin...ptzMax)
+        return allValues.lazy.map { Self.init(ptzValue: $0) }
     }
     
     public var description: String {

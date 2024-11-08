@@ -123,7 +123,73 @@ internal extension Interactive {
         }
     }
     
-    class State<T: PTZReadable & PTZWriteable>: Interactive.RefreshableElement {
+    class Move<T: PTZWriteable>: Interactive.Element {
+        let id = UUID().uuidString
+        private let camera: Camera
+        private let directions: [Direction: T.Variant]
+        private var lastDirectionV: T.Variant
+        private var lastDirection: Direction = .stop
+        private var lastError: String?
+        private let speed: T.Value
+        private enum Direction: CaseIterable {
+            case oneWay, stop, otherWay
+        }
+        
+        init(_ type: T.Type, camera: Camera, oneWay: T.Variant, otherWay: T.Variant, stop: T.Variant, speed: T.Value) {
+            self.camera = camera
+            self.directions = [.oneWay: oneWay, .otherWay: otherWay, .stop: stop]
+            self.lastDirectionV = stop
+            self.speed = speed
+        }
+        
+        private func move(_ direction: Direction) {
+            do {
+                try camera.set(T(speed, for: directions[direction]!))
+                lastDirection = direction
+                lastDirectionV = directions[direction]!
+            }
+            catch {
+                lastError = error.localizedDescription
+            }
+        }
+
+        // InteractiveElement
+        var output: String {
+            var string = "\(T.name) (\(lastDirectionV.description))"
+            if string.count < 30 {
+                string = string.padding(toLength: 30, withPad: " ", startingAt: 0)
+            }
+            
+            let symbolOneWay   = lastDirection == .oneWay   ? "O" : "·"
+            let symbolStop     = lastDirection == .stop     ? "O" : "·"
+            let symbolOtherWay = lastDirection == .otherWay ? "O" : "·"
+            
+            string += " <\(symbolOneWay)·\(symbolStop)·\(symbolOtherWay)>"
+            return string
+        }
+        var selectable: Bool { true }
+        var children: [any Interactive.Element] { [] }
+        func input(char: WideChar, camera: Camera) -> Bool {
+            switch (char) {
+            case .code(260): // left
+                let dir = Direction.allCases.elementBefore(lastDirection, or: Direction.allCases.first!)
+                move(dir)
+                
+            case .code(261): // right
+                let dir = Direction.allCases.elementAfter(lastDirection, or: Direction.allCases.last!)
+                move(dir)
+
+            case .char(" "): // space
+                move(.stop)
+                
+            default:
+                return false
+            }
+            return true
+        }
+    }
+    
+    class State<T: PTZReadable & PTZWriteable>: Interactive.RefreshableElement where T.Value: PTZValue {
         let id = UUID().uuidString
         private let camera: Camera
         private let variant: T.Variant
@@ -140,36 +206,38 @@ internal extension Interactive {
             self.init(state, for: camera, variant: .init(), values: T.Value.allCases, default: `default`)
         }
 
+        convenience init(_ state: T.Type, for camera: Camera, default: T.Value) where T.Variant == PTZNone, T.Value: PTZScaledValue {
+            var values: [T.Value] = T.Value.allCases
+            if values.count > 25 {
+                let step = max(1, (T.Value.maxValue - T.Value.minValue) / 25)
+                values = stride(from: T.Value.minValue, to: T.Value.maxValue, by: step)
+                    .map { T.Value(rawValue: $0) }
+                    .uniqueOrdered(by: \.rawValue)
+            }
+            self.init(state, for: camera, variant: .init(), values: values, default: `default`)
+        }
+
         init(_ state: T.Type, for camera: Camera, variant: T.Variant, values: any Collection<T.Value>, default: T.Value) {
             self.camera = camera
             self.variant = variant
-            self.values = values.map { $0 }
+            self.values = Array(values)
             self.currentValue = try! camera.get(T.self , for: variant)
             self.defaultValue = `default`
             
-            if values.count > 30 {
-                self.values = stride(from: 0, to: self.values.count - 1, by: max(1, self.values.count / 30)).map { self.values[$0] }
-            }
+            setCurrentValue(currentValue)
         }
         
-        #warning("doesn't seem to work")
-        private func setCurrentValue(_ value: T.Value) where T.Value: RawRepresentable, T.Value.RawValue == UInt16 {
-            let rawValue = values.map(\.rawValue).closest(to: value.rawValue) ?? value.rawValue
-            currentValue = .init(rawValue: rawValue)!
-        }
-
         private func setCurrentValue(_ value: T.Value) {
-            currentValue = value
         }
 
         private func set(to value: T.Value) {
             do {
                 try camera.set(T.init(value, for: variant))
-                setCurrentValue(value)
-                self.lastError = nil
+                currentValue = values.closest(to: value) ?? value
+                lastError = nil
             }
             catch {
-                self.lastError = error.localizedDescription
+                lastError = error.localizedDescription
             }
         }
 
@@ -177,11 +245,11 @@ internal extension Interactive {
         func refresh() {
             do {
                 let value = try camera.get(T.self, for: variant)
-                setCurrentValue(value)
-                self.lastError = nil
+                currentValue = values.closest(to: value) ?? value
+                lastError = nil
             }
             catch {
-                self.lastError = error.localizedDescription
+                lastError = error.localizedDescription
             }
         }
 
