@@ -23,3 +23,19 @@ public extension PTZWriteableCombo {
         self.init(value)
     }
 }
+
+public extension PTZReadableCombo {
+    static var cliReadDescription: String {
+        return name.prefix(1).lowercased() + name.dropFirst()
+    }
+}
+
+public extension PTZWriteableCombo {
+    static var cliWriteDescription: String {
+        var description: String = name.prefix(1).lowercased() + name.dropFirst()
+        if !Value.cliStringExamples.isEmpty {
+            description += "=" + Value.cliStringExamples.joined(separator: "/")
+        }
+        return description
+    }
+}

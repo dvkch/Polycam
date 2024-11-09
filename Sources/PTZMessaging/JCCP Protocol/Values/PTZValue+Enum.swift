@@ -31,6 +31,10 @@ public extension PTZEnumValue {
         }
     }
     
+    static var cliStringExamples: [String] {
+        return allCases.map(\.description)
+    }
+    
     var toJSON: JSONValue {
         return rawValue
     }

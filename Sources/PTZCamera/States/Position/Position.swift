@@ -33,6 +33,10 @@ public struct PTZPosition: Equatable, CustomStringConvertible, CLIDecodable, JSO
         self.zoom = zoom
     }
     
+    public static var cliStringExamples: [String] {
+        return ["pan,tilt,zoom"]
+    }
+    
     public var description: String { "\(pan), \(tilt), \(zoom)" }
     public var toJSON: JSONValue {
         return ["pan": pan.toJSON, "tilt": tilt.toJSON, "zoom": zoom.toJSON]

@@ -28,3 +28,12 @@ public extension PTZReadable where Variant == PTZNone {
     }
 }
 
+public extension PTZReadable {
+    static var cliReadDescription: String {
+        var description: String = name.prefix(1).lowercased() + name.dropFirst()
+        if !(Variant.self == PTZNone.self), variants.count > 0 {
+            description += "(\(variants.map(\.description).joined(separator: ", ")))"
+        }
+        return description
+    }
+}

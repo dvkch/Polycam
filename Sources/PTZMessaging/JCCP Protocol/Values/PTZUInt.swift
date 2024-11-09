@@ -41,6 +41,8 @@ extension PTZUInt: PTZValue {
         self.rawValue = value
     }
     
+    public static var cliStringExamples: [String] { ["UInt"] }
+    
     public var toJSON: JSONValue {
         return rawValue
     }

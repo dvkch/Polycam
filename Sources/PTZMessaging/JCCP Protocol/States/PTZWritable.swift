@@ -39,3 +39,16 @@ public extension PTZWritable {
         self.init(value, for: variant)
     }
 }
+
+public extension PTZWritable {
+    static var cliWriteDescription: String {
+        var description: String = name.prefix(1).lowercased() + name.dropFirst()
+        if !(Variant.self == PTZNone.self), variants.count > 0 {
+            description += "(\(variants.map(\.description).joined(separator: ", ")))"
+        }
+        if !Value.cliStringExamples.isEmpty {
+            description += "=" + Value.cliStringExamples.joined(separator: "/")
+        }
+        return description
+    }
+}

@@ -43,6 +43,10 @@ public struct PTZLedIntensity: Equatable, CustomStringConvertible, CLIDecodable,
         self.b = b
     }
     
+    public static var cliStringExamples: [String] {
+        return ["r,g,b"]
+    }
+    
     public var toJSON: JSONValue {
         return ["r": r.toJSON, "g": g.toJSON, "b": b.toJSON]
     }

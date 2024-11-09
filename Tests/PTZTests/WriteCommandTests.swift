@@ -63,9 +63,10 @@ final class WriteCommandTests: XCTestCase {
         do {
             let expectedErr =
             """
-            Error: Unknown state "bunny"
-            Usage: ptz <subcommand>
-              See 'ptz --help' for more information.
+            Error: The value 'bunny=10' is invalid for '<operations>': Unknown operation
+            Help:  <operations>  Operations (boot, pause=secs, or any state(variant)=value)
+            Usage: ptz write [--device <device>] [--log <log>] [--continue <continue>] [<operations> ...]
+              See 'ptz write --help' for more information.
             """
             
             let output = try ptz(["write", "bunny=10"])
@@ -81,9 +82,10 @@ final class WriteCommandTests: XCTestCase {
         do {
             let expectedErr =
             """
-            Error: Invalid parameters for state "clock"
-            Usage: ptz <subcommand>
-              See 'ptz --help' for more information.
+            Error: The value 'clock(t3)=0' is invalid for '<operations>': Invalid parameters for state "clock"
+            Help:  <operations>  Operations (boot, pause=secs, or any state(variant)=value)
+            Usage: ptz write [--device <device>] [--log <log>] [--continue <continue>] [<operations> ...]
+              See 'ptz write --help' for more information.
             """
 
             let output = try ptz(["write", "clock(t3)=0"])
@@ -99,9 +101,10 @@ final class WriteCommandTests: XCTestCase {
         do {
             let expectedErr =
             """
-            Error: Invalid parameters for state "clock"
-            Usage: ptz <subcommand>
-              See 'ptz --help' for more information.
+            Error: The value 'clock(t1)=-1' is invalid for '<operations>': Invalid parameters for state "clock"
+            Help:  <operations>  Operations (boot, pause=secs, or any state(variant)=value)
+            Usage: ptz write [--device <device>] [--log <log>] [--continue <continue>] [<operations> ...]
+              See 'ptz write --help' for more information.
             """
 
             let output = try ptz(["write", "clock(t1)=-1"])

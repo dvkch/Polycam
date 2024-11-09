@@ -20,8 +20,6 @@ struct TesterCommand: ParsableCommand {
     var logLevel: LogLevel = .error
 
     mutating func run() throws(CameraError) {
-        Camera.registerKnownStates()
-
         let camera = try Camera(serial: .givenOrFirst(serial), logLevel: logLevel)
         try camera.powerOn()
 

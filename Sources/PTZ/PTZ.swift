@@ -7,6 +7,7 @@
 
 import Foundation
 import ArgumentParser
+import PTZCamera
 
 @main
 struct PTZ: ParsableCommand {
@@ -23,6 +24,7 @@ struct PTZ: ParsableCommand {
     )
     
     public static func main() {
+        Camera.registerKnownStates()
         self.main(nil)
     }
 }

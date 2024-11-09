@@ -21,8 +21,6 @@ struct FuzzerCommand: ParsableCommand {
     var complete: Bool = false
     
     mutating func run() throws(CameraError) {
-        Camera.registerKnownStates()
-
         let camera = try Camera(serial: .givenOrFirst(serial), logLevel: .error)
         try camera.powerOn()
         try camera.startReset(.settingsAndMotors)

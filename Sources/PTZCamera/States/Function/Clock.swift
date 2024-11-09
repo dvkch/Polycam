@@ -26,6 +26,10 @@ extension UInt32: CLIDecodable, JSONEncodable {
         self = value
     }
     
+    public static var cliStringExamples: [String] {
+        return ["UInt32"]
+    }
+    
     public var toJSON: JSONValue {
         return self
     }

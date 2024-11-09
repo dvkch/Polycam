@@ -9,5 +9,6 @@ import Foundation
 
 public protocol CLIDecodable {
     init?(from cliString: String)
+    static var cliStringExamples: [String] { get }
 }
 

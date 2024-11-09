@@ -19,8 +19,6 @@ struct BenchmarkCommand: ParsableCommand {
     var duration: Int = 60
     
     mutating func run() throws(CameraError) {
-        Camera.registerKnownStates()
-
         let camera = try Camera(serial: .givenOrFirst(serial), logLevel: .error)
         try camera.powerOn()
         

@@ -93,6 +93,10 @@ public struct PTZLed: Equatable, CustomStringConvertible, CLIDecodable, JSONEnco
         self.mode = mode
     }
     
+    public static var cliStringExamples: [String] {
+        return ["color,mode"]
+    }
+    
     public var toJSON: JSONValue {
         return ["color": color.toJSON, "mode": mode.toJSON]
     }

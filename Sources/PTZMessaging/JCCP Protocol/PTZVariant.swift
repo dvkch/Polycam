@@ -23,6 +23,10 @@ public extension PTZVariant {
             return nil
         }
     }
+    
+    static var cliStringExamples: [String] {
+        return allCases.map({ $0.description.lowercased() })
+    }
 }
 
 public extension PTZVariant where Self: RawRepresentable, RawValue == UInt8 {

@@ -20,6 +20,8 @@ extension PTZNone: PTZVariant {
         guard cliString == "" else { return nil }
     }
     
+    public static var cliStringExamples: [String] { [] }
+    
     public static var allCases: [PTZNone] { [.init()] }
 
     public var description: String { "" }

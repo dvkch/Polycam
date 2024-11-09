@@ -13,76 +13,83 @@ import PTZMessaging
 struct ReadCommand: ParsableCommand {
     static var configuration: CommandConfiguration = .init(
         commandName: "read",
-        usage: "read brightness pan contrast calibrationHue(blue) --device=/dev/serial0",
-        discussion: "Available commands: " + supportedCommands.joined(separator: ", ")
+        discussion: "Available operations:\n" + availableOperations
     )
     
-    static var supportedCommands: [String] {
-        ["all"] + (PTZConfig.knownReadableStates.map({ $0.name.camelCased }) + PTZConfig.knownReadableCombosStates.map({ $0.name.camelCased })).sorted()
+    static var availableOperations: String {
+        var operations = ["all"]
+        operations += PTZConfig.knownReadableStates.map({ $0.cliReadDescription })
+        operations += PTZConfig.knownReadableCombosStates.map({ $0.cliReadDescription })
+        return operations.map({ "  " + $0 }).joined(separator: "\n")
     }
-
+    
     @Option(name: .customLong("device"), help: "PTZ serial device name")
     var serial: String?
     
     @Option(name: .customLong("log"), help: "Log level")
     var logLevel: LogLevel = .error
     
-    @Argument(help: "States")
-    var states: [String] = []
-
+    typealias Operation = (Camera, inout [String: JSONValue]) throws -> ()
+    
+    @Argument(help: "States, e.g. calibrationHue(cyan)", transform: { try Self.parseOperation($0) })
+    var states: [Operation] = []
+    
+    private static func parseOperation(_ operationString: String) throws -> [Operation] {
+        let regex = #/(?<name>[a-zA-Z0-9]+)(?:\((?<variant>[a-zA-Z0-9/]+)\))?/#
+        guard let state = try? regex.wholeMatch(in: operationString)?.output else {
+            throw ValidationError("Unrecognized syntax")
+        }
+        
+        if state.name == "all" {
+            var operations = [Operation]()
+            for state in PTZConfig.knownReadableCombosStates {
+                operations.append({ try Self.readState(state, camera: $0, result: &$1) })
+            }
+            for state in PTZConfig.knownReadableStates {
+                for variant in state.variants {
+                    operations.append({ try Self.readState(state, for: variant.description, camera: $0, result: &$1) })
+                }
+            }
+            return operations
+        }
+        
+        if let stateType = PTZConfig.knownReadableCombosStates.first(where: { $0.name.camelCased == state.name }) {
+            return [{ try Self.readState(stateType, camera: $0, result: &$1) }]
+        }
+        
+        if let stateType = PTZConfig.knownReadableStates.first(where: { $0.name.camelCased == state.name }) {
+            return [{ try Self.readState(stateType, for: state.variant.map(String.init) ?? "", camera: $0, result: &$1) }]
+        }
+        
+        throw ValidationError("Unknown state")
+    }
+    
     mutating func run() throws {
-        Camera.registerKnownStates()
-
         let (serial, camera) = try Result(catching: {
             let serial = try SerialName.givenOrFirst(self.serial)
             let camera = try Camera(serial: serial, logLevel: logLevel)
             return (serial, camera)
         }).mapError { ValidationError($0.localizedDescription) }.get()
-
+        
         try camera.powerOnIfNeeded()
         
         var result = [String: JSONValue]()
         result["device"] = serial.rawValue
-
-        let regex = #/(?<name>[a-zA-Z0-9]+)(?:\((?<variant>[a-zA-Z0-9/]+)\))?/#
-        for stateString in states {
-            guard let state = try? regex.wholeMatch(in: stateString)?.output else {
-                throw ValidationError("Unrecognized syntax: \(stateString)")
-            }
-            
-            if state.name == "all" {
-                for state in PTZConfig.knownReadableCombosStates {
-                    try readState(state, camera: camera, result: &result)
-                }
-                for state in PTZConfig.knownReadableStates {
-                    for variant in state.variants {
-                        try readState(state, for: variant.description, camera: camera, result: &result)
-                    }
-                }
-                continue
-            }
-
-            if let stateType = PTZConfig.knownReadableCombosStates.first(where: { $0.name.camelCased == state.name }) {
-                try readState(stateType, camera: camera, result: &result)
-                continue
-            }
-
-            if let stateType = PTZConfig.knownReadableStates.first(where: { $0.name.camelCased == state.name }) {
-                try readState(stateType, for: state.variant.map(String.init) ?? "", camera: camera, result: &result)
-                continue
-            }
-
-            throw ValidationError("Unknown state \"\(state.name)\"")
+        
+        for operation in states {
+            try operation(camera, &result)
         }
         
         let jsonData = try JSONSerialization.data(withJSONObject: result, options: [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes])
         let jsonString = String(data: jsonData, encoding: .utf8)!
         print(jsonString)
-
+        
         throw ExitCode.success
     }
-    
-    private func readState<T: PTZReadableCombo>(_ stateType: T.Type, camera: Camera, result: inout [String: JSONValue]) throws {
+}
+
+private extension ReadCommand {
+    static func readState<T: PTZReadableCombo>(_ stateType: T.Type, camera: Camera, result: inout [String: JSONValue]) throws {
         do {
             let key = stateType.name.camelCased
             let value = try camera.get(stateType)
@@ -96,7 +103,7 @@ struct ReadCommand: ParsableCommand {
         }
     }
     
-    private func readState<T: PTZReadable>(_ stateType: T.Type, for variant: String, camera: Camera, result: inout [String: JSONValue]) throws {
+    static func readState<T: PTZReadable>(_ stateType: T.Type, for variant: String, camera: Camera, result: inout [String: JSONValue]) throws {
         do {
             guard let value = try camera.get(stateType, forCli: variant) else {
                 throw ValidationError("Invalid parameters for state \"\(stateType.name)\"")

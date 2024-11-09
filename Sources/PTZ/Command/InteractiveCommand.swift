@@ -21,8 +21,6 @@ struct InteractiveCommand: ParsableCommand {
     private static var lastError: String?
     
     mutating func run() throws(CameraError) {
-        Camera.registerKnownStates()
-
         let camera = try Camera(serial: .givenOrFirst(serial), logLevel: .error)
         try camera.powerOn()
         

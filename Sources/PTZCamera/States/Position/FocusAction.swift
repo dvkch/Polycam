@@ -12,7 +12,7 @@ import PTZMessaging
 /// Takes about 5 seconds to settle down
 /// Discovered by fuzzing
 public struct PTZFocusAction: PTZWritable {
-    public static let name: String = "Start Focus"
+    public static let name: String = "StartFocus"
     public static let register: PTZRegister<PTZNone> = .init(0x05, 0x13)
 
     public var value: PTZNone

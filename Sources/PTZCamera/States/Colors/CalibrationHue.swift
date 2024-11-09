@@ -9,11 +9,11 @@ import Foundation
 import PTZMessaging
 
 public enum PTZCalibrationRange: UInt8, PTZVariant {
-    case red = 0x00
+    case red    = 0x00
     case orange = 0x01
-    case green = 0x02
-    case cyan = 0x03
-    case blue = 0x04
+    case green  = 0x02
+    case cyan   = 0x03
+    case blue   = 0x04
     case purple = 0x05
     
     public var description: String {

@@ -55,6 +55,10 @@ public struct PTZCalibrationMatrix: Equatable, CustomStringConvertible, CLIDecod
         }
     }
     
+    public static var cliStringExamples: [String] {
+        return ["h,h,h,h,h,h|l,l,l,l,l,l|s,s,s,s,s,s"]
+    }
+    
     public var toJSON: JSONValue {
         let hues        = PTZCalibrationRange.allCases.map({ self[hue: $0].toJSON })
         let luminances  = PTZCalibrationRange.allCases.map({ self[luminance: $0].toJSON })

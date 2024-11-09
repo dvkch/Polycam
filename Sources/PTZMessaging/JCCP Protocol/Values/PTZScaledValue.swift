@@ -85,6 +85,10 @@ extension PTZScaledValue {
         self.init(rawValue: rawValue)
     }
     
+    public static var cliStringExamples: [String] {
+        return [min.description + "->" + max.description]
+    }
+    
     public var toJSON: JSONValue {
         return rawValue
     }

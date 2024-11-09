@@ -53,6 +53,10 @@ extension PTZBool: PTZValue {
         }
     }
     
+    public static var cliStringExamples: [String] {
+        return ["0", "1"]
+    }
+    
     public var toJSON: JSONValue {
         return rawValue
     }
