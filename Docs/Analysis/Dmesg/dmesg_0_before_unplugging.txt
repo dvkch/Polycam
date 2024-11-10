@@ -1,0 +1,501 @@
+root@android:/ # dmesg                                                         
+<5>Linux version 2.6.37+ (@rhythm01.austin.polycom.com) (gcc version 4.4.3 (GCC) ) #0 PREEMPT Tue Aug 11 23:09:08 CDT 2015
+<5>Kernel: : UID-log-analysis: UID-37486534: tag=linux-boot
+<4>CPU: ARMv7 Processor [413fc082] revision 2 (ARMv7), cr=10c53c7f
+<4>CPU: VIPT nonaliasing data cache, VIPT aliasing instruction cache
+<4>Machine: ti8168evm
+<6>vram size = 33554432 at 0x0
+<6>reserved size = 33554432 at 0x0
+<6>FB: Reserving 33554432 bytes SDRAM for VRAM
+<4>Memory policy: ECC disabled, Data cache writeback
+<6>OMAP chip is TI8168 2.1
+<7>On node 0 totalpages: 184320
+<7>free_area_init_node: node 0, pgdat 805556bc, node_mem_map 80605000
+<7>  Normal zone: 2440 pages used for memmap
+<7>  Normal zone: 0 pages reserved
+<7>  Normal zone: 76408 pages, LIFO batch:15
+<7>  HighMem zone: 888 pages used for memmap
+<7>  HighMem zone: 104584 pages, LIFO batch:31
+<7>pcpu-alloc: s0 r0 d32768 u32768 alloc=1*32768
+<7>pcpu-alloc: [0] 0 
+<4>Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 180992
+<5>Kernel command line: console=ttyO2,115200n8 androidboot.console=ttyO2 vram=32M mem=112M@0x80000000 mem=640M@0xC0000000 vmalloc=700M ti816x_pcie_disable eth=00:E0:DB:45:2D:36 root=/dev/mmcblk0p5 rootwait init=/init polycom_hawking=MARS110 bootmode=
+<4>plcm_board_setup unknown boardid, defaulting to MARS
+<6>PID hash table entries: 2048 (order: 1, 8192 bytes)
+<6>Dentry cache hash table entries: 65536 (order: 6, 262144 bytes)
+<6>Inode-cache hash table entries: 32768 (order: 5, 131072 bytes)
+<6>Memory: 112MB 608MB = 720MB total
+<5>Memory: 724644k/724644k available, 45404k reserved, 421888K highmem
+<5>Virtual kernel memory layout:
+<5>    vector  : 0xffff0000 - 0xffff1000   (   4 kB)
+<5>    fixmap  : 0xfff00000 - 0xfffe0000   ( 896 kB)
+<5>    DMA     : 0xffc00000 - 0xffe00000   (   2 MB)
+<5>    vmalloc : 0xcc800000 - 0xf8000000   ( 696 MB)
+<5>    lowmem  : 0x80000000 - 0xcc400000   (1220 MB)
+<5>    pkmap   : 0x7fe00000 - 0x80000000   (   2 MB)
+<5>    modules : 0x7f000000 - 0x7fe00000   (  14 MB)
+<5>      .init : 0x80008000 - 0x80075000   ( 436 kB)
+<5>      .text : 0x80075000 - 0x80512000   (4724 kB)
+<5>      .data : 0x80512000 - 0x80556e40   ( 276 kB)
+<6>SLUB: Genslabs=11, HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+<6>NR_IRQS:407
+<6>IRQ: Found an INTC at 0xfa200000 (revision 5.0) with 128 interrupts
+<6>Total of 128 interrupts on 1 active controller
+<6>GPMC revision 6.0
+<4>Trying to install interrupt handler for IRQ400
+<4>Trying to install interrupt handler for IRQ401
+<4>Trying to install interrupt handler for IRQ402
+<4>Trying to install interrupt handler for IRQ403
+<4>Trying to install interrupt handler for IRQ404
+<4>Trying to install interrupt handler for IRQ405
+<4>Trying to install interrupt handler for IRQ406
+<3>Trying to install type control for IRQ407
+<3>Trying to set irq flags for IRQ407
+<6>OMAP clockevent source: GPTIMER1 at 27000000 Hz
+<4>Console: colour dummy device 80x30
+<6>Calibrating delay loop... 983.04 BogoMIPS (lpj=491520)
+<6>pid_max: default: 32768 minimum: 301
+<6>Security Framework initialized
+<4>Mount-cache hash table entries: 512
+<6>CPU: Testing write buffer coherency: ok
+<6>devtmpfs: initialized
+<4>omap_voltage_early_init: voltage driver support not added
+<6>regulator: core version 0.5
+<6>regulator: dummy: 
+<6>NET: Registered protocol family 16
+<3>omap_voltage_domain_lookup: Voltage driver init not yet happened.Faulting!
+<4>omap_voltage_add_dev: VDD specified does not exist!
+<6>OMAP GPIO hardware version 0.1
+<6>OMAP GPIO hardware version 0.1
+<6>omap_mux_init: Add partition: #1: core, flags: 0
+<3>_omap_mux_get_by_name: Could not find signal i2c2_scl.i2c2_scl
+<3>_omap_mux_get_by_name: Could not find signal i2c2_sda.i2c2_sda
+<6>registered ti816x_gpio_vr device
+<6>registered ti816x_sr device
+<6>registered ti81xx_vpss device
+<6>ti816x_hdmi_init(): Mars board with PG2.1 detected
+<6>mcb_clk_sel_pins(): Reparent pin_mux_out_ck clk to mcb_fsx_ck PINCTRL149 (pin AM34)
+<6>registered ti81xx on-chip HDMI device
+<6>registered ti81xx_fb device
+<3>ti81xx_pcie: No platform data
+<4>bio: create slab <bio-0> at 0
+<6>regulator: VFB: 800 <--> 1025 mV at 980 mV 
+<6>vgaarb: loaded
+<5>SCSI subsystem initialized
+<6>usbcore: registered new interface driver usbfs
+<6>usbcore: registered new interface driver hub
+<6>usbcore: registered new device driver usb
+<6>USBSS revision 4ea20809
+<6>registerd cppi-dma Intr @ IRQ 17
+<6>Cppi41 Init Done
+<6>omap_i2c omap_i2c.1: bus 1 rev4.0 at 100 kHz
+<6>omap_i2c omap_i2c.2: bus 2 rev4.0 at 100 kHz
+<6>Switching to clocksource gp timer
+<6>Switched to NOHz mode on CPU #0
+<6>musb-hdrc: version 6.0, host, debug=0
+<6>musb-hdrc musb-hdrc.0: dma type: dma-cppi41
+<6>MUSB controller-0 revision 4ea20800
+<7>TxFifo Empty intr disabled
+<7>musb-hdrc: ConfigData=0xde (UTMI-8, dyn FIFOs, bulk combine, bulk split, HB-ISO Rx, HB-ISO Tx, SoftConn)
+<7>musb-hdrc: MHDRC RTL version 2.0 
+<7>musb-hdrc: setup fifo_mode 4
+<7>musb-hdrc: 28/31 max ep, 16384/16384 memory
+<6>musb-hdrc musb-hdrc.0: MUSB HDRC host driver
+<6>musb-hdrc musb-hdrc.0: new USB bus registered, assigned bus number 1
+<6>usb usb1: New USB device found, idVendor=1d6b, idProduct=0002
+<6>usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+<6>usb usb1: Product: MUSB HDRC host driver
+<6>usb usb1: Manufacturer: Linux 2.6.37+ musb-hcd
+<6>usb usb1: SerialNumber: musb-hdrc.0
+<6>hub 1-0:1.0: USB hub found
+<6>hub 1-0:1.0: 1 port detected
+<6>musb-hdrc musb-hdrc.0: USB Host mode controller at cc81e000 using DMA, IRQ 18
+<7>Registered /proc/driver/musb_hdrc.0
+<6>musb-hdrc musb-hdrc.1: dma type: dma-cppi41
+<6>MUSB controller-1 revision 4ea20800
+<7>TxFifo Empty intr disabled
+<7>musb-hdrc: ConfigData=0xde (UTMI-8, dyn FIFOs, bulk combine, bulk split, HB-ISO Rx, HB-ISO Tx, SoftConn)
+<7>musb-hdrc: MHDRC RTL version 2.0 
+<7>musb-hdrc: setup fifo_mode 4
+<7>musb-hdrc: 28/31 max ep, 16384/16384 memory
+<6>musb-hdrc musb-hdrc.1: MUSB HDRC host driver
+<6>musb-hdrc musb-hdrc.1: new USB bus registered, assigned bus number 2
+<6>usb usb2: New USB device found, idVendor=1d6b, idProduct=0002
+<6>usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+<6>usb usb2: Product: MUSB HDRC host driver
+<6>usb usb2: Manufacturer: Linux 2.6.37+ musb-hcd
+<6>usb usb2: SerialNumber: musb-hdrc.1
+<6>hub 2-0:1.0: USB hub found
+<6>hub 2-0:1.0: 1 port detected
+<6>musb-hdrc musb-hdrc.1: USB Host mode controller at cc828800 using DMA, IRQ 19
+<7>Registered /proc/driver/musb_hdrc.1
+<6>NET: Registered protocol family 2
+<6>IP route cache hash table entries: 16384 (order: 4, 65536 bytes)
+<6>TCP established hash table entries: 65536 (order: 7, 524288 bytes)
+<6>TCP bind hash table entries: 65536 (order: 6, 262144 bytes)
+<6>TCP: Hash tables configured (established 65536 bind 65536)
+<6>TCP reno registered
+<6>UDP hash table entries: 256 (order: 0, 4096 bytes)
+<6>UDP-Lite hash table entries: 256 (order: 0, 4096 bytes)
+<6>NET: Registered protocol family 1
+<6>RPC: Registered udp transport module.
+<6>RPC: Registered tcp transport module.
+<6>RPC: Registered tcp NFSv4.1 backchannel transport module.
+<7>PCI: CLS 0 bytes, default 64
+<4>NetWinder Floating Point Emulator V0.97 (double precision)
+<6>PMU: registered new PMU device of type 0
+<6>omap-iommu omap-iommu.0: ducati registered
+<6>omap-iommu omap-iommu.1: sys registered
+<4>highmem bounce pool size: 64 pages
+<6>ashmem: initialized
+<6>msgmni has been set to 591
+<6>io scheduler noop registered (default)
+<6>io scheduler deadline registered
+<6>io scheduler cfq registered
+<6>Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+<6>omap_uart.0: ttyO0 at MMIO 0x48020000 (irq = 72) is a OMAP UART0
+<6>omap_uart.1: ttyO1 at MMIO 0x48022000 (irq = 73) is a OMAP UART1
+<6>omap_uart.2: ttyO2 at MMIO 0x48024000 (irq = 74) is a OMAP UART2
+<6>console [ttyO2] enabled
+<6>brd: module loaded
+<6>loop: module loaded
+<4>m25p80 spi1.0: found s25fl064k, expected w25q64
+<6>m25p80 spi1.0: s25fl064k (8192 Kbytes)
+<5>Creating 7 MTD partitions on "spi_flash":
+<5>0x000000000000-0x000000040000 : "U-Boot"
+<5>0x000000040000-0x000000042000 : "U-Boot Env"
+<5>0x000000042000-0x000000044000 : "Failsafe U-Boot Env"
+<5>0x000000044000-0x000000045000 : "Critical Board Backup"
+<5>0x000000045000-0x000000048000 : "Kernel Log"
+<5>0x000000048000-0x000000348000 : "Kernel"
+<5>0x000000348000-0x000000800000 : "Ramfs"
+<6>davinci_mdio davinci_mdio.0: davinci mdio revision 1.6
+<6>davinci_mdio davinci_mdio.0: detected phy mask fffffffc
+<6>davinci_mdio.0: probed
+<6>davinci_mdio davinci_mdio.0: phy[0]: device 0:00, id 1cc915, driver unknown
+<6>davinci_mdio davinci_mdio.0: phy[1]: device 0:01, id 1cc915, driver unknown
+<6>usbcore: registered new interface driver cdc_ether
+<6>usbcore: registered new interface driver dm9601
+<6>Initializing USB Mass Storage driver...
+<6>usbcore: registered new interface driver usb-storage
+<6>USB Mass Storage support registered.
+<6>mice: PS/2 mouse device common for all mice
+<6>usbcore: registered new interface driver wacom
+<6>wacom: v1.52:USB Wacom tablet driver
+<6>usbcore: registered new interface driver usbtouchscreen
+<6>i2c /dev entries driver
+<6>Linux video capture interface: v2.00
+<6>usbcore: registered new interface driver uvcvideo
+<6>USB Video Class driver (v1.0.0)
+<6>OMAP Watchdog Timer Rev 0x00: initial timeout 60 sec
+<6>usbcore: registered new interface driver usbhid
+<6>usbhid: USB HID core driver
+<6>logger: created 64K log 'log_main'
+<6>logger: created 256K log 'log_events'
+<6>logger: created 64K log 'log_radio'
+<6>logger: created 64K log 'log_system'
+<6>nf_conntrack version 0.5.0 (11322 buckets, 45288 max)
+<6>ip_tables: (C) 2000-2006 Netfilter Core Team
+<6>TCP cubic registered
+<6>NET: Registered protocol family 10
+<6>NET: Registered protocol family 17
+<6>802.1Q VLAN Support v1.8 Ben Greear <greearb@candelatech.com>
+<6>All bugs added by David S. Miller <davem@redhat.com>
+<6>VFP support v0.3: implementor 41 architecture 3 part 30 variant c rev 3
+<3>omap_voltage_late_init: Voltage driver support not added
+<6>Power Management for TI81XX.
+<6>smartreflex smartreflex: Driver initialized
+<6>Freeing init memory: 436K
+<6>set sw_caps.hs_max_dtr = 50000000
+<6>SD manid: 0x00000074, prod_name: SD   
+<6>mmc0: new high speed SDHC card at address 0260
+<6>mmcblk0: mmc0:0260 SD    3.75 GiB 
+<6> mmcblk0: p1 p2 p3 p4 < p5 p6 p7 p8 p9 >
+<6>EXT3-fs: barriers not enabled
+<6>kjournald starting.  Commit interval 5 seconds
+<6>EXT3-fs (mmcblk0p6): using internal journal
+<6>EXT3-fs (mmcblk0p6): mounted filesystem with ordered data mode
+<6>EXT3-fs: barriers not enabled
+<6>kjournald starting.  Commit interval 5 seconds
+<6>EXT3-fs (mmcblk0p5): using internal journal
+<6>EXT3-fs (mmcblk0p5): mounted filesystem with ordered data mode
+<4>init (1): /proc/1/oom_adj is deprecated, please use /proc/1/oom_score_adj instead.
+<3>init: cannot open '/initlogo.rle'
+<6>EXT3-fs: barriers not enabled
+<6>kjournald starting.  Commit interval 5 seconds
+<6>EXT3-fs (mmcblk0p6): using internal journal
+<6>EXT3-fs (mmcblk0p6): mounted filesystem with ordered data mode
+<3>init: cannot find '/devmount', disabling 'devmount'
+<6>input: Polycom uC IR keyboard as /devices/polycomuc_irrc/input/input0
+<7>Registered led device: polycom_uc:red
+<7>Registered led device: polycom_uc:green
+<7>Registered led device: polycom_uc:blue
+<6>using rtc device, polycomuc_rtc, for alarms
+<6>polycomuc_rtc polycomuc_rtc: rtc core: registered polycomuc_rtc as rtc0
+<4>plcmlog: no log buffer data detected, init the plcmlog buffer
+<6>LINX: version 2.5.1
+<6>LINX: Compile-time configuration:
+<6>LINX: Max number of LINX sockets 512
+<6>LINX: Max number of attach references 1024
+<6>LINX: Max number of remote links 32
+<6>LINX: Max number of communicating sockets over a link 1024
+<6>LINX: Max number of timeout references 1024
+<6>NET: Registered protocol family 29
+<4>LINX TCP CM: IPv4 on port 19790, listen on port 19790
+<4>LINX TCP CM: IPv6 Support is disabled
+<4>davinci_mdio davinci_mdio.0: resetting idled controller
+<6>net eth0: attached PHY driver [Generic PHY] (mii_bus:phy_addr=0:01, id=1cc915)
+<6>ADDRCONF(NETDEV_UP): eth0: link is not ready
+<4>ipc_init 3
+<4>mproc_info cb701000, size 1280, mproc_info_pci_addr cb701000
+<4>SysLink version : 2.00.06.87
+<4>SysLink module created on Date:Aug 11 2015 Time:23:10:06
+<6>HDMI W1 rev 2.0
+<6>HDMI CEC Spec version 1.2
+<7>hdmi: Enter HDMI_W1_StopVideoFrame()
+<7>found best resolution: 1920x1080 (9)
+<7>Extension block present db 2 13
+<7>84
+<7>Extension block present db 1 13
+<7>84
+<7>Extension block present db 3 13
+<7>84
+<7>Extension block present db 3 13
+<7>84
+<7>Extension block present db 3 13
+<7>84
+<7>hdmi: Enter HDMI_W1_GlobalInitVars()
+<6>PHY: 0:01 - Link is Up - 1000/Full
+<6>ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+<7>hdmi: Enter HDMI_Core_GlobalInitVars()
+<7>hdmi: Enter HDMI_W1_ConfigVideoResolutionTiming()
+<7>hdmi: Enter HDMI_W1_ConfigVideoInterface()
+<7>hdmi: HDMI_WP_AUDIO_CFG = 0x1030006
+<7>hdmi: HDMI_WP_AUDIO_CFG2 = 0x20c0
+<7>hdmi: HDMI_WP_AUDIO_CTRL = 0x20
+<7>hdmi: Enter DSS_HDMI_CORE_SW_RESET_ASSERT ()
+<7>hdmi: Enter DSS_HDMI_CORE_POWER_DOWN_DISABLE()
+<7>hdmi: Enter DSS_HDMI_CORE_SW_RESET_RELEASE()
+<7>hdmi: Enter HDMI_W1_StartVideoFrame  ()
+<7>hdmi: Irqenable 60000011
+<7>hdmi: 40 hpd
+<7>hdmi: -------------DEBUG-------------------
+<7>hdmi: 1 hdmi_wp_irqstatus
+<7>hdmi: 1 hdmi_core_intr_state
+<7>hdmi: 60 hdmi_core_intr1
+<7>hdmi: 3 hdmi_core_intr2
+<7>hdmi: f hdmi_core_intr3
+<7>hdmi: 87 hdmi_core_sys_sys_stat
+<7>hdmi: -------------DEBUG-------------------
+<7>hdmi: first hpd
+<6>allocated heap buffer 0xea000000 of size 0xc00000
+<6>cmemk initialized
+<6>load fpga support module
+<7>fpga module initialized 247
+<7>fpga_open
+<6>FPGA program size 0x3418c
+<7>loadCtrlFpga: size=213388, waiting on status..
+<7>loadCtrlFpga waiting on status
+<7>loadCtrlFpga waiting on status-done
+<6>Ready to download fpga design....
+<6>warning: `dhcpcd' uses 32-bit capabilities (legacy support in use)
+<6>FPGA load succeeded
+<6>FPGA revision 0x00010004
+<6>fpgaserial module initialized, major 246.
+<6>aic3104_i2c_probe of tlv320audin.
+<6>registered tlv320audin I2C driver.
+<6>aic3104_i2c_probe of tlv320audout.
+<6>registered tlv320audout I2C driver.
+<7>mcasp_init: hwType=25 am_master=1
+<6>mcasp_init: irq 167 for gpio 7.
+<7>mcasp_init done
+<7>plcm_audio_init done 245
+<6>Board is mars
+<6>adv7604_i2c_probe: ID value 0, Probing for HDCI-HDMI chip
+<6>$: Read adv7604 revision ID
+<6>adv7604_i2c_probe: ID value 1, Probing for HDMI-VGA chip
+<6>$: Read adv7604 revision ID
+<6>adv7604_i2c_probe: EEPROM enable pin initial state is:0
+<6>rx_get_interrupts: pid = 719, tgid = 719
+<6>adv7604 1-0020: rx_get_interrupts: Digital camera detected 
+<6>adv7604 1-0020: get_hdmi_resolution: Resolution value got is 1080p60
+<6>adv7604 1-0020: rx_get_interrupts: Port1: Encrypted value from reg is 0 
+<6>adv7604 1-0020: rx_get_interrupts: Port1 has normal video 
+<3>init: untracked pid 411 exited
+<6>adv7604 1-0020: rx_get_interrupts: Port1 state changed
+<6>adv7604 2-0020: rx_get_interrupts: No sources present on Port2 
+<6>adv7604 2-0020: rx_get_interrupts: Port2 has Blue screen output 
+<6>Loading ADV7604 Video Input Chip Control Driver rev=3.A build=Aug 11 2015 23:10:05
+<6>adv7604_open: Trying to open HDCI-HDMI instance of the driver
+<6>adv7604_open: Trying to open HDMI-VGA instance of the driver
+<6>adv7604_open: Trying to open HDMI-VGA instance of the driver
+<6>adv7510_init: board type is Mars
+<6>adv7510 2-003d: adv7510_probe: found i2c client (2) (adv7510_0) (7a)
+<6>Found device type as adv7511
+<6>adv7510 2-003d: config_device: configure adv7510_0
+<6>adv7510 2-003d: config_device: configure adv7511 specific settings
+<6>adv7510 2-003d: adv7510_init: driver initialzed at time 1702235272:805336
+<6>adv7510 2-003d: enable_interrupts: Entered enable irq function
+<6>Loading ADV7510 HDMI Output Chip Control Driver rev=3.1 build=Aug 11 2015 23:10:12
+<3>init: untracked pid 754 exited
+<3>init: untracked pid 756 exited
+<3>init: untracked pid 752 exited
+<3>init: untracked pid 753 exited
+<3>init: untracked pid 755 exited
+<3>init: untracked pid 757 exited
+<3>init: untracked pid 791 exited
+<3>init: untracked pid 793 exited
+<3>init: untracked pid 790 exited
+<3>init: untracked pid 794 exited
+<3>init: untracked pid 792 exited
+<4>buf value=3
+<4>filter value=3
+<4>channel =3
+<4>mIR_filter =3
+<3>init: untracked pid 894 exited
+<3>init: untracked pid 910 exited
+<6>adv7604_open: Trying to open HDCI-HDMI instance of the driver
+<4>rt_throttled
+<4>pid 146 configservice 
+<6>adv7604_open: Trying to open HDMI-VGA instance of the driver
+<6>rx_get_interrupts: pid = 956, tgid = 956
+<6>adv7604 1-0020: rx_get_interrupts: Digital camera detected 
+<6>adv7604 1-0020: get_hdmi_resolution: Resolution value got is 1080p60
+<4>rb_open() called for 256 512 byte entries 7f0553ac
+<4>rb_open: one ring buffer size 384
+<4>rb_open: total allocsize 131456
+<4>rb_open: localRB d3000000, PCI bus addr bc000000
+<4>offset of pdata 384
+<4>rb_open() called for 64 5120 byte entries 7f0553b0
+<4>rb_open: one ring buffer size 384
+<4>rb_open: total allocsize 328064
+<4>rb_open: localRB d3020180, PCI bus addr bc020180
+<4>offset of pdata 384
+<6>plcm_audio_open
+<6>mcasp_open
+<6>hdmi_audio_open
+<4> TMDS: 148500 RATE: 48000
+<4>FS: 48000 N: 6144 CTS: 0
+<6>hdmi_hw_params(): CTS_MODE_HW
+<6>hdmi_hw_params(): using external HDMI_ACLK
+<7>hdmi: HDMI_WP_AUDIO_CFG = 0x1030006
+<7>hdmi: HDMI_WP_AUDIO_CFG2 = 0x60f0
+<7>hdmi: HDMI_WP_AUDIO_CTRL = 0x20
+<4>CTS mode is HW
+<6>adv7604 1-0020: rx_get_interrupts: Port1: Encrypted value from reg is 0 
+<6>adv7604 1-0020: rx_get_interrupts: Port1 has normal video 
+<6>adv7604 2-0020: rx_get_interrupts: No sources present on Port2 
+<6>adv7604 2-0020: rx_get_interrupts: Port2 has Blue screen output 
+<7>found best resolution: 1920x1080 (9)
+<7>Extension block present db 2 13
+<7>84
+<7>Extension block present db 1 13
+<7>84
+<7>Extension block present db 3 13
+<7>84
+<7>Extension block present db 3 13
+<7>84
+<7>Extension block present db 3 13
+<7>84
+<7>found best resolution: 1920x1080 (9)
+<7>Extension block present db 2 13
+<7>84
+<7>Extension block present db 1 13
+<7>84
+<7>Extension block present db 3 13
+<7>84
+<7>Extension block present db 3 13
+<7>84
+<6>TI81XXHDMI_CEC_DEACTIVATE:
+<7>Extension block present db 3 13
+<7>84
+<6>adv7510 2-003d: adv7510_ioctl: Video mode IOCTL called with parameter 0
+<4>ipcc cpu 1: read control rb addr f803c380 from addr cb701100
+<4>ipcc remote_rb d23c0380 131072
+<4>clink: link state change #1.
+<7>found best resolution: 1920x1080 (9)
+<7>Extension block present db 2 13
+<7>84
+<7>Extension block present db 1 13
+<7>84
+<7>Extension block present db 3 13
+<7>84
+<7>Extension block present db 3 13
+<7>84
+<7>found best resolution: 1920x1080 (9)
+<7>Extension block present db 2 13
+<7>84
+<7>Extension block present db 1 13
+<7>84
+<7>Extension block present db 3 13
+<7>84
+<7>Extension block present db 3 13
+<7>84
+<6>HDMI CECDBG TX INT STAT0 value - 20
+<4>clink: link state change #2.
+<4>clink: link state change #3.
+<6>plcm_audio_ioctl(AUDIO_START_IOCTL)
+<6>plcm_audio_start
+<7>mcasp[0] set MCASP_REG_RXFMT = 0x20074
+<7>mcasp[0] set MCASP_REG_WFIFOCTL = 0x2001
+<7>mcasp[0] set MCASP_REG_RFIFOCTL = 0x2001
+<6>mcasp_unit[0]: 1 rx ser 32 slots, 1 tx ser 32 slots.
+<7>hdmi: Enter DSS_HDMI_CORE_SW_RESET_ASSERT ()
+<7>hdmi: Enter HDMI_W1_StopVideoFrame()
+<7>hdmi: Enter HDMI_W1_StopVideoFrame()
+<7>found best resolution: 1920x1080 (9)
+<7>Extension block present db 2 13
+<7>84
+<7>Extension block present db 1 13
+<7>84
+<7>Extension block present db 3 13
+<7>84
+<7>Extension block present db 3 13
+<7>84
+<7>Extension block present db 3 13
+<7>84
+<7>hdmi: Enter HDMI_W1_GlobalInitVars()
+<7>hdmi: Enter HDMI_Core_GlobalInitVars()
+<7>hdmi: Enter HDMI_W1_ConfigVideoResolutionTiming()
+<7>hdmi: Enter HDMI_W1_ConfigVideoInterface()
+<7>hdmi: HDMI_WP_AUDIO_CFG = 0x1030006
+<7>hdmi: HDMI_WP_AUDIO_CFG2 = 0x20c0
+<7>hdmi: HDMI_WP_AUDIO_CTRL = 0x20
+<7>hdmi: Enter DSS_HDMI_CORE_SW_RESET_ASSERT ()
+<7>hdmi: Enter DSS_HDMI_CORE_POWER_DOWN_DISABLE()
+<7>hdmi: Enter DSS_HDMI_CORE_SW_RESET_RELEASE()
+<7>hdmi: Enter HDMI_W1_StartVideoFrame  ()
+<4> TMDS: 148500 RATE: 48000
+<4>FS: 48000 N: 6144 CTS: 0
+<6>hdmi_hw_params(): CTS_MODE_HW
+<7>hdmi: HDMI_WP_AUDIO_CFG = 0x1030006
+<7>hdmi: HDMI_WP_AUDIO_CFG2 = 0x60f0
+<7>hdmi: HDMI_WP_AUDIO_CTRL = 0x20
+<4>CTS mode is HW
+<7>hdmi: Irqenable 60000011
+<7>hdmi: 40 hpd
+<7>hdmi: -------------DEBUG-------------------
+<7>hdmi: 1 hdmi_wp_irqstatus
+<7>hdmi: 1 hdmi_core_intr_state
+<7>hdmi: 60 hdmi_core_intr1
+<7>hdmi: 3 hdmi_core_intr2
+<7>hdmi: f hdmi_core_intr3
+<7>hdmi: 87 hdmi_core_sys_sys_stat
+<7>hdmi: -------------DEBUG-------------------
+<6>request_suspend_state: wakeup (3->0) at 78990194690 (2023-12-10 19:08:32.241962093 UTC)
+<3>init: untracked pid 1679 exited
+<3>init: untracked pid 1106 exited
+<3>binder: release proc 1652, transaction 1099, not freed
+<3>init: untracked pid 856 exited
+<3>init: untracked pid 338 exited
+<3>init: untracked pid 326 exited
+<4>cpu 1: read data rb addr f80a4600 from addr cb701180
+<4>ipcd remote_rb d2e80600 327680
+<3>init: untracked pid 954 exited
+<6>Write failed - CEC not reg
+<6>TI81XXHDMI_CEC_DEACTIVATE:
+<7>Extension block present db 3 13
+<7>84
+<6>adv7510 2-003d: inode:0 curr_power:OFF prev_power:ON 
+<6>adv7510 2-003d: disable_interrupts: Entered disable irq function
+root@android:/ # 

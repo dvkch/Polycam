@@ -1,0 +1,168 @@
+  logcat: hd[0]: Syan(4639): ________________ brightness 1 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 1
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 33 76 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4642): ________________ brightness 2 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 2
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 33 77 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4645): ________________ brightness 3 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 3
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 33 78 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4648): ________________ brightness 4 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 4
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 33 79 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4651): ________________ brightness 5 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 5
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 33 7a 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4654): ________________ brightness 6 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 6
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 33 7b 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4657): ________________ brightness 7 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 7
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 33 7c 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4660): ________________ brightness 8 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 8
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 33 7d 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4663): ________________ brightness 9 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 9
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 33 7e 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4666): ________________ brightness 10 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 10
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 33 7f 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4669): ________________ brightness 11 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 11
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 41 33 1 0 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4672): ________________ brightness 12 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 12
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 41 33 1 1 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4675): ________________ brightness 13 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 13
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 41 33 1 2 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4678): ________________ brightness 14 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 14
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 41 33 1 3 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4681): ________________ brightness 15 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 15
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 41 33 1 4 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4685): ________________ brightness 16 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 16
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 41 33 1 5 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4688): ________________ brightness 17 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 17
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 41 33 1 6 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4691): ________________ brightness 18 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 18
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 41 33 1 7 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4694): ________________ brightness 19 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 19
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 41 33 1 8 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4697): ________________ brightness 20 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 20
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 41 33 1 9 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 10
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 33 7f 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4700): ________________ brightness 10 ________________ 

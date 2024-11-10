@@ -1,0 +1,8 @@
+  logcat: hd[0]: Syan(4633): ________________ calibrate ________________ 
+  SMan: hd[0]: CameraJCCP: composeCalibrateCmd: JCCP camera start white balance calibrate
+  SMan: hd[0]: CameraJCCP: Send 3 bytes: 82 45 17 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted

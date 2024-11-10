@@ -1,0 +1,31 @@
+10:
+Executed command: change backlight mode to 1 (ON)
+Bytes sent: 83 42 15 01
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+11:
+Executed command: change backlight mode to 0 (OFF)
+Bytes sent: 83 42 15 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+12:
+Executed command: change backlight mode to 1 (ON)
+Bytes sent: 83 42 15 01
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+13:
+Executed command: change backlight mode to 0 (OFF)
+Bytes sent: 83 42 15 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed

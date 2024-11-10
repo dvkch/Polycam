@@ -1,0 +1,55 @@
+18:20:06.512 ERROR    logcat: hd[0]: Syan(4728): ________________ sat 5 ________________ 
+18:20:08.151 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+18:20:08.151 DEBUG    SMan: hd[0]: CameraBase: In: Command: 05 
+18:20:08.151 INFO     SMan: hd[0]: CameraJCCP: composeSaturationCmd: JCCP camera got saturation change to 5
+18:20:08.151 INFO     SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 43 3e 7f 
+18:20:08.151 INFO     SMan: hd[0]: SrcMan: 83 43 3E 7F 
+18:20:08.151 INFO     SMan: hd[0]: SrcMan: PortNear SrcManPortNear1 Controller 0 SendMessage: component_id: "cam1" serial_write { serial_bytes: "\203C>\177" } 
+18:20:08.151 INFO     SMan: hd[0]: SrcMan: SendMessage: local port controller 
+18:20:08.151 INFO     SMan: hd[0]: SrcMan: SendToEndpoint from SrcManPortNear1 to PortController
+18:20:08.151 INFO     PCon: hd[0]: PcThreads: PC: NETRA0 input thread received CMD/REQ Msg - Comp_ID = cam1
+18:20:08.151 INFO     PCon: hd[0]: PcThreads: PC_ProcessMsg: component_id: "cam1" serial_write { serial_bytes: "\203C>\177" } 
+18:20:08.152 INFO     PCon: hd[0]: PcSerial: Not CAM CTRL mode:  Send to CAMx ser HDCI
+18:20:08.152 INFO     SMan: hd[0]: SrcMan: SendMessage: component_id: "cam1" error: kErrNoError 
+18:20:08.152 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 0
+18:20:08.152 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+18:20:08.158 INFO     PCon: hd[0]: PcSerial: PC: Serial read - sent notify from: PC:CAM1, num chars:1
+18:20:08.158 INFO     PCon: hd[0]: PcSerial: CAM_Serial_ReadThread: component_id: "cam1" serial_bytes: "\240" 
+18:20:08.158 INFO     SMan: hd[0]: SrcMan: SMPlatformComponentNtfyHdlr, context 0x7b97c
+18:20:08.159 INFO     SMan: hd[0]: SrcMan: PlatformComponentNtfyHdlr: component_id: "cam1" serial_bytes: "\240" 
+18:20:08.159 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+18:20:08.159 DEBUG    SMan: hd[0]: CameraBase: In: Response: a0 
+18:20:08.159 INFO     SMan: hd[0]: CameraJCCP: QRead 1 bytes
+18:20:08.159 INFO     SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+18:20:08.159 INFO     SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+18:20:08.159 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 0
+18:20:08.159 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+18:20:08.159 INFO     PCon: hd[0]: PcSerial: PC: Serial read - sent notify from: PC:CAM1, num chars:1
+18:20:08.159 INFO     PCon: hd[0]: PcSerial: CAM_Serial_ReadThread: component_id: "cam1" serial_bytes: "\222" 
+18:20:08.159 INFO     SMan: hd[0]: SrcMan: SMPlatformComponentNtfyHdlr, context 0x7b97c
+18:20:08.160 INFO     SMan: hd[0]: SrcMan: PlatformComponentNtfyHdlr: component_id: "cam1" serial_bytes: "\222" 
+18:20:08.160 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+18:20:08.160 DEBUG    SMan: hd[0]: CameraBase: In: Response: 92 
+18:20:08.160 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 1
+18:20:08.160 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+18:20:08.160 INFO     PCon: hd[0]: PcSerial: PC: Serial read - sent notify from: PC:CAM1, num chars:1
+18:20:08.160 INFO     PCon: hd[0]: PcSerial: CAM_Serial_ReadThread: component_id: "cam1" serial_bytes: "@" 
+18:20:08.160 INFO     SMan: hd[0]: SrcMan: SMPlatformComponentNtfyHdlr, context 0x7b97c
+18:20:08.161 INFO     SMan: hd[0]: SrcMan: PlatformComponentNtfyHdlr: component_id: "cam1" serial_bytes: "@" 
+18:20:08.161 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+18:20:08.161 DEBUG    SMan: hd[0]: CameraBase: In: Response: 40 
+18:20:08.161 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 2
+18:20:08.161 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+18:20:08.161 INFO     PCon: hd[0]: PcSerial: PC: Serial read - sent notify from: PC:CAM1, num chars:1
+18:20:08.162 INFO     PCon: hd[0]: PcSerial: CAM_Serial_ReadThread: component_id: "cam1" serial_bytes: "\000" 
+18:20:08.162 INFO     SMan: hd[0]: SrcMan: SMPlatformComponentNtfyHdlr, context 0x7b97c
+18:20:08.162 INFO     SMan: hd[0]: SrcMan: PlatformComponentNtfyHdlr: component_id: "cam1" serial_bytes: "\000" 
+18:20:08.162 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+18:20:08.162 DEBUG    SMan: hd[0]: CameraBase: In: Response: 00 
+18:20:08.162 INFO     SMan: hd[0]: CameraJCCP: QRead 3 bytes
+18:20:08.162 INFO     SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+18:20:08.162 INFO     SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+18:20:08.162 INFO     SMan: hd[0]: CameraJCCP: rx: Excuted
+18:20:08.162 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 0
+18:20:08.162 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+18:20:08.169 INFO     PCon: hd[0]: PcConfig: Camera CHANGE callback: node sourceman.camera, NodeInst 1, sVar saturation, nVarInst 0

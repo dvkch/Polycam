@@ -1,0 +1,244 @@
+---------------
+-   2
+---------------
+
+Executed command: standby change to mode 0
+Bytes sent: 83 41 0 10
+Bytes received: a0
+Received message: JCCP ACK
+Bytes received: 93 40 01 10
+Received message: NOT Executed
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: standby change to mode 0, part 3
+Bytes sent: 84 41 21 2 10
+Bytes received: a0
+Received message: JCCP ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+
+----------------
+-   5
+----------------
+
+Executed command: composeVideoOutputCmd: JCCP camera got video output change to mode 1
+Bytes sent: 83 41 13 1a
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeShutterSpeedCmd: JCCP camera got shutter speed change to frequency 0
+Bytes sent: 83 42 14 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeDirectionCmd: JCCP camera got direction change to mode 0
+Bytes sent: 83 41 3e 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeOrientationCmd: JCCP camera got orientation change to mode 0
+Bytes sent: 83 41 3e 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeBrightnessCmd: JCCP camera got brightness change to 11
+Bytes sent: 84 41 33 1 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeSaturationCmd: JCCP camera got saturation change to 6
+Bytes sent: 84 43 3e 1 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeWbAutoGainRCmd: JCCP camera got auto gainr change to 37
+Bytes sent: 84 43 42 1 4
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeWbAutoGainBCmd: JCCP camera got auto gainb change to 33
+Bytes sent: 84 43 43 1 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeWhiteBalanceCmd: JCCP camera got white balance change to mode 1
+Bytes sent: 83 42 12 1
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+----------------
+-   26
+----------------
+Executed command: composeVideoOutputCmd: JCCP camera got video output change to mode 1
+Bytes sent: 83 41 13 1a
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeShutterSpeedCmd: JCCP camera got shutter speed change to frequency 0
+Bytes sent: 83 42 14 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeDirectionCmd: JCCP camera got direction change to mode 0
+Bytes sent: 83 41 3e 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeOrientationCmd: JCCP camera got orientation change to mode 0
+Bytes sent: 83 41 3e 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeBrightnessCmd: JCCP camera got brightness change to 11
+Bytes sent: 84 41 33 1 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeSaturationCmd: JCCP camera got saturation change to 6
+Bytes sent: 84 43 3e 1 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeWbAutoGainRCmd: JCCP camera got auto gainr change to 37
+Bytes sent: 84 43 42 1 4
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeWbAutoGainBCmd: JCCP camera got auto gainb change to 33
+Bytes sent: 84 43 43 1 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: composeWhiteBalanceCmd: JCCP camera got white balance change to mode 1
+Bytes sent: 83 42 12 1
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+
+----------------
+-   43
+----------------
+Executed command: Set video output mode to 1
+Bytes sent: 83 41 13 1a
+Bytes received: a0
+Received message: JCCP ACK
+Bytes received: 92 40 00
+Received message: complete message 92 40 00
+Bytes received: N/A
+Received message: Executed
+
+Executed command: Set camera LED to blue
+Bytes sent: 84 41 21 2 10
+Bytes received: a0
+Received message: JCCP ACK
+Bytes received: 92 40 00
+Received message: complete message 92 40 00
+Bytes received: N/A
+Received message: Executed
+
+Executed command: Mute control command, part 2, call state = 0, mute state = 0
+Bytes sent: 85 41 25 8 8 8
+Bytes received: a0
+Received message: JCCP ACK
+Bytes received: 92 40 00
+Received message: complete message 92 40 00
+Bytes received: N/A
+Received message: Executed
+
+
+----------------
+-   60
+----------------
+Executed command: Set video output mode to 1
+Bytes sent: 83 41 13 1a
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: Set shutter speed to frequency 0
+Bytes sent: 83 42 14 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: Set direction to mode 0 and orientation to mode 0
+Bytes sent: 83 41 3e 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: Set brightness to 11
+Bytes sent: 84 41 33 1 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: Set saturation to 6
+Bytes sent: 84 43 3e 1 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: Set auto gainr to 37
+Bytes sent: 84 43 42 1 4
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: Set auto gainb to 33
+Bytes sent: 84 43 43 1 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: Set white balance to mode 1
+Bytes sent: 83 42 12 1
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed

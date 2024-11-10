@@ -1,0 +1,87 @@
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: composeShutterSpeedCmd: JCCP camera got shutter speed change to frequency 0
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 42 14 0 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: composeDirectionCmd: JCCP camera got direction change to mode 0
+  SMan: hd[0]: CameraJCCP: composeOrientationCmd: JCCP camera got orientation change to mode 0
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 3e 0 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 10
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 33 7f 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: composeSaturationCmd: JCCP camera got saturation change to 6
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 43 3e 1 0 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: composeWbAutoGainRCmd: JCCP camera got auto gainr change to 37
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 43 42 1 4 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: composeWbAutoGainBCmd: JCCP camera got auto gainb change to 33
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 43 43 1 0 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: composeWhiteBalanceCmd: JCCP camera got white balance change to mode 1
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 42 12 1 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraEagleEyeIV: composeBackLightCmd: JCCP EEIV camera got back light change to mode 0
+  SMan: hd[0]: CameraEagleEyeIV: Send 4 bytes: 83 42 15 0 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: Send 14 bytes: 8d 41 51 24 0 3 68 0 0 7a 3 0 0 40 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraEagleEyeIV: composeLEDControlCmd: CameraEagleEyeIV camera got led control command, part 1, call state = 0, mute state = 0
+  SMan: hd[0]: CameraEagleEyeIV: composeLEDControlCmd: System is not in a call, and not sleeping, set camera led to blue
+  SMan: hd[0]: CameraEagleEyeIV: Send 5 bytes: 84 41 21 2 10 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraEagleEyeIV: composeLEDControlCmd: CameraEagleEyeIV camera got mute control command, part 2, call state = 0, mute state = 0
+  SMan: hd[0]: CameraEagleEyeIV: Send 6 bytes: 85 41 25 8 8 8 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: unrecognize camera message 00: ignore it
+  logcat: hd[0]: Syan(7806): ________________ Starting capture ________________ 
+  logcat: hd[0]: Syan(7810): ________________ plugging ________________ 
+  logcat: hd[0]: Syan(7813): ________________ done ________________ 

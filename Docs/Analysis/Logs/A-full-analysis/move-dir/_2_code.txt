@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdint.h>
+
+typedef enum {
+    kUp = 3,
+    kDown = 4,
+    kLeft = 1,
+    kRight = 0,
+    kZoomIn = 12,
+    kZoomOut = 13
+} Direction;
+
+void generateMoveCommand(Direction direction, int acceleration, uint8_t commandBytes[4]) {
+    // Validate the acceleration value to be within the range [0, 100]
+    acceleration = (acceleration < 0) ? 0 : acceleration;
+    acceleration = (acceleration > 100) ? 100 : acceleration;
+
+    // Calculate the command byte based on the direction and acceleration
+    int commandByte = (direction << 2) | ((acceleration * 3) / 100);
+
+    // Set the commandBytes array with the appropriate values
+    commandBytes[0] = 0x83;
+    commandBytes[1] = 0x45;
+    commandBytes[2] = commandByte;
+    commandBytes[3] = (direction == kZoomIn || direction == kZoomOut) ? 0 : 0x10 + (acceleration / 10);
+
+    // Print the generated command details (optional)
+    printf("Generated command: ");
+    for (int i = 0; i < 4; ++i) {
+        printf("%02X ", commandBytes[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    // Example usage of the function
+    uint8_t commandBytes[4];
+
+    generateMoveCommand(kLeft, 50, commandBytes);
+    generateMoveCommand(kRight, 75, commandBytes);
+    generateMoveCommand(kUp, 20, commandBytes);
+    generateMoveCommand(kDown, 90, commandBytes);
+    generateMoveCommand(kZoomOut, 10, commandBytes);
+    generateMoveCommand(kZoomIn, 40, commandBytes);
+
+    return 0;
+}

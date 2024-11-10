@@ -1,0 +1,8 @@
+  logcat: hd[0]: Syan(4636): ________________ wbauto ________________ 
+  SMan: hd[0]: CameraJCCP: composeWhiteBalanceCmd: JCCP camera got white balance change to mode 1
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 42 12 1 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted

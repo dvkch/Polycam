@@ -1,0 +1,135 @@
+  logcat: hd[0]: Syan(4100): ________________ wake ________________ 
+  PCon: hd[0]: PcCec: CEC: TI81xx Detected the sink
+  SMan: hd[0]: stateMachine: LogTransition Transition for State Machine : SourceManSM, Current State : SleepState, Event Found : 104, Next State : RunningState
+  PCon: hd[0]: PcCec: CEC: TI81xxCEC Registered as playback device. is_cec_active=true
+  PCon: hd[0]: PcCec: CEC: TI81xxCEC deviceID 4, Discovered Physical Address is 1.0.0.0
+  PCon: hd[0]: PcCec: CEC: TI81xx Sending Image View ON
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 0 0 
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 0 10 
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 0 0 
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 0 10 
+  PCon: hd[0]: PcCec: CEC: TI81xx Sending Active Source
+  SMan: hd[0]: CameraVisca: In DiscoverCamera 
+  SMan: hd[0]: CameraVisca: DiscoverCamera()
+  SMan: hd[0]: CameraVisca: +ProcessMessage, response QLength:5
+  SMan: hd[0]: CameraVisca: ProcessMessage, response_index:0,value:e0
+  SMan: hd[0]: CameraVisca: ProcessMessage, response_index:0,value:a0
+  SMan: hd[0]: CameraVisca: ProcessMessage, response_index:0,value:93
+  SMan: hd[0]: CameraVisca: ProcessMessage, response_index:1,value:40
+  SMan: hd[0]: CameraVisca: ProcessMessage, response_index:2,value:1
+  SMan: hd[0]: CameraVisca: +ProcessMessage, response QLength:2
+  SMan: hd[0]: CameraVisca: ProcessMessage, response_index:3,value:12
+  SMan: hd[0]: CameraVisca: ProcessMessage, response_index:4,value:f0
+  SMan: hd[0]: CameraVisca: +ProcessMessage, response QLength:3
+  SMan: hd[0]: CameraVisca: ProcessMessage, response_index:0,value:a0
+  SMan: hd[0]: CameraVisca: ProcessMessage, response_index:0,value:93
+  SMan: hd[0]: CameraVisca: ProcessMessage, response_index:1,value:40
+  SMan: hd[0]: CameraVisca: +ProcessMessage, response QLength:1
+  SMan: hd[0]: CameraVisca: ProcessMessage, response_index:2,value:1
+  SMan: hd[0]: CameraVisca: +ProcessMessage, response QLength:2
+  SMan: hd[0]: CameraVisca: ProcessMessage, response_index:3,value:12
+  SMan: hd[0]: CameraVisca: ProcessMessage, response_index:4,value:f0
+  SMan: hd[0]: CameraRabbitEye: InitRETimer: Info: Init Rabbit Eye timer 
+  SMan: hd[0]: CameraRabbitEye: DiscoverCamera: Info: Attempt to discover Rabbit Eye on port(1)
+  SMan: hd[0]: CameraRabbitEye: ProcessCommand: Debug: The message type: 43, the camera ID: 0 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 93 40 01 12 
+  SMan: hd[0]: CameraJCCP: rx: complete message 93 40 01 12 
+  SMan: hd[0]: CameraJCCP: rx: NOT Excuted
+  SMan: hd[0]: CameraJCCP: command not defined
+  SMan: hd[0]: CameraRabbitEye: ProcessCommand: Debug: The message type: 43, the camera ID: 0 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 93 40 01 12 
+  SMan: hd[0]: CameraJCCP: rx: complete message 93 40 01 12 
+  SMan: hd[0]: CameraJCCP: rx: NOT Excuted
+  SMan: hd[0]: CameraJCCP: command not defined
+  SMan: hd[0]: CameraEagleEyeProd: InitEEPTimer: Info: Init Eagle Eye Producer timer 
+  SMan: hd[0]: CameraEagleEyeProd: DiscoverCamera: Info: Attempt to discover Eagle Eye Producer on port(1)
+  SMan: hd[0]: CameraEagleEyeProd: ProcessCommand: Debug: The message type: 43, the camera ID: 0 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 93 40 01 12 
+  SMan: hd[0]: CameraJCCP: rx: complete message 93 40 01 12 
+  SMan: hd[0]: CameraJCCP: rx: NOT Excuted
+  SMan: hd[0]: CameraJCCP: command not defined
+  SMan: hd[0]: CameraEagleEyeProd: ProcessCommand: Debug: The message type: 43, the camera ID: 0 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 93 40 01 12 
+  SMan: hd[0]: CameraJCCP: rx: complete message 93 40 01 12 
+  SMan: hd[0]: CameraJCCP: rx: NOT Excuted
+  SMan: hd[0]: CameraJCCP: command not defined
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 93 40 01 10 
+  SMan: hd[0]: CameraJCCP: rx: complete message 93 40 01 10 
+  SMan: hd[0]: CameraJCCP: rx: NOT Excuted
+  SMan: hd[0]: CameraJCCP: Syntax Error
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 93 40 01 10 
+  SMan: hd[0]: CameraJCCP: rx: complete message 93 40 01 10 
+  SMan: hd[0]: CameraJCCP: rx: NOT Excuted
+  SMan: hd[0]: CameraJCCP: Syntax Error
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 8f 30 46 77 06 30 31 30 30 30 30 35 37 30 31 30 31 30 30 35 32 30 31 30 30 30 30 32 31 30 31 30 30 30 30 30 36 32 39 35 30 30 31 30 31 30 30 34 38 
+  SMan: hd[0]: CameraJCCP: ParseReadResponse: MPTZ_11
+  SMan: hd[0]: CameraJCCP: ParseReadResponse: sysver = "01000057", camver = "01010052"
+  SMan: hd[0]: CameraJCCP: ParseReadResponse: lensver = "", promver = ""
+  SMan: hd[0]: CameraJCCP: ParseReadResponse: backver = "01000021", bootver = "01000006"
+  SMan: hd[0]: CameraJCCP: ParseReadResponse: splver = "2950", pkgver = "01010048"
+  SMan: hd[0]: CameraEagleEyeIV: DiscoverCamera
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 93 40 01 10 
+  SMan: hd[0]: CameraJCCP: rx: complete message 93 40 01 10 
+  SMan: hd[0]: CameraJCCP: rx: NOT Excuted
+  SMan: hd[0]: CameraJCCP: Syntax Error
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 93 40 01 10 
+  SMan: hd[0]: CameraJCCP: rx: complete message 93 40 01 10 
+  SMan: hd[0]: CameraJCCP: rx: NOT Excuted
+  SMan: hd[0]: CameraJCCP: Syntax Error
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 8f 30 46 77 06 30 31 30 30 30 30 35 37 30 31 30 31 30 30 35 32 30 31 30 30 30 30 32 31 30 31 30 30 30 30 30 36 32 39 35 30 30 31 30 31 30 30 34 38 
+  SMan: hd[0]: CameraJCCP: ParseReadResponse: MPTZ_11
+  SMan: hd[0]: CameraJCCP: ParseReadResponse: sysver = "01000057", camver = "01010052"
+  SMan: hd[0]: CameraJCCP: ParseReadResponse: lensver = "", promver = ""
+  SMan: hd[0]: CameraJCCP: ParseReadResponse: backver = "01000021", bootver = "01000006"
+  SMan: hd[0]: CameraJCCP: ParseReadResponse: splver = "2950", pkgver = "01010048"
+  SMan: hd[0]: CameraEagleEyeIV: DiscoverCamera: Detected eagleeyeiv at port 1, system has 1 eagleeyeiv
+  SMan: hd[0]: CameraEagleEyeIV: DiscoverCamera: Not requesting EEIV firmware upgrade from 48 to 48
+  SMan: hd[0]: CameraEagleEyeIV: ApplyConfigSetting:: EEIV camera attach on port 1, setting whitebalance values
+  SMan: hd[0]: CameraJCCP: SetExposureMode: JCCP camera set exposure mode: 1
+  SMan: hd[0]: CameraRabbitEye: UpdateStatus: v1 norabbiteye , status : norabbiteye, count 0 
+  SMan: hd[0]: CameraEagleEyeProd: UpdateStatus: v1 noeagleeyeprod , status : noeagleeyeprod, count 0 
+  SMan: hd[0]: CameraDeimos: UpdateStatus: v1 nodeimos , status : nodeimos, count 0 
+  SMan: hd[0]: CameraHilo: UpdateStatus: v1 nohilo , status : nohilo, count 0 
+  SMan: hd[0]: CameraEagleEyeIV: UpdateStatus: v1 /dev/fpgaserial0 , status : cam1, count 1 
+  SMan: hd[0]: CameraJCCP: composeVideoOutputCmd: JCCP camera got video output change to mode 1
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 41 13 1a 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraEagleEyeIV: composeLEDControlCmd: CameraEagleEyeIV camera got led control command, part 1, call state = 0, mute state = 0
+  SMan: hd[0]: CameraEagleEyeIV: composeLEDControlCmd: System is not in a call, and not sleeping, set camera led to blue
+  SMan: hd[0]: CameraEagleEyeIV: Send 5 bytes: 84 41 21 2 10 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraEagleEyeIV: composeLEDControlCmd: CameraEagleEyeIV camera got mute control command, part 2, call state = 0, mute state = 0
+  SMan: hd[0]: CameraEagleEyeIV: Send 6 bytes: 85 41 25 8 8 8 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted

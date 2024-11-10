@@ -1,0 +1,8 @@
+  logcat: hd[0]: Syan(4749): ________________ sat 6 ________________ 
+  SMan: hd[0]: CameraJCCP: composeSaturationCmd: JCCP camera got saturation change to 6
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 43 3e 1 0 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted

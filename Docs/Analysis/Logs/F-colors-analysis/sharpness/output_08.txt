@@ -1,0 +1,4 @@
+18:13:17.623 ERROR    logcat: hd[0]: Syan(4564): ________________ motion ________________ 
+18:13:20.882 INFO     SMan: hd[0]: SrcMan: VideoAttributesChangedNtfy: Resolution is supported
+18:13:20.882 INFO     SMan: hd[0]: SrcMan: VideoAttributesChangedNtfy: source_id { system: 0 id: 1 } video_resolution { width: 1920 height: 1080 refresh_rate: 50 is_interlaced: false } video_signal: eComponent video_role: ePeople video_quality: eMotion attached: true unsupported: BLUE_SCREEN_OFF 
+18:13:20.915 INFO     PCon: hd[0]: PcConfig: Camera CHANGE callback: node sourceman.camera, NodeInst 1, sVar videoquality, nVarInst 0

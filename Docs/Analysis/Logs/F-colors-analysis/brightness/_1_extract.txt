@@ -1,0 +1,139 @@
+Executed command: change brightness to 1
+Bytes sent: 83 41 33 76
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 2
+Bytes sent: 83 41 33 77
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 3
+Bytes sent: 83 41 33 78
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 4
+Bytes sent: 83 41 33 79
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 5
+Bytes sent: 83 41 33 7a
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 6
+Bytes sent: 83 41 33 7b
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 7
+Bytes sent: 83 41 33 7c
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 8
+Bytes sent: 83 41 33 7d
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 9
+Bytes sent: 83 41 33 7e
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 10
+Bytes sent: 83 41 33 7f
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 11
+Bytes sent: 84 41 33 01 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 12
+Bytes sent: 84 41 33 01 01
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 13
+Bytes sent: 84 41 33 01 02
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 14
+Bytes sent: 84 41 33 01 03
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 15
+Bytes sent: 84 41 33 01 04
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 16
+Bytes sent: 84 41 33 01 05
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 17
+Bytes sent: 84 41 33 01 06
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 18
+Bytes sent: 84 41 33 01 07
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 19
+Bytes sent: 84 41 33 01 08
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change brightness to 20
+Bytes sent: 84 41 33 01 09
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed

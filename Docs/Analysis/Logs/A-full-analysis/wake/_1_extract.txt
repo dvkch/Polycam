@@ -1,0 +1,44 @@
+---------------
+-   1 WAKE
+---------------
+
+Executed command: NOT Excuted
+Bytes sent: 83 41 0 0
+Bytes received: a0
+Received message: JCCP ACK
+Bytes received: 93 40 01 12
+Received message: complete message 93 40 01 12
+Received message: NOT Excuted
+Received message: command not defined
+
+Executed command: NOT Excuted
+Bytes sent: 83 41 0 10
+Bytes received: a0
+Received message: JCCP ACK
+Bytes received: 93 40 01 12
+Received message: complete message 93 40 01 12
+Received message: NOT Excuted
+Received message: command not defined
+
+----------------
+-   3 WAKE
+----------------
+
+
+Executed command: NOT Excuted
+Bytes sent: 83 41 0 0
+Bytes received: a0
+Received message: JCCP ACK
+Bytes received: 93 40 01 12
+Received message: complete message 93 40 01 12
+Received message: NOT Excuted
+Received message: command not defined
+
+Executed command: NOT Excuted
+Bytes sent: 83 41 0 10
+Bytes received: a0
+Received message: JCCP ACK
+Bytes received: 93 40 01 12
+Received message: complete message 93 40 01 12
+Received message: NOT Excuted
+Received message: command not defined

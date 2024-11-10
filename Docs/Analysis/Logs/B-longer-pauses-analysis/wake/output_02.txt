@@ -1,0 +1,281 @@
+22:27:46.942 ERROR    logcat: hd[0]: Syan(3942): ________________ wake ________________ 
+22:27:47.055 INFO     PCon: hd[0]: PcThreads: 	PC received router or sleep msg
+22:27:47.055 INFO     PCon: hd[0]: PcThreads: PC_SleepWakeReqCB: Received Sleep/Wake 4 change request message from process monitor
+22:27:47.055 INFO     PCon: hd[0]: PcVideoOut: Enter PC_HandleSleepModeCB, sleep status = 0 sleep_mode= NoSignal env=MARS110
+22:27:47.055 INFO     PCon: hd[0]: PcVideoOut: PC_HandleSleepModeCB: found mon1 with TI81XX!
+22:27:47.055 INFO     PCon: hd[0]: PcVideoOut: 	PC_HandleSleepModeCB found mon2 with 7510!
+22:27:47.055 INFO     PCon: hd[0]: PcVideoOut: 	Setting 7510 to WAKE mode
+22:27:47.067 INFO     PCon: hd[0]: PcCec: CEC: TI81xx Detected the sink
+22:27:47.072 DEBUG    SMan: hd[0]: DeSerializeSubsysSyncStateReq: Received event 5 Message from CeCon
+22:27:47.072 DEBUG    SMan: hd[0]: SendSubsystemSyncEventRsp: pSubsystemSync 0x0x997d8, pMsg 0x0x13a158
+22:27:47.072 DEBUG    SMan: hd[0]: SendSubsystemEventRsp: pSubsystem->subsysID CE:SourceMgr
+22:27:47.073 INFO     SMan: hd[0]: stateMachine: LogTransition Transition for State Machine : SourceManSM, Current State : SleepState, Event Found : 104, Next State : RunningState
+22:27:47.073 DEBUG    SMan: hd[0]: SubSystem : SleepStateExitHdlr
+22:27:47.073 INFO     SMan: hd[0]: SrcMan: SrcMan : SleepStateExitHdlr
+22:27:47.074 DEBUG    SMan: hd[0]: SrcMan: UID-log-analysis: UID-76236239: tid=868: pid=798: time=2023-12-28 22:27:47.970 : schedPolicy=RR: prio=22: tag=process-wakeup
+22:27:47.074 INFO     SMan: hd[0]: SrcMan: SleepStateExitHdlr: Sending srcman message to take all cams out of sleep
+22:27:47.074 INFO     SMan: hd[0]: SrcMan: ProcessStateChange: Sending state change message to source manager, state = 10
+22:27:47.074 DEBUG    SMan: hd[0]: SubsystemStateNotify - subsysID CE:SourceMgr, prevState = 4, currentState = 3 
+22:27:47.074 DEBUG    SMan: hd[0]: SubSystem : RunningStateEntryHdlr
+22:27:47.074 INFO     SMan: hd[0]: SrcMan: SrcMan : RunningStateEntryHdlr
+22:27:47.074 INFO     SMan: hd[0]: SrcMan: RunningStateEntryHdlr: Enter into Running State - take all cams out of standby
+22:27:47.074 INFO     SMan: hd[0]: SrcMan: ProcessStateChange: Sending state change message to source manager, state = 7
+22:27:47.075 INFO     SMan: hd[0]: SrcMan:  SrcMan SMStateChangeNtfyHdlr Context CE:SourceMgr
+22:27:47.075 INFO     SMan: hd[0]: SrcMan: StateChangeNtfyHdlr: new_state: 10 
+22:27:47.075 INFO     SMan: hd[0]: SrcMan: SourceManagerStateChanged: *Sleep State Exit*
+22:27:47.075 INFO     SMan: hd[0]: SrcMan:  SrcMan SMStateChangeNtfyHdlr Context CE:SourceMgr
+22:27:47.075 INFO     SMan: hd[0]: SrcMan: StateChangeNtfyHdlr: new_state: 7 
+22:27:47.075 INFO     SMan: hd[0]: SrcMan: SourceManagerStateChanged: *Running State Entry* Taking all cams out of standby
+22:27:47.075 INFO     SMan: hd[0]: SrcMan: CameraSetStandbyMode: Sending attached cam1, mode = 0
+22:27:47.075 INFO     SMan: hd[0]: SrcMan: CameraSetStandbyMode: Trying to wake unattached cam2
+22:27:47.075 INFO     SMan: hd[0]: SrcMan: SrcMan QueryVideoAttributes SourceId 2, cameraId 2, source cam2, Controller 0
+22:27:47.075 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "cam2" get_properties { }
+22:27:47.075 INFO     SMan: hd[0]: SrcMan: SrcMan SourceId 2
+22:27:47.075 INFO     SMan: hd[0]: SrcMan: SendMessageToPortController: SrcMan Message sent to Local port controller 1011f
+22:27:47.076 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+22:27:47.076 DEBUG    SMan: hd[0]: CameraBase: In: Command: 00 00 
+22:27:47.076 INFO     SMan: hd[0]: CameraEagleEyeIV: composeStandbyCmd: EagleEyeIV camera got standby change to mode 0, part 1
+22:27:47.076 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 0
+22:27:47.076 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+22:27:47.076 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+22:27:47.076 DEBUG    SMan: hd[0]: CameraBase: In: Command: 01 00 
+22:27:47.076 INFO     SMan: hd[0]: CameraEagleEyeIV: composeStandbyCmd: EagleEyeIV camera got standby change to mode 0, part 2
+22:27:47.076 INFO     SMan: hd[0]: CameraEagleEyeIV: Send 4 bytes: 83 41 0 10 
+22:27:47.076 INFO     SMan: hd[0]: SrcMan: 83 41 00 10 
+22:27:47.076 INFO     SMan: hd[0]: SrcMan: PortNear SrcManPortNear1 Controller 0 SendMessage: component_id: "cam1" serial_write { serial_bytes: "\203A\000\020" } 
+22:27:47.076 INFO     SMan: hd[0]: SrcMan: SendMessage: local port controller 
+22:27:47.076 INFO     SMan: hd[0]: SrcMan: SendToEndpoint from SrcManPortNear1 to PortController
+22:27:47.116 INFO     PCon: hd[0]: PcCec: CEC: TI81xxCEC Registered as playback device. is_cec_active=true
+22:27:47.116 INFO     PCon: hd[0]: PcCec: CEC: TI81xxCEC deviceID 4, Discovered Physical Address is 1.0.0.0
+22:27:47.116 INFO     PCon: hd[0]: PcCec: CEC: TI81xx Sending Image View ON
+22:27:47.130 INFO     PCon: hd[0]: PcVideoOut: Mars 300/310 - check if in dual display mode for 7510 message
+22:27:47.130 INFO     PCon: hd[0]: PcVideoOut: 	Skipping 7510 message on GS300/310
+22:27:48.041 INFO     PCon: hd[0]: PcThreads: PC: NETRA0 input thread received CMD/REQ Msg - Comp_ID = cam2
+22:27:48.041 INFO     PCon: hd[0]: PcThreads: PC_ProcessMsg: component_id: "cam2" get_properties { } 
+22:27:48.042 INFO     PCon: hd[0]: PcThreads: PC: NETRA0 input thread received CMD/REQ Msg - Comp_ID = cam1
+22:27:48.042 INFO     PCon: hd[0]: PcThreads: PC_ProcessMsg: component_id: "cam1" serial_write { serial_bytes: "\203A\000\020" } 
+22:27:48.042 INFO     PCon: hd[0]: PcVideoIn: No signal detected; driver defaults to 1080P60 blue screen.
+22:27:48.042 INFO     PCon: hd[0]: PcVideoIn: Enter StoreCapsParams....comp=cam2 flags= 1  caps=2  pComp=40f58
+22:27:48.042 INFO     PCon: hd[0]: PcSerial: Not CAM CTRL mode:  Send to CAMx ser HDCI
+22:27:48.042 INFO     PCon: hd[0]: PcThreads: RESPONSE for GetProperties - Comp_ID = cam2
+22:27:48.042 INFO     PCon: hd[0]: PcThreads: 	RESPONSE, set comp cam2 to DETACHED  pComp=0x40f58
+22:27:48.043 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "cam2" error: kErrNoError video_params { action: DETACHED resolution { width: 1920 height: 1080 refresh_rate: 60 is_interlaced: false } signal: eUnknown blue_screen: BLUE_SCREEN_ON } capabilities { has_video_in: true has_video_out: false has_command_channel: false } 
+22:27:48.043 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: Received Capabilities of comp_id cam2:
+22:27:48.043 INFO     SMan: hd[0]: SrcMan: 	VIDEO_IN
+22:27:48.043 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 2, pCamera = 0x0
+22:27:48.043 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 2, pPort has command 0
+22:27:48.043 INFO     SMan: hd[0]: SrcMan: CameraSetStandbyMode: Trying to wake unattached cam3
+22:27:48.043 INFO     SMan: hd[0]: SrcMan: SrcMan QueryVideoAttributes SourceId 3, cameraId 3, source cam3, Controller 0
+22:27:48.043 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "cam3" get_properties { }
+22:27:48.043 INFO     SMan: hd[0]: SrcMan: SrcMan SourceId 3
+22:27:48.043 INFO     SMan: hd[0]: SrcMan: SendMessageToPortController: SrcMan Message sent to Local port controller 1011f
+22:27:48.044 INFO     SMan: hd[0]: SrcMan: SendMessage: component_id: "cam1" error: kErrNoError 
+22:27:48.044 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 0
+22:27:48.044 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+22:27:48.044 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+22:27:48.044 DEBUG    SMan: hd[0]: CameraBase: In: Command: 02 00 
+22:27:48.044 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 0
+22:27:48.044 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+22:27:48.044 INFO     PCon: hd[0]: PcThreads: PC: NETRA0 input thread received CMD/REQ Msg - Comp_ID = cam3
+22:27:48.044 INFO     PCon: hd[0]: PcThreads: PC_ProcessMsg: component_id: "cam3" get_properties { } 
+22:27:48.044 INFO     PCon: hd[0]: PcThreads: ERROR!  Port Controller received Msg with invalid component ID: cam3
+22:27:48.044 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "cam3" error: kErrBadParameter 
+22:27:48.044 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 3, pCamera = 0x0
+22:27:48.044 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 3, pPort has command 0
+22:27:48.044 INFO     SMan: hd[0]: SrcMan: CameraSetStandbyMode: Trying to wake unattached cam4
+22:27:48.044 INFO     SMan: hd[0]: SrcMan: SrcMan QueryVideoAttributes SourceId 4, cameraId 4, source cam4, Controller 0
+22:27:48.044 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "cam4" get_properties { }
+22:27:48.044 INFO     SMan: hd[0]: SrcMan: SrcMan SourceId 4
+22:27:48.044 INFO     SMan: hd[0]: SrcMan: SendMessageToPortController: SrcMan Message sent to Local port controller 1011f
+22:27:48.044 INFO     PCon: hd[0]: PcThreads: PC: NETRA0 input thread received CMD/REQ Msg - Comp_ID = cam4
+22:27:48.044 INFO     PCon: hd[0]: PcThreads: PC_ProcessMsg: component_id: "cam4" get_properties { } 
+22:27:48.045 INFO     PCon: hd[0]: PcThreads: ERROR!  Port Controller received Msg with invalid component ID: cam4
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "cam4" error: kErrBadParameter 
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 4, pCamera = 0x0
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 4, pPort has command 0
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: CameraSetStandbyMode: Trying to wake unattached cam5
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: SrcMan QueryVideoAttributes SourceId 5, cameraId 5, source cam5, Controller 0
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "cam5" get_properties { }
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: SrcMan SourceId 5
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: SendMessageToPortController: SrcMan Message sent to Local port controller 1011f
+22:27:48.045 INFO     PCon: hd[0]: PcThreads: PC: NETRA0 input thread received CMD/REQ Msg - Comp_ID = cam5
+22:27:48.045 INFO     PCon: hd[0]: PcThreads: PC_ProcessMsg: component_id: "cam5" get_properties { } 
+22:27:48.045 INFO     PCon: hd[0]: PcThreads: ERROR!  Port Controller received Msg with invalid component ID: cam5
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "cam5" error: kErrBadParameter 
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 5, pCamera = 0x0
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 5, pPort has command 0
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: CameraSetStandbyMode: Trying to wake unattached cam6
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: SrcMan QueryVideoAttributes SourceId 6, cameraId 6, source vclan0, Controller 0
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "vclan0" get_properties { }
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: SrcMan SourceId 6
+22:27:48.045 INFO     SMan: hd[0]: SrcMan: SendMessageToPortController: SrcMan Message sent to Local port controller 1011f
+22:27:48.046 INFO     PCon: hd[0]: PcThreads: PC: NETRA0 input thread received CMD/REQ Msg - Comp_ID = vclan0
+22:27:48.046 INFO     PCon: hd[0]: PcThreads: PC_ProcessMsg: component_id: "vclan0" get_properties { } 
+22:27:48.046 INFO     PCon: hd[0]: PcThreads: ERROR!  Port Controller received Msg with invalid component ID: vclan0
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "vclan0" error: kErrBadParameter 
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 6, pCamera = 0x0
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 6, pPort has command 0
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: CameraSetStandbyMode: Trying to wake unattached cam8
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: SrcMan QueryVideoAttributes SourceId 8, cameraId 8, source imag, Controller 0
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "imag" get_properties { }
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: SrcMan SourceId 8
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: SendMessageToPortController: SrcMan Message sent to Local port controller 1011f
+22:27:48.046 INFO     PCon: hd[0]: PcThreads: PC: NETRA0 input thread received CMD/REQ Msg - Comp_ID = imag
+22:27:48.046 INFO     PCon: hd[0]: PcThreads: PC_ProcessMsg: component_id: "imag" get_properties { } 
+22:27:48.046 INFO     PCon: hd[0]: PcThreads: ERROR!  Port Controller received Msg with invalid component ID: imag
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "imag" error: kErrBadParameter 
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 8, pCamera = 0x0
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 8, pPort has command 0
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: CameraSetStandbyMode: Trying to wake unattached cam9
+22:27:48.046 ERROR    SMan: hd[0]: SrcMan: SrcMan error - CompIDInt > num Cams: 9
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: SrcMan QueryVideoAttributes SourceId 9, cameraId 9, source , Controller 0
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "" get_properties { }
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: SrcMan SourceId 9
+22:27:48.046 INFO     SMan: hd[0]: SrcMan: SendMessageToPortController: SrcMan Message sent to Local port controller 1011f
+22:27:48.047 INFO     PCon: hd[0]: PcThreads: PC: NETRA0 input thread received CMD/REQ Msg - Comp_ID = 
+22:27:48.047 INFO     PCon: hd[0]: PcThreads: PC_ProcessMsg: component_id: "" get_properties { } 
+22:27:48.047 INFO     PCon: hd[0]: PcVideoIn:  RES_HDMI_1920x1080p50
+22:27:48.047 INFO     PCon: hd[0]: PcVideoIn: Enter StoreCapsParams....comp= flags= 5  caps=3  pComp=40f0c
+22:27:48.047 INFO     PCon: hd[0]: PcThreads: RESPONSE for GetProperties - Comp_ID = 
+22:27:48.047 INFO     PCon: hd[0]: PcThreads: 	RESPONSE, set comp  to ATTACHED  pComp=0x40f0c
+22:27:48.047 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "" error: kErrNoError video_params { action: ATTACHED resolution { width: 1920 height: 1080 refresh_rate: 50 is_interlaced: false } signal: eComponent blue_screen: BLUE_SCREEN_OFF } capabilities { has_video_in: true has_video_out: false has_command_channel: true } 
+22:27:48.047 ERROR    SMan: hd[0]: SrcMan: SrcMan error - could not find CompID 
+22:27:48.047 ERROR    SMan: hd[0]: SrcMan: QueryVideoAttributes: Invalid component Id for source 
+22:27:48.047 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 9, pCamera = 0x0
+22:27:48.047 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 9, pPort has command 0
+22:27:48.047 INFO     SMan: hd[0]: SrcMan: CameraSetStandbyMode: Trying to wake unattached cam10
+22:27:48.047 ERROR    SMan: hd[0]: SrcMan: SrcMan error - CompIDInt > num Cams: 9
+22:27:48.047 INFO     SMan: hd[0]: SrcMan: SrcMan QueryVideoAttributes SourceId 10, cameraId 10, source , Controller 0
+22:27:48.047 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "" get_properties { }
+22:27:48.047 INFO     SMan: hd[0]: SrcMan: SrcMan SourceId 10
+22:27:48.047 INFO     SMan: hd[0]: SrcMan: SendMessageToPortController: SrcMan Message sent to Local port controller 1011f
+22:27:48.048 INFO     PCon: hd[0]: PcThreads: PC: NETRA0 input thread received CMD/REQ Msg - Comp_ID = 
+22:27:48.048 INFO     PCon: hd[0]: PcThreads: PC_ProcessMsg: component_id: "" get_properties { } 
+22:27:48.048 INFO     PCon: hd[0]: PcVideoIn:  RES_HDMI_1920x1080p50
+22:27:48.048 INFO     PCon: hd[0]: PcVideoIn: Enter StoreCapsParams....comp= flags= 5  caps=3  pComp=40f0c
+22:27:48.048 INFO     PCon: hd[0]: PcThreads: RESPONSE for GetProperties - Comp_ID = 
+22:27:48.048 INFO     PCon: hd[0]: PcThreads: 	RESPONSE, set comp  to ATTACHED  pComp=0x40f0c
+22:27:48.048 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "" error: kErrNoError video_params { action: ATTACHED resolution { width: 1920 height: 1080 refresh_rate: 50 is_interlaced: false } signal: eComponent blue_screen: BLUE_SCREEN_OFF } capabilities { has_video_in: true has_video_out: false has_command_channel: true } 
+22:27:48.048 ERROR    SMan: hd[0]: SrcMan: SrcMan error - could not find CompID 
+22:27:48.048 ERROR    SMan: hd[0]: SrcMan: QueryVideoAttributes: Invalid component Id for source 
+22:27:48.048 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 10, pCamera = 0x0
+22:27:48.048 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 10, pPort has command 0
+22:27:48.048 INFO     SMan: hd[0]: SrcMan: CameraSetStandbyMode: Trying to wake unattached cam11
+22:27:48.048 ERROR    SMan: hd[0]: SrcMan: SrcMan error - CompIDInt > num Cams: 9
+22:27:48.048 INFO     SMan: hd[0]: SrcMan: SrcMan QueryVideoAttributes SourceId 11, cameraId 11, source , Controller 0
+22:27:48.048 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "" get_properties { }
+22:27:48.049 INFO     SMan: hd[0]: SrcMan: SrcMan SourceId 11
+22:27:48.049 INFO     SMan: hd[0]: SrcMan: SendMessageToPortController: SrcMan Message sent to Local port controller 1011f
+22:27:48.049 INFO     PCon: hd[0]: PcSerial: PC: Serial read - sent notify from: PC:CAM1, num chars:1
+22:27:48.049 INFO     PCon: hd[0]: PcSerial: CAM_Serial_ReadThread: component_id: "cam1" serial_bytes: "\240" 
+22:27:48.049 INFO     PCon: hd[0]: PcThreads: PC: NETRA0 input thread received CMD/REQ Msg - Comp_ID = 
+22:27:48.049 INFO     PCon: hd[0]: PcThreads: PC_ProcessMsg: component_id: "" get_properties { } 
+22:27:48.049 INFO     PCon: hd[0]: PcVideoIn:  RES_HDMI_1920x1080p50
+22:27:48.049 INFO     PCon: hd[0]: PcVideoIn: Enter StoreCapsParams....comp= flags= 5  caps=3  pComp=40f0c
+22:27:48.050 INFO     PCon: hd[0]: PcThreads: RESPONSE for GetProperties - Comp_ID = 
+22:27:48.050 INFO     PCon: hd[0]: PcThreads: 	RESPONSE, set comp  to ATTACHED  pComp=0x40f0c
+22:27:48.050 INFO     PCon: hd[0]: PcSerial: PC: Serial read - sent notify from: PC:CAM1, num chars:1
+22:27:48.050 INFO     PCon: hd[0]: PcSerial: CAM_Serial_ReadThread: component_id: "cam1" serial_bytes: "\223" 
+22:27:48.051 INFO     SMan: hd[0]: SrcMan: QueryVideoAttributes: component_id: "" error: kErrNoError video_params { action: ATTACHED resolution { width: 1920 height: 1080 refresh_rate: 50 is_interlaced: false } signal: eComponent blue_screen: BLUE_SCREEN_OFF } capabilities { has_video_in: true has_video_out: false has_command_channel: true } 
+22:27:48.051 ERROR    SMan: hd[0]: SrcMan: SrcMan error - could not find CompID 
+22:27:48.051 ERROR    SMan: hd[0]: SrcMan: QueryVideoAttributes: Invalid component Id for source 
+22:27:48.051 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 11, pCamera = 0x0
+22:27:48.051 INFO     SMan: hd[0]: SrcMan: WakeCamera:  port_id = 11, pPort has command 0
+22:27:48.051 INFO     SMan: hd[0]: SrcMan: SMPlatformComponentNtfyHdlr, context 0x7b97c
+22:27:48.051 INFO     SMan: hd[0]: SrcMan: PlatformComponentNtfyHdlr: component_id: "cam1" serial_bytes: "\240" 
+22:27:48.052 INFO     PCon: hd[0]: PcSerial: PC: Serial read - sent notify from: PC:CAM1, num chars:1
+22:27:48.052 INFO     PCon: hd[0]: PcSerial: CAM_Serial_ReadThread: component_id: "cam1" serial_bytes: "@" 
+22:27:48.052 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+22:27:48.052 DEBUG    SMan: hd[0]: CameraBase: In: Response: a0 
+22:27:48.052 INFO     SMan: hd[0]: CameraJCCP: QRead 1 bytes
+22:27:48.052 INFO     SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+22:27:48.052 INFO     SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+22:27:48.052 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 0
+22:27:48.052 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+22:27:48.052 INFO     SMan: hd[0]: SrcMan: SMPlatformComponentNtfyHdlr, context 0x7b97c
+22:27:48.052 INFO     SMan: hd[0]: SrcMan: PlatformComponentNtfyHdlr: component_id: "cam1" serial_bytes: "\223" 
+22:27:48.052 INFO     PCon: hd[0]: PcSerial: PC: Serial read - sent notify from: PC:CAM1, num chars:1
+22:27:48.053 INFO     PCon: hd[0]: PcSerial: CAM_Serial_ReadThread: component_id: "cam1" serial_bytes: "\001" 
+22:27:48.053 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+22:27:48.053 DEBUG    SMan: hd[0]: CameraBase: In: Response: 93 
+22:27:48.053 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 1
+22:27:48.053 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+22:27:48.053 INFO     SMan: hd[0]: SrcMan: SMPlatformComponentNtfyHdlr, context 0x7b97c
+22:27:48.053 INFO     SMan: hd[0]: SrcMan: PlatformComponentNtfyHdlr: component_id: "cam1" serial_bytes: "@" 
+22:27:48.053 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+22:27:48.053 DEBUG    SMan: hd[0]: CameraBase: In: Response: 40 
+22:27:48.053 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 2
+22:27:48.053 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+22:27:48.053 INFO     PCon: hd[0]: PcSerial: PC: Serial read - sent notify from: PC:CAM1, num chars:1
+22:27:48.054 INFO     PCon: hd[0]: PcSerial: CAM_Serial_ReadThread: component_id: "cam1" serial_bytes: "\020" 
+22:27:48.054 INFO     SMan: hd[0]: SrcMan: SMPlatformComponentNtfyHdlr, context 0x7b97c
+22:27:48.054 INFO     SMan: hd[0]: SrcMan: PlatformComponentNtfyHdlr: component_id: "cam1" serial_bytes: "\001" 
+22:27:48.054 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+22:27:48.054 DEBUG    SMan: hd[0]: CameraBase: In: Response: 01 
+22:27:48.054 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 3
+22:27:48.054 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+22:27:48.054 INFO     SMan: hd[0]: SrcMan: SMPlatformComponentNtfyHdlr, context 0x7b97c
+22:27:48.055 INFO     SMan: hd[0]: SrcMan: PlatformComponentNtfyHdlr: component_id: "cam1" serial_bytes: "\020" 
+22:27:48.055 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+22:27:48.055 DEBUG    SMan: hd[0]: CameraBase: In: Response: 10 
+22:27:48.055 INFO     SMan: hd[0]: CameraJCCP: QRead 4 bytes
+22:27:48.055 INFO     SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 93 40 01 10 
+22:27:48.055 INFO     SMan: hd[0]: CameraJCCP: rx: complete message 93 40 01 10 
+22:27:48.055 INFO     SMan: hd[0]: CameraJCCP: rx: NOT Excuted
+22:27:48.055 INFO     SMan: hd[0]: CameraJCCP: Syntax Error
+22:27:48.055 DEBUG    SMan: hd[0]: CameraBase: SM: CameraCommandLoop: process pending cmd
+22:27:48.055 DEBUG    SMan: hd[0]: CameraBase: In: Command: 02 00 
+22:27:48.055 INFO     SMan: hd[0]: CameraEagleEyeIV: composeStandbyCmd: EagleEyeIV camera got standby change to mode 0, part 3
+22:27:48.055 INFO     SMan: hd[0]: CameraEagleEyeIV: composeStandbyCmd: System is coming out of standby, set camera led to blue
+22:27:48.055 INFO     SMan: hd[0]: CameraEagleEyeIV: Send 5 bytes: 84 41 21 2 10 
+22:27:48.055 INFO     SMan: hd[0]: SrcMan: 84 41 21 02 10 
+22:27:48.055 INFO     SMan: hd[0]: SrcMan: PortNear SrcManPortNear1 Controller 0 SendMessage: component_id: "cam1" serial_write { serial_bytes: "\204A!\002\020" } 
+22:27:48.055 INFO     SMan: hd[0]: SrcMan: SendMessage: local port controller 
+22:27:48.055 INFO     SMan: hd[0]: SrcMan: SendToEndpoint from SrcManPortNear1 to PortController
+22:27:48.055 INFO     PCon: hd[0]: PcThreads: PC: NETRA0 input thread received CMD/REQ Msg - Comp_ID = cam1
+22:27:48.056 INFO     PCon: hd[0]: PcThreads: PC_ProcessMsg: component_id: "cam1" serial_write { serial_bytes: "\204A!\002\020" } 
+22:27:48.056 INFO     PCon: hd[0]: PcSerial: Not CAM CTRL mode:  Send to CAMx ser HDCI
+22:27:48.056 INFO     SMan: hd[0]: SrcMan: SendMessage: component_id: "cam1" error: kErrNoError 
+22:27:48.056 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 0
+22:27:48.056 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+22:27:48.063 INFO     PCon: hd[0]: PcSerial: PC: Serial read - sent notify from: PC:CAM1, num chars:1
+22:27:48.063 INFO     PCon: hd[0]: PcSerial: CAM_Serial_ReadThread: component_id: "cam1" serial_bytes: "\240" 
+22:27:48.064 INFO     SMan: hd[0]: SrcMan: SMPlatformComponentNtfyHdlr, context 0x7b97c
+22:27:48.064 INFO     SMan: hd[0]: SrcMan: PlatformComponentNtfyHdlr: component_id: "cam1" serial_bytes: "\240" 
+22:27:48.064 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+22:27:48.064 DEBUG    SMan: hd[0]: CameraBase: In: Response: a0 
+22:27:48.064 INFO     SMan: hd[0]: CameraJCCP: QRead 1 bytes
+22:27:48.064 INFO     SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+22:27:48.064 INFO     SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+22:27:48.064 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 0
+22:27:48.064 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+22:27:48.064 INFO     PCon: hd[0]: PcSerial: PC: Serial read - sent notify from: PC:CAM1, num chars:1
+22:27:48.064 INFO     PCon: hd[0]: PcSerial: CAM_Serial_ReadThread: component_id: "cam1" serial_bytes: "\222" 
+22:27:48.065 INFO     SMan: hd[0]: SrcMan: SMPlatformComponentNtfyHdlr, context 0x7b97c
+22:27:48.065 INFO     SMan: hd[0]: SrcMan: PlatformComponentNtfyHdlr: component_id: "cam1" serial_bytes: "\222" 
+22:27:48.065 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+22:27:48.065 DEBUG    SMan: hd[0]: CameraBase: In: Response: 92 
+22:27:48.065 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 1
+22:27:48.065 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+22:27:48.065 INFO     PCon: hd[0]: PcSerial: PC: Serial read - sent notify from: PC:CAM1, num chars:1
+22:27:48.066 INFO     PCon: hd[0]: PcSerial: CAM_Serial_ReadThread: component_id: "cam1" serial_bytes: "@" 
+22:27:48.066 INFO     SMan: hd[0]: SrcMan: SMPlatformComponentNtfyHdlr, context 0x7b97c
+22:27:48.066 INFO     SMan: hd[0]: SrcMan: PlatformComponentNtfyHdlr: component_id: "cam1" serial_bytes: "@" 
+22:27:48.066 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+22:27:48.066 DEBUG    SMan: hd[0]: CameraBase: In: Response: 40 
+22:27:48.066 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 2
+22:27:48.066 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+22:27:48.066 INFO     PCon: hd[0]: PcSerial: PC: Serial read - sent notify from: PC:CAM1, num chars:1
+22:27:48.067 INFO     PCon: hd[0]: PcSerial: CAM_Serial_ReadThread: component_id: "cam1" serial_bytes: "\000" 
+22:27:48.067 INFO     SMan: hd[0]: SrcMan: SMPlatformComponentNtfyHdlr, context 0x7b97c
+22:27:48.067 INFO     SMan: hd[0]: SrcMan: PlatformComponentNtfyHdlr: component_id: "cam1" serial_bytes: "\000" 
+22:27:48.067 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: got message...
+22:27:48.067 DEBUG    SMan: hd[0]: CameraBase: In: Response: 00 
+22:27:48.067 INFO     SMan: hd[0]: CameraJCCP: QRead 3 bytes
+22:27:48.067 INFO     SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+22:27:48.067 INFO     SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+22:27:48.067 INFO     SMan: hd[0]: CameraJCCP: rx: Excuted
+22:27:48.067 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: qHandler QLength is 0
+22:27:48.067 DEBUG    SMan: hd[0]: CameraBase: SM: WaitForNewCmdMsg: blocking on dequeue...
+22:27:49.320 INFO     PCon: hd[0]: PcCec: CEC: TI81xx Sending Active Source
+22:27:52.445 INFO     PCon: hd[0]: PcVideoOut: CEC: PC_CecMonitorWakeupThread for port mon1 is Done

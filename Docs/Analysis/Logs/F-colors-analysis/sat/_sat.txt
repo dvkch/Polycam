@@ -1,0 +1,100 @@
+  logcat: hd[0]: Syan(4703): ________________ sat 1 ________________ 
+  SMan: hd[0]: CameraJCCP: composeSaturationCmd: JCCP camera got saturation change to 1
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 43 3e 7b 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4706): ________________ sat 2 ________________ 
+  SMan: hd[0]: CameraJCCP: composeSaturationCmd: JCCP camera got saturation change to 2
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 43 3e 7c 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4709): ________________ sat 3 ________________ 
+  logcat: hd[0]: Syan(4722): ________________ sat 3 ________________ 
+  SMan: hd[0]: CameraJCCP: composeSaturationCmd: JCCP camera got saturation change to 3
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 43 3e 7d 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4725): ________________ sat 4 ________________ 
+  SMan: hd[0]: CameraJCCP: composeSaturationCmd: JCCP camera got saturation change to 4
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 43 3e 7e 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4728): ________________ sat 5 ________________ 
+  SMan: hd[0]: CameraJCCP: composeSaturationCmd: JCCP camera got saturation change to 5
+  SMan: hd[0]: CameraJCCP: Send 4 bytes: 83 43 3e 7f 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4731): ________________ sat 6 ________________ 
+  SMan: hd[0]: CameraJCCP: composeSaturationCmd: JCCP camera got saturation change to 6
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 43 3e 1 0 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4734): ________________ sat 7 ________________ 
+  SMan: hd[0]: CameraJCCP: composeSaturationCmd: JCCP camera got saturation change to 7
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 43 3e 1 1 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4737): ________________ sat 8 ________________ 
+  SMan: hd[0]: CameraJCCP: composeSaturationCmd: JCCP camera got saturation change to 8
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 43 3e 1 2 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4740): ________________ sat 9 ________________ 
+  SMan: hd[0]: CameraJCCP: composeSaturationCmd: JCCP camera got saturation change to 9
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 43 3e 1 3 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4743): ________________ sat 10 ________________ 
+  SMan: hd[0]: CameraJCCP: composeSaturationCmd: JCCP camera got saturation change to 10
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 43 3e 1 4 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4746): ________________ sat 11 ________________ 
+  SMan: hd[0]: CameraJCCP: composeSaturationCmd: JCCP camera got saturation change to 11
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 43 3e 1 5 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  logcat: hd[0]: Syan(4749): ________________ sat 6 ________________ 
+  SMan: hd[0]: CameraJCCP: composeSaturationCmd: JCCP camera got saturation change to 6
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 43 3e 1 0 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted

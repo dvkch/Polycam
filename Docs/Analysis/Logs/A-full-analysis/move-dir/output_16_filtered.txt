@@ -1,0 +1,41 @@
+  logcat: hd[0]: Syan(3963): ________________ camera near move down ________________ 
+  SMan: hd[0]: CameraJCCP: Move - 0 3 -1
+  SMan: hd[0]: CameraJCCP: Move - first start
+  SMan: hd[0]: CameraJCCP: composeMoveCmd - 0 3 -1
+  SMan: hd[0]: CameraJCCP: composeMoveCmd - Timer Start(150, 1)
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: composeMoveCmd - 1 3 150
+  SMan: hd[0]: CameraJCCP: composeMoveCmd - accelerate 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: composeMoveCmd - 1 3 150
+  SMan: hd[0]: CameraJCCP: composeMoveCmd - accelerate 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: composeMoveCmd - 1 3 150
+  SMan: hd[0]: CameraJCCP: composeMoveCmd - accelerate 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: composeMoveCmd - 1 3 150
+  SMan: hd[0]: CameraJCCP: composeMoveCmd - accelerate 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraJCCP: composeMoveCmd - 1 3 150
+  SMan: hd[0]: CameraJCCP: composeMoveCmd - accelerate 
+  SMan: hd[0]: CameraJCCP: composeMoveCmd - Periodic Timer Stopped

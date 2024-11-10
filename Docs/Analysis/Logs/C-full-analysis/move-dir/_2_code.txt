@@ -1,0 +1,49 @@
+##### Space acceleration by ~200ms. stop sending commands once reached the max acceleration value. camera should stop automatically
+
+#include <stdio.h>
+
+// Enum for camera directions
+enum Direction {
+    kLeft = 0x11,
+    kRight = 0x01,
+    kUp = 0x03,
+    kDown = 0x04,
+    kZoomOut = 0x0D,
+    kZoomIn = 0x0C
+};
+
+// Function to generate camera movement command bytes
+void generateCameraCommand(enum Direction direction, int accelerate) {
+    // Command bytes
+    unsigned char commandBytes[4] = {0x83, 0x45, direction, 0x00};
+
+    // Set acceleration bits
+    commandBytes[2] += accelerate;
+
+    // Print bytes sent
+    printf("Bytes sent: ");
+    for (int i = 0; i < 4; ++i) {
+        printf("%02X ", commandBytes[i]);
+    }
+    printf("\n");
+
+    // Assume JCCP ACK (0xA0) is received
+    printf("Bytes received: A0\n");
+    printf("Received message: ACK\n");
+
+    // Assume Executed response (0x92 0x40 0x00) is received
+    printf("Bytes received: 92 40 00\n");
+    printf("Received message: Executed\n\n");
+}
+
+int main() {
+    // Example usage
+    generateCameraCommand(kLeft, 0x11);
+    generateCameraCommand(kRight, 0x13);
+    generateCameraCommand(kUp, 0x15);
+    generateCameraCommand(kDown, 0x17);
+    generateCameraCommand(kZoomIn, 0x19);
+    generateCameraCommand(kZoomOut, 0x02);
+
+    return 0;
+}

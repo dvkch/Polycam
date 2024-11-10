@@ -1,0 +1,8 @@
+  logcat: hd[0]: Syan(4688): ________________ brightness 17 ________________ 
+  SMan: hd[0]: CameraJCCP: composeBrightnessCmd: JCCP camera got brightness change to 17
+  SMan: hd[0]: CameraJCCP: Send 5 bytes: 84 41 33 1 6 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted

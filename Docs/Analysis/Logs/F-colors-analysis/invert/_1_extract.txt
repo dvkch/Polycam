@@ -1,0 +1,27 @@
+Executed command: change camera orientation to mode 1 (invert)
+Bytes sent: 83 41 3E 1
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change camera orientation to mode 0 (normal)
+Bytes sent: 83 41 3E 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change camera orientation to mode 1 (invert)
+Bytes sent: 83 41 3E 1
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change camera orientation to mode 0 (normal)
+Bytes sent: 83 41 3E 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed

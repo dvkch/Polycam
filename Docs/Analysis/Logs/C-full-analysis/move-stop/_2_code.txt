@@ -1,0 +1,47 @@
+#include <stdio.h>
+
+// Define enum for camera movement directions
+enum CameraDirection {
+    kUp,
+    kDown,
+    kLeft,
+    kRight,
+    kZoomIn,
+    kZoomOut
+};
+
+// Function to generate bytes for stopping camera movement based on direction
+void stopCameraMovement(enum CameraDirection direction) {
+    // Common bytes for stopping camera movement
+    printf("Bytes sent: 82 45 ");
+    
+    // Determine specific bytes based on direction
+    switch (direction) {
+        case kUp:
+        case kDown:
+            printf("02");
+            break;
+        case kLeft:
+        case kRight:
+            printf("05");
+            break;
+        case kZoomIn:
+        case kZoomOut:
+            printf("0E");
+            break;
+        default:
+            printf("Invalid direction");
+            return;
+    }
+    
+    // Print the remaining part of the log
+    printf("\nBytes received: A0\nReceived message: ACK\nBytes received: 92 40 00\nReceived message: executed\n");
+}
+
+int main() {
+    // Test the function with different directions
+    stopCameraMovement(kLeft);
+    stopCameraMovement(kZoomOut);
+    
+    return 0;
+}

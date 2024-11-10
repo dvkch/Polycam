@@ -1,0 +1,43 @@
+---------------
+-   0 SLEEP
+---------------
+
+Executed command: Standby camera mode 1, part 1
+Bytes sent: 84 41 21 00 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Standby camera mode 1, part 2
+Bytes sent: 83 41 00 12
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Standby camera mode 1, part 3
+Bytes sent: [Command not provided in the log]
+Bytes received: [No information in the log]
+
+----------------
+-   3 SLEEP
+----------------
+
+Executed command: Standby camera mode 1, part 1
+Bytes sent: 84 41 21 00 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Standby camera mode 1, part 2
+Bytes sent: 83 41 00 12
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Standby camera mode 1, part 3
+Bytes sent: [Command not provided in the log]
+Bytes received: [No information in the log]

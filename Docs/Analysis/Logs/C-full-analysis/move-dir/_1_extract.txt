@@ -1,0 +1,341 @@
+-----------
+-   7 LEFT
+-----------
+Executed command: Move camera left
+Bytes sent: 83 45 01 11
+Bytes received: A0 (JCCP ACK)
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: Move camera left (accelerate)
+Bytes sent: 83 45 01 13
+Bytes received: A0 (JCCP ACK)
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: Move camera left (accelerate)
+Bytes sent: 83 45 01 15
+Bytes received: A0 (JCCP ACK)
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: Move camera left (accelerate)
+Bytes sent: 83 45 01 17
+Bytes received: A0 (JCCP ACK)
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: Move camera left (accelerate)
+Bytes sent: 83 45 01 19
+Bytes received: A0 (JCCP ACK)
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+------------
+-    10 RIGHT
+------------
+Executed command: Move camera right
+Bytes sent: 83 45 00 11 
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Move camera right (accelerate)
+Bytes sent: 83 45 00 13 
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Move camera right (accelerate)
+Bytes sent: 83 45 00 15 
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Move camera right (accelerate)
+Bytes sent: 83 45 00 17 
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Move camera right (accelerate)
+Bytes sent: 83 45 00 19 
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+------------
+-    13 LEFT
+------------
+Move camera left (accelerate)
+Executed command: Move camera left
+Bytes sent: 83 45 01 11
+Bytes received: A0 (ACK)
+Bytes received: 92 40 00 (Executed)
+
+Move camera left (accelerate)
+Executed command: Move camera left (accelerate)
+Bytes sent: 83 45 01 13
+Bytes received: A0 (ACK)
+Bytes received: 92 40 00 (Executed)
+
+Move camera left (accelerate)
+Executed command: Move camera left (accelerate)
+Bytes sent: 83 45 01 15
+Bytes received: A0 (ACK)
+Bytes received: 92 40 00 (Executed)
+
+Move camera left (accelerate)
+Executed command: Move camera left (accelerate)
+Bytes sent: 83 45 01 17
+Bytes received: A0 (ACK)
+Bytes received: 92 40 00 (Executed)
+
+Move camera left (accelerate)
+Executed command: Move camera left (accelerate)
+Bytes sent: 83 45 01 19
+Bytes received: A0 (ACK)
+Bytes received: 92 40 00 (Executed)
+
+------------
+-    16 RIGHT
+------------
+Executed command: Move camera right
+Bytes sent: 83 45 00 11
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: Move camera right (accelerate)
+Bytes sent: 83 45 00 13
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: Move camera right (accelerate)
+Bytes sent: 83 45 00 15
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: Move camera right (accelerate)
+Bytes sent: 83 45 00 17
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+Executed command: Move camera right (accelerate)
+Bytes sent: 83 45 00 19
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: Executed
+
+------------
+-    19 UP
+------------
+Executed command: Move camera up
+Bytes sent: 83 45 03 11
+Bytes received: A0 92 40 00
+Received message: ACK, no error
+
+Executed command: Move camera up (accelerate)
+Bytes sent: 83 45 03 13
+Bytes received: A0 92 40 00
+Received message: ACK, no error
+
+Executed command: Move camera up (accelerate)
+Bytes sent: 83 45 03 15
+Bytes received: A0 92 40 00
+Received message: ACK, no error
+
+Executed command: Move camera up (accelerate)
+Bytes sent: 83 45 03 17
+Bytes received: A0 92 40 00
+Received message: ACK, no error
+
+Executed command: Move camera up (accelerate)
+Bytes sent: 83 45 03 19
+Bytes received: A0 92 40 00
+Received message: ACK, no error
+
+------------
+-    22 DOWN
+------------
+Executed command: Move camera down
+Bytes sent: 83 45 04 11
+Bytes received: A0 92 40 00
+Received message: ACK, no error
+
+Executed command: Move camera down (accelerate)
+Bytes sent: 83 45 04 13
+Bytes received: A0 92 40 00
+Received message: ACK, no error
+
+Executed command: Move camera down (accelerate)
+Bytes sent: 83 45 04 15
+Bytes received: A0 92 40 00
+Received message: ACK, no error
+
+Executed command: Move camera down (accelerate)
+Bytes sent: 83 45 04 17
+Bytes received: A0 92 40 00
+Received message: ACK, no error
+
+Executed command: Move camera down (accelerate)
+Bytes sent: 83 45 04 19
+Bytes received: A0 92 40 00
+Received message: ACK, no error
+
+------------
+-    25 UP
+------------
+Executed command: Move camera up
+Bytes sent: 83 45 03 11 
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Move camera up (accelerate)
+Bytes sent: 83 45 03 13 
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Move camera up (accelerate)
+Bytes sent: 83 45 03 15 
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Move camera up (accelerate)
+Bytes sent: 83 45 03 17 
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Move camera up (accelerate)
+Bytes sent: 83 45 03 19 
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+------------
+-    28 DOWN
+------------
+Executed command: Move camera down
+Bytes sent: 83 45 04 11
+Bytes received: A0 92 40 00
+Received message: ACK, no error
+
+Executed command: Move camera down (accelerate)
+Bytes sent: 83 45 04 13
+Bytes received: A0 92 40 00
+Received message: ACK, no error
+
+Executed command: Move camera down (accelerate)
+Bytes sent: 83 45 04 15
+Bytes received: A0 92 40 00
+Received message: ACK, no error
+
+Executed command: Move camera down (accelerate)
+Bytes sent: 83 45 04 17
+Bytes received: A0 92 40 00
+Received message: ACK, no error
+
+Executed command: Move camera down (accelerate)
+Bytes sent: 83 45 04 19
+Bytes received: A0 92 40 00
+Received message: ACK, no error
+
+------------
+-    31 ZOOM-
+------------
+Executed command: Zoom camera out
+Bytes sent: 83 45 0D 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Zoom camera out (accelerate)
+Bytes sent: 83 45 0D 01
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Zoom camera out (accelerate)
+Bytes sent: 83 45 0D 02
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+------------
+-    36 ZOOM-
+------------
+Executed command: Zoom camera out
+Bytes sent: 83 45 0D 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Zoom camera out (accelerate)
+Bytes sent: 83 45 0D 01
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Zoom camera out (accelerate)
+Bytes sent: 83 45 0D 02
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+------------
+-    39 ZOOM+
+------------
+Executed command: Zoom camera in
+Bytes sent: 83 45 0C 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Zoom camera in (accelerate)
+Bytes sent: 83 45 0C 01
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Zoom camera in (accelerate)
+Bytes sent: 83 45 0C 02
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+

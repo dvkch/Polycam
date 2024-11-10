@@ -1,0 +1,8 @@
+  logcat: hd[0]: Syan(3948): ________________ camera near move stop ________________ 
+  SMan: hd[0]: CameraJCCP: Move - 2 8 -1
+  SMan: hd[0]: CameraJCCP: composeMoveCmd - 2 8 -1
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted

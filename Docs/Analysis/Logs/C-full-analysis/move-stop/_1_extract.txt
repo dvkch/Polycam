@@ -1,0 +1,96 @@
+08:
+Executed command: stop horizontal camera movement
+Bytes sent: 82 45 02
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+11:
+Executed command: stop horizontal camera movement
+Bytes sent: 82 45 02
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+14:
+Executed command: stop horizontal camera movement
+Bytes sent: 82 45 02
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+17:
+Executed command: stop horizontal camera movement
+Bytes sent: 82 45 02
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+20:
+Executed command: stop vertical camera movement
+Bytes sent: 82 45 05
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+23:
+Executed command: stop vertical camera movement
+Bytes sent: 82 45 05
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+26:
+Executed command: stop vertical camera movement
+Bytes sent: 82 45 05
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+29:
+Executed command: stop vertical camera movement
+Bytes sent: 82 45 05
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+32:
+Executed command: stop zoom camera movement
+Bytes sent: 82 45 0E
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+34:
+Executed command: stop zoom camera movement
+Bytes sent: 82 45 0E
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+37:
+Executed command: stop zoom camera movement
+Bytes sent: 82 45 0E
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+40:
+Executed command: stop zoom camera movement
+Bytes sent: 82 45 0E
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+

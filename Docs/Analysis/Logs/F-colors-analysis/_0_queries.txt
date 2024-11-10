@@ -1,0 +1,24 @@
+###########################
+###########################
+###########################
+
+
+I am trying to reverse engineering a serial PTZ control for a camera. This PTZ is not using the Visca protocol. To do so, I have found the relevant log information in the associated system, and found how to pilot the camera using this system's API.
+
+I will need your help to analyze each log file and extract relevant information to decode this protocol. 
+
+Each of my following message will be a single log file. It will contain important data such as the bytes sent and received over serial as well as some debugging logs explaining the meaning of this data.
+
+Everytime I submit a new log, your task will be to find the relevant bits of information and output in the following format : 
+
+```
+Executed command: change camera position to 0, -100, 5090
+Bytes sent: 8D 41 51 24 00 03 68 00 00 48 03 00 04 7A
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+```
+
+If the log file contains multiple commands sent and received, repeat this pattern for each one of them
+

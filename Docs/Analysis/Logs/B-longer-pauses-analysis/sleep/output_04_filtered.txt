@@ -1,0 +1,25 @@
+  logcat: hd[0]: Syan(3950): ________________ sleep ________________ 
+  PCon: hd[0]: PcCec: CEC: TI81xxCEC - Cec_Standby Sending Standby
+  SMan: hd[0]: stateMachine: LogTransition Transition for State Machine : SourceManSM, Current State : RunningState, Event Found : 103, Next State : SleepState
+  SMan: hd[0]: CameraBase: save current camera coordinates for wake
+  SMan: hd[0]: CameraJCCP: Send 3 bytes: 82 1 50 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 8a 41 50 0a 03 68 00 7a 05 53 00 
+  SMan: hd[0]: CameraEagleEyeIV: composeStandbyCmd: EagleEyeIV camera got standby change to mode 1, part 1
+  SMan: hd[0]: CameraEagleEyeIV: composeStandbyCmd: System is going into standby, set camera led to off
+  SMan: hd[0]: CameraEagleEyeIV: Send 5 bytes: 84 41 21 0 0 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraEagleEyeIV: composeStandbyCmd: EagleEyeIV camera got standby change to mode 1, part 2
+  SMan: hd[0]: CameraEagleEyeIV: Send 4 bytes: 83 41 0 12 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  SMan: hd[0]: CameraEagleEyeIV: composeStandbyCmd: EagleEyeIV camera got standby change to mode 1, part 3
+  SMan: hd[0]: CameraJCCP: unrecognize camera message 00: ignore it

@@ -1,0 +1,112 @@
+---------------
+-   0 SLEEP
+---------------
+
+Executed command: Standby camera mode 1, part 1
+Bytes sent: 84 41 21 00 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Standby camera mode 1, part 2
+Bytes sent: 83 41 00 12
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Standby camera mode 1, part 3
+Bytes sent: [Command not provided in the log]
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+----------------
+-   3 SLEEP
+----------------
+
+Executed command: Change shutter speed to frequency 0
+Bytes sent: 83 42 14 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Change direction to mode 0
+Bytes sent: 83 41 3e 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Change orientation to mode 0
+Bytes sent: 83 41 3e 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Change brightness to 11
+Bytes sent: 84 41 33 01 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Change saturation to 6
+Bytes sent: 84 43 3e 01 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Change auto gainr to 37
+Bytes sent: 84 43 42 01 04
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Change auto gainb to 33
+Bytes sent: 84 43 43 01 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Change white balance to mode 1
+Bytes sent: 83 42 12 01
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Change back light to mode 0
+Bytes sent: 83 42 15 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Standby camera mode 1, part 1
+Bytes sent: 84 41 21 00 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Standby camera mode 1, part 2
+Bytes sent: 83 41 00 12
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Standby camera mode 1, part 3
+Bytes sent: [Command not provided in the log]
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed

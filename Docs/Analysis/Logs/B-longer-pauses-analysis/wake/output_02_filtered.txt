@@ -1,0 +1,24 @@
+  logcat: hd[0]: Syan(3942): ________________ wake ________________ 
+  PCon: hd[0]: PcCec: CEC: TI81xx Detected the sink
+  SMan: hd[0]: stateMachine: LogTransition Transition for State Machine : SourceManSM, Current State : SleepState, Event Found : 104, Next State : RunningState
+  SMan: hd[0]: CameraEagleEyeIV: composeStandbyCmd: EagleEyeIV camera got standby change to mode 0, part 1
+  SMan: hd[0]: CameraEagleEyeIV: composeStandbyCmd: EagleEyeIV camera got standby change to mode 0, part 2
+  SMan: hd[0]: CameraEagleEyeIV: Send 4 bytes: 83 41 0 10 
+  PCon: hd[0]: PcCec: CEC: TI81xxCEC Registered as playback device. is_cec_active=true
+  PCon: hd[0]: PcCec: CEC: TI81xxCEC deviceID 4, Discovered Physical Address is 1.0.0.0
+  PCon: hd[0]: PcCec: CEC: TI81xx Sending Image View ON
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 93 40 01 10 
+  SMan: hd[0]: CameraJCCP: rx: complete message 93 40 01 10 
+  SMan: hd[0]: CameraJCCP: rx: NOT Excuted
+  SMan: hd[0]: CameraJCCP: Syntax Error
+  SMan: hd[0]: CameraEagleEyeIV: composeStandbyCmd: EagleEyeIV camera got standby change to mode 0, part 3
+  SMan: hd[0]: CameraEagleEyeIV: composeStandbyCmd: System is coming out of standby, set camera led to blue
+  SMan: hd[0]: CameraEagleEyeIV: Send 5 bytes: 84 41 21 2 10 
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: a0 
+  SMan: hd[0]: CameraJCCP: rx: JCCP ACK
+  SMan: hd[0]: CameraJCCP: ProcessMessage: cam response: 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: complete message 92 40 00 
+  SMan: hd[0]: CameraJCCP: rx: Excuted
+  PCon: hd[0]: PcCec: CEC: TI81xx Sending Active Source

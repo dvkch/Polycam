@@ -1,0 +1,149 @@
+---------------
+-   1 WAKE
+---------------
+
+Executed command: set video output mode to 1
+Bytes sent: 83 41 13 1a
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: set shutter speed to 0
+Bytes sent: 83 42 14 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: set direction to 0
+Bytes sent: 83 41 3e 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: set orientation to 0
+Bytes sent: 83 41 3e 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: set brightness to 11
+Bytes sent: 84 41 33 1 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: set saturation to 6
+Bytes sent: 84 43 3e 1 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: set auto gainr to 37
+Bytes sent: 84 43 42 1 4
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: set auto gainb to 33
+Bytes sent: 84 43 43 1 0
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: set white balance to mode 1
+Bytes sent: 83 42 12 1
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+---------------
+-   4 WAKE
+---------------
+
+Executed command: Set video output to mode 1
+Bytes sent: 83 41 13 1A
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Set shutter speed to frequency 0
+Bytes sent: 83 42 14 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Set direction to mode 0, Set orientation to mode 0
+Bytes sent: 83 41 3E 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Set brightness to 11
+Bytes sent: 84 41 33 01 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Set saturation to 6
+Bytes sent: 84 43 3E 01 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Set auto gain R to 37
+Bytes sent: 84 43 42 01 04
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Set auto gain B to 33
+Bytes sent: 84 43 43 01 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Set white balance to mode 1
+Bytes sent: 83 42 12 01
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Change camera position to 0, 100, 5090
+Bytes sent: 8D 41 51 24 00 03 68 00 00 7A 03 00 04 7A
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Set video output to mode 1
+Bytes sent: 83 41 13 1A
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: Set shutter speed to frequency 0
+Bytes sent: 83 42 14 00
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+

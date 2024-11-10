@@ -1,0 +1,40 @@
+8:
+Executed command: stop camera movement
+Bytes sent: 02 08 ffffffff
+Bytes received: a0
+Received message: JCCP ACK, success
+
+11:
+Executed command: stop camera movement
+Bytes sent: 02 08 ffffffff
+Bytes received: a0
+Received message: JCCP ACK, success
+
+14:
+Executed command: stop camera movement
+Bytes sent: 02 08 ffffffff
+Bytes received: a0
+Received message: JCCP ACK, success
+
+17:
+Executed command: stop camera movement
+Bytes sent: 02 08 ffffffff
+Bytes received: a0
+Received message: JCCP ACK, success
+
+20:
+Executed command: Stop camera movement
+Command bytes sent: 02 08 ffffffff
+Response bytes received: a0 92 40 00
+Received message:
+    JCCP ACK (a0): Success acknowledgment
+    Additional response: 92 40 00
+
+
+23:
+Executed command: Stop camera movement
+Command bytes sent: 02 08 ffffffff
+Response bytes received: a0 92 40 00
+Received message:
+    JCCP ACK (a0): Success acknowledgment
+    Additional response: 92 40 00

@@ -1,0 +1,63 @@
+Executed command: change white balance to mode 1 (Auto)
+Bytes sent: 83 42 12 1
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change white balance to mode 5 (2300K)
+Bytes sent: 83 42 12 5
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change white balance to mode 6 (2856K)
+Bytes sent: 83 42 12 6
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change white balance to mode 7 (3450K)
+Bytes sent: 83 42 12 7
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change white balance to mode 8 (4230K)
+Bytes sent: 83 42 12 8
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change white balance to mode 9 (5200K)
+Bytes sent: 83 42 12 9
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change white balance to mode 10 (6504K)
+Bytes sent: 83 42 12 A
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: change white balance to mode 4 (Manual)
+Bytes sent: 83 42 12 4
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
+Executed command: start white balance calibration
+Bytes sent: 82 45 17
+Bytes received: A0
+Received message: ACK
+Bytes received: 92 40 00
+Received message: executed
+
