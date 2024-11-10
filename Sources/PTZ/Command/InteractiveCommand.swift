@@ -5,6 +5,7 @@
 //  Created by syan on 22/10/2024.
 //
 
+#if os(macOS)
 import Foundation
 import ArgumentParser
 import PTZCamera
@@ -160,3 +161,4 @@ struct InteractiveCommand: ParsableCommand {
         }
     }
 }
+#endif

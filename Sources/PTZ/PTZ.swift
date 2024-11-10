@@ -11,17 +11,22 @@ import PTZCamera
 
 @main
 struct PTZ: ParsableCommand {
-    static var configuration = CommandConfiguration(
-        commandName: "ptz",
-        abstract: "PTZ",
-        version: "1.0",
-        subcommands: [
-            InteractiveCommand.self,
-            ReadCommand.self,
-            WriteCommand.self,
-            AdvancedCommand.self,
-        ]
-    )
+    static var configuration: CommandConfiguration {
+        var commands: [ParsableCommand.Type] = []
+#if os(macOS)
+        commands.append(InteractiveCommand.self)
+#endif
+        commands.append(ReadCommand.self)
+        commands.append(WriteCommand.self)
+        commands.append(AdvancedCommand.self)
+
+        return CommandConfiguration(
+            commandName: "ptz",
+            abstract: "PTZ",
+            version: "1.0",
+            subcommands: commands
+        )
+    }
     
     public static func main() {
         Camera.registerKnownStates()

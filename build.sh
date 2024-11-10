@@ -2,16 +2,24 @@
 
 set -e
 
-# cleanup
-rm -rf .build/ build/
+# Cleanup
+#rm -rf .build/ build/
 
-# build for macOS
-echo "Building for macOS..."
-swift build --arch arm64 --arch x86_64 -c release -Xswiftc -O > /dev/null
-mkdir -p "build/macOS"
-rsync -ar ".build/apple/Products/Release/SwiftPTZ" "build/macOS"
+# Build for macOS
+# can't build for both archs in one go, cf https://github.com/swiftlang/swift-package-manager/issues/8013
+echo ""
+echo "Building for macOS ARM64..."
+swift build --arch arm64 -c release -Xswiftc -O
+mkdir -p "build/macOS-arm64"
+cp ".build/arm64-apple-macosx/release/ptz" "build/macOS-arm64/"
 
-# build for linux
+echo ""
+echo "Building for macOS x64..."
+swift build --arch x86_64 -c release -Xswiftc -O
+mkdir -p "build/macOS-x86_64"
+cp ".build/x86_64-apple-macosx/release/ptz" "build/macOS-x86_64/"
+
+# Build for linux
 if ! command -v docker &> /dev/null; then
     echo "Couldn't build for linux, docker isn't available"
     exit -1
@@ -24,13 +32,13 @@ echo "Building for Linux ARM64..."
 docker container rm -f SwiftPTZ-linux > /dev/null
 docker run -it --name SwiftPTZ-linux --platform linux/arm64/v8 -v $(pwd):/sources swift:latest /bin/bash -c "cd sources && $BUILD_CMD"
 mkdir -p "build/linux-arm64"
-rsync -ar ".build/aarch64-unknown-linux-gnu/release/SwiftPTZ" "build/linux-arm64"
+cp ".build/aarch64-unknown-linux-gnu/release/ptz" "build/linux-arm64/"
 
 echo ""
 echo "Building for Linux x64..."
 docker container rm -f SwiftPTZ-linux > /dev/null
 docker run -it --name SwiftPTZ-linux --platform linux/amd64    -v $(pwd):/sources swift:latest /bin/bash -c "cd sources && $BUILD_CMD"
 mkdir -p "build/linux-amd64"
-rsync -ar ".build/x86_64-unknown-linux-gnu/release/SwiftPTZ"  "build/linux-amd64"
+cp ".build/x86_64-unknown-linux-gnu/release/ptz"  "build/linux-amd64/"
 
 echo "All good!"
