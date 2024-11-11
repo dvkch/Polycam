@@ -20,7 +20,7 @@ struct ReadCommand: ParsableCommand {
         var operations = ["all", "moving"]
         operations += PTZConfig.knownReadableStates.map({ $0.cliReadDescription })
         operations += PTZConfig.knownReadableCombosStates.map({ $0.cliReadDescription })
-        return operations.map({ "  " + $0 }).joined(separator: "\n")
+        return operations.sorted().map({ "  " + $0 }).joined(separator: "\n")
     }
     
     @Option(name: .customLong("device"), help: "PTZ serial device name")
@@ -32,7 +32,7 @@ struct ReadCommand: ParsableCommand {
     typealias Operation = (Camera, inout [String: JSONValue]) throws -> ()
     
     @Argument(help: "States, e.g. calibrationHue(cyan)", transform: { try Self.parseOperation($0) })
-    var states: [Operation] = []
+    var states: [[Operation]] = []
     
     private static func parseOperation(_ operationString: String) throws -> [Operation] {
         let regex = #/(?<name>[a-zA-Z0-9]+)(?:\((?<variant>[a-zA-Z0-9/]+)\))?/#
@@ -89,8 +89,10 @@ struct ReadCommand: ParsableCommand {
         var result = [String: JSONValue]()
         result["device"] = serial.rawValue
         
-        for operation in states {
-            try operation(camera, &result)
+        for operations in states {
+            for operation in operations {
+                try operation(camera, &result)
+            }
         }
         
         let jsonData = try JSONSerialization.data(withJSONObject: result, options: [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes])
