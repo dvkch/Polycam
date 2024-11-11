@@ -17,7 +17,7 @@ struct ReadCommand: ParsableCommand {
     )
     
     static var availableOperations: String {
-        var operations = ["all"]
+        var operations = ["all", "moving"]
         operations += PTZConfig.knownReadableStates.map({ $0.cliReadDescription })
         operations += PTZConfig.knownReadableCombosStates.map({ $0.cliReadDescription })
         return operations.map({ "  " + $0 }).joined(separator: "\n")
@@ -51,6 +51,19 @@ struct ReadCommand: ParsableCommand {
                 }
             }
             return operations
+        }
+        
+        if state.name == "moving" {
+            return [{
+                let position1 = try $0.position()
+                Thread.sleep(forTimeInterval: 0.05)
+                let position2 = try $0.position()
+                let moving = PTZBool(rawValue: position1 != position2)
+                $1["moving"] = [
+                    "value": moving.rawValue,
+                    "name": moving.description
+                ]
+            }]
         }
         
         if let stateType = PTZConfig.knownReadableCombosStates.first(where: { $0.name.camelCased == state.name }) {
