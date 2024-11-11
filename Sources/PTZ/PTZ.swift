@@ -18,6 +18,7 @@ struct PTZ: ParsableCommand {
 #endif
         commands.append(ReadCommand.self)
         commands.append(WriteCommand.self)
+        commands.append(PresetCommand.self)
         commands.append(AdvancedCommand.self)
 
         return CommandConfiguration(
