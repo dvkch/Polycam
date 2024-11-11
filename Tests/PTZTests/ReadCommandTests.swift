@@ -19,7 +19,7 @@ final class ReadCommandTests: XCTestCase {
         }
     }
     
-    func testDistinctOutputs() throws {
+    func testReadHasDistinctOutputs() throws {
         let parsed = try ptzReadParsed(ReadBrightness.self, ["brightness"])
 
         let expectedStdOut =
@@ -48,5 +48,23 @@ final class ReadCommandTests: XCTestCase {
         let (stdOut, stdErr) = try ptz(["read", "brightness", "--log=info"])
         XCTAssertEqual(stdOut, expectedStdOut)
         XCTAssertEqual(stdErr, expectedStdErr)
+    }
+    
+    func testReadMoving() throws {
+        let moveOutput = try ptz(["write", "position=0,0,0", "pause=0.5", "movePan(left)=10"])
+        XCTAssertTrue(moveOutput.stdOut.contains("-> Position(0, 0, 0)"), "")
+        XCTAssertTrue(moveOutput.stdOut.contains("-> pause=0.5"), "")
+        XCTAssertTrue(moveOutput.stdOut.contains("-> MovePan(left: 13%)"), "")
+        XCTAssertEqual(moveOutput.stdErr, "")
+
+        let afterMoving = try ptzReadParsed(ReadMoving.self, ["moving"])
+        XCTAssertTrue(afterMoving.moving.value)
+
+        let stopOutput = try ptz(["write", "movePan(stop)=0"])
+        XCTAssertTrue(stopOutput.stdOut.contains("-> MovePan(stop: 0%)"), "")
+        XCTAssertEqual(stopOutput.stdErr, "")
+
+        let afterStopping = try ptzReadParsed(ReadMoving.self, ["moving"])
+        XCTAssertFalse(afterStopping.moving.value)
     }
 }
