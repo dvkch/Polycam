@@ -30,12 +30,24 @@ public enum PTZPreset: UInt8, PTZVariant {
         case .eight:    return "eight"
         }
     }
+    
+    public init?(from cliString: String) {
+        guard let int = UInt8(cliString) else { return nil }
+        guard let item = Self.allCases.first(where: { $0.rawValue + 1 == int }) else { return nil }
+        self = item
+    }
+    
+    public static var cliStringExamples: [String] {
+        return allCases.map({ String($0.rawValue + 1) })
+    }
+
 }
 
 /// Stores up to 8 presets positions.
 /// Discovered by fuzzing
 ///
 /// There doesn't seem to be a way to directly save the current position to a preset, or set the current position from a preset, in a single request.
+#warning("writing presets doesnt work")
 public struct PTZPresetState: PTZReadable, PTZWritable {
     public static let name: String = "Preset"
     public static let register: PTZRegister<PTZPreset> = .init(0x01, 0x60)
