@@ -36,7 +36,9 @@ extension Config {
     
     func write(to path: URL) {
         do {
-            let data = try JSONEncoder().encode(self)
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+            let data = try encoder.encode(self)
             try data.write(to: path, options: .atomic)
         }
         catch {
