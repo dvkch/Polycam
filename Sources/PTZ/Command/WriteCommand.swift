@@ -10,6 +10,7 @@ import ArgumentParser
 import PTZCamera
 import PTZMessaging
 
+#warning("allow += and -= operations on PTZScaledValue states")
 struct WriteCommand: ParsableCommand {
     static var configuration: CommandConfiguration = .init(
         commandName: "write",
