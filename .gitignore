@@ -1,4 +1,5 @@
 .build/
+.swift/
+.swiftpm/
 build/
 Docs/Analysis/Binaries/
-.swiftpm/

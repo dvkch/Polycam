@@ -1,0 +1,21 @@
+version: "3.5"
+
+services:
+  app:
+    image: onvif
+    build:
+      context: .
+    network_mode: "host"
+    ports:
+      - 8080:8080
+    environment:
+      - PTZ_CONFIG=/app/config/ptz.json
+      - VIDEO_DEVICE=/dev/video0
+    volumes:
+      - /dev/bus/usb:/dev/bus/usb
+      - ./onvif-config:/app/config
+    privileged: true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
