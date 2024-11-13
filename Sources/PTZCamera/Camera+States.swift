@@ -70,7 +70,6 @@ public extension Camera {
         PTZConfig.register(PTZMoveZoomAction.self)
         PTZConfig.register(PTZPanState.self)
         PTZConfig.register(PTZPositionState.self)
-        PTZConfig.register(PTZPresetState.self)
         PTZConfig.register(PTZTiltState.self)
         PTZConfig.register(PTZZoomState.self)
     }
@@ -135,7 +134,6 @@ public extension Camera {
     #PTZState( "W" , PTZMoveZoomAction.self,                   PTZZoomDirection.self,      PTZZoomSpeed.self)
     #PTZState("RWD", PTZPanState.self,                         PTZNone.self,               PTZPan.self)
     #PTZState("RWD", PTZPositionState.self,                    PTZNone.self,               PTZPosition.self)
-    #PTZState("RWD", PTZPresetState.self,                      PTZPreset.self,             PTZPosition.self)
     #PTZState("RWD", PTZTiltState.self,                        PTZNone.self,               PTZTilt.self)
     #PTZState("RWD", PTZZoomState.self,                        PTZNone.self,               PTZZoom.self)
 }

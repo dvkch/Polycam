@@ -6,6 +6,7 @@ Marks:
 - `1`: the command was extensively tested, but setting it to different values never revealed any visible changes in behaviour or output
 - `2`: the command was tested, but no setter is available or easily testable, and it was not obvious what the values from the getter correspond to
 - `3`: the command was tested but the setter always returns a `mode condition` error. playing with all other known setters to try and put the camera in better conditions did not help and the setter was never run successfully
+- `4`: initially thought those were presets, but their value only goes from 00 00 00 00 00 00 00 00 to 0F 7F 7F 7F 7F 00 00 00, too small to store any position with zoom, and setting them to multiple values didn't result in a specific behaviour to find their original purpose
 - ` `: means the command is still being explored
 
 Commands that weren't found, but i wouldn't be suprised to see there:
@@ -53,14 +54,14 @@ Getters
 | 8x 01 5C |   √    | MotorStats(Pan=90072, Tilt=67102)
 | 8x 01 5D |   √    | Clock(t1: 4789814)
 | 8x 01 5E |   √    | Clock(t2: 4144652)
-| 8x 01 60 |   √    | Preset(one: 0, 0, 0)
-| 8x 01 61 |   √    | Preset(two: 0, 0, 0)
-| 8x 01 62 |   √    | Preset(three: 0, 0, 0)
-| 8x 01 63 |   √    | Preset(four: 771, 30720, 0)
-| 8x 01 64 |   √    | Preset(five: 254, 6, 0)
-| 8x 01 65 |   √    | Preset(six: 130, 2, 0)
-| 8x 01 66 |   √    | Preset(seven: 596, 444, 0)
-| 8x 01 67 |   √    | Preset(eight: 12289, 7169, 0)
+| 8x 01 60 |   4    | Unknown(8A 40 60 00 00 00 00 00 00 00 00)
+| 8x 01 61 |   4    | Unknown(8A 41 60 00 00 00 00 00 00 00 00)
+| 8x 01 62 |   4    | Unknown(8A 42 60 00 00 00 00 00 00 00 00)
+| 8x 01 63 |   4    | Unknown(8A 43 60 00 00 00 00 00 00 00 00)
+| 8x 01 64 |   4    | Unknown(8A 44 60 00 00 00 00 00 00 00 00)
+| 8x 01 65 |   4    | Unknown(8A 45 60 00 00 00 00 00 00 00 00)
+| 8x 01 66 |   4    | Unknown(8A 46 60 00 00 00 00 00 00 00 00)
+| 8x 01 67 |   4    | Unknown(8A 47 60 00 00 00 00 00 00 00 00)
 | 8x 01 71 |   2    | Unknown(83 41 71 00) // Couldn't make it reply anything else than 00
 | 8x 01 72 |   1    | Unknown(83 41 72 00)
 

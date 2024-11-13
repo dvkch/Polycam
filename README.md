@@ -39,9 +39,9 @@ Nota:
 This is the CLI executable. It supports the following commands:
 
 - `ptz interactive`: runs a TUI to control the camera with the keyboard. not all configurations are possible in this interface to keep it simple
-- `ptz read`: allows reading the current state of the camera, for instance: `ptz read all` or `ptz read brightness position preset(4) contrast clock(t1)`
+- `ptz read`: allows reading the current state of the camera, for instance: `ptz read all` or `ptz read brightness position contrast clock(t1)`
 - `ptz write`: update the state of the camera, for instance: `ptz movePan(left)=50 pause=2 movePan(stop)=0` or `ptz boot videoOutput=720p60 whiteBalance=5200K`
-- `ptz preset`: allows the creation, listing and deletion of named presets. The presets are stored in a configuration file. While the camera itself can store presets, they cannot have names and cannot be easily manipulated (removing index 3 would make no sense for instance, but it is requried by ONVIF)
+- `ptz preset`: allows the creation, listing and deletion of named presets. The presets are stored in a configuration file
 - `ptz advanced benchmark`: benchmarks the communication speed between the camera and the computer. helpful while writing the code, probably not a lot today
 - `ptz advanced fuzzer`: runs all possible commands on the camera and outputs potentially functional commands. Careful with this, might be dangerous and leave your camera in a weird state (`ptz write reset=settings` might help there)
 - `ptz advanced tester`: often-rewritten command to help me analyse newly discovered commands
