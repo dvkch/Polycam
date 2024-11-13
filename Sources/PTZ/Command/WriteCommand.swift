@@ -30,7 +30,7 @@ struct WriteCommand: ParsableCommand {
     var logLevel: LogLevel = .error
 
     @Flag(name: .customLong("continue-on-failure"), help: "Continue on failure")
-    var continueOnFailure: Bool = true
+    var continueOnFailure: Bool = false
 
     typealias Operation = (String, (Camera) throws -> Void)
 
