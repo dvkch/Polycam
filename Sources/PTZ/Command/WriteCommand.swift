@@ -17,7 +17,7 @@ struct WriteCommand: ParsableCommand {
     )
 
     static var availableOperations: String {
-        var operations = ["boot", "pause=secs", "position=preset(...)", "preset(...)=position"]
+        var operations = ["boot", "pause=secs", "positionRelative=x,y,z"]
         operations += PTZConfig.knownWriteableStates.map({ $0.cliWriteDescription })
         operations += PTZConfig.knownWriteableComboStates.map({ $0.cliWriteDescription })
         return operations.sorted().map({ "  " + $0 }).joined(separator: "\n")
@@ -55,6 +55,21 @@ struct WriteCommand: ParsableCommand {
                 throw ValidationError("Invalid parameters for pause operation")
             }
             return ("pause=\(seconds)", { _ in Thread.sleep(forTimeInterval: seconds) })
+        }
+
+        if operation.state == "positionRelative" {
+            var values: [Int] = (operation.value.map(String.init) ?? "").split(separator: ",").map({ Int($0) ?? 0 })
+            while values.count < 3 { values.append(0) }
+
+            return ("positionRelative=\(values.map(\.description).joined(separator: ","))", {
+                let position = try $0.position()
+                let newPosition = PTZPosition(
+                    pan:  .init(rawValue: position.pan.rawValue + values[0]),
+                    tilt: .init(rawValue: position.tilt.rawValue + values[1]),
+                    zoom: .init(rawValue: position.zoom.rawValue + values[2])
+                )
+                try $0.setPosition(newPosition)
+            })
         }
 
         if let stateType = PTZConfig.knownWriteableComboStates.first(where: {
