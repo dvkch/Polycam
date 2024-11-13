@@ -10,7 +10,7 @@ import PTZMessaging
 
 public struct PTZFocus: PTZScaledValue {
     public var ptzValue: UInt16
-    public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
+    public init(ptzValue: UInt16) { self.ptzValue = Self.clamped(ptzValue) }
     public static let minValue: Int = 0
     public static let maxValue: Int = 500
     public static let ptzMin: UInt16 = 0xF0
