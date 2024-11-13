@@ -18,6 +18,12 @@ public protocol PTZScaledValue: PTZValue, ExpressibleByIntegerLiteral where RawV
 }
 
 extension PTZScaledValue {
+    public static func clamped(_ ptzValue: UInt16) -> UInt16 {
+        return Swift.min(ptzMax, Swift.max(ptzMin, ptzValue))
+    }
+}
+
+extension PTZScaledValue {
     public init(integerLiteral value: Int) {
         self.init(rawValue: value)!
     }

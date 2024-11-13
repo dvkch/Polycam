@@ -10,7 +10,7 @@ import PTZMessaging
 
 public struct PTZTilt: PTZScaledValue {
     public var ptzValue: UInt16
-    public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
+    public init(ptzValue: UInt16) { self.ptzValue = Self.clamped(ptzValue) }
     public static let minValue: Int = -1000
     public static let maxValue: Int = 1000
     public static let ptzMin: UInt16 = 0x00
@@ -21,7 +21,7 @@ public struct PTZTilt: PTZScaledValue {
 
 internal struct PTZTiltOriginalAPI: PTZScaledValue {
     public var ptzValue: UInt16
-    public init(ptzValue: UInt16) { self.ptzValue = ptzValue }
+    public init(ptzValue: UInt16) { self.ptzValue = Self.clamped(ptzValue) }
     static var minValue: Int = -50_000
     static var maxValue: Int =  50_000
     static var ptzMin: UInt16 = 0x00
