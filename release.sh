@@ -41,4 +41,8 @@ docker run -it --name SwiftPTZ-linux --platform linux/amd64    -v $(pwd):/source
 mkdir -p "build/linux-amd64"
 cp ".build/x86_64-unknown-linux-gnu/release/ptz"  "build/linux-amd64/"
 
+echo ""
+echo "Archiving"
+find build/ -maxdepth 1 -mindepth 1 -type d -exec zip -r {}.zip {}  \;
+
 echo "All good!"
