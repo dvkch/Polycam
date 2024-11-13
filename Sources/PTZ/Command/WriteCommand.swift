@@ -51,36 +51,6 @@ struct WriteCommand: ParsableCommand {
             return ("boot", { try $0.powerOn() })
         }
 
-        if operation.state == "preset", operation.value == "position" {
-            guard let preset = PTZPreset(from: operation.variant.map(String.init) ?? "") else {
-                throw ValidationError("Invalid parameters for preset operation")
-            }
-            return (
-                String(operation.0),
-                {
-                    let position = try $0.position()
-                    try $0.setPreset(position, for: preset)
-                }
-            )
-        }
-
-        if operation.state == "position", let value = operation.value.map(String.init),
-            value.hasPrefix("preset(")
-        {
-            let presetString = value.replacingOccurrences(of: "preset(", with: "")
-                .replacingOccurrences(of: ")", with: "")
-            guard let preset = PTZPreset(from: presetString) else {
-                throw ValidationError("Invalid parameters for position operation")
-            }
-            return (
-                String(operation.0),
-                {
-                    let presetPosition = try $0.preset(for: preset)
-                    try $0.setPosition(presetPosition)
-                }
-            )
-        }
-
         if operation.state == "pause" {
             guard let seconds = TimeInterval(operation.value.map(String.init) ?? "") else {
                 throw ValidationError("Invalid parameters for pause operation")
