@@ -3,11 +3,6 @@
 import PackageDescription
 import CompilerPluginSupport
 
-var nCursesDependency: [PackageDescription.Target.Dependency] = []
-#if os(macOS)
-nCursesDependency.append(.product(name: "SwiftCurses", package: "SwiftCurses"))
-#endif
-
 let package = Package(
     name: "PTZ",
     platforms: [.macOS(.v13)],
@@ -24,7 +19,8 @@ let package = Package(
         .executableTarget(name: "PTZ", dependencies: [
                 .target(name: "PTZCamera"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
-        ] + nCursesDependency),
+                .product(name: "SwiftCurses", package: "SwiftCurses")
+        ]),
         .target(name: "PTZCamera", dependencies: [
             .target(name: "PTZMessaging"),
             .target(name: "PTZCameraMacros"),

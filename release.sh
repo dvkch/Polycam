@@ -25,19 +25,19 @@ if ! command -v docker &> /dev/null; then
     exit -1
 fi
 
-BUILD_CMD="swift build -c release -Xswiftc -O"
+BUILD_CMD="apt update && apt install -y libncurses5-dev && swift build -c release -Xswiftc -O"
 
 echo ""
 echo "Building for Linux ARM64..."
 docker container rm -f SwiftPTZ-linux > /dev/null
-docker run -it --name SwiftPTZ-linux --platform linux/arm64/v8 -v $(pwd):/sources swift:latest /bin/bash -c "cd sources && $BUILD_CMD"
+docker run -it --name SwiftPTZ-linux --platform linux/arm64/v8 -v $(pwd):/sources swift:6.0-jammy /bin/bash -c "cd sources && $BUILD_CMD"
 mkdir -p "build/linux-arm64"
 cp ".build/aarch64-unknown-linux-gnu/release/ptz" "build/linux-arm64/"
 
 echo ""
 echo "Building for Linux x64..."
 docker container rm -f SwiftPTZ-linux > /dev/null
-docker run -it --name SwiftPTZ-linux --platform linux/amd64    -v $(pwd):/sources swift:latest /bin/bash -c "cd sources && $BUILD_CMD"
+docker run -it --name SwiftPTZ-linux --platform linux/amd64    -v $(pwd):/sources swift:6.0-jammy /bin/bash -c "cd sources && $BUILD_CMD"
 mkdir -p "build/linux-amd64"
 cp ".build/x86_64-unknown-linux-gnu/release/ptz"  "build/linux-amd64/"
 

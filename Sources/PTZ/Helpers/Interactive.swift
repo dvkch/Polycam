@@ -5,7 +5,6 @@
 //  Created by syan on 25/10/2024.
 //
 
-#if os(macOS)
 import Foundation
 import SwiftCurses
 import PTZCamera
@@ -298,4 +297,3 @@ internal extension Interactive {
         }
     }
 }
-#endif

@@ -13,9 +13,7 @@ import PTZCamera
 struct PTZ: ParsableCommand {
     static var configuration: CommandConfiguration {
         var commands: [ParsableCommand.Type] = []
-#if os(macOS)
         commands.append(InteractiveCommand.self)
-#endif
         commands.append(ReadCommand.self)
         commands.append(WriteCommand.self)
         commands.append(PresetCommand.self)
