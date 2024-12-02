@@ -69,10 +69,7 @@ fi
 
 if [ ! -d onvif_simple_server ]; then
     echo "Downloading onvif_simple_server"
-    git clone https://github.com/dvkch/onvif_simple_server.git
-    cd onvif_simple_server
-    git switch patch-zoom
-    cd ..
+    git clone https://github.com/roleoroleo/onvif_simple_server.git
 fi
 
 if [ ! -f onvif_simple_server/extras/_install/www/onvif/ptz_service ]; then
