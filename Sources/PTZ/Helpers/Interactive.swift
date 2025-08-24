@@ -90,7 +90,8 @@ internal extension Interactive {
         let collapsibleSpacing: Bool
         let items: [any Interactive.Element]
         
-        init(_ name: String, collapsibleSpacing: Bool, _ items: [any Interactive.Element]) {
+        init(_ name: String, collapsibleSpacing: Bool, defaultOpened: Bool, _ items: [any Interactive.Element]) {
+            self.opened = defaultOpened
             self.name = name
             self.collapsibleSpacing = collapsibleSpacing
             self.items = items
@@ -100,7 +101,7 @@ internal extension Interactive {
         var output: String { name + (opened ? "" : " (+)") }
         var outputColor: Interactive.Color { .regular }
         var selectable: Bool { true }
-        private var opened = true
+        private var opened: Bool
         var children: [any Interactive.Element] {
             let separator = collapsibleSpacing ? [Line("")] : []
             return opened ? (items + separator) : []

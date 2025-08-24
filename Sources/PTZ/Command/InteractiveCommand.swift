@@ -28,25 +28,25 @@ struct InteractiveCommand: ParsableCommand {
             Interactive.Line("Let's have some fun!"),
             Interactive.DynamicLine({ Self.lastError ?? "" }, .error),
             Interactive.Line(""),
-            Interactive.Group("--- Testing ---", collapsibleSpacing: true, [
+            Interactive.Group("--- Testing ---", collapsibleSpacing: true, defaultOpened: false, [
                 Interactive.State(PTZDevModeState.self, on: camera, default: .on),
             ]),
-            Interactive.Group("--- Position ---", collapsibleSpacing: true, [
+            Interactive.Group("--- Position ---", collapsibleSpacing: true, defaultOpened: true, [
                 Interactive.State(PTZPanState.self, on: camera, default: .default),
                 Interactive.State(PTZTiltState.self, on: camera, default: .default),
                 Interactive.State(PTZZoomState.self, on: camera, default: .default),
-                Interactive.Group("Focus", collapsibleSpacing: false, [
+                Interactive.Group("Focus", collapsibleSpacing: false, defaultOpened: false, [
                     Interactive.State(PTZAutoFocusState.self, on: camera, default: .on),
                     Interactive.State(PTZFocusState.self, on: camera, default: .mid),
                 ]),
-                Interactive.Group("Move", collapsibleSpacing: false, [
+                Interactive.Group("Move", collapsibleSpacing: false, defaultOpened: true, [
                     Interactive.Move(PTZMovePanAction.self, camera: camera, oneWay: .left, otherWay: .right, stop: .stop, speed: .mid),
                     Interactive.Move(PTZMoveTiltAction.self, camera: camera, oneWay: .down, otherWay: .up, stop: .stop, speed: .mid),
                     Interactive.Move(PTZMoveZoomAction.self, camera: camera, oneWay: .out, otherWay: .in, stop: .stop, speed: .mid),
                     Interactive.Move(PTZMoveFocusAction.self, camera: camera, oneWay: .far, otherWay: .near, stop: .stop, speed: .mid),
                 ])
             ]),
-            Interactive.Group("--- Exposure ---", collapsibleSpacing: true, [
+            Interactive.Group("--- Exposure ---", collapsibleSpacing: true, defaultOpened: false, [
                 Interactive.State(PTZShutterSpeedState.self, on: camera, default: .default),
                 Interactive.State(PTZAutoExposureState.self, on: camera, default: .on),
                 Interactive.State(PTZGainModeState.self, on: camera, default: .default),
@@ -56,11 +56,11 @@ struct InteractiveCommand: ParsableCommand {
                 Interactive.State(PTZVignetteCorrectionState.self, on: camera, default: .on),
                 Interactive.State(PTZNoiseReductionState.self, on: camera, default: .on),
             ]),
-            Interactive.Group("--- Colors ---", collapsibleSpacing: true, [
+            Interactive.Group("--- Colors ---", collapsibleSpacing: true, defaultOpened: true, [
                 Interactive.State(PTZBrightnessState.self, on: camera, default: .default),
                 Interactive.State(PTZContrastState.self, on: camera, default: .default),
                 Interactive.State(PTZSaturationState.self, on: camera, default: .default),
-                Interactive.Group("WhiteBalance", collapsibleSpacing: false, [
+                Interactive.Group("WhiteBalance", collapsibleSpacing: false, defaultOpened: false, [
                     Interactive.State(PTZWhiteBalanceState.self, on: camera, default: .default),
                     Interactive.State(PTZWhiteBalanceTempState.self, on: camera, default: .default),
                     Interactive.State(PTZWhiteBalanceTintState.self, on: camera, default: .default),
@@ -99,6 +99,8 @@ struct InteractiveCommand: ParsableCommand {
             scr.clear()
             try scr.move(row: 0, col: 0)
             try Interactive.traverse(content) { (element, idx, path) in
+                guard idx < scr.maxYX.row else { return }
+
                 try scr.move(row: Int32(idx), col: 0)
                 if SwiftCurses.Color.hasColors {
                     try scr.withAttrs(.colorPair(element.outputColor.rawValue)) {
@@ -118,6 +120,7 @@ struct InteractiveCommand: ParsableCommand {
             selectedElementID = selectedElement?.1.id
 
             if let selectedElement {
+                guard selectedElement.0 < scr.maxYX.row else { return }
                 try scr.move(row: Int32(selectedElement.0), col: 0)
             }
 
