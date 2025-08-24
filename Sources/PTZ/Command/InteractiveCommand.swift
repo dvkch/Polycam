@@ -32,6 +32,7 @@ struct InteractiveCommand: ParsableCommand {
                 Interactive.State(PTZDevModeState.self, on: camera, default: .on),
             ]),
             Interactive.Group("--- Position ---", collapsibleSpacing: true, defaultOpened: true, [
+                Interactive.State(PTZInvertedState.self, on: camera, default: .on),
                 Interactive.State(PTZPanState.self, on: camera, default: .default),
                 Interactive.State(PTZTiltState.self, on: camera, default: .default),
                 Interactive.State(PTZZoomState.self, on: camera, default: .default),
