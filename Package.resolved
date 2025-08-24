@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-syntax.git",
       "state" : {
-        "revision" : "2bc86522d115234d1f588efe2bcb4ce4be8f8b82",
-        "version" : "510.0.3"
+        "revision" : "0687f71944021d616d34d922343dcef086855920",
+        "version" : "600.0.1"
       }
     },
     {
@@ -24,7 +24,7 @@
       "location" : "https://github.com/Jomy10/SwiftCurses.git",
       "state" : {
         "branch" : "master",
-        "revision" : "ce182a9e29f4212043335ca3c913695ed2a74f3e"
+        "revision" : "5513ba40c61de3234ed09c06a3b2a42c5b3153ad"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mredig/SwiftSerial.git",
       "state" : {
-        "revision" : "1df0f4616e763b504950197f5bf22f0a6067997d",
-        "version" : "0.1.4"
+        "revision" : "764bf55dc7667f665934ce69d63211471bf55b0f",
+        "version" : "0.1.5"
       }
     }
   ],

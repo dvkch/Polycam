@@ -25,7 +25,7 @@ if ! command -v docker &> /dev/null; then
     exit -1
 fi
 
-BUILD_CMD="apt update && apt install -y libncurses5-dev && swift build -c release -Xswiftc -O"
+BUILD_CMD="apt update && apt install -y libncurses5-dev && swift build -c release -Xswiftc -O -Xswiftc -static-stdlib"
 
 echo ""
 echo "Building for Linux ARM64..."
