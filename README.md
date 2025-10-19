@@ -50,7 +50,7 @@ Full list of supported commands and their arguments is available by running the 
 
 ### PTZCamera
 
-This is the library package, defining all possible configurations and actions supported by the EagleEye IV. A lot of work has been put into this over the last two years, while I cannot garantee that all commands are safe, I feel pretty confident in my understanding and implementation for all of them.
+This is the library package, defining all possible configurations and actions supported by the EagleEye IV. A lot of work has been put into this over the last two years, while I cannot guarantee that all commands are safe, I feel pretty confident in my understanding and implementation for all of them.
 
 Full list of supported camera commands is visible in the [fuzzer report](Docs/FuzzerResults.md).
 
