@@ -4,6 +4,8 @@
 
 Controlling a Polycom EagleEye IV camera through its original HDCI cable, or <i>A reverse engineering rabbit hole</i>
 
+[Read about it @ syan.me](https://syan.me/en/products/polycam)
+
 To be able to connect to the camera using its original cable, here are roughly the steps :
 
 - cut your cable
