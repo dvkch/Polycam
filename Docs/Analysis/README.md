@@ -124,6 +124,8 @@ Details:
 
 Cable wires:
 
+**NOTA 3/11/2025 => the cable colors are not always the same! It is up to you to verify your own cable colors by testing the continuity to the camera socket pins.**
+
 - in main shield:
     - 4x shields, for HDMI
     - 12V pin 14: blue
