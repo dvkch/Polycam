@@ -23,6 +23,7 @@ requirements['jq']='jq'
 requirements['lighttpd']='lighttpd'
 requirements['v4l2-ctl']='v4l-utils'
 requirements['envsubst']='gettext-base'
+requirements['swift']='swiftlang'
 
 echo "Checking dependencies"
 declare -a missing_requirements
@@ -40,10 +41,10 @@ if [ -n "$missing_requirements" ]; then
         $SUDO apt update
         $SUDO apt install -y curl
 
-        curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz && \
-        tar zxf swiftly-$(uname -m).tar.gz && \
-        ./swiftly init --quiet-shell-followup && \
-        . "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh" && hash -r
+        #curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz && \
+        #tar zxf swiftly-$(uname -m).tar.gz && \
+        #./swiftly init --quiet-shell-followup && \
+        #. "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh" && hash -r
 
         $SUDO apt install -y ${missing_requirements}
     else
