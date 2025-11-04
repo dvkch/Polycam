@@ -1,0 +1,13 @@
+[Unit]
+Description=ONVIF Server
+
+[Service]
+ExecStart=/home/pi/Polycam/onvif.sh
+WorkingDirectory=/home/pi/Polycam
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
