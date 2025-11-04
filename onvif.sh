@@ -40,7 +40,11 @@ if [ -n "$missing_requirements" ]; then
         $SUDO apt update
         $SUDO apt install -y curl
 
-        curl -s https://archive.swiftlang.xyz/install.sh | $SUDO bash
+        curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz && \
+        tar zxf swiftly-$(uname -m).tar.gz && \
+        ./swiftly init --quiet-shell-followup && \
+        . "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh" && hash -r
+
         $SUDO apt install -y ${missing_requirements}
     else
         echo "Please install ${missing_requirements}"
