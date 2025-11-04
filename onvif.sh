@@ -82,6 +82,7 @@ if [ ! -d onvif_simple_server ]; then
 fi
 
 if [ ! -f onvif_simple_server/extras/_install/www/onvif/ptz_service ]; then
+    $SUDO apt install libmbedtls-dev libjson-c-dev
     echo "Building onvif_simple_server"
     cd onvif_simple_server/extras
     ./build.sh
