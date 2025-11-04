@@ -109,7 +109,7 @@ if [[ " $* " == *"--no-start"* ]]; then
 fi
 
 # Find IP and adjust configuration files
-export SERVER_IP=`ip -o -4 addr show | awk '{print $4}' |  grep -oP '192\.168\.69\.\d+' | head -n 1`
+export SERVER_IP=`ip -o -4 addr show | awk '{print $4}' |  grep -oP '192\.168\.\d+\.\d+' | head -n 1`
 export PTZ="`pwd`/ptz"
 export PTZ_CONFIG="${PTZ_CONFIG:-"`pwd`/ptz.json"}"
 export VIDEO_DEVICE="${VIDEO_DEVICE:-/dev/video0}"
