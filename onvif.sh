@@ -95,8 +95,13 @@ if ! grep 'log-request-handling' /usr/local/etc/lighttpd.conf > /dev/null; then
     echo "Configuring lighttpd"
 
     # echo 'debug.log-request-handling = "enable"' | $SUDO tee -a /usr/local/etc/lighttpd.conf > /dev/null
-    echo 'server.modules += ( "mod_accesslog" )' | $SUDO tee -a /usr/local/etc/lighttpd.conf > /dev/null
-    echo 'accesslog.filename = "/dev/fd/3"' | $SUDO tee -a /usr/local/etc/lighttpd.conf > /dev/null
+
+    if ! grep 'mod_accesslog' /usr/local/etc/lighttpd.conf > /dev/null; then
+        echo 'server.modules += ( "mod_accesslog" )' | $SUDO tee -a /usr/local/etc/lighttpd.conf > /dev/null
+    fi
+    if ! grep 'accesslog.filename' /usr/local/etc/lighttpd.conf > /dev/null; then
+        echo 'accesslog.filename = "/dev/fd/3"' | $SUDO tee -a /usr/local/etc/lighttpd.conf > /dev/null
+    fi
 
     echo "---------"
     cat /usr/local/etc/lighttpd.conf
