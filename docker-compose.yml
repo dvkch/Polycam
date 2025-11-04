@@ -5,9 +5,10 @@ services:
     image: onvif
     build:
       context: .
+      network: host
     network_mode: "host"
     ports:
-      - 8080:8080
+      - "80:80"
     environment:
       - PTZ_CONFIG=/app/config/ptz.json
       - VIDEO_DEVICE=/dev/video0

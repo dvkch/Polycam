@@ -11,7 +11,7 @@ SUDO=`which sudo || true`
 
 declare -A requirements
 requirements['ffmpeg']='ffmpeg'
-requirements['swift']='swiftlang'
+# requirements['swift']='swiftlang'
 requirements['gcc']='build-essential'
 requirements['make']='build-essential'
 requirements['git']='git'
@@ -82,7 +82,7 @@ if [ ! -d onvif_simple_server ]; then
 fi
 
 if [ ! -f onvif_simple_server/extras/_install/www/onvif/ptz_service ]; then
-    $SUDO apt install libmbedtls-dev libjson-c-dev
+    $SUDO apt install libmbedtls-dev libjson-c-dev zlib1g-dev
     echo "Building onvif_simple_server"
     cd onvif_simple_server/extras
     ./build.sh
@@ -102,6 +102,8 @@ if ! grep 'log-request-handling' /usr/local/etc/lighttpd.conf > /dev/null; then
     if ! grep 'accesslog.filename' /usr/local/etc/lighttpd.conf > /dev/null; then
         echo 'accesslog.filename = "/dev/fd/3"' | $SUDO tee -a /usr/local/etc/lighttpd.conf > /dev/null
     fi
+
+    $SUDO sed -i 's/server.port\s*=\s*8080/server.port = 80/' /usr/local/etc/lighttpd.conf
 
     echo "---------"
     cat /usr/local/etc/lighttpd.conf
