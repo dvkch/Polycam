@@ -23,7 +23,6 @@ requirements['jq']='jq'
 requirements['lighttpd']='lighttpd'
 requirements['v4l2-ctl']='v4l-utils'
 requirements['envsubst']='gettext-base'
-requirements['swift']='swiftlang'
 
 echo "Checking dependencies"
 declare -a missing_requirements
@@ -39,14 +38,13 @@ if [ -n "$missing_requirements" ]; then
         missing_requirements=$(IFS=' ' ; echo "${missing_requirements[*]}")
         echo "Installing ${missing_requirements}"
         $SUDO apt update
-        $SUDO apt install -y curl
+        $SUDO apt install -y ${missing_requirements}
 
+        # $SUDO apt install -y curl libncurses-dev
         #curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz && \
         #tar zxf swiftly-$(uname -m).tar.gz && \
         #./swiftly init --quiet-shell-followup && \
         #. "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh" && hash -r
-
-        $SUDO apt install -y ${missing_requirements}
     else
         echo "Please install ${missing_requirements}"
         exit 1
@@ -64,12 +62,18 @@ else
 fi
 
 if [ ! -f ptz ]; then
-    echo "Building PTZ"
-    swift build --build-path .swift # -c release # -Xswiftc -O
+    # Since Swift-curses doesn't always work depending on the current OS version, we will install the latest release instead of compiling by hand
 
-    TRIPLE=`swiftc -print-target-info | jq -r '.target.unversionedTriple'`
-    cp .swift/$TRIPLE/debug/ptz .
-    rm -rf .swift
+    # echo "Building PTZ"
+    # swift build --build-path .swift # -c release # -Xswiftc -O
+
+    # TRIPLE=`swiftc -print-target-info | jq -r '.target.unversionedTriple'`
+    # cp .swift/$TRIPLE/debug/ptz .
+    # rm -rf .swift
+
+    curl -L -o ptz.zip "https://github.com/dvkch/Polycam/releases/download/1.4.1/linux-$(dpkg --print-architecture).zip"
+    unzip -o ptz.zip
+    mv "build/linux-$(dpkg --print-architecture)/ptz" ptz
 fi
 
 if [ ! -d onvif_simple_server ]; then
