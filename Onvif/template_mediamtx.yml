@@ -16,8 +16,8 @@ paths:
     runOnInit: >
       ffmpeg -loglevel error -f v4l2 -i /dev/video0 -framerate 10
         -filter_complex "[0:v]split=2[v1][v2];[v2]scale=640:360[v3]"
-        -map "[v1]" -f rtsp -c:v h264_v4l2m2m -preset default -tune zerolatency -c:a none rtsp://localhost:8554/ch0_0
-        -map "[v3]" -f rtsp -c:v h264_v4l2m2m -preset default -tune zerolatency -c:a none rtsp://localhost:8554/ch1_0
+        -map "[v1]" -f rtsp -c:v h264_v4l2m2m -preset fast -tune zerolatency -c:a none rtsp://localhost:8554/ch0_0
+        -map "[v3]" -f rtsp -c:v h264_v4l2m2m -preset fast -tune zerolatency -c:a none rtsp://localhost:8554/ch1_0
     runOnInitRestart: yes
     runOnReady: ffmpeg -hide_banner -loglevel error -y -i rtsp://localhost:8554/ch0_0 -vf fps=1 -update 1 /usr/local/www/ch0_0.jpg
     runOnReadyRestart: yes
