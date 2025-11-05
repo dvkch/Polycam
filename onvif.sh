@@ -103,8 +103,6 @@ if ! grep 'log-request-handling' /usr/local/etc/lighttpd.conf > /dev/null; then
         echo 'accesslog.filename = "/dev/fd/3"' | $SUDO tee -a /usr/local/etc/lighttpd.conf > /dev/null
     fi
 
-    $SUDO sed -i 's/server.port\s*=\s*8080/server.port = 80/' /usr/local/etc/lighttpd.conf
-
     echo "---------"
     cat /usr/local/etc/lighttpd.conf
     echo "---------"
