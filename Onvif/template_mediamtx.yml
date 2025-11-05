@@ -14,7 +14,7 @@ logLevel: info
 paths:
   ch0_0:
     runOnInit: >
-      ffmpeg -loglevel error -f v4l2 -input_format mjpeg -i /dev/video0 -framerate 10
+      ffmpeg -loglevel error -f v4l2 -i /dev/video0 -framerate 10
         -filter_complex "[0:v]split=2[v1][v2];[v2]scale=640:360[v3]"
         -map "[v1]" -f rtsp -c:v h264_v4l2m2m -preset default -tune zerolatency -c:a none rtsp://localhost:8554/ch0_0
         -map "[v3]" -f rtsp -c:v h264_v4l2m2m -preset default -tune zerolatency -c:a none rtsp://localhost:8554/ch1_0
