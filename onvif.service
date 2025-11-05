@@ -11,3 +11,9 @@ User=pi
 
 [Install]
 WantedBy=multi-user.target
+
+
+# sudo cp onvif.service /etc/systemd/system/
+# sudo systemctl enable onvif.service
+# sudo systemctl start onvif.service
+# sudo systemctl stop onvif.service
