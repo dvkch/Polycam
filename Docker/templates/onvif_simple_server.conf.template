@@ -54,16 +54,16 @@ audio_decoder=NONE
 ########################
 
 ptz=1
-min_step_x=-1000
-max_step_x=1000
-min_step_y=-1000
-max_step_y=1000
+min_step_x=-1
+max_step_x=1
+min_step_y=-1
+max_step_y=1
 min_step_z=0
-max_step_z=1000
+max_step_z=1
 
-get_position=$PTZ read position | jq ".position.value.pan,.position.value.tilt,.position.value.zoom" | tr '\n' ,
-jump_to_abs=$PTZ write position=%f,%f,%f         --log=info
-jump_to_rel=$PTZ write positionRelative=%f,%f,%f --log=info
+get_position=$PTZ read position | jq "(.position.value.pan / 1000), (.position.value.tilt / 1000), (.position.value.zoom / 1000)" | tr '\n' ,
+jump_to_abs=$PTZ write position=$(awk 'BEGIN { printf "%.0f", %f * 1000 }'),$(awk 'BEGIN { printf "%.0f", %f * 1000 }'),$(awk 'BEGIN { printf "%.0f", %f * 1000 }') --log=info
+jump_to_rel=$PTZ write positionRelative=$(awk 'BEGIN { printf "%.0f", %f * 1000 }'),$(awk 'BEGIN { printf "%.0f", %f * 1000 }'),$(awk 'BEGIN { printf "%.0f", %f * 1000 }') --log=info
 
 is_moving=$PTZ  read moving | jq "if .moving.value then 1 else 0 end"
 move_left=$PTZ  write  "movePan(left)=$(awk 'BEGIN { printf %f * 100 }')" --log=info
@@ -77,7 +77,7 @@ move_stop=$PTZ  write  "movePan(stop)=0" "moveTilt(stop)=0" "moveZoom(stop)=0" -
 set_home_position=$PTZ  write "preset(1)=position" --log=info
 goto_home_position=$PTZ write position=0,0,0       --log=info
 
-get_presets=$PTZ   preset --config-path=$PTZ_CONFIG --list | jq -r '.presets | to_entries[] | "\(.key)=\(.value.name),\(.value.pan),\(.value.tilt),\(.value.zoom)"'
+get_presets=$PTZ   preset --config-path=$PTZ_CONFIG --list | jq -r '.presets | to_entries[] | "\(.key)=\(.value.name),\(.value.pan/1000),\(.value.tilt/1000),\(.value.zoom/1000)"'
 move_preset=$PTZ   preset --config-path=$PTZ_CONFIG --apply %d  --log=info
 set_preset=$PTZ    preset --config-path=$PTZ_CONFIG --add %s    --log=info
 remove_preset=$PTZ preset --config-path=$PTZ_CONFIG --remove %d --log=info
