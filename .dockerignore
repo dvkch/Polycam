@@ -3,3 +3,8 @@
 .swift/
 build/
 Docs/
+Docker/onvif-config/
+Sources/
+Tests/
+Package.swift
+Package.resolved

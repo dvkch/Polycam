@@ -1,0 +1,26 @@
+services:
+  onvif:
+    image: polycam-onvif
+    build:
+      context: ..
+      dockerfile: Docker/Dockerfile
+    network_mode: "host"
+    privileged: true
+    restart: unless-stopped
+    environment:
+      - PTZ_CONFIG=/app/config/ptz.json
+      - VIDEO_DEVICE=/dev/video0
+      # - SERVER_IP=192.168.1.50   # uncomment if auto-detection picks the wrong interface
+    volumes:
+      - /dev/bus/usb:/dev/bus/usb
+      - ./onvif-config:/app/config
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080 && exec 3<&-"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
