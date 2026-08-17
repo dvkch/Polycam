@@ -7,6 +7,8 @@ export SERVER_IP="${SERVER_IP:-$(echo "$DETECTED_IF_IP" | awk '{print $2}' | cut
 export PTZ="/app/ptz"
 export PTZ_CONFIG="${PTZ_CONFIG:-/app/config/ptz.json}"
 export VIDEO_DEVICE="${VIDEO_DEVICE:-/dev/video0}"
+export MODEL="${MODEL:-Polycam}"
+export MANUFACTURER="${MANUFACTURER:-Syan}"
 
 echo "Starting: SERVER_IP=$SERVER_IP SERVER_IF=$SERVER_IF PTZ_CONFIG=$PTZ_CONFIG VIDEO_DEVICE=$VIDEO_DEVICE"
 
@@ -18,6 +20,7 @@ chmod a+rw /var/log/onvif_simple_server.log /tmp/onvif_simple_server.debug
 
 exec 3>&1
 /usr/local/bin/lighttpd -D -f /usr/local/etc/lighttpd.conf &
+/usr/local/bin/wsd_simple_server -f -i "$SERVER_IF" -x "http://%s:8080/onvif/device_service" -m "$MODEL" -n "$MANUFACTURER" -p /var/run/wsd_simple_server.pid &
 tail -F /var/log/onvif_simple_server.log &
 tail -F /tmp/onvif_simple_server.debug &
 exec /app/mediamtx /app/mediamtx.yml

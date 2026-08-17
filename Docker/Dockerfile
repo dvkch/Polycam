@@ -50,6 +50,6 @@ RUN chmod +x ptz mediamtx entrypoint.sh \
     && echo 'accesslog.filename = "/dev/fd/3"' >> /usr/local/etc/lighttpd.conf
 
 VOLUME /app/config
-EXPOSE 8080 8554
+EXPOSE 8080 8554 3702
 
 ENTRYPOINT ["./entrypoint.sh"]
