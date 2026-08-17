@@ -110,9 +110,10 @@ struct WriteCommand: ParsableCommand {
                 let d = Date()
                 try action(camera)
                 let t = Int(Date().timeIntervalSince(d) * 1000)
-                print("-> \(name), \(t)ms")
+                // don't output anything to stdout, it would be a problem for ONVIF later on
+                try! FileHandle.standardError.write(contentsOf: Data("-> \(name), \(t)ms\n".utf8))
             } catch {
-                print("-> \(name), failed \(error)")
+                try! FileHandle.standardError.write(contentsOf: Data("-> \(name), failed \(error)\n".utf8))
 
                 if !continueOnFailure {
                     throw ExitCode.failure

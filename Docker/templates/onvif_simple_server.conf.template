@@ -62,22 +62,22 @@ min_step_z=0
 max_step_z=1000
 
 get_position=$PTZ read position | jq ".position.value.pan,.position.value.tilt,.position.value.zoom" | tr '\n' ,
-jump_to_abs=$PTZ write position=%f,%f,%f
-jump_to_rel=$PTZ write positionRelative=%f,%f,%f
+jump_to_abs=$PTZ write position=%f,%f,%f         --log=info
+jump_to_rel=$PTZ write positionRelative=%f,%f,%f --log=info
 
 is_moving=$PTZ  read moving | jq "if .moving.value then 1 else 0 end"
-move_left=$PTZ  write  "movePan(left)=$(awk 'BEGIN { printf %f * 100 }')"
-move_right=$PTZ write "movePan(right)=$(awk 'BEGIN { printf %f * 100 }')"
-move_up=$PTZ    write   "moveTilt(up)=$(awk 'BEGIN { printf %f * 100 }')"
-move_down=$PTZ  write "moveTilt(down)=$(awk 'BEGIN { printf %f * 100 }')"
-move_in=$PTZ    write   "moveZoom(in)=$(awk 'BEGIN { printf %f * 100 }')"
-move_out=$PTZ   write  "moveZoom(out)=$(awk 'BEGIN { printf %f * 100 }')"
-move_stop=$PTZ  write  "movePan(stop)=0" "moveTilt(stop)=0" "moveZoom(stop)=0"
+move_left=$PTZ  write  "movePan(left)=$(awk 'BEGIN { printf %f * 100 }')" --log=info
+move_right=$PTZ write "movePan(right)=$(awk 'BEGIN { printf %f * 100 }')" --log=info
+move_up=$PTZ    write   "moveTilt(up)=$(awk 'BEGIN { printf %f * 100 }')" --log=info
+move_down=$PTZ  write "moveTilt(down)=$(awk 'BEGIN { printf %f * 100 }')" --log=info
+move_in=$PTZ    write   "moveZoom(in)=$(awk 'BEGIN { printf %f * 100 }')" --log=info
+move_out=$PTZ   write  "moveZoom(out)=$(awk 'BEGIN { printf %f * 100 }')" --log=info
+move_stop=$PTZ  write  "movePan(stop)=0" "moveTilt(stop)=0" "moveZoom(stop)=0" --log=info
 
-set_home_position=$PTZ  write "preset(1)=position"
-goto_home_position=$PTZ write position=0,0,0
+set_home_position=$PTZ  write "preset(1)=position" --log=info
+goto_home_position=$PTZ write position=0,0,0       --log=info
 
 get_presets=$PTZ   preset --config-path=$PTZ_CONFIG --list | jq -r '.presets | to_entries[] | "\(.key)=\(.value.name),\(.value.pan),\(.value.tilt),\(.value.zoom)"'
-move_preset=$PTZ   preset --config-path=$PTZ_CONFIG --apply %d
-set_preset=$PTZ    preset --config-path=$PTZ_CONFIG --add %s
-remove_preset=$PTZ preset --config-path=$PTZ_CONFIG --remove %d
+move_preset=$PTZ   preset --config-path=$PTZ_CONFIG --apply %d  --log=info
+set_preset=$PTZ    preset --config-path=$PTZ_CONFIG --add %s    --log=info
+remove_preset=$PTZ preset --config-path=$PTZ_CONFIG --remove %d --log=info
