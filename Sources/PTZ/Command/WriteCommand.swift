@@ -58,7 +58,7 @@ struct WriteCommand: ParsableCommand {
         }
 
         if operation.state == "positionRelative" {
-            var values: [Int] = (operation.value.map(String.init) ?? "").split(separator: ",").map({ Int($0) ?? 0 })
+            var values: [Int] = (operation.value.map(String.init) ?? "").split(separator: ",").map({ Int(Double($0) ?? 0) })
             while values.count < 3 { values.append(0) }
 
             return ("positionRelative=\(values.map(\.description).joined(separator: ","))", {
