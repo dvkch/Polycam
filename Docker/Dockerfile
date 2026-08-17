@@ -6,7 +6,7 @@ WORKDIR /app
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
-        build-essential git rsync ca-certificates curl unzip \
+        build-essential git rsync ca-certificates curl wget unzip \
         libmbedtls-dev libjson-c-dev zlib1g-dev
 
 # PTZ
