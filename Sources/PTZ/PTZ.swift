@@ -22,7 +22,7 @@ struct PTZ: ParsableCommand {
         return CommandConfiguration(
             commandName: "ptz",
             abstract: "PTZ",
-            version: "1.4.2",
+            version: "1.4.3",
             subcommands: commands
         )
     }
