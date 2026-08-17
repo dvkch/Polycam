@@ -9,12 +9,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         build-essential git rsync ca-certificates curl wget unzip \
         libmbedtls-dev libjson-c-dev zlib1g-dev
 
-# PTZ
-ADD https://github.com/dvkch/Polycam/releases/latest/download/linux-arm64.zip /app/ptz.zip
-RUN unzip -o /app/ptz.zip -d /app \
-    && mv /app/build/linux-arm64/ptz /app/ptz \
-    && rm -rf /app/ptz.zip /app/build
-
 # Mediamtx (RPi4/arm64)
 ARG MEDIAMTX_VERSION=1.9.3
 ARG MEDIAMTX_URL="https://github.com/bluenviron/mediamtx/releases/download/v${MEDIAMTX_VERSION}/mediamtx_v${MEDIAMTX_VERSION}_linux_arm64v8.tar.gz"
@@ -27,6 +21,12 @@ RUN git clone --depth 1 https://github.com/roleoroleo/onvif_simple_server.git /t
     && cp lighttpd-1.4.73/src/.libs/mod_accesslog.so _install/lib/ \
     && mkdir -p /opt/onvif_simple_server \
     && rsync -a _install/ /opt/onvif_simple_server/
+
+# PTZ
+ADD https://github.com/dvkch/Polycam/releases/latest/download/linux-arm64.zip /app/ptz.zip
+RUN unzip -o /app/ptz.zip -d /app \
+    && mv /app/build/linux-arm64/ptz /app/ptz \
+    && rm -rf /app/ptz.zip /app/build
 
 # FINAL
 FROM debian:bookworm-slim
