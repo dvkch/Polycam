@@ -37,19 +37,6 @@ audio_encoder=NONE
 audio_decoder=NONE
 
 ########################
-# Profiles/1
-########################
-
-name=Profile_1
-width=640
-height=360
-url=rtsp://$SERVER_IP:8554/ch1_0
-snapurl=http://$SERVER_IP:8080/ch1_0.jpg
-type=H264
-audio_encoder=NONE
-audio_decoder=NONE
-
-########################
 # PTZ
 ########################
 
@@ -62,7 +49,7 @@ min_step_z=0
 max_step_z=1
 
 get_position=$PTZ read position | jq "(.position.value.pan / 1000), (.position.value.tilt / 1000), (.position.value.zoom / 1000)" | tr '\n' ,
-jump_to_abs=$PTZ write position=$(awk 'BEGIN { printf "%%.0f", %f * 1000 }'),$(awk 'BEGIN { printf "%%.0f", %f * 1000 }'),$(awk 'BEGIN { printf "%%.0f", %f * 1000 }') --log=info
+jump_to_abs=$PTZ write position=$(awk 'BEGIN { printf "%%.0f", %f * 1000 }'),$(awk 'BEGIN { printf "%%.0f", %f * 1000 }'),$(awk 'BEGIN { printf "%%.0f", %f * 500 + 500 }') --log=info
 jump_to_rel=$PTZ write positionRelative=$(awk 'BEGIN { printf "%%.0f", %f * 1000 }'),$(awk 'BEGIN { printf "%%.0f", %f * 1000 }'),$(awk 'BEGIN { printf "%%.0f", %f * 1000 }') --log=info
 
 is_moving=$PTZ  read moving | jq "if .moving.value then 1 else 0 end"
