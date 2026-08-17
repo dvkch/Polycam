@@ -42,8 +42,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 COPY --from=builder /app/ptz ./ptz
 COPY --from=builder /app/mediamtx ./mediamtx
 COPY --from=builder /opt/onvif_simple_server /usr/local
-COPY docker/templates ./templates
-COPY docker/entrypoint.sh ./entrypoint.sh
+COPY Docker/templates ./templates
+COPY Docker/entrypoint.sh ./entrypoint.sh
 
 RUN chmod +x ptz mediamtx entrypoint.sh \
     && echo 'server.modules += ( "mod_accesslog" )' >> /usr/local/etc/lighttpd.conf \
