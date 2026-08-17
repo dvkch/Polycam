@@ -2,8 +2,8 @@
 # Basic options
 ########################
 
-model=Model
-manufacturer=Polycam
+model=$MODEL
+manufacturer=$MANUFACTURER
 firmware_ver=1.0.0
 hardware_id=HWID
 serial_num=SNLES4S
