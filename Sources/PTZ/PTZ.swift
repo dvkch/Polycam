@@ -22,11 +22,11 @@ struct PTZ: ParsableCommand {
         return CommandConfiguration(
             commandName: "ptz",
             abstract: "PTZ",
-            version: "1.4.1",
+            version: "1.4.2",
             subcommands: commands
         )
     }
-    
+
     public static func main() {
         Camera.registerKnownStates()
         self.main(nil)
