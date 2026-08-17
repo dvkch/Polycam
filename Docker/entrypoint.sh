@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-export SERVER_IP="${SERVER_IP:-$(ip -o -4 addr show | awk '{print $4}' | grep -oP '((192\.168)|(10)|(172\.(1[6-9]|2[0-9]|3[01])))\.[0-9]+\.[0-9]+' | head -n 1)}"
+DETECTED_IF_IP=$(ip -o -4 addr show | awk '{print $2, $4}' | grep -E '((192\.168)|(10)|(172\.(1[6-9]|2[0-9]|3[01])))\.[0-9]+\.[0-9]+/' | head -n 1)
+export SERVER_IF="${SERVER_IF:-$(echo "$DETECTED_IF_IP" | awk '{print $1}')}"
+export SERVER_IP="${SERVER_IP:-$(echo "$DETECTED_IF_IP" | awk '{print $2}' | cut -d/ -f1)}"
 export PTZ="/app/ptz"
 export PTZ_CONFIG="${PTZ_CONFIG:-/app/config/ptz.json}"
 export VIDEO_DEVICE="${VIDEO_DEVICE:-/dev/video0}"
 
-echo "Starting: SERVER_IP=$SERVER_IP PTZ_CONFIG=$PTZ_CONFIG VIDEO_DEVICE=$VIDEO_DEVICE"
+echo "Starting: SERVER_IP=$SERVER_IP SERVER_IF=$SERVER_IF PTZ_CONFIG=$PTZ_CONFIG VIDEO_DEVICE=$VIDEO_DEVICE"
 
 envsubst < /app/templates/onvif_simple_server.conf.template > /usr/local/etc/onvif_simple_server.conf
 envsubst < /app/templates/mediamtx.yml.template > /app/mediamtx.yml
