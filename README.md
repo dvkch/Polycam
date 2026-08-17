@@ -20,8 +20,7 @@ To be able to connect to the camera using its original cable, here are roughly t
 Wanna go further ? This repository contains some tools to turn your camera into an ONVIF compatible camera, supporting PTZ requests.
 
 - building:
-  - via docker : `docker compose up --build`
-  - locally : `./onvif.sh`
+  - `cd docker && docker compose up -d --build`
 - accessing:
   - [IPCams](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://ipcams.app/&ved=2ahUKEwjE5f226NeJAxX4Q6QEHbWoAtwQFnoECA4QAQ&usg=AOvVaw0MhM--gDy4lm8oofamOkCa)
   - [Synology](https://www.synology.com/en-global/compatibility/camera/29211)
@@ -30,7 +29,6 @@ Wanna see more details about the reverse engineering steps? [Read my notes here]
 
 Nota:
 
-- the `onvif.sh` script *will* mess up your lighttpd configuration! running via docker is safer, but will be slower as well.
 - this has only be tested on a RaspberryPi 4 with a disposable install.
 - while manual focus is supported by `ptz`, it is not yet supported by [onvif_simple_server](https://github.com/roleoroleo/onvif_simple_server), and will not be available over ONVIF.
 
