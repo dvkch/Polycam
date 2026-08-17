@@ -62,8 +62,8 @@ min_step_z=0
 max_step_z=1
 
 get_position=$PTZ read position | jq "(.position.value.pan / 1000), (.position.value.tilt / 1000), (.position.value.zoom / 1000)" | tr '\n' ,
-jump_to_abs=$PTZ write position=$(awk 'BEGIN { printf "%.0f", %f * 1000 }'),$(awk 'BEGIN { printf "%.0f", %f * 1000 }'),$(awk 'BEGIN { printf "%.0f", %f * 1000 }') --log=info
-jump_to_rel=$PTZ write positionRelative=$(awk -v raw=%f 'BEGIN { printf "%.0f", raw * 1000; print "jump_to_rel raw pan=" raw >> "/tmp/onvif_simple_server.debug"; close("/tmp/onvif_simple_server.debug") }'),$(awk -v raw=%f 'BEGIN { printf "%.0f", raw * 1000; print "jump_to_rel raw tilt=" raw >> "/tmp/onvif_simple_server.debug"; close("/tmp/onvif_simple_server.debug") }'),$(awk -v raw=%f 'BEGIN { printf "%.0f", raw * 1000; print "jump_to_rel raw zoom=" raw >> "/tmp/onvif_simple_server.debug"; close("/tmp/onvif_simple_server.debug") }') --log=info
+jump_to_abs=$PTZ write position=$(awk -v raw=%f 'BEGIN { v=raw*1000; print (v>=0)?int(v+0.5):int(v-0.5) }'),$(awk -v raw=%f 'BEGIN { v=raw*1000; print (v>=0)?int(v+0.5):int(v-0.5) }'),$(awk -v raw=%f 'BEGIN { v=raw*1000; print (v>=0)?int(v+0.5):int(v-0.5) }') --log=info
+jump_to_rel=$PTZ write positionRelative=$(awk -v raw=%f 'BEGIN { v=raw*1000; r=(v>=0)?int(v+0.5):int(v-0.5); print r; print "jump_to_rel raw pan=" raw >> "/tmp/onvif_simple_server.debug"; close("/tmp/onvif_simple_server.debug") }'),$(awk -v raw=%f 'BEGIN { v=raw*1000; r=(v>=0)?int(v+0.5):int(v-0.5); print r; print "jump_to_rel raw tilt=" raw >> "/tmp/onvif_simple_server.debug"; close("/tmp/onvif_simple_server.debug") }'),$(awk -v raw=%f 'BEGIN { v=raw*1000; r=(v>=0)?int(v+0.5):int(v-0.5); print r; print "jump_to_rel raw zoom=" raw >> "/tmp/onvif_simple_server.debug"; close("/tmp/onvif_simple_server.debug") }') --log=info
 
 is_moving=$PTZ  read moving | jq "if .moving.value then 1 else 0 end"
 move_left=$PTZ  write  "movePan(left)=$(awk 'BEGIN { printf %f * 100 }')" --log=info
