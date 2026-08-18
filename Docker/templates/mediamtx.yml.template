@@ -17,5 +17,5 @@ paths:
       ffmpeg -loglevel error -f v4l2 -input_format yuyv422 -video_size 1920x1080 -framerate 5 -i /dev/video0
         -f rtsp -rtsp_transport tcp -c:v libx264 -preset veryfast -tune zerolatency -g 10 -sc_threshold 0 -c:a none rtsp://localhost:8554/ch0_0
     runOnInitRestart: yes
-    runOnReady: sh -c "while true; do ffmpeg -hide_banner -loglevel error -y -i rtsp://localhost:8554/ch0_0 -frames:v 1 /usr/local/www/ch0_0.jpg; sleep 20; done"
+    runOnReady: sh -c "while true; do ffmpeg -hide_banner -loglevel error -y -i rtsp://localhost:8554/ch0_0 -frames:v 1 /usr/local/www/ch0_0.jpg; sleep 60; done"
     runOnReadyRestart: yes
