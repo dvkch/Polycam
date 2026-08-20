@@ -24,14 +24,9 @@ internal final class Serial: Loggable {
     internal let logTag: String
     private(set) var isOpen: Bool = false
     private(set) var port: SerialPort!
-    private let lock = NSLock()
-    private var readBytes: Bytes = []
 
     // MARK: Serial
     private func open() throws(PortError) {
-        lock.lock()
-        defer { lock.unlock() }
-
         guard !isOpen else { return }
 
         log(.info, "Opening port...")
@@ -48,7 +43,7 @@ internal final class Serial: Loggable {
                 useHardwareFlowControl: false,
                 useSoftwareFlowControl: false,
                 processOutput: false
-                
+
             )
         }
         catch {
@@ -56,52 +51,31 @@ internal final class Serial: Loggable {
         }
         isOpen = true
         log(.info, "> opened!")
-        
-        startReading()
-        log(.info, "> started reading bytes")
     }
-    
-    private func startReading() {
-        Task {
-            for await data in (try port.asyncData()) {
-                lock.withLock {
-                    readBytes.append(contentsOf: data)
-                }
-            }
-        }
-    }
-    
-    // MARK: Outside world
-    internal func sendBytes(_ bytes: Bytes, lastTransmission: Bool = false) {
-        lock.lock()
-        defer { lock.unlock() }
 
+    // MARK: Outside world
+    internal func sendBytes(_ bytes: Bytes) {
         guard bytes.count > 0 else { return }
 
         do {
-            readBytes.removeAll()
             let writtenBytes = try port.writeData(Data(bytes))
-            if bytes.count > 0 {
-                log(.debug, "Wrote \(writtenBytes) out of \(bytes.count) bytes: \(bytes.hexString)")
-            }
+            log(.debug, "Wrote \(writtenBytes) out of \(bytes.count) bytes: \(bytes.hexString)")
         }
         catch {
             log(.error, "Error writing: \(error)")
         }
     }
-    
-    internal func readAllBytes() -> Bytes {
-        lock.withLock {
-            let bytes = self.readBytes
-            self.readBytes.removeAll()
-            return bytes
-        }
-    }
-    
-    internal func stop() {
-        lock.lock()
-        defer { lock.unlock() }
 
+    /// Synchronously reads whatever is currently available on the port. Given VMIN=0/VTIME=1,
+    /// this returns promptly once data has arrived, and blocks up to ~0.1s otherwise.
+    internal func readAvailableBytes() -> Bytes {
+        guard let data = try? port.readData(ofLength: 1024), !data.isEmpty else {
+            return []
+        }
+        return Bytes(data)
+    }
+
+    internal func stop() {
         guard isOpen else { return }
 
         port.closePort()

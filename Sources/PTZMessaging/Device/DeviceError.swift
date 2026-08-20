@@ -11,6 +11,7 @@ import Foundation
 public enum DeviceError: Error {
     case noSerialDevice
     case serialError(PortError)
+    case ipLockUnavailable
     case timeout
     case fail
     case reset
@@ -39,6 +40,8 @@ extension DeviceError: LocalizedError, RecoverableError {
             return "No serial device available"
         case .serialError(let e):
             return "Serial error: \(e.localizedDescription)"
+        case .ipLockUnavailable:
+            return "Could not create the inter-process lock file"
         case .timeout:
             return "Serial timeout"
         case .fail:

@@ -8,7 +8,7 @@
 import Foundation
 
 open class Device: Loggable {
-    
+
     // MARK: Init
     public init(serial: SerialName, logLevel: LogLevel) throws(DeviceError) {
         self.logLevel = logLevel
@@ -18,6 +18,11 @@ open class Device: Loggable {
         catch {
             throw .serialError(error)
         }
+        let lockName = serial.rawValue.replacingOccurrences(of: "/", with: "_")
+        guard let ipLock = IPLock(path: "/tmp/ptz-serial-\(lockName).lock") else {
+            throw .ipLockUnavailable
+        }
+        self.ipLock = ipLock
     }
 
     deinit {
@@ -27,42 +32,42 @@ open class Device: Loggable {
     // MARK: Properties
     private let serial: Serial
     private let requestLock: NSLock = .init()
+    private let ipLock: IPLock
     public var logLevel: LogLevel
     public let logTag: String = "Device"
 }
 
 // MARK: Base level communication
 extension Device {
-    private func communicate(_ request: PTZRequest) -> Bytes {
-        // Prevent multiple requests to be run concurrently
+    private func communicate(_ request: PTZRequest, attempt: Int = 0) -> Bytes {
         requestLock.lock()
         defer { requestLock.unlock() }
-        
-        // Send bytes
+        guard ipLock.lock(timeout: 2) else {
+            log(.error, "Timed out waiting for exclusive access to the serial port")
+            return []
+        }
+        defer { ipLock.unlock() }
+
         log(.info, request.description)
         log(.debug, "> \(request.message.bytes.hexString)")
         serial.sendBytes(request.message.bytes)
-        
-        // Read bytes, up until we have received complete messages or timeout
+
         let startDate = Date()
         var bytes = Bytes()
-        var receivedMessageInLastLoop = false
-        
         while Date().timeIntervalSince(startDate) < 0.5 {
-            let newBytes = serial.readAllBytes()
-            receivedMessageInLastLoop = !newBytes.isEmpty
+            let newBytes = serial.readAvailableBytes()
             bytes.append(contentsOf: newBytes)
-            
-            if !bytes.isEmpty, !receivedMessageInLastLoop, PTZMessage.receptionComplete(from: bytes) {
+            if !bytes.isEmpty, newBytes.isEmpty, PTZMessage.receptionComplete(from: bytes) {
                 break
             }
-            
-            // we used to use 20_000us here, allowing us to receive all the message in 2-3 loops, but resulting in ~75ms delay
-            // to get a simple response. by switching to a shorter sleep time we usually get the reply in 15 loops, but in 15ms
-            usleep(1000)
+            if newBytes.isEmpty { usleep(1000) }
         }
         log(.debug, "< \(bytes.hexString)")
-        
+
+        if bytes.isEmpty, attempt < 2 {
+            log(.error, "No reply received, retrying (attempt \(attempt + 1))")
+            return communicate(request, attempt: attempt + 1)
+        }
         return bytes
     }
 }
@@ -74,7 +79,7 @@ extension Device {
         case onError(PTZReply.CommandError)
         case rescueModeCondition(maxTries: Int)
         case untilZeros
-        
+
         internal static func modeCondition(_ rescue: Bool) -> [RetryConditions] {
             return rescue ? [.rescueModeCondition(maxTries: 3)] : []
         }
@@ -83,15 +88,15 @@ extension Device {
     @discardableResult
     public func send(_ request: PTZRequest, retries: [RetryConditions] = []) -> PTZReply {
         var bytes: Bytes
-        
+
         while true {
             // Serial communication
             bytes = communicate(request)
-            
+
             // Parse reply
             let replies = PTZMessage.replies(from: bytes)
             log(.info, replies.map(\.description).joined(separator: ", "))
-            
+
             // Handle retries
             var shouldRetry: Bool = false
             for retry in retries {
@@ -101,7 +106,7 @@ extension Device {
                         Thread.sleep(forTimeInterval: 0.2)
                         shouldRetry = true
                     }
-                    
+
                 case .onError(let error):
                     if replies.contains(where: { $0 == .notExecuted(error: error) }) {
                         Thread.sleep(forTimeInterval: 0.2)
@@ -115,15 +120,15 @@ extension Device {
                         }
                         shouldRetry = true
                     }
-                    
+
                 case .untilZeros:
-                    while serial.readAllBytes() != [0x00] {
+                    while serial.readAvailableBytes() != [0x00] {
                         Thread.sleep(forTimeInterval: 0.02)
                     }
                     shouldRetry = false
                 }
             }
-            
+
             if !shouldRetry {
                 break
             }
@@ -156,11 +161,11 @@ extension Device {
         case .unknown:              throw .wrongReply(reply)
         }
     }
-    
+
     public func get<T: PTZReadable>(_ state: T.Type, rescueModeCondition: Bool = false) throws(DeviceError) -> T.Value where T.Variant == PTZNone {
         return try get(state, for: .init(), rescueModeCondition: rescueModeCondition)
     }
-    
+
     public func get<T: PTZReadable>(_ state: T.Type, forCli cliStringVariant: String, rescueModeCondition: Bool = false) throws(DeviceError) -> T.Value? {
         guard let variant = state.Variant.init(from: cliStringVariant) else {
             return nil
@@ -189,7 +194,7 @@ extension Device {
         }
         try set(state, rescueModeCondition: rescueModeCondition)
     }
-    
+
     public func get<T: PTZReadableCombo>(_ state: T.Type) throws(DeviceError) -> T.Value {
         var messages = [PTZMessage]()
         for (request, reply) in state.get().map({ ($0, send($0)) }) {
@@ -207,7 +212,7 @@ extension Device {
         guard let state = T.init(messages: messages) else { throw .missingReply }
         return state.value
     }
-    
+
     public func set<T: PTZWriteableCombo>(_ state: T) throws(DeviceError) {
         for (request, reply) in state.set().map({ ($0, send($0)) }) {
             switch reply {
