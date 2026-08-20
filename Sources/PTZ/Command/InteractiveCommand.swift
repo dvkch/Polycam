@@ -14,16 +14,16 @@ import PTZMessaging
 
 struct InteractiveCommand: ParsableCommand {
     static var configuration: CommandConfiguration = .init(commandName: "interactive")
-    
+
     @Option(name: .customLong("device"), help: "PTZ serial device name")
     var serial: String?
 
     private static var lastError: String?
-    
+
     mutating func run() throws(CameraError) {
         let camera = try Camera(serial: .givenOrFirst(serial), logLevel: .error)
-        try camera.powerOn()
-        
+        try camera.powerOnIfNeeded()
+
         let content: [any Interactive.Element] = [
             Interactive.Line("Let's have some fun!"),
             Interactive.DynamicLine({ Self.lastError ?? "" }, .error),
@@ -76,7 +76,7 @@ struct InteractiveCommand: ParsableCommand {
                 state.refresh()
             }
         }
-        
+
         do {
             try initScreen(settings: [.noEcho, .cbreak, .colors], windowSettings: [.keypad(true), .timeout(1000)]) { scr in
                 if SwiftCurses.Color.hasColors {
@@ -90,7 +90,7 @@ struct InteractiveCommand: ParsableCommand {
             print("/!\\", error)
         }
     }
-    
+
     private func tui(scr: Window, content: [any Interactive.Element], camera: Camera) throws {
         var selectedElementID: String?
 
@@ -111,12 +111,12 @@ struct InteractiveCommand: ParsableCommand {
                 else {
                     try scr.addStr(String(repeating: " ", count: 2 * (path.count - 1)) + element.output)
                 }
-                
+
                 if element.selectable {
                     selectableElements.append((idx, element))
                 }
             }
-            
+
             let selectedElement = selectableElements.first(where: { $0.1.id == selectedElementID }) ?? selectableElements.first
             selectedElementID = selectedElement?.1.id
 
