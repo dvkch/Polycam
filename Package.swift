@@ -10,10 +10,10 @@ let package = Package(
         .executable(name: "ptz", targets: ["PTZ"])
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.3.0"),
+        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.3.1"),
         .package(url: "https://github.com/mredig/SwiftSerial.git", from: "0.1.5"),
-        .package(url: "https://github.com/Jomy10/SwiftCurses.git", branch: "master"),
-        .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "600.0.1"),
+        .package(url: "https://github.com/Jomy10/SwiftCurses.git", revision: "5513ba40c61de3234ed09c06a3b2a42c5b3153ad"),
+        .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "603.0.2"),
     ],
     targets: [
         .executableTarget(
