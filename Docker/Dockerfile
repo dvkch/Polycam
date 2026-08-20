@@ -22,6 +22,10 @@ RUN git clone --depth 1 https://github.com/roleoroleo/onvif_simple_server.git /t
     && mkdir -p /opt/onvif_simple_server \
     && rsync -a _install/ /opt/onvif_simple_server/
 
+# ttyd (RPi4/arm64)
+ARG TTYD_VERSION=1.7.7
+ADD https://github.com/tsl0922/ttyd/releases/download/${TTYD_VERSION}/ttyd.aarch64 /app/ttyd
+
 # PTZ
 ADD https://github.com/dvkch/Polycam/releases/latest/download/linux-arm64.zip /app/ptz.zip
 RUN unzip -o /app/ptz.zip -d /app \
@@ -33,6 +37,8 @@ FROM debian:bookworm-slim
 
 WORKDIR /app
 
+ENV LANG=C.UTF-8
+
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
@@ -42,14 +48,15 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 COPY --from=builder /app/ptz ./ptz
 COPY --from=builder /app/mediamtx ./mediamtx
 COPY --from=builder /opt/onvif_simple_server /usr/local
+COPY --from=builder /app/ttyd ./ttyd
 COPY Docker/templates ./templates
 COPY Docker/entrypoint.sh ./entrypoint.sh
 
-RUN chmod +x ptz mediamtx entrypoint.sh \
+RUN chmod +x ptz mediamtx ttyd entrypoint.sh \
     && echo 'server.modules += ( "mod_accesslog" )' >> /usr/local/etc/lighttpd.conf \
     && echo 'accesslog.filename = "/dev/fd/3"' >> /usr/local/etc/lighttpd.conf
 
 VOLUME /app/config
-EXPOSE 8080 8554 3702
+EXPOSE 80 8080 8554 3702
 
 ENTRYPOINT ["./entrypoint.sh"]
