@@ -39,7 +39,7 @@ open class Device: Loggable {
 
 // MARK: Base level communication
 extension Device {
-    private func communicate(_ request: PTZRequest, attempt: Int = 0) -> Bytes {
+    private func communicate(_ request: PTZRequest) -> Bytes {
         requestLock.lock()
         defer { requestLock.unlock() }
         guard ipLock.lock(timeout: 2) else {
@@ -48,27 +48,27 @@ extension Device {
         }
         defer { ipLock.unlock() }
 
-        log(.info, request.description)
-        log(.debug, "> \(request.message.bytes.hexString)")
-        serial.sendBytes(request.message.bytes)
+        for attempt in 0...2 {
+            log(.info, request.description)
+            log(.debug, "> \(request.message.bytes.hexString)")
+            serial.sendBytes(request.message.bytes)
 
-        let startDate = Date()
-        var bytes = Bytes()
-        while Date().timeIntervalSince(startDate) < 0.5 {
-            let newBytes = serial.readAvailableBytes()
-            bytes.append(contentsOf: newBytes)
-            if !bytes.isEmpty, newBytes.isEmpty, PTZMessage.receptionComplete(from: bytes) {
-                break
+            let startDate = Date()
+            var bytes = Bytes()
+            while Date().timeIntervalSince(startDate) < 0.5 {
+                let newBytes = serial.readAvailableBytes()
+                bytes.append(contentsOf: newBytes)
+                if !bytes.isEmpty, newBytes.isEmpty, PTZMessage.receptionComplete(from: bytes) {
+                    break
+                }
+                if newBytes.isEmpty { usleep(1000) }
             }
-            if newBytes.isEmpty { usleep(1000) }
-        }
-        log(.debug, "< \(bytes.hexString)")
+            log(.debug, "< \(bytes.hexString)")
 
-        if bytes.isEmpty, attempt < 2 {
+            if !bytes.isEmpty { return bytes }
             log(.error, "No reply received, retrying (attempt \(attempt + 1))")
-            return communicate(request, attempt: attempt + 1)
         }
-        return bytes
+        return []
     }
 }
 
