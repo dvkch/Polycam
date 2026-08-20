@@ -48,7 +48,8 @@ extension Device {
         }
         defer { ipLock.unlock() }
 
-        for attempt in 0...2 {
+        let maxAttempts = 3
+        for attempt in 0..<maxAttempts {
             log(.info, request.description)
             log(.debug, "> \(request.message.bytes.hexString)")
             serial.sendBytes(request.message.bytes)
@@ -66,8 +67,9 @@ extension Device {
             log(.debug, "< \(bytes.hexString)")
 
             if !bytes.isEmpty { return bytes }
-            log(.error, "No reply received, retrying (attempt \(attempt + 1))")
+            log(.warning, "No reply received, retrying (attempt \(attempt + 1))")
         }
+        log(.error, "No reply received after \(maxAttempts) retries, giving up")
         return []
     }
 }
