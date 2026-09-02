@@ -64,4 +64,4 @@ This package creates the building blocks for the PTZ communication over serial. 
 
 ## License
 
-MPL-2.0
+MPL-2.0 (Except for the vendored documents in Docs/ONVIF and Docs/Analysis/Docs)
