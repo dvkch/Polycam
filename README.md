@@ -61,3 +61,7 @@ Defines a simple macro to generate getters and setters for all states inside the
 ### PTZMessaging
 
 This package creates the building blocks for the PTZ communication over serial. The message format is deduced by days and months of reverse engineering and except for the `hello` reply I feel pretty confident that this implements the JCCP protocol used by the EagleEye IV.
+
+## License
+
+MPL-2.0
