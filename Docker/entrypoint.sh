@@ -19,7 +19,7 @@ touch /var/log/onvif_simple_server.log /tmp/onvif_simple_server.debug
 chmod a+rw /var/log/onvif_simple_server.log /tmp/onvif_simple_server.debug
 
 exec 3>&1
-/app/ttyd -W -p 80 -I /app/ttyd-index.html "$PTZ" interactive &
+/app/ttyd -W -p 80 -t titleFixed=Polycam -I /app/ttyd-index.html "$PTZ" interactive &
 /usr/local/bin/lighttpd -D -f /usr/local/etc/lighttpd.conf &
 /usr/local/bin/wsd_simple_server -f -i "$SERVER_IF" -x "http://%s:8080/onvif/device_service" -m "$MODEL" -n "$MANUFACTURER" -p /var/run/wsd_simple_server.pid &
 tail -F /var/log/onvif_simple_server.log &
