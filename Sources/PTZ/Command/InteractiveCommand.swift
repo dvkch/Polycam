@@ -33,9 +33,9 @@ struct InteractiveCommand: ParsableCommand {
             ]),
             Interactive.Group("--- Position ---", collapsibleSpacing: true, defaultOpened: true, [
                 Interactive.State(PTZInvertedState.self, on: camera, default: .on),
-                Interactive.State(PTZPanState.self, on: camera, default: .default),
-                Interactive.State(PTZTiltState.self, on: camera, default: .default),
-                Interactive.State(PTZZoomState.self, on: camera, default: .default),
+                Interactive.State(PTZPanState.self, on: camera, default: .default, maxWidth: 50),
+                Interactive.State(PTZTiltState.self, on: camera, default: .default, maxWidth: 50),
+                Interactive.State(PTZZoomState.self, on: camera, default: .default, maxWidth: 50),
                 Interactive.Group("Focus", collapsibleSpacing: false, defaultOpened: false, [
                     Interactive.State(PTZAutoFocusState.self, on: camera, default: .on),
                     Interactive.State(PTZFocusState.self, on: camera, default: .mid),
@@ -102,14 +102,20 @@ struct InteractiveCommand: ParsableCommand {
             try Interactive.traverse(content) { (element, idx, path) in
                 guard idx < scr.maxYX.row else { return }
 
+                var line = String(repeating: " ", count: 2 * (path.count - 1)) + element.output
+                let paddedLine = line.padding(toLength: max(line.count, 32), withPad: " ", startingAt: 0)
+                if let slider = element.slider(width: Int(scr.maxYX.col) - paddedLine.count - 4) {
+                    line = paddedLine + " <" + slider + ">"
+                }
+
                 try scr.move(row: Int32(idx), col: 0)
                 if SwiftCurses.Color.hasColors {
                     try scr.withAttrs(.colorPair(element.outputColor.rawValue)) {
-                        try scr.addStr(String(repeating: " ", count: 2 * (path.count - 1)) + element.output)
+                        try scr.addStr(line)
                     }
                 }
                 else {
-                    try scr.addStr(String(repeating: " ", count: 2 * (path.count - 1)) + element.output)
+                    try scr.addStr(line)
                 }
 
                 if element.selectable {

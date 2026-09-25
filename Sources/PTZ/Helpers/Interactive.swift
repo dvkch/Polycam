@@ -47,6 +47,7 @@ internal extension Interactive {
         var selectable: Bool { get }
         var children: [any Interactive.Element] { get }
         func input(char: WideChar, camera: Camera) throws -> Bool
+        func slider(width: Int) -> String?
     }
     
     protocol RefreshableElement: Element {
@@ -66,6 +67,7 @@ internal extension Interactive {
         var selectable: Bool { false }
         var children: [any Interactive.Element] { [] }
         func input(char: WideChar, camera: Camera) -> Bool { false }
+        func slider(width: Int) -> String? { nil }
     }
     
     struct DynamicLine: Interactive.Element {
@@ -82,6 +84,7 @@ internal extension Interactive {
         var selectable: Bool { false }
         var children: [any Interactive.Element] { [] }
         func input(char: WideChar, camera: Camera) -> Bool { false }
+        func slider(width: Int) -> String? { nil }
     }
     
     class Group: Interactive.Element {
@@ -116,8 +119,9 @@ internal extension Interactive {
             }
             return true
         }
-    }
-    
+        func slider(width: Int) -> String? { nil }
+   }
+
     class Action<T: CustomStringConvertible>: Interactive.Element {
         let id = UUID().uuidString
         let name: String
@@ -144,6 +148,7 @@ internal extension Interactive {
             }
             return true
         }
+        func slider(width: Int) -> String? { nil }
     }
     
     class Move<T: PTZWritable>: Interactive.Element {
@@ -172,17 +177,13 @@ internal extension Interactive {
 
         // InteractiveElement
         var output: String {
-            var string = "\(T.name) (\(lastDirectionV.description))"
-            if string.count < 30 {
-                string = string.padding(toLength: 30, withPad: " ", startingAt: 0)
-            }
-            
+            return "\(T.name) (\(lastDirectionV.description))"
+        }
+        func slider(width: Int) -> String? {
             let symbolOneWay   = lastDirection == .oneWay   ? "O" : "·"
             let symbolStop     = lastDirection == .stop     ? "O" : "·"
             let symbolOtherWay = lastDirection == .otherWay ? "O" : "·"
-            
-            string += " <\(symbolOneWay)·\(symbolStop)·\(symbolOtherWay)>"
-            return string
+            return "\(symbolOneWay)·\(symbolStop)·\(symbolOtherWay)"
         }
         var outputColor: Interactive.Color { .regular }
         var selectable: Bool { true }
@@ -215,19 +216,19 @@ internal extension Interactive {
         private let defaultValue: T.Value
         private var currentValue: T.Value
 
-        convenience init(_ state: T.Type, on camera: Camera, default: T.Value) where T.Value: PTZScaledValue, T.Variant == PTZNone {
-            self.init(state, for: .init(), on: camera, default: `default`)
+        convenience init(_ state: T.Type, on camera: Camera, default: T.Value, maxWidth: Int = 25) where T.Value: PTZScaledValue, T.Variant == PTZNone {
+            self.init(state, for: .init(), on: camera, default: `default`, maxWidth: maxWidth)
         }
 
-        convenience init(_ state: T.Type, on camera: Camera, default: T.Value) where T.Value: PTZValue, T.Variant == PTZNone {
+        convenience init(_ state: T.Type, on camera: Camera, default: T.Value, maxWidth: Int = 25) where T.Value: PTZValue, T.Variant == PTZNone {
             self.init(state, for: .init(), on: camera, values: T.Value.allCases, default: `default`)
         }
 
-        convenience init(_ state: T.Type, for variant: T.Variant, on camera: Camera, default: T.Value) where T.Value: PTZScaledValue {
+        convenience init(_ state: T.Type, for variant: T.Variant, on camera: Camera, default: T.Value, maxWidth: Int = 25) where T.Value: PTZScaledValue {
             var values: [T.Value] = T.Value.allCases
 
-            if values.count > 25 {
-                let step = max(1, (T.Value.maxValue - T.Value.minValue) / 25)
+            if values.count > maxWidth {
+                let step = max(1, (T.Value.maxValue - T.Value.minValue) / maxWidth)
                 values = stride(from: T.Value.minValue, to: T.Value.maxValue, by: step)
                     .map { T.Value(rawValue: $0) }
                     .uniqueOrdered(by: \.rawValue)
@@ -265,14 +266,18 @@ internal extension Interactive {
                 string += "(\(variant))"
             }
             string += " (\(currentValue))"
-            if string.count < 30 {
-                string = string.padding(toLength: 30, withPad: " ", startingAt: 0)
+
+            return string
+        }
+        func slider(width: Int) -> String? {
+            // one cell per value, or less if there is not enough room
+            let cells = max(1, min(width, values.count))
+            let selectedCell = values.firstIndex(of: currentValue).map { $0 * (cells - 1) / max(1, values.count - 1) }
+
+            var string = ""
+            for cell in 0..<cells {
+                string += (cell == selectedCell) ? "O" : "·"
             }
-            string += " <"
-            for v in values {
-                string += (currentValue == v) ? "O" : "·"
-            }
-            string += ">"
             return string
         }
         var outputColor: Interactive.Color { .regular }
