@@ -1,0 +1,23 @@
+<!-- Polycam: appended to ttyd's index.html, adds on-screen keys for phones -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  #terminal-container { height: calc(100% - 60px) !important; }
+  #keys { position: fixed; left: 0; right: 0; bottom: 0; height: 60px; display: flex; }
+  #keys button { flex: 1; font-size: 24px; }
+</style>
+<div id="keys">
+  <button data-key="D">◀</button>
+  <button data-key="A">▲</button>
+  <button data-key="B">▼</button>
+  <button data-key="C">▶</button>
+  <button data-key=" ">␣</button>
+</div>
+<script>
+  // arrows are ESC O x in ncurses' keypad mode, ESC [ x otherwise
+  document.querySelectorAll('#keys button').forEach(button => button.addEventListener('pointerdown', event => {
+    event.preventDefault();
+    const key = button.dataset.key;
+    const prefix = term.modes.applicationCursorKeysMode ? '\x1bO' : '\x1b[';
+    term.input(key === ' ' ? key : prefix + key);
+  }));
+</script>

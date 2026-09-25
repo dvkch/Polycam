@@ -25,6 +25,9 @@ RUN git clone --depth 1 https://github.com/roleoroleo/onvif_simple_server.git /t
 # ttyd (RPi4/arm64)
 ARG TTYD_VERSION=1.7.7
 ADD https://github.com/tsl0922/ttyd/releases/download/${TTYD_VERSION}/ttyd.aarch64 /app/ttyd
+ADD https://raw.githubusercontent.com/tsl0922/ttyd/${TTYD_VERSION}/src/html.h /tmp/ttyd-html.h
+COPY Docker/ttyd-keys.html /tmp/ttyd-keys.html
+RUN perl -ne 'print pack("H2", $1) while /0x(..)/g' /tmp/ttyd-html.h | gunzip | cat - /tmp/ttyd-keys.html > /app/ttyd-index.html
 
 # PTZ
 ADD https://github.com/dvkch/Polycam/releases/latest/download/linux-arm64.zip /app/ptz.zip
@@ -49,6 +52,7 @@ COPY --from=builder /app/ptz ./ptz
 COPY --from=builder /app/mediamtx ./mediamtx
 COPY --from=builder /opt/onvif_simple_server /usr/local
 COPY --from=builder /app/ttyd ./ttyd
+COPY --from=builder /app/ttyd-index.html ./ttyd-index.html
 COPY Docker/templates ./templates
 COPY Docker/entrypoint.sh ./entrypoint.sh
 
