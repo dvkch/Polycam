@@ -11,6 +11,7 @@
   <button data-key="B">▼</button>
   <button data-key="C">▶</button>
   <button data-key=" ">␣</button>
+  <button data-key="r">↻</button>
 </div>
 <script>
   // arrows are ESC O x in ncurses' keypad mode, ESC [ x otherwise
@@ -18,6 +19,6 @@
     event.preventDefault();
     const key = button.dataset.key;
     const prefix = term.modes.applicationCursorKeysMode ? '\x1bO' : '\x1b[';
-    term.input(key === ' ' ? key : prefix + key);
+    term.input('ABCD'.includes(key) ? prefix + key : key);
   }));
 </script>
