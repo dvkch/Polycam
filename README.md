@@ -25,12 +25,30 @@ Wanna go further ? This repository contains some tools to turn your camera into 
   - [IPCams](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://ipcams.app/&ved=2ahUKEwjE5f226NeJAxX4Q6QEHbWoAtwQFnoECA4QAQ&usg=AOvVaw0MhM--gDy4lm8oofamOkCa)
   - [Synology](https://www.synology.com/en-global/compatibility/camera/29211)
 
+
 Wanna see more details about the reverse engineering steps? [Read my notes here](Docs/Analysis/README.md)
 
 Nota:
 
 - this has only be tested on a RaspberryPi 4 with a disposable install.
 - while manual focus is supported by `ptz`, it is not yet supported by [onvif_simple_server](https://github.com/roleoroleo/onvif_simple_server), and will not be available over ONVIF.
+
+### Requirements & behaviour of the Docker image
+
+- **Raspberry Pi 4** (Raspberry Pi OS). Encoding runs on the GPU through V4L2 (`bcm2835-codec`): the capture card's MJPEG frames are decoded and encoded to H.264 in hardware, with almost no CPU usage.
+  The **Raspberry Pi 5 is not supported**: it has no hardware H.264 encoder.
+- The HDMI capture card must support **MJPEG at 1920x1080** (check with `v4l2-ctl -d /dev/video0 --list-formats-ext`).
+- Stream: `rtsp://<ip>:8554/ch0_0`, H.264 1080p, about 0.5s of latency.
+- Snapshot: `http://<ip>:8080/ch0_0.jpg`, refreshed every 10s.
+
+Environment variables (`docker-compose.yml`):
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `VIDEO_DEVICE` | `/dev/video0` | capture device |
+| `FRAMERATE` | `25` | 30 fps may need `core_freq_min=500` in `/boot/firmware/config.txt` |
+| `BITRATE` | `4000` | H.264 bitrate, in kbit/s |
+| `SERVER_IP` / `SERVER_IF` | auto-detected | override if the wrong interface is picked |
 
 ## Swift packages
 
