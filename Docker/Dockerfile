@@ -1,5 +1,5 @@
 # BUILD
-FROM debian:bookworm-slim AS builder
+FROM debian:trixie-slim AS builder
 
 WORKDIR /app
 
@@ -36,7 +36,7 @@ RUN unzip -o /app/ptz.zip -d /app \
     && rm -rf /app/ptz.zip /app/build
 
 # FINAL
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 WORKDIR /app
 
@@ -45,8 +45,9 @@ ENV LANG=C.UTF-8
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
-        ffmpeg iproute2 jq v4l-utils gettext-base \
-        libncurses-dev libmbedtls-dev libjson-c-dev
+        iproute2 jq v4l-utils gettext-base \
+        gstreamer1.0-tools gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-rtsp \
+        libncurses6 libncursesw6 libmbedtls21 libmbedcrypto16 libmbedx509-7 libjson-c5
 
 COPY --from=builder /app/ptz ./ptz
 COPY --from=builder /app/mediamtx ./mediamtx
