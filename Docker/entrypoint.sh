@@ -9,6 +9,10 @@ export PTZ_CONFIG="${PTZ_CONFIG:-/app/config/ptz.json}"
 export VIDEO_DEVICE="${VIDEO_DEVICE:-/dev/video0}"
 export MODEL="${MODEL:-Polycam}"
 export MANUFACTURER="${MANUFACTURER:-Syan}"
+export FRAMERATE="${FRAMERATE:-25}"
+export KEYINT=$(( FRAMERATE * 2 ))          # one keyframe every 2s
+export BITRATE="${BITRATE:-4000}"           # kbit/s
+export BITRATE_BPS=$(( BITRATE * 1000 ))
 
 echo "Starting: SERVER_IP=$SERVER_IP SERVER_IF=$SERVER_IF PTZ_CONFIG=$PTZ_CONFIG VIDEO_DEVICE=$VIDEO_DEVICE"
 

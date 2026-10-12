@@ -14,13 +14,13 @@ logLevel: info
 paths:
   ch0_0:
     runOnInit: >
-      gst-launch-1.0 -q v4l2src device=/dev/video0 do-timestamp=true
-        ! image/jpeg,width=1920,height=1080,framerate=25/1
+      gst-launch-1.0 -q v4l2src device=$VIDEO_DEVICE do-timestamp=true
+        ! image/jpeg,width=1920,height=1080,framerate=${FRAMERATE}/1
         ! tee name=t
         t. ! queue
            ! capssetter caps="image/jpeg,colorimetry=(string)bt601" ! jpegparse
            ! v4l2jpegdec
-           ! v4l2h264enc extra-controls="controls,video_bitrate=4000000,h264_i_frame_period=50"
+           ! v4l2h264enc extra-controls="controls,video_bitrate=${BITRATE_BPS},h264_i_frame_period=${KEYINT}"
            ! video/x-h264,level=(string)4 ! h264parse config-interval=-1
            ! rtspclientsink location=rtsp://localhost:8554/ch0_0 protocols=tcp
         t. ! queue leaky=downstream max-size-buffers=2
