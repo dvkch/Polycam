@@ -2,8 +2,8 @@
 
 # Mediamtx (RPi4/arm64)
 FROM debian:trixie-slim AS mediamtx
-ARG MEDIAMTX_VERSION=1.9.3
-ADD https://github.com/bluenviron/mediamtx/releases/download/v${MEDIAMTX_VERSION}/mediamtx_v${MEDIAMTX_VERSION}_linux_arm64v8.tar.gz /tmp/mediamtx.tar.gz
+ARG MEDIAMTX_VERSION=1.21.2
+ADD https://github.com/bluenviron/mediamtx/releases/download/v${MEDIAMTX_VERSION}/mediamtx_v${MEDIAMTX_VERSION}_linux_arm64.tar.gz /tmp/mediamtx.tar.gz
 RUN mkdir /out && tar -xzf /tmp/mediamtx.tar.gz -C /out mediamtx && chmod 755 /out/mediamtx
 
 # ttyd (RPi4/arm64)
@@ -24,7 +24,7 @@ RUN unzip -o /tmp/ptz.zip -d /tmp/ptz \
 # onvif_simple_server, built and cleaned up in a single layer to keep the build cache small
 # set ONVIF_SIMPLE_SERVER_REF to a branch or a full commit hash
 FROM debian:trixie-slim AS onvif
-ARG ONVIF_SIMPLE_SERVER_REF=master
+ARG ONVIF_SIMPLE_SERVER_REF=95c17f7ef00f16dcaef938951cdf3e28357247f8
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential git rsync ca-certificates curl wget \
         libmbedtls-dev libjson-c-dev zlib1g-dev \

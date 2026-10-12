@@ -1,12 +1,13 @@
 # mediamtx configuration file
 
-rtsp: yes
-protocols: [tcp, udp]
+rtsp: true
+rtspTransports: [tcp, udp]
 
-rtmp: no
-hls: no
-webrtc: no
-srt: no
+rtmp: false
+hls: false
+webrtc: false
+srt: false
+moq: false
 
 logLevel: info
 
@@ -17,7 +18,7 @@ paths:
       gst-launch-1.0 -q v4l2src device=$VIDEO_DEVICE do-timestamp=true
         ! image/jpeg,width=1920,height=1080,framerate=${FRAMERATE}/1
         ! tee name=t
-        t. ! queue
+        t. ! queue max-size-buffers=3 leaky=downstream
            ! capssetter caps="image/jpeg,colorimetry=(string)bt601" ! jpegparse
            ! v4l2jpegdec
            ! v4l2h264enc extra-controls="controls,video_bitrate=${BITRATE_BPS},h264_i_frame_period=${KEYINT}"
@@ -26,4 +27,4 @@ paths:
         t. ! queue leaky=downstream max-size-buffers=2
            ! videorate drop-only=true ! image/jpeg,framerate=1/10
            ! multifilesink location=/usr/local/www/ch0_0.jpg
-    runOnInitRestart: yes
+    runOnInitRestart: true
